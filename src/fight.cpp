@@ -4997,19 +4997,17 @@ void raw_kill(CHAR_DATA * ch, CHAR_DATA * victim)
              "         \\               /\\ |\r\n"
              "          \\             /  \\|\r\n"
              "           `-----------`\r\n", victim);
-	   char name[100];
-	   strncpy(name, GET_NAME(victim), 100);
-           do_quit(victim, "", 666);
+	   string name(GET_NAME(victim));
+     do_quit(victim, "", 666);
 
 	   remove_familiars(name, CONDEATH);
 	   remove_vault(name, CONDEATH);
 	   if(victim->clan) {
 	     remove_clan_member(victim->clan, victim);
 	   }
-	   remove_character(name, CONDEATH);
+	   remove_character(name.c_str(), CONDEATH);
 
-           sprintf(buf2, "%s permanently dies.", name);
-           log(buf2, ANGEL, LOG_MORTAL);
+           logf(ANGEL, LOG_MORTAL, "%s permanently dies.", name);
            return;
 	}
          else if(GET_INT(victim) <= 4)
@@ -5054,9 +5052,8 @@ void raw_kill(CHAR_DATA * ch, CHAR_DATA * victim)
 	   }
 	   remove_character(name, CONDEATH);
 
-           sprintf(buf2, "%s sees tits.", name);
-           log(buf2, ANGEL, LOG_MORTAL);
-           return;
+     logf(ANGEL, LOG_MORTAL, "%s sees tits.", name);
+     return;
         } 
  	else if(GET_WIS(victim) <= 4)
          {
