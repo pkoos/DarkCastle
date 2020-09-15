@@ -6,14 +6,17 @@ extern "C"
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <list>
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <list>
+
+#include <fmt/format.h>
 
 #include <structs.h>
 #include <db.h>
-#include "utility.h"
+#include <utility.h>
 #include <vault.h>
 #include <room.h>
 #include <player.h>
@@ -29,6 +32,8 @@ extern "C"
 #include <clan.h> // clan right
 
 using namespace std;
+
+extern char *wear_bits[];
 
 enum vault_search_type {
   UNDEFINED,
@@ -116,7 +121,7 @@ void save_vault(char *name) {
   struct vault_data *vault;
   struct vault_access_data *access;
   struct vault_items_data *items;
-  char fname[256], buf[MAX_INPUT_LENGTH];
+  char fname[256];
 
   if (!(vault = has_vault(name)))
     return;
@@ -129,23 +134,21 @@ void save_vault(char *name) {
   *name = UPPER(*name);
   sprintf(fname, "../vaults/%c/%s.vault", UPPER(*name), name);
   if(!(fl = dc_fopen(fname, "w"))) {
-    sprintf(buf, "save_vaults: could not open vault file for [%s].", fname);
-    log (buf, IMMORTAL, LOG_BUG);
+    logf(IMMORTAL, LOG_BUG, "save_vaults: could not open vault file for [%s].", fname);
     return;
   }
 
-  fprintf(fl, "S %d\n", vault->size);
+  fprintf(fl, "S %llu\n", vault->size);
   fprintf(fl, "G %llu\n", vault->gold);
 
-  for (items = vault->items;items;items = items->next)
-  {
-      obj_data *obj = items->obj?items->obj:get_obj(items->item_vnum);
-      if (obj == 0)
-	  continue;
-      
-      fprintf(fl, "O %d %d %d\n", items->item_vnum, items->count, items->obj?1:0);
-      if (items->obj)
-	write_object(items->obj,fl);
+  for (items = vault->items; items; items = items->next) {
+    obj_data *obj = items->obj ? items->obj : get_obj(items->item_vnum);
+    if (obj == 0)
+      continue;
+
+    fprintf(fl, "O %d %d %d\n", items->item_vnum, items->count, items->obj ? 1 : 0);
+    if (items->obj)
+      write_object(items->obj, fl);
   }
 
   for (access = vault->access;access;access = access->next)
@@ -384,7 +387,8 @@ void vault_stats(CHAR_DATA *ch, char *name) {
   struct vault_items_data *item;
   struct vault_access_data *access;
   struct obj_data *obj;
-  int items = 0, weight = 0, accesses = 0, num = 0, unique = 0, count = 0, skipped = 0;
+  int items = 0, accesses = 0, num = 0, unique = 0, count = 0, skipped = 0;
+  uint64_t weight = 0;
   char buf[MAX_STRING_LENGTH*4], buf1[MAX_STRING_LENGTH];
 
   sprintf(buf, "###) Character Name        Gold     Items (Unique) Item Weight/Vault Weight/Vault Max Weight Access   Errors\r\n");
@@ -478,11 +482,14 @@ void rename_vault_owner(char *oldname, char *newname) {
 
   for(items = vault->items; items; items = items->next) {
     if(items->obj && IS_SET(items->obj->obj_flags.extra_flags, ITEM_SPECIAL)) {
-      char tmp[256];
-      sprintf(tmp,"%s",items->obj->name);
+      char tmp[MAX_STRING_LENGTH];
+      sprintf(tmp, "%s", items->obj->name);
       tmp[strlen(tmp)-strlen(oldname)-1] = '\0';
-      sprintf(tmp,"%s %s",tmp, newname);
-      items->obj->name = str_hsh(tmp);
+
+      char buffer[MAX_STRING_LENGTH];
+      sprintf(buffer, "%s %s", tmp, newname);
+
+      items->obj->name = str_hsh(buffer);
     }
   }
   save_vault(newname);
@@ -506,37 +513,46 @@ void rename_vault_owner(char *oldname, char *newname) {
   remove_vault(oldname);
 }
 
-void remove_vault(char *name, BACKUP_TYPE backup) {
-  char src_filename[256];
-  char dst_dir[256] = {0};
-  char syscmd[512];
+void remove_vault(const char *unformatted_name, BACKUP_TYPE backup) {
+  string src_filename, dst_dir, syscmd;
   struct stat statbuf;
 
-  if (name == NULL) {
+  if (unformatted_name == nullptr) {
     return;
   }
 
-  name[0] = UPPER(name[0]);
+  string name(unformatted_name);
+  name[0] = UPPER(unformatted_name[0]);
 
   switch(backup) {
   case SELFDELETED:
-    strncpy(dst_dir, "../archive/selfdeleted/", 256);
+    dst_dir = "../archive/selfdeleted/";
     break;
   case CONDEATH:
-    strncpy(dst_dir, "../archive/condeath/", 256);
+    dst_dir = "../archive/condeath/";
     break;
   case ZAPPED:
-    strncpy(dst_dir, "../archive/zapped/", 256);
+    dst_dir = "../archive/zapped/";
     break;
   case NONE:
     break;
   default:
-    logf(108, LOG_GOD, "remove_vault passed invalid BACKUP_TYPE %d for %s.", backup,
-	 name);
+    logf(108, LOG_GOD, "remove_vault passed invalid BACKUP_TYPE %d for %s.", backup, name);
     break;
   }
 
-  snprintf(src_filename, 256, "%s/%c/%s.vault", VAULT_DIR, name[0], name);
+  src_filename = fmt::format("{}/{}/{}.vault", VAULT_DIR, name[0], name);
+  
+  if (0 == stat(src_filename.c_str(), &statbuf)) {
+    if (dst_dir[0] != 0) {
+      syscmd = fmt::format("mv {} {}", src_filename, dst_dir);
+      system(syscmd.c_str());
+    } else {
+      unlink(src_filename.c_str());
+    }
+  }
+
+  src_filename = fmt::format("%s/%c/%s.vault.backup", VAULT_DIR, name[0], name);
   
   if (0 == stat(src_filename, &statbuf)) { 
     if (dst_dir[0] != 0) {
@@ -547,52 +563,40 @@ void remove_vault(char *name, BACKUP_TYPE backup) {
     }
   }
 
-  snprintf(src_filename, 256, "%s/%c/%s.vault.backup", VAULT_DIR, name[0], name);
+  src_filename = fmt::format("{}/{}/{}.vault.log", VAULT_DIR, name[0], name);
   
-  if (0 == stat(src_filename, &statbuf)) { 
+  if (0 == stat(src_filename.c_str(), &statbuf)) {
     if (dst_dir[0] != 0) {
-      snprintf(syscmd, 512, "mv %s %s", src_filename, dst_dir);
-      system(syscmd);
+      syscmd = fmt::format("mv {} {}", src_filename, dst_dir);
+      system(syscmd.c_str());
     } else {
-      unlink(src_filename);
+      unlink(src_filename.c_str());
     }
   }
 
-  snprintf(src_filename, 256, "%s/%c/%s.vault.log", VAULT_DIR, name[0], name);
-  
-  if (0 == stat(src_filename, &statbuf)) { 
-    if (dst_dir[0] != 0) {
-      snprintf(syscmd, 512, "mv %s %s", src_filename, dst_dir);
-      system(syscmd);
-    } else {
-      unlink(src_filename);
-    }
-  }
-
-  remove_vault_accesses(name);
+  remove_vault_accesses(name.c_str());
 
   struct vault_data *vault, *next_vault, *prev_vault = NULL;
   struct vault_items_data *items, *titems;
   struct vault_access_data *access, *taccess;
 
-  char buf[MAX_INPUT_LENGTH];
-  char h[MAX_INPUT_LENGTH];
+  string cmd;
 
-  sprintf(h, "cat %s| grep -iv '^%s$' > %s", VAULT_INDEX_FILE, name, VAULT_INDEX_FILE_TMP);
-  system(h);
+  cmd == fmt::format("cat {}| grep -iv '^{}$' > {}", VAULT_INDEX_FILE, name, VAULT_INDEX_FILE_TMP);
+  system(cmd.c_str());
   unlink(VAULT_INDEX_FILE);
   rename(VAULT_INDEX_FILE_TMP, VAULT_INDEX_FILE);
-  sprintf(buf, "Deleting %s's vault.", name);
-  log(buf, ANGEL, LOG_VAULT);
+  logf(ANGEL, LOG_VAULT, "Deleting %s's vault.", name.c_str());
   
-  if (!(vault = has_vault(name)))
+  if (!(vault = has_vault(name.c_str())))
     return;
 
   if (vault && vault->items) {
     for (items = vault->items; items; items = titems) {
       titems = items->next;
-      if (items->obj)
-	extract_obj(items->obj);
+      if (items->obj) {
+        extract_obj(items->obj);
+      }
       free(items);
      }
   }
@@ -608,7 +612,7 @@ void remove_vault(char *name, BACKUP_TYPE backup) {
     next_vault = vault->next;
     if (!vault || !vault->owner || !*vault->owner) continue;
 
-    if (!strcasecmp(vault->owner, name)) {
+    if (!strcasecmp(vault->owner, name.c_str())) {
       if (vault == vault_table)
         vault_table = vault->next;
       else
@@ -620,6 +624,22 @@ void remove_vault(char *name, BACKUP_TYPE backup) {
     }
     prev_vault = vault;
   }
+}
+
+int calc_vault_weight(vault_data *vault) {
+	if (vault == nullptr) {
+		return 0;
+	}
+
+	int items = 0;
+	unsigned weight = 0;
+    for (vault_items_data *vitem = vault->items; vitem; vitem = vitem->next) {
+      items += vitem->count;
+      obj_data *obj = vitem->obj ? vitem->obj : get_obj(vitem->item_vnum);
+      weight += vitem->count * GET_OBJ_WEIGHT(obj);
+    }
+
+    return MAX(0, weight);
 }
 
 void load_vaults(void) {
@@ -635,26 +655,47 @@ void load_vaults(void) {
   bool saveChanges = FALSE;
   char src_filename[256];
 
-  if(!(index = dc_fopen(VAULT_INDEX_FILE, "r"))) {
-    log ("boot_vaults: could not open vault index file, probably doesn't exist.", IMMORTAL, LOG_BUG);
+  ifstream in(VAULT_INDEX_FILE);
+  if (!in) {
+    logf(IMMORTAL, LOG_BUG, "load_vaults: could not open \'%s\'.", VAULT_INDEX_FILE);
     return;
   }
+
+  string buffer;
+  vector<string> vaultIndex;
+  while (!in.eof()) {
+    getline(in, buffer, '\n');
+    if (buffer[0] >= 'A' && buffer[0] <= 'Z') {
+      vaultIndex.push_back(buffer);
+      //logf(IMMORTAL, LOG_BUG, "%d. [%s]", vaultIndex.size(), buffer.c_str());
+    }
+  }
+  in.close();
+
+  /*
+  if (!(index = dc_fopen(VAULT_INDEX_FILE, "r"))) {
+    log("load_vaults: could not open vault index file, probably doesn't exist.", IMMORTAL, LOG_BUG);
+    return;
+  }
+
   fscanf(index, "%s\n", line);
+  total_vaults = 0;
   while (*line != '$') {
     total_vaults++;
-    sprintf(buf, "%d - %s", total_vaults, line);
-//    log(buf, IMMORTAL, LOG_BUG);
+    //logf(IMMORTAL, LOG_BUG, "%d. [%s]", total_vaults, line);
     fscanf(index, "%s\n", line);
   }
   dc_fclose(index);
+  logf(IMMORTAL, LOG_BUG, "load_vaults: found [%d %d] player vaults to read.", total_vaults, vaultIndex.size());
+*/
 
-  sprintf(buf, "boot_vaults: found [%d] player vaults to read.", total_vaults);
-  log(buf, IMMORTAL, LOG_BUG);
+  total_vaults = vaultIndex.size();
+
   if (total_vaults)
-  CREATE(vault_table, struct vault_data, total_vaults);
+    vault_table = new vault_data[total_vaults];
 
-  if(!(index = dc_fopen(VAULT_INDEX_FILE, "r"))) {
-    log ("boot_vaults: could not open vault index file, probably doesn't exist.", IMMORTAL, LOG_BUG);
+  if (!(index = dc_fopen(VAULT_INDEX_FILE, "r"))) {
+    log("load_vaults: could not open vault index file, probably doesn't exist.", IMMORTAL, LOG_BUG);
     return;
   }
 
@@ -664,134 +705,127 @@ void load_vaults(void) {
 
     *line = UPPER(*line);
     sprintf(fname, "../vaults/%c/%s.vault", UPPER(*line), line);
-    if(!(fl = dc_fopen(fname, "r"))) {
-      sprintf(buf, "boot_vaults: unable to open file [%s].", fname);
+    if (!(fl = dc_fopen(fname, "r"))) {
+      sprintf(buf, "load_vaults: unable to open file [%s].", fname);
       log(buf, IMMORTAL, LOG_BUG);
       fscanf(index, "%s\n", line);
       continue;
-    } else {
-      sprintf(buf, "boot_vaults: sucessfully opened file [%s].", fname);
-//      log(buf, IMMORTAL, LOG_BUG);
     }
 
     CREATE(vault, struct vault_data, 1);
 
-    vault->owner 	= str_dup(line);
-    vault->size		= VAULT_BASE_SIZE;
-    vault->gold		= 0;
-    vault->weight	= 0;
-    vault->access 	= NULL;
-    vault->items 	= NULL;
-    vault->next 	= NULL;
+    vault->owner = str_dup(line);
+    vault->size = VAULT_BASE_SIZE;
+    vault->gold = 0;
+    vault->weight = 0;
+    vault->access = NULL;
+    vault->items = NULL;
+    vault->next = NULL;
 
     get_line(fl, type);
-    while(*type != '$') {
+    while (*type != '$') {
       switch (*type) {
-        case 'S':
-          sscanf(type, "%s %d", tmp, &vnum);
-          vnum = MIN(vnum, VAULT_MAX_SIZE);
-          vault->size	= vnum;
-
-	  /*
-	  if (vault->size > 2000) {
-	      logf(IMMORTAL, LOG_BUG, "boot_vaults: buggy vault size of %d on %s.", vault->size, vault->owner);
-
-	      FILE *oldfl;
-	      char oldfname[MAX_INPUT_LENGTH], oldtype[MAX_INPUT_LENGTH];
-		  
-	      sprintf(oldfname, "../vaults.old/%c/%s.vault", UPPER(*line), line);
-	      if(!(oldfl = dc_fopen(oldfname, "r"))) {
-		  sprintf(buf, "boot_vaults: unable to open file [%s].", oldfname);
-		  log(buf, IMMORTAL, LOG_BUG);
-	      } else {
-		  get_line(oldfl, oldtype);
-
-		  if (*oldtype == 'S') {
-		      sscanf(oldtype, "%s %d", tmp, &vnum);
-		      vault->size = vnum;
-		      logf(IMMORTAL, LOG_BUG, "boot_vaults: Setting %s's vault size to %d.", vault->owner, vault->size);
-		      saveChanges = TRUE;
-		  }
-
-		  dc_fclose(oldfl);
-	      }
-	  }
-	  */
-
-          break;
-        case 'G':
-          sscanf(type, "%s %llu", tmp, &gold);
-          vault->gold	= gold;
-          break;
-        case 'O':
-          if (sscanf(type, "%s %d %d %d", tmp, &vnum, &count, &full) == 4) {
-            ;
-          } else {
-            sprintf(buf, "boot_vaults: Bad 'O' option in file [%s]: %s\r\n", fname, type);
-            log(buf, IMMORTAL, LOG_BUG);
-            break;
-          }
-
-          CREATE(items, struct vault_items_data, 1);
-
-	  if (!full) {
-            obj = get_obj(vnum);
-	    items->obj = NULL;
-	  } else {
-	    char tmp[MAX_INPUT_LENGTH];
-	    get_line(fl, tmp);
-  	    obj = read_object(real_object(vnum), fl, TRUE);
-	    items->obj = obj;
-	  }
-	  
-          if (!obj) {
-	      if (full) {
-		  // Skip the rest of the full item
-		  while (strcmp(type, "S") != 0) {
-		      get_line(fl, type);
-		  }
-	      }
-
-	      sprintf(buf, "boot_vaults: bad item vnum (#%d) in vault: %s", vnum,
-		    vault->owner);
-	      log(buf, IMMORTAL, LOG_BUG);
-	      saveChanges = TRUE;
-          } else {
-	    vault->weight += (GET_OBJ_WEIGHT(obj) * count);
-	    items->item_vnum  	= vnum;
-	    items->count	= count;
-	    items->next  	= vault->items;
-	    vault->items 	= items;
-	    sprintf(buf, "boot_vaults: got item [%s(%d)(%d)(%d)] from file [%s].", GET_OBJ_SHORT(obj), GET_OBJ_VNUM(obj), count, vnum, fname);
-	    if (items->obj && ((items->obj->obj_flags.wear_flags != get_obj(vnum)->obj_flags.wear_flags)||
-			       (items->obj->obj_flags.size != get_obj(vnum)->obj_flags.size)||(items->obj->obj_flags.eq_level != get_obj(vnum)->obj_flags.eq_level)))
-	      log(buf, IMMORTAL, LOG_BUG);
-	  }
-	  break;
-        case 'A':
-          sscanf(type, "%s %s", tmp, value);
-
-	  // Confirm if the character exists before giving it access to this vault
-	  snprintf(src_filename, 256, "%s/%c/%s", SAVE_DIR, value[0], value);
-
-	  if (0 == stat(src_filename, &statbuf)) {
-	    CREATE(access, struct vault_access_data, 1);
-	    access->name  = str_dup(value);
-	    access->next  = vault->access;
-	    vault->access = access;
-	    sprintf(buf, "boot_vaults: got access [%s] from file [%s].", access->name, fname);
-	    //        log(buf, IMMORTAL, LOG_BUG);
-	  } else {
-	    sprintf(buf, "Invalid access entry found. Removing %s's access to %s.", value, vault->owner);
-	    vlog(buf, vault->owner);
-	    saveChanges = true;
-	  }
-
-          break;
-        default:
-          sprintf(buf, "boot_vaults: unknown type in file [%s].", fname);
+      case 'S':
+        sscanf(type, "%s %d", tmp, &vnum);
+        vnum = MIN(vnum, VAULT_MAX_SIZE);
+        vault->size = vnum;
+        break;
+      case 'G':
+        sscanf(type, "%s %llu", tmp, &gold);
+        vault->gold = gold;
+        break;
+      case 'O':
+        if (sscanf(type, "%s %d %d %d", tmp, &vnum, &count, &full) == 4) {
+          ;
+        } else {
+          sprintf(buf, "load_vaults: Bad 'O' option in file [%s]: %s\r\n", fname, type);
           log(buf, IMMORTAL, LOG_BUG);
           break;
+        }
+
+        CREATE(items, struct vault_items_data, 1);
+
+        if (!full) {
+          obj = get_obj(vnum);
+          items->obj = NULL;
+        } else {
+          char tmp[MAX_INPUT_LENGTH];
+          get_line(fl, tmp);
+          obj = read_object(real_object(vnum), fl, TRUE);
+          items->obj = obj;
+        }
+
+        if (!obj) {
+          if (full) {
+            // Skip the rest of the full item
+            while (strcmp(type, "S") != 0) {
+              get_line(fl, type);
+            }
+          }
+
+          sprintf(buf, "load_vaults: bad item vnum (#%d) in vault: %s", vnum, vault->owner);
+          log(buf, IMMORTAL, LOG_BUG);
+          saveChanges = TRUE;
+        } else {
+          vault->weight += (GET_OBJ_WEIGHT(obj) * count);
+          items->item_vnum = vnum;
+          items->count = count;
+          items->next = vault->items;
+          vault->items = items;
+          if (items->obj) {
+            if (items->obj->obj_flags.wear_flags != get_obj(vnum)->obj_flags.wear_flags) {
+              // wrong wear flags
+              char old_wear_flags[MAX_STRING_LENGTH] = { 0 };
+              sprintbit(items->obj->obj_flags.wear_flags, wear_bits, old_wear_flags);
+              char new_wear_flags[MAX_STRING_LENGTH] = { 0 };
+              sprintbit(get_obj(vnum)->obj_flags.wear_flags, wear_bits, new_wear_flags);
+
+              logf(IMMORTAL, LOG_BUG, "load_vaults[%s]: Fixing vault item %d x %d (%s) has incorrect wear flags: [%s] Valid flags: [%s]", vault->owner, count,
+                  GET_OBJ_VNUM(obj), GET_OBJ_SHORT(obj), old_wear_flags, new_wear_flags);
+              items->obj->obj_flags.wear_flags = get_obj(vnum)->obj_flags.wear_flags;
+              saveChanges = true;
+
+            }
+            if (items->obj->obj_flags.size != get_obj(vnum)->obj_flags.size) {
+              // wrong size
+              logf(IMMORTAL, LOG_BUG, "load_vaults[%s]: Fixing vault item %d x %d (%s) has incorrect size: [%d] Valid size: [%d]", vault->owner, count,
+                  GET_OBJ_VNUM(obj), GET_OBJ_SHORT(obj), items->obj->obj_flags.size, get_obj(vnum)->obj_flags.size);
+              items->obj->obj_flags.size = get_obj(vnum)->obj_flags.size;
+              saveChanges = true;
+
+            }
+            if (items->obj->obj_flags.eq_level != get_obj(vnum)->obj_flags.eq_level) {
+              // wrong level
+              logf(IMMORTAL, LOG_BUG, "load_vaults[%s]: Fixing vault item %d x %d (%s) has incorrect eq level: [%d] Valid level: [%d]", vault->owner, count,
+                  GET_OBJ_VNUM(obj), GET_OBJ_SHORT(obj), items->obj->obj_flags.eq_level, get_obj(vnum)->obj_flags.eq_level);
+              items->obj->obj_flags.eq_level = get_obj(vnum)->obj_flags.eq_level;
+              saveChanges = true;
+            }
+          }
+        } // if (!obj) {
+        break;
+      case 'A':
+        sscanf(type, "%s %s", tmp, value);
+
+        // Confirm if the character exists before giving it access to this vault
+        snprintf(src_filename, 256, "%s/%c/%s", SAVE_DIR, value[0], value);
+
+        if (0 == stat(src_filename, &statbuf)) {
+          CREATE(access, struct vault_access_data, 1);
+          access->name = str_dup(value);
+          access->next = vault->access;
+          vault->access = access;
+        } else {
+          sprintf(buf, "Invalid access entry found. Removing %s's access to %s.", value, vault->owner);
+          vlog(buf, vault->owner);
+          saveChanges = true;
+        }
+
+        break;
+      default:
+        sprintf(buf, "load_vaults: unknown type in file [%s].", fname);
+        log(buf, IMMORTAL, LOG_BUG);
+        break;
       }
       get_line(fl, type);
     }
@@ -800,10 +834,17 @@ void load_vaults(void) {
     vault_table = vault;
 
     dc_fclose(fl);
-    
+
+    unsigned int new_weight = calc_vault_weight(vault);
+    if (new_weight != vault->weight) {
+      logf(IMMORTAL, LOG_BUG, "load_vaults[%s]: Fixing vault weight to %d due to mismatch. Old value: %d", vault->owner, new_weight, vault->weight);
+      vault->weight = new_weight;
+      saveChanges = true;
+    }
+
     if (saveChanges) {
-	logf(IMMORTAL, LOG_BUG, "boot_vaults: Saving changes to %s's vault.", vault->owner);
-	save_vault(vault->owner);
+      logf(IMMORTAL, LOG_BUG, "load_vaults: Saving changes to %s's vault.", vault->owner);
+      save_vault(vault->owner);
     }
 
     fscanf(index, "%s\n", line);
@@ -870,7 +911,7 @@ void remove_vault_access(CHAR_DATA *ch, char *name, struct vault_data *vault) {
   save_char_obj(ch);
 }
 
-void remove_vault_accesses(char *name) {
+void remove_vault_accesses(const char *name) {
   struct vault_data *vault;
   struct vault_access_data *access, *next_access;
   char buf[MAX_INPUT_LENGTH];
@@ -891,7 +932,7 @@ void remove_vault_accesses(char *name) {
   }
 }
 
-void access_remove(char *name, struct vault_data *vault) {
+void access_remove(const char *name, struct vault_data *vault) {
   struct vault_access_data *access, *next_access, *prev_access = NULL;
 
   for (access = vault->access; access ; access = next_access) {
@@ -1586,15 +1627,14 @@ void vault_list(CHAR_DATA *ch, char *owner) {
   struct vault_data *vault;
   struct obj_data *obj;
   int objects = 0, self = 0;
-  char sectionbuf[MAX_STRING_LENGTH*4];
+  string sectionbuf;
   char linebuf[MAX_INPUT_LENGTH];
-  char buf[MAX_INPUT_LENGTH];
   int diff_len = 0;
-  int sectionbuf_len = 0;
   int linebuf_len = 0;
 
   owner[0] = UPPER(owner[0]);
-  if (!strcmp(owner, GET_NAME(ch))) self = 1;
+  if (!strcmp(owner, GET_NAME(ch)))
+    self = 1;
 
   if (!(vault = has_vault(owner))) {
     if (self)
@@ -1603,83 +1643,59 @@ void vault_list(CHAR_DATA *ch, char *owner) {
       csendf(ch, "%s doesn't have a vault.\r\n", owner);
     return;
   }
-  
+
   if (!has_vault_access(GET_NAME(ch), vault)) {
     csendf(ch, "You don't have access to %s's vault.\r\n", owner);
     return;
-  } 
-
+  }
 
   if (self)
-      snprintf(sectionbuf, sizeof(sectionbuf), "Your vault is at %d of %d maximum pounds and contains:\r\n", vault->weight, vault->size);
+    sectionbuf = fmt::format("Your vault is at {} of {} maximum pounds and contains:\r\n", vault->weight, vault->size);
   else
-      snprintf(sectionbuf, sizeof(sectionbuf), "%s's vault is at %d of %d maximum pounds and contains:\r\n", owner, vault->weight, vault->size);
-   
-  
-  for (items = vault->items;items;items = items->next) {
+    sectionbuf = fmt::format("{}'s vault is at {} of {} maximum pounds and contains:\r\n", owner, vault->weight, vault->size);
+
+  for (items = vault->items; items; items = items->next) {
     linebuf[0] = '\0';
 
     obj = items->obj ? items->obj : get_obj(items->item_vnum);
     if (obj == NULL)
-	continue;
+      continue;
 
     if (items->count > 1) {
-	snprintf(linebuf, sizeof(linebuf), "[$5%d$R] ", items->count);
-
-	sectionbuf_len = strlen(sectionbuf);
-	linebuf_len = strlen(linebuf);
-	diff_len = sizeof(sectionbuf) - (sectionbuf_len + linebuf_len + 1 + 2);
-
-	if (diff_len > 0) {
-	    strncat(sectionbuf, linebuf, diff_len);
-	}
+      sectionbuf += fmt::format("[$5{}$R] ", items->count);
     }
 
-    snprintf(linebuf, sizeof(linebuf), "%s ", GET_OBJ_SHORT(obj));
+    sectionbuf += fmt::format("{} ", GET_OBJ_SHORT(obj));
 
-    if (obj->obj_flags.type_flag == ITEM_ARMOR ||
-	obj->obj_flags.type_flag == ITEM_WEAPON ||
-	obj->obj_flags.type_flag == ITEM_FIREWEAPON ||
-	obj->obj_flags.type_flag == ITEM_CONTAINER ||
-	obj->obj_flags.type_flag == ITEM_INSTRUMENT ||
-	obj->obj_flags.type_flag == ITEM_STAFF ||
-	obj->obj_flags.type_flag == ITEM_WAND ||
-	obj->obj_flags.type_flag == ITEM_LIGHT)
-    { 
-	strncpy(buf, linebuf, sizeof(buf));
-	snprintf(linebuf, MAX_INPUT_LENGTH, "%s %s $3Lvl: %d$R", buf,
-		 item_condition(obj), obj->obj_flags.eq_level);
+    if (obj->obj_flags.type_flag == ITEM_ARMOR || obj->obj_flags.type_flag == ITEM_WEAPON || obj->obj_flags.type_flag == ITEM_FIREWEAPON
+        || obj->obj_flags.type_flag == ITEM_CONTAINER || obj->obj_flags.type_flag == ITEM_INSTRUMENT || obj->obj_flags.type_flag == ITEM_STAFF
+        || obj->obj_flags.type_flag == ITEM_WAND || obj->obj_flags.type_flag == ITEM_LIGHT) {
+      sectionbuf += fmt::format("{0} $3Lvl: {1}$R", item_condition(obj), obj->obj_flags.eq_level);
     }
 
     if (GET_LEVEL(ch) > IMMORTAL) {
-	strncpy(buf, linebuf, sizeof(buf));
-	snprintf(linebuf, sizeof(linebuf), "%s [%d]", buf, items->item_vnum);
+      sectionbuf += fmt::format("{} [{}]", items->item_vnum);
     }
-      
+
     objects = 1;
     linebuf_len = strlen(linebuf);
     diff_len = sizeof(linebuf) - (linebuf_len + 2 + 1);
 
     if (diff_len > 0) {
-	strncat(linebuf,"\r\n", diff_len);
+      strncat(linebuf, "\r\n", diff_len);
     }
 
-    if (strlen(linebuf) + strlen(sectionbuf) < MAX_STRING_LENGTH*4 - 200) {
-	strncat(sectionbuf, linebuf, MAX_STRING_LENGTH*4);
-    } else {
-	strcat(sectionbuf, "Overflow!!!\r\n");
-	break;
-    }
+    sectionbuf += linebuf;
   }
 
   if (!objects) {
-      if (self) {
-	  csendf(ch, "Your vault is currently empty and can hold %d pounds.\r\n", vault->size);
-      } else {
-	  csendf(ch, "%s's vault is currently empty.\r\n", owner);
-      }
+    if (self) {
+      csendf(ch, "Your vault is currently empty and can hold %d pounds.\r\n", vault->size);
+    } else {
+      csendf(ch, "%s's vault is currently empty.\r\n", owner);
+    }
   } else {
-      page_string(ch->desc, sectionbuf, 1);
+    page_string(ch->desc, sectionbuf.c_str(), 1);
   }
 }
 
@@ -1720,8 +1736,7 @@ void add_new_vault(char *name, int indexonly) {
 
    sprintf(fname, "../vaults/%c/%s.vault", UPPER(*name), name);
   if (!(pvfl = dc_fopen(fname, "w"))) {
-    sprintf(buf, "add_new_vault: error opening new vault file [%s].", fname);
-    log(buf, IMMORTAL, LOG_BUG);
+    logf(IMMORTAL, LOG_BUG, "add_new_vault: error opening new vault file [%s].", fname);
     return;
   }
 
@@ -1796,13 +1811,13 @@ void vault_log(CHAR_DATA *ch, char *owner)
 }
 
 void vlog(const char *message, const char *name) {
-  struct tm *tm = NULL;
-  long ct;
+  tm *tm = NULL;
+  time_t ct;
   FILE *ofile, *nfile;
-  char buf[MAX_INPUT_LENGTH], line[MAX_INPUT_LENGTH];
+  string buf;
+  char line[MAX_INPUT_LENGTH];
   char fname[256], nfname[256];
   int lines = 1;
-  char mins[5], hours[5];
 
   static char *months[] = {
 	"Jan",
@@ -1826,41 +1841,27 @@ void vlog(const char *message, const char *name) {
 
   if(!(ofile = dc_fopen(fname, "r"))) {
     if(!(ofile = dc_fopen(fname, "w"))) {
-      sprintf(buf, "vault_log: could not open vault log file [%s].", fname);
-      log(buf, IMMORTAL, LOG_BUG);
+      logf(IMMORTAL, LOG_BUG, "vault_log: could not open vault log file [%s].", fname);
       return;
     }
     fprintf(ofile, "$\n");
     fclose(ofile);
     if(!(ofile = dc_fopen(fname, "r"))) {
-      sprintf(buf, "vault_log: could not open vault log file [%s].", fname);
-      log(buf, IMMORTAL, LOG_BUG);
+      logf(IMMORTAL, LOG_BUG, "vault_log: could not open vault log file [%s].", fname);
       return;
     }
   }
 
   if(!(nfile = dc_fopen(nfname, "w"))) {
-    sprintf(buf, "vault_log: could not open vault log file [%s].", nfname);
-    log(buf, IMMORTAL, LOG_BUG);
+    logf(IMMORTAL, LOG_BUG, "vault_log: could not open vault log file [%s].", nfname);
     return;
   }
   
-  ct   = time(0);
+  ct = time(nullptr);
   tm = localtime(&ct);
-
-  if (tm->tm_min < 10) 
-    sprintf(mins, "0%d", tm->tm_min);
-  else 
-    sprintf(mins, "%d", tm->tm_min);
-
-  if (tm->tm_hour < 10) 
-    sprintf(hours, "0%d", tm->tm_hour);
-  else 
-    sprintf(hours, "%d", tm->tm_hour);
-
   
-  sprintf(buf, "%s %d %s:%s", months[tm->tm_mon],tm->tm_mday,hours,mins);
-  fprintf(nfile, "%s :: %s\n", buf, message);
+  buf = fmt::format("{} {} {:0}:{:0}", months[tm->tm_mon], tm->tm_mday, tm->tm_hour, tm->tm_min);
+  fprintf(nfile, "%s :: %s\n", buf.c_str(), message);
   
   get_line(ofile, line);
   while (*line != '$' && lines++ < 500) {
@@ -2021,12 +2022,11 @@ vault_search(CHAR_DATA *ch, char *args)
 {
   struct vault_items_data *items;
   struct obj_data *obj;
-  char sectionbuf[MAX_STRING_LENGTH * 4];char
-  linebuf[MAX_INPUT_LENGTH];
+  string sectionbuf;
+  char linebuf[MAX_INPUT_LENGTH];
   char buf[MAX_INPUT_LENGTH];
   int objects = 0;
   int diff_len = 0;
-  int sectionbuf_len = 0;
   int linebuf_len = 0;
   bool owner_shown = false;
   int vaults_searched = 0;
@@ -2125,7 +2125,6 @@ vault_search(CHAR_DATA *ch, char *args)
       vaults_searched++;
       objects = 0;
       diff_len = 0;
-      sectionbuf_len = 0;
       linebuf_len = 0;
       sectionbuf[0] = '\0';
       linebuf[0] = '\0';
@@ -2185,15 +2184,7 @@ vault_search(CHAR_DATA *ch, char *args)
 
         if (items->count > 1) {
           snprintf(linebuf, sizeof(linebuf), "[$5%d$R] ", items->count);
-
-          sectionbuf_len = strlen(sectionbuf);
-          linebuf_len = strlen(linebuf);
-          diff_len = sizeof(sectionbuf)
-              - (sectionbuf_len + linebuf_len + 1 + 2);
-
-          if (diff_len > 0) {
-            strncat(sectionbuf, linebuf, diff_len);
-          }
+          sectionbuf = sectionbuf + linebuf;
         }
 
         objects_found += items->count;
@@ -2228,17 +2219,11 @@ vault_search(CHAR_DATA *ch, char *args)
           strncat(linebuf, "\r\n", diff_len);
         }
 
-        if (strlen(linebuf) + strlen(sectionbuf)
-            < MAX_STRING_LENGTH * 4 - 200) {
-          strncat(sectionbuf, linebuf, MAX_STRING_LENGTH * 4);
-        } else {
-          strcat(sectionbuf, "Overflow!!!\r\n");
-          break;
-        }
+        sectionbuf += linebuf;
       } // for loop of objects
 
       if (objects) {
-        page_string(ch->desc, sectionbuf, 1);
+        page_string(ch->desc, sectionbuf.c_str(), 1);
       }
     } // if we have access to vault
   } // for loop of vaults

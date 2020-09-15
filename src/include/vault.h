@@ -24,10 +24,10 @@ void vault_list(CHAR_DATA *ch, char *owner);
 void add_new_vault(char *name, int indexonly);
 void reload_vaults(void);
 void vault_cost(CHAR_DATA *ch, char *object, char *arg);
-void remove_vault(char *name, BACKUP_TYPE backup = NONE);
-void rename_vault_owner(char *oldname, char *newname);
-void access_remove(char *name, struct vault_data *vault);
-void remove_vault_accesses(char *name);
+void remove_vault(const char *unformatted_name, BACKUP_TYPE backup = NONE);
+void rename_vault_owner(const char *oldname, char *newname);
+void access_remove(const char *name, struct vault_data *vault);
+void remove_vault_accesses(const char *name);
 void vault_sell(CHAR_DATA *ch, char *object, char *arg);
 int vault_log_to_string(const char *name, char *buf);
 void vlog(const char *message, const char *name);
@@ -44,26 +44,26 @@ struct vault_items_data *get_items_in_all_vaults(char *object, int num);
 int has_vault_access(char *owner, struct vault_data *vault);
 int vault_search(CHAR_DATA *ch, char *keyword);
 
-struct vault_data {
-   char *owner;
-   unsigned int size;
-   unsigned int weight;
-   long long unsigned int gold;
-
-   struct vault_access_data *access;
-   struct vault_items_data *items;
-
-   struct vault_data *next;
-};
-
 struct vault_access_data {
   char *name;
-  struct vault_access_data *next;
+  vault_access_data *next;
 };
 
 struct vault_items_data {
   int item_vnum;
   int count;
   obj_data *obj; // for full-save items
-  struct vault_items_data *next;
+  vault_items_data *next;
+};
+
+struct vault_data {
+  char *owner;
+  uint64_t size;
+  uint64_t weight;
+  uint64_t gold;
+
+  vault_access_data *access;
+  vault_items_data *items;
+
+  vault_data *next;
 };
