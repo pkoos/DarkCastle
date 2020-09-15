@@ -409,7 +409,7 @@ void log( const char *str, int god_level, long type, char_data *vict)
 }
 
 // function for new SETBIT et al. commands
-void sprintbit( uint value[], char *names[], char *result )
+void sprintbit( uint value[], char *names[], char *result, const char *divide)
 {
    int i;
    *result = '\0';
@@ -421,7 +421,7 @@ void sprintbit( uint value[], char *names[], char *result )
      {
       if (!strcmp(names[i], "UNUSED")) continue;
       strcat(result, names[i]);
-     strcat(result, " ");
+     strcat(result, divide);
      }
    }
 
@@ -429,7 +429,7 @@ void sprintbit( uint value[], char *names[], char *result )
       strcat( result, "NoBits " );
 }
 
-void sprintbit( unsigned long vektor, char *names[], char *result )
+void sprintbit( unsigned long vektor, char *names[], char *result, const char *divide)
 {
     long nr;
 
@@ -441,20 +441,27 @@ void sprintbit( unsigned long vektor, char *names[], char *result )
       return;
     }
 
+    bool needspace=false;
     for ( nr=0; vektor; vektor>>=1 )
     {
-	if ( IS_SET(1, vektor) )
-	{
-	    if (!strcmp(names[nr], "unused")) continue;
-	    if ( *names[nr] != '\n')
-		strcat( result, names[nr] );
-	    else
-		strcat( result, "Undefined" );
-	    strcat( result, " " );
-	}
+		if ( IS_SET(1, vektor) )
+		{
+			if (!strcmp(names[nr], "unused"))
+				continue;
 
-	if ( *names[nr] != '\n' )
-	  nr++;
+			if (needspace)
+				strcat( result, divide );
+
+			if ( *names[nr] != '\n')
+				strcat( result, names[nr] );
+			else
+				strcat( result, "Undefined" );
+
+			needspace=true;
+		}
+
+		if ( *names[nr] != '\n' )
+		  nr++;
     }
 
     if ( *result == '\0' )
@@ -1544,6 +1551,12 @@ int do_not_here(struct char_data *ch, char *argument, int cmd)
 }
 
 // Used for debugging with dmalloc
+// Used for debugging with dmalloc
+void *cause_leak()
+{
+  return malloc(10);
+}
+
 int do_memoryleak(struct char_data *ch, char *argument, int cmd)
 {
    if(GET_LEVEL(ch) < OVERSEER)
@@ -1551,16 +1564,10 @@ int do_memoryleak(struct char_data *ch, char *argument, int cmd)
       send_to_char("The 'leak' command is not available to you.\r\n", ch);
       return eFAILURE;
    }
-   malloc(10);
+   cause_leak();
 
    send_to_char("A memory leak was just caused.\r\n", ch);
    return eSUCCESS;
-}
-
-// Used for debugging with dmalloc
-void cause_leak()
-{
-   malloc(10);
 }
 
 int do_beep(struct char_data *ch, char *argument, int cmd)
@@ -2004,19 +2011,23 @@ void remove_character(char *name, BACKUP_TYPE backup)
   }
 
 }
-
-void remove_familiars(char *name, BACKUP_TYPE backup)
+void remove_familiars(string name, BACKUP_TYPE backup)
+{
+  remove_familiars(name.c_str(), backup);
+}
+void remove_familiars(const char *name, BACKUP_TYPE backup)
 {
   char src_filename[256];
   char dst_dir[256] = {0};
   char syscmd[512];
   struct stat statbuf;
 
-  if (name == NULL) {
+  if (name == nullptr) {
     return;
   }
 
-  name[0] = UPPER(name[0]);
+  string proper_name(name);
+  proper_name[0] = UPPER(name[0]);
 
   switch(backup) {
   case SELFDELETED:
@@ -2031,13 +2042,12 @@ void remove_familiars(char *name, BACKUP_TYPE backup)
   case NONE:
     break;
   default:
-    logf(108, LOG_GOD, "remove_familiars passed invalid BACKUP_TYPE %d for %s.",
-	 backup, name);
+    logf(108, LOG_GOD, "remove_familiars passed invalid BACKUP_TYPE %d for %s.", backup, proper_name);
     break;
   }
   
   for (int i=0; i < MAX_GOLEMS; i++) {
-    snprintf(src_filename, 256, "%s/%c/%s.%d", FAMILIAR_DIR, name[0], name, i);
+    snprintf(src_filename, 256, "%s/%c/%s.%d", FAMILIAR_DIR, proper_name[0], proper_name.c_str(), i);
     
     if (0 == stat(src_filename, &statbuf)) { 
       if (dst_dir[0] != 0) {

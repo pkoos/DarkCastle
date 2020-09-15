@@ -68,7 +68,6 @@ void sprinttype(int type, char *names[], char *result);
 void remove_memory(CHAR_DATA *ch, char type);
 int is_in_range(CHAR_DATA *ch, int virt);
 int create_one_room(CHAR_DATA *ch, int vnum);
-void sprintbit(unsigned long vektor, char *names[], char *result);
 int mana_gain(CHAR_DATA *ch);
 int hit_gain(CHAR_DATA *ch);
 int move_gain(CHAR_DATA *ch, int extra);

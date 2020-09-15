@@ -365,8 +365,8 @@ char *	str_dup0	(const char *str);
 void    log		(const char *str, int god_level, long type, char_data *vict = 0);
 void    logf            (int level, long type, const char *arg, ...);
 int     send_to_gods    (const char * str, int god_level, long type);
-void	sprintbit	(uint value[], char *names[], char *result);
-void    sprintbit	(unsigned long vektor, char *names[], char *result);
+void	sprintbit	(uint value[], char *names[], char *result, const char *divide = " ");
+void    sprintbit( unsigned long vektor, char *names[], char *result, const char *divide = " ");
 void    sprinttype	(int type, char *names[], char *result);
 int     consttype       (char * search_str, char *names[]);
 char *  constindex      (int index, char *names[]);
@@ -567,8 +567,8 @@ struct mprog_variable_data {
 int handle_poisoned_weapon_attack(char_data * ch, char_data * vict, int percent);
 
 enum BACKUP_TYPE { NONE, SELFDELETED, CONDEATH, ZAPPED };
-void remove_character(char *name, BACKUP_TYPE backup = NONE);
-void remove_familiars(char *name, BACKUP_TYPE backup = NONE);
+void remove_character(const char *name, BACKUP_TYPE backup = NONE);
+void remove_familiars(const char *name, BACKUP_TYPE backup = NONE);
 
 std::string replaceString(std::string message, std::string find, std::string replace);
 
