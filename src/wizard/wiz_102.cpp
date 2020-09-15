@@ -640,6 +640,11 @@ int max_res(int zone)
 
 }
 
+
+// Command can be used as follows:
+// zedit <sub-command> <...>
+// zedit <zone #> <sub-command> <...>
+//
 int do_zedit(struct char_data *ch, char *argument, int cmd)
 {
   char buf[MAX_STRING_LENGTH];
@@ -671,6 +676,14 @@ int do_zedit(struct char_data *ch, char *argument, int cmd)
     return eFAILURE;
   }
 
+  // Set zone # if zedit used like: zedit <zone #> <sub-command> <...>
+  i = atoi(select);
+  if ((select[0] == '0' && i == 0) || i > 0) {
+	  zone = i;
+  } else {
+	  zone = world[ch->in_room].zone;
+  }
+
   for(skill = 0 ;; skill++)
   {
     if(zedit_values[skill][0] == '\n')
@@ -687,8 +700,6 @@ int do_zedit(struct char_data *ch, char *argument, int cmd)
     return eFAILURE;
   }
   int from, to;
-  // set the zone we're in
-  zone = world[ch->in_room].zone;
 
   // set the index of the S command in that zone 
   // have to go from bottom instead of top-counting down since we could have more than
@@ -4222,7 +4233,7 @@ int do_osave(struct char_data *ch, char *arg, int cmd)
   }
   int v = obj_index[ch->pcdata->last_obj_edit].virt;
   if(!can_modify_object(ch, v)) {
-    send_to_char("You may only msave inside of the room range you are assigned to.\n\r", ch);
+    send_to_char("You may only osave inside of the room range you are assigned to.\n\r", ch);
     return eFAILURE;
   }
   int r = real_object(v);
