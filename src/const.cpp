@@ -840,6 +840,7 @@ char *mob_types[] =
 		"NORMAL",
 		"GUARD",
 		"CLAN GUARD",
+		"REROLL VENDOR",
 		"\n"
 };
 
