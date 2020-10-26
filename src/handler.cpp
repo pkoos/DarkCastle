@@ -78,6 +78,11 @@ void add_memory(CHAR_DATA *ch, char *victim, char type);
 bool isTimer(CHAR_DATA *ch, int spell) {
 	return affected_by_spell(ch, BASE_TIMERS + spell);
 }
+int timerLeft(CHAR_DATA *ch, int spell) {
+	struct affected_type *af = affected_by_spell(ch, BASE_TIMERS + spell);
+	if (af == NULL) return 0;
+	else return af->duration;
+}
 void addTimer(CHAR_DATA *ch, int spell, int ticks) {
 
 	struct affected_type af;
@@ -380,268 +385,422 @@ bool still_affected_by_poison(CHAR_DATA * ch) {
 	return 0;
 }
 
-const struct set_data set_list[] = { { "Ascetic's Focus", 19, { 2700, 6904, 8301, 8301, 9567, 9567, 12108, 14805, 15621, 21718, 22302, 22314, 22600, 22601,
-		22602, 24815, 24815, 24816, 26237 }, "You attach your penis mightier.\r\n", "You remove your penis mightier.\r\n" }, { "Warlock's Vestments", 7, {
-		17334, 17335, 17336, 17337, 17338, 17339, 17340, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		"You feel an increase in energy coursing through your body.\r\n", "Your magical energy returns to its normal state.\r\n" }, { "Hunter's Arsenal", 7, {
-		17327, 17328, 17329, 17330, 17331, 17332, 17333, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		"You sense your accuracy and endurance have undergone a magical improvement.\r\n", "Your accuracy and endurance return to their normal levels.\r\n" }, {
-		"Captain's Regalia", 7, { 17341, 17342, 17343, 17344, 17345, 17346, 17347, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		"You feel an increased vigor surge throughout your body.\n", "Your vigor is reduced to its normal state.\n" }, { "Celebrant's Defenses", 7, { 17319,
-		17320, 17321, 17322, 17323, 17324, 17325, 17326, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		"Your inner focus feels as though it is more powerful.\r\n", "Your inner focus has reverted to its original form.\r\n" }, { "Battlerager's Fury", 18, {
-		352, 353, 354, 355, 356, 357, 358, 359, 359, 360, 361, 362, 362, 9702, 9808, 9808, 27114, 27114, -1 },
-		"You feel your stance harden and blood boil as you strap on your battlerager's gear.\r\n",
-		"Your blood returns to its normal temperature as you remove your battlerager's gear.\r\n" }, { "Veteran's Field Plate Armour", 9, { 21719, 21720, 21721,
-		21722, 21723, 21724, 21725, 21726, 21727, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		"There is an audible *click* as the field plate locks into its optimal assembly.\r\n",
-		"There is a soft *click* as you remove the field plate from its optimal positioning.\r\n" }, { "Mother of All Dragons' Trophies", 7, { 22320, 22321,
-		22322, 22323, 22324, 22325, 22326, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		"You feel the might of the ancient dragonkind surge through your body.\r\n", "The might of the ancient dragonkind has left you.\r\n" }, { "Feral Fangs",
-		2, { 4818, 4819, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-		"As the fangs' cries harmonize they unleash something feral inside you.\r\n", "As you remove the fangs your muscles relax and focus is restored.\r\n" },
-		{ "White Crystal Armours", 10, { 22003, 22006, 22010, 22014, 22015, 22020, 22021, 22022, 22023, 22024, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-				"Your crystal armours begin to $B$7glow$R with an ethereal light.\r\n", "The $B$7glow$R fades from your crystal armours.\r\n" }, {
-				"Black Crystal Armours", 7, { 22011, 22017, 22025, 22026, 22027, 22028, 22029, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-				"Your crystal armours $B$0darken$R and begin to hum with magic.\r\n", "The $B$0darkness$R disperses as the crystal armours are removed.\r\n" },
-		{ "Aqua Pendants", 2, { 5611, 5643, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-				"The pendants click softly and you feel a surge of energy as gills spring from your neck!\r\n",
-				"Your gills retract and fade as the two pendants separate quietly.\r\n" }, { "Arcane Apparatus", 19, { 367, 368, 369, 370, 371, 372, 373, 374,
-				375, 376, 377, 378, 379, 379, 380, 381, 382, 383, 383 },
-				"The power of ancient magicks surges through your body as you slowly fade out of existence.\r\n",
-				"You feel a slight tingle of fading magicks as you shimmer into existence.\r\n" }, { "Titanic Gear", 11, { 19402, 19404, 19406, 19407, 19408,
-				19409, 19410, 19411, 19413, 19417, 19419, -1, -1, -1, -1, -1, -1, -1, -1 }, "You feel a mighty surge as your body rapidly expands.\n\r",
-				"You feel your size reduce to normal proportions.\n\r" }, { "Moss Equipment", 11, { 18001, 18002, 18003, 18004, 18006, 18008, 18009, 18010,
-				18011, 18016, 18017, -1, -1, -1, -1, -1, -1, -1, -1 }, "A strange energy surges through you and you feel your senses sharpen.\n\r",
-				"Your senses return to normal as you remove your mossy garb.\n\r" }, { "Blacksteel Battlegear", 19, { 283, 283, 284, 284, 285, 286, 287, 288,
-				289, 290, 292, 293, 294, 294, 295, 296, 296, 297, 291 },
-				"The might of the warrior's spirit, past, present, and future, hums through your body.\n\r",
-				"The harmony of the warrior's spirit has left you.\n\r" }, { "\n", 0, { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-				-1 }, "\n", "\n" } };
+const struct set_data set_list[] = {
+    {
+        "Ascetic's Focus",
+        19,
+        { 2700, 6904, 8301, 8301, 9567, 9567, 12108, 14805, 15621, 21718, 22302, 22314, 22600, 22601, 22602, 24815, 24815, 24816, 26237 },
+        "You attach your penis mightier.\r\n",
+        "You remove your penis mightier.\r\n"
+    },
+    {
+        "Warlock's Vestments",
+        7,
+        { 17334, 17335, 17336, 17337, 17338, 17339, 17340, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        "You feel an increase in energy coursing through your body.\r\n",
+        "Your magical energy returns to its normal state.\r\n"
+    },
+    {
+        "Hunter's Arsenal",
+        7,
+        { 17327, 17328, 17329, 17330, 17331, 17332, 17333, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        "You sense your accuracy and endurance have undergone a magical improvement.\r\n",
+        "Your accuracy and endurance return to their normal levels.\r\n"
+    },
+    {
+        "Captain's Regalia",
+        7,
+        { 17341, 17342, 17343, 17344, 17345, 17346, 17347, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        "You feel an increased vigor surge throughout your body.\n",
+        "Your vigor is reduced to its normal state.\n" },
+    {
+        "Celebrant's Defenses",
+        7,
+        { 17319, 17320, 17321, 17322, 17323, 17324, 17325, 17326, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        "Your inner focus feels as though it is more powerful.\r\n", "Your inner focus has reverted to its original form.\r\n"
+    },
+    {
+        "Battlerager's Fury",
+        18,
+        {352, 353, 354, 355, 356, 357, 358, 359, 359, 360, 361, 362, 362, 9702, 9808, 9808, 27114, 27114, -1 },
+        "You feel your stance harden and blood boil as you strap on your battlerager's gear.\r\n",
+        "Your blood returns to its normal temperature as you remove your battlerager's gear.\r\n"
+    },
+    {
+        "Veteran's Field Plate Set",
+        9,
+        { 21719, 21720, 21721, 21722, 21723, 21724, 21725, 21726, 21727, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        "There is an audible *click* as the field plate locks into its optimal assembly.\r\n",
+        "There is a soft *click* as you remove the field plate from its optimal positioning.\r\n"
+    },
+    {
+        "Mother of All Dragons",
+        7,
+        { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        "You feel the might of the ancient dragonkind surge through your body.\r\n",
+        "The might of the ancient dragonkind has left you.\r\n"
+    },
+    {
+        "Feral Fangs",
+        2,
+        { 4818, 4819, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        "As the fangs' cries harmonize they unleash something feral inside you.\r\n",
+        "As you remove the fangs your muscles relax and focus is restored.\r\n"
+    },
+    {
+        "White Crystal Armours",
+        10,
+        { 22003, 22006, 22010, 22014, 22015, 22020, 22021, 22022, 22023, 22024, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        "Your crystal armours begin to $B$7glow$R with an ethereal light.\r\n",
+        "The $B$7glow$R fades from your crystal armours.\r\n"
+    },
+    {
+        "Black Crystal Armours",
+        7,
+        { 22011, 22017, 22025, 22026, 22027, 22028, 22029, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        "Your crystal armours $B$0darken$R and begin to hum with magic.\r\n",
+        "The $B$0darkness$R disperses as the crystal armours are removed.\r\n"
+    },
+    {
+        "Aqua Pendants",
+        2,
+        { 5611, 5643, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        "The pendants click softly and you feel a surge of energy as gills spring from your neck!\r\n",
+        "Your gills retract and fade as the two pendants separate quietly.\r\n"
+    },
+    {
+        "Arcane Apparatus",
+        19,
+        { 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 379, 380, 381, 382, 383, 383 },
+        "The power of ancient magicks surges through your body as you slowly fade out of existence.\r\n",
+        "You feel a slight tingle of fading magicks as you shimmer into existence.\r\n"
+    },
+    {
+        "Titanic Gear",
+        11,
+        { 19402, 19404, 19406, 19407, 19408, 19409, 19410, 19411, 19413, 19417, 19419, -1, -1, -1, -1, -1, -1, -1, -1 },
+        "You feel a mighty surge as your body rapidly expands.\n\r",
+        "You feel your size reduce to normal proportions.\n\r"
+    },
+    {
+        "Moss Equipment",
+        11,
+        { 18001, 18002, 18003, 18004, 18006, 18008, 18009, 18010, 18011, 18016, 18017, -1, -1, -1, -1, -1, -1, -1, -1 },
+        "A strange energy surges through you and you feel your senses sharpen.\n\r",
+        "Your senses return to normal as you remove your mossy garb.\n\r"
+    },
+    {
+        "Blacksteel Battlegear",
+        19,
+        { 283, 283, 284, 284, 285, 286, 287, 288, 289, 290, 292, 293, 294, 294, 295, 296, 296, 297, 291 },
+        "The might of the warrior's spirit, past, present, and future, hums through your body.\n\r",
+        "The harmony of the warrior's spirit has left you.\n\r"
+    },
+    {
+        "Mother of All Dragons",
+        7,
+        { 22323, 22330, 22331, 22332, 22334, 22335, 22336, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        "You feel the might of the ancient dragonkind surge through your body.\r\n",
+        "The might of the ancient dragonkind has left you.\r\n"
+    },
+    {
+        "Berkthgar's Rage",
+        1,
+        {27977, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        NULL,
+        NULL
+    },
+    {
+        "The Naturalists Trappings",
+        17,
+        { 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 343, 344, 345, 346, 347, 347 },
+        "You feel the spirit of the wolf upon you.\r\n",
+        "The spirit of the wolf leaves you.\r\n"
+    },
+    {
+        "Troubadour's Finery",
+        19,
+        { 323, 323, 314, 314, 315, 316, 317, 318, 319, 320, 321, 322, 328, 328, 324, 325, 325, 326, 327 },
+        "You feel the need to sing, you are a STAR!\r\n",
+        "Your desire to sing like a star has faded.\r\n"
+    },
+    {
+        "\n",
+        0,
+        { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+        "\n",
+        "\n"
+    }
+};
 
-void add_set_stats(char_data *ch, obj_data *obj, int flag, int pos) {
-	// obj has just been worn
-	int obj_vnum = obj_index[obj->item_number].virt;
-	int i;
-	int z = 0, y;
-	// Quadruply nested for. Annoying, but it's gotta be done.
-	// I'm sure "quadruply" is a word.
-	for (; *(set_list[z].SetName) != '\n'; z++)
-		for (y = 0; y < 19 && set_list[z].vnum[y] != -1; y++)
-			if (set_list[z].vnum[y] == obj_vnum) {  // Aye, 'tis part of a set.
-				if ((obj_vnum == 4818 || obj_vnum == 4819) && pos == WEAR_HANDS)
-					continue;
-				for (y = 0; y < 19 && set_list[z].vnum[y] != -1; y++) {
-					if (set_list[z].vnum[y] == 17326 && GET_CLASS(ch) != CLASS_BARD)
-						continue;
-					if (set_list[z].vnum[y] == 17325 && GET_CLASS(ch) != CLASS_MONK)
-						continue;
-					bool found = FALSE, doublea = FALSE;
-					for (i = 0; i < MAX_WEAR; i++) {
-						if (ch->equipment[i] && obj_index[ch->equipment[i]->item_number].virt == set_list[z].vnum[y]) {
-							if (y > 0 && !doublea && set_list[z].vnum[y] == set_list[z].vnum[y - 1]) {
-								doublea = TRUE;
-								continue;
-							}
-							found = TRUE;
-							break;
-						}
-					}
-					if (!found) {
-						return;
-					}  // Nope.
-				}
-				struct affected_type af;
-				af.duration = -1;
-				af.bitvector = -1;
-				af.type = BASE_SETS + z;
-				af.location = APPLY_NONE;
-				af.modifier = 0;
-				// By gawd, they just completed the set.
-				if (affected_by_spell(ch, BASE_SETS + z))
-					return;
-				if (!flag)
-					send_to_char(set_list[z].Set_Wear_Message, ch);
-				switch (z) {
-				case SET_SAIYAN: // (aka Ascetic's Focus)
-					af.bitvector = AFF_HASTE;
-					affect_to_char(ch, &af);
-					break;
-				case SET_VESTMENTS:
-					af.location = APPLY_MANA;
-					af.modifier = 75;
-					affect_to_char(ch, &af);
-					break;
-				case SET_HUNTERS:
-					af.location = APPLY_HITROLL;
-					af.modifier = 5;
-					affect_to_char(ch, &af);
-					af.location = APPLY_MOVE;
-					af.modifier = 40;
-					affect_to_char(ch, &af);
-					break;
-				case SET_FERAL:
-					af.location = APPLY_HITROLL;
-					af.modifier = 2;
-					affect_to_char(ch, &af);
-					af.location = APPLY_HIT;
-					af.modifier = 10;
-					affect_to_char(ch, &af);
-					af.location = APPLY_DAMROLL;
-					af.modifier = 1;
-					affect_to_char(ch, &af);
-					break;
-				case SET_CAPTAINS:
-					af.location = APPLY_HIT;
-					af.modifier = 75;
-					affect_to_char(ch, &af);
-					break;
-				case SET_CELEBRANTS:
-					af.location = APPLY_KI;
-					af.modifier = 8;
-					affect_to_char(ch, &af);
-					break;
-				case SET_RAGER:
-					af.location = 0;
-					af.modifier = 0;
-					af.bitvector = AFF_STABILITY;
-					affect_to_char(ch, &af);
-					af.location = SKILL_BLOOD_FURY * 1000;
-					af.modifier = 5;
-					af.bitvector = -1;
-					affect_to_char(ch, &af);
-					break;
-				case SET_FIELDPLATE:
-					af.location = APPLY_HIT;
-					af.modifier = 100;
-					affect_to_char(ch, &af);
-					af.location = APPLY_HIT_N_DAM;
-					af.modifier = 6;
-					affect_to_char(ch, &af);
-					af.location = APPLY_AC;
-					af.modifier = -40;
-					affect_to_char(ch, &af);
-					break;
-				case SET_MOAD:
-					af.location = APPLY_HIT_N_DAM;
-					af.modifier = 4;
-					affect_to_char(ch, &af);
-					af.location = APPLY_SAVING_FIRE;
-					af.modifier = 15;
-					affect_to_char(ch, &af);
-					af.location = APPLY_MELEE_DAMAGE;
-					af.modifier = 5;
-					affect_to_char(ch, &af);
-					af.location = APPLY_SONG_DAMAGE;
-					af.modifier = 5;
-					affect_to_char(ch, &af);
-					break;
-				case SET_WHITECRYSTAL:
-					af.location = APPLY_HITROLL;
-					af.modifier = 10;
-					affect_to_char(ch, &af);
-					af.location = APPLY_HIT;
-					af.modifier = 50;
-					affect_to_char(ch, &af);
-					af.location = APPLY_MANA;
-					af.modifier = 50;
-					affect_to_char(ch, &af);
-					af.location = APPLY_SAVING_MAGIC;
-					af.modifier = 8;
-					affect_to_char(ch, &af);
-					break;
-				case SET_BLACKCRYSTAL:
-					af.location = APPLY_HIT_N_DAM;
-					af.modifier = 4;
-					affect_to_char(ch, &af);
-					af.location = APPLY_MANA;
-					af.modifier = 80;
-					affect_to_char(ch, &af);
-					af.location = APPLY_SAVING_ACID;
-					af.modifier = 8;
-					affect_to_char(ch, &af);
-					af.location = APPLY_SAVING_ENERGY;
-					af.modifier = 8;
-					affect_to_char(ch, &af);
-					break;
-				case SET_AQUA:
-					af.bitvector = AFF_WATER_BREATHING;
-					affect_to_char(ch, &af);
-					af.bitvector = -1;
-					af.location = APPLY_HIT_N_DAM;
-					af.modifier = 2;
-					affect_to_char(ch, &af);
-					break;
-				case SET_APPARATUS:
-					af.bitvector = AFF_INVISIBLE;
-					affect_to_char(ch, &af);
-					af.bitvector = -1;
-					af.location = APPLY_HP_REGEN;
-					af.modifier = 10;
-					affect_to_char(ch, &af);
-					break;
-				case SET_TITANIC:
-					af.location = APPLY_STR;
-					af.modifier = 3;
-					affect_to_char(ch, &af);
-					af.location = APPLY_INT;
-					affect_to_char(ch, &af);
-					af.location = APPLY_HIT;
-					af.modifier = 25;
-					affect_to_char(ch, &af);
-					af.location = APPLY_MANA;
-					affect_to_char(ch, &af);
-					af.location = APPLY_MOVE;
-					affect_to_char(ch, &af);
-					af.location = APPLY_CHAR_HEIGHT;
-					af.modifier = 30;
-					affect_to_char(ch, &af);
-					af.location = APPLY_CHAR_WEIGHT;
-					af.modifier = 60;
-					affect_to_char(ch, &af);
-					break;
-				case SET_MOSS:
-					af.bitvector = AFF_INFRARED;
-					affect_to_char(ch, &af);
-					af.bitvector = -1;
-					af.location = APPLY_HIT;
-					af.modifier = 25;
-					affect_to_char(ch, &af);
-					af.location = APPLY_KI;
-					af.modifier = 5;
-					affect_to_char(ch, &af);
-					af.location = APPLY_MOVE;
-					af.modifier = 50;
-					affect_to_char(ch, &af);
-					af.location = APPLY_HIT_N_DAM;
-					af.modifier = 5;
-					affect_to_char(ch, &af);
-					af.location = APPLY_WIS;
-					af.modifier = 3;
-					affect_to_char(ch, &af);
-					break;
-				case SET_BLACKSTEEL:
-					af.bitvector = AFF_FLYING;
-					af.location = 0;
-					af.modifier = 0;
-					affect_to_char(ch, &af);
+void add_set_stats(char_data *ch, obj_data *obj, int flag, int pos)
+{
+  // obj has just been worn
+  int obj_vnum = obj_index[obj->item_number].virt;
+  int i;
+  int z = 0, y;
+  // Quadruple nested for. Annoying, but it's gotta be done.
 
-					af.bitvector = -1;
-					af.location = APPLY_ARMOR;
-					af.modifier = -100;
-					affect_to_char(ch, &af);
+  for (; *(set_list[z].SetName) != '\n'; z++)
+    for (y = 0; y < 19 && set_list[z].vnum[y] != -1; y++)
+      if (set_list[z].vnum[y] == obj_vnum)
+      {  // Aye, 'tis part of a set.
+        if ((obj_vnum == 4818 || obj_vnum == 4819) && pos == WEAR_HANDS)
+          continue;
+        for (y = 0; y < 19 && set_list[z].vnum[y] != -1; y++)
+        {
+          if (set_list[z].vnum[y] == 17326 && GET_CLASS(ch) != CLASS_BARD)
+            continue;
+          if (set_list[z].vnum[y] == 17325 && GET_CLASS(ch) != CLASS_MONK)
+            continue;
+          bool found = FALSE, doublea = FALSE;
+          for (i = 0; i < MAX_WEAR; i++)
+          {
+            if (ch->equipment[i] && obj_index[ch->equipment[i]->item_number].virt == set_list[z].vnum[y])
+            {
+              if (y > 0 && !doublea && set_list[z].vnum[y] == set_list[z].vnum[y - 1])
+              {
+                doublea = TRUE;
+                continue;
+              }
+              found = TRUE;
+              break;
+            }
+          }
+          if (!found)
+          {
+            return;
+          }  // Nope.
+        }
+        struct affected_type af;
+        af.duration = -1;
+        af.bitvector = -1;
+        af.type = BASE_SETS + z;
+        af.location = APPLY_NONE;
+        af.modifier = 0;
+        // By gawd, they just completed the set.
+        if (affected_by_spell(ch, BASE_SETS + z))
+          return;
+        if (!flag && set_list[z].Set_Wear_Message != NULL)
+          send_to_char(set_list[z].Set_Wear_Message, ch);
+        switch (z) {
+        case SET_SAIYAN: // (aka Ascetic's Focus)
+          af.bitvector = AFF_HASTE;
+          affect_to_char(ch, &af);
+          break;
+        case SET_VESTMENTS:
+          af.location = APPLY_MANA;
+          af.modifier = 75;
+          affect_to_char(ch, &af);
+          break;
+        case SET_HUNTERS:
+          af.location = APPLY_HITROLL;
+          af.modifier = 5;
+          affect_to_char(ch, &af);
+          af.location = APPLY_MOVE;
+          af.modifier = 40;
+          affect_to_char(ch, &af);
+          break;
+        case SET_FERAL:
+          af.location = APPLY_HITROLL;
+          af.modifier = 2;
+          affect_to_char(ch, &af);
+          af.location = APPLY_HIT;
+          af.modifier = 10;
+          affect_to_char(ch, &af);
+          af.location = APPLY_DAMROLL;
+          af.modifier = 1;
+          affect_to_char(ch, &af);
+          break;
+        case SET_CAPTAINS:
+          af.location = APPLY_HIT;
+          af.modifier = 75;
+          affect_to_char(ch, &af);
+          break;
+        case SET_CELEBRANTS:
+          af.location = APPLY_KI;
+          af.modifier = 8;
+          affect_to_char(ch, &af);
+          break;
+        case SET_RAGER:
+          af.location = 0;
+          af.modifier = 0;
+          af.bitvector = AFF_STABILITY;
+          affect_to_char(ch, &af);
+          af.location = SKILL_BLOOD_FURY * 1000;
+          af.modifier = 5;
+          af.bitvector = -1;
+          affect_to_char(ch, &af);
+          break;
+        case SET_RAGER2:
+          af.location = 0;
+          af.location = SKILL_BLOOD_FURY * 1000;
+          af.modifier = 5;
+          af.bitvector = -1;
+          affect_to_char(ch, &af);
+          break;
+        case SET_FIELDPLATE:
+          af.location = APPLY_HIT;
+          af.modifier = 100;
+          affect_to_char(ch, &af);
+          af.location = APPLY_HIT_N_DAM;
+          af.modifier = 6;
+          affect_to_char(ch, &af);
+          af.location = APPLY_AC;
+          af.modifier = -40;
+          affect_to_char(ch, &af);
+          break;
+        case SET_MOAD:
+          af.location = APPLY_HIT_N_DAM;
+          af.modifier = 4;
+          affect_to_char(ch, &af);
+          af.location = APPLY_SAVING_FIRE;
+          af.modifier = 15;
+          affect_to_char(ch, &af);
+          af.location = APPLY_MELEE_DAMAGE;
+          af.modifier = 5;
+          affect_to_char(ch, &af);
+          af.location = APPLY_SONG_DAMAGE;
+          af.modifier = 5;
+          affect_to_char(ch, &af);
+          break;
+        case SET_MOAD2:
+          af.location = APPLY_HIT_N_DAM;
+          af.modifier = 4;
+          affect_to_char(ch, &af);
+          af.location = APPLY_SAVING_FIRE;
+          af.modifier = 15;
+          affect_to_char(ch, &af);
+          af.location = APPLY_MELEE_DAMAGE;
+          af.modifier = 5;
+          affect_to_char(ch, &af);
+          af.location = APPLY_SONG_DAMAGE;
+          af.modifier = 5;
+          affect_to_char(ch, &af);
+          break;
+        case SET_WHITECRYSTAL:
+          af.location = APPLY_HITROLL;
+          af.modifier = 10;
+          affect_to_char(ch, &af);
+          af.location = APPLY_HIT;
+          af.modifier = 50;
+          affect_to_char(ch, &af);
+          af.location = APPLY_MANA;
+          af.modifier = 50;
+          affect_to_char(ch, &af);
+          af.location = APPLY_SAVING_MAGIC;
+          af.modifier = 8;
+          affect_to_char(ch, &af);
+          break;
+        case SET_BLACKCRYSTAL:
+          af.location = APPLY_HIT_N_DAM;
+          af.modifier = 4;
+          affect_to_char(ch, &af);
+          af.location = APPLY_MANA;
+          af.modifier = 80;
+          affect_to_char(ch, &af);
+          af.location = APPLY_SAVING_ACID;
+          af.modifier = 8;
+          affect_to_char(ch, &af);
+          af.location = APPLY_SAVING_ENERGY;
+          af.modifier = 8;
+          affect_to_char(ch, &af);
+          break;
+        case SET_AQUA:
+          af.bitvector = AFF_WATER_BREATHING;
+          affect_to_char(ch, &af);
+          af.bitvector = -1;
+          af.location = APPLY_HIT_N_DAM;
+          af.modifier = 2;
+          affect_to_char(ch, &af);
+          break;
+        case SET_APPARATUS:
+          af.bitvector = AFF_INVISIBLE;
+          affect_to_char(ch, &af);
+          af.bitvector = -1;
+          af.location = APPLY_HP_REGEN;
+          af.modifier = 10;
+          affect_to_char(ch, &af);
+          break;
+        case SET_TITANIC:
+          af.location = APPLY_STR;
+          af.modifier = 3;
+          affect_to_char(ch, &af);
+          af.location = APPLY_INT;
+          affect_to_char(ch, &af);
+          af.location = APPLY_HIT;
+          af.modifier = 25;
+          affect_to_char(ch, &af);
+          af.location = APPLY_MANA;
+          affect_to_char(ch, &af);
+          af.location = APPLY_MOVE;
+          affect_to_char(ch, &af);
+          af.location = APPLY_CHAR_HEIGHT;
+          af.modifier = 30;
+          affect_to_char(ch, &af);
+          af.location = APPLY_CHAR_WEIGHT;
+          af.modifier = 60;
+          affect_to_char(ch, &af);
+          break;
+        case SET_MOSS:
+          af.bitvector = AFF_INFRARED;
+          affect_to_char(ch, &af);
+          af.bitvector = -1;
+          af.location = APPLY_HIT;
+          af.modifier = 25;
+          affect_to_char(ch, &af);
+          af.location = APPLY_KI;
+          af.modifier = 5;
+          affect_to_char(ch, &af);
+          af.location = APPLY_MOVE;
+          af.modifier = 50;
+          affect_to_char(ch, &af);
+          af.location = APPLY_HIT_N_DAM;
+          af.modifier = 5;
+          affect_to_char(ch, &af);
+          af.location = APPLY_WIS;
+          af.modifier = 3;
+          affect_to_char(ch, &af);
+          break;
+        case SET_BLACKSTEEL:
+          af.bitvector = AFF_FLYING;
+          af.location = 0;
+          af.modifier = 0;
+          affect_to_char(ch, &af);
 
-					af.bitvector = -1;
-					af.location = APPLY_SAVES;
-					af.modifier = 25;
-					affect_to_char(ch, &af);
-					break;
-				default:
-					send_to_char("Tough luck, you completed an unimplemented set. Report what you just wore, eh?\r\n", ch);
-					break;
-				}
-				break;
-			}
+          af.bitvector = -1;
+          af.location = APPLY_ARMOR;
+          af.modifier = -100;
+          affect_to_char(ch, &af);
+
+          af.bitvector = -1;
+          af.location = APPLY_SAVES;
+          af.modifier = 25;
+          affect_to_char(ch, &af);
+          break;
+
+        case SET_TRAPPINGS:
+          af.bitvector = AFF_HASTE;
+          affect_to_char(ch, &af);
+
+          af.bitvector = -1;
+          af.location = APPLY_MANA_REGEN;
+          af.modifier = 15;
+          affect_to_char(ch, &af);
+          break;
+
+        case SET_FINERY:
+          af.location = APPLY_KI_REGEN;
+          af.modifier = 5;
+          affect_to_char(ch, &af);
+          break;
+
+        default:
+          send_to_char("Tough luck, you completed an unimplemented set. Report what you just wore, eh?\r\n", ch);
+          break;
+        }
+        break;
+      }
 }
 
 void remove_set_stats(char_data *ch, obj_data *obj, int flag) {
@@ -675,7 +834,7 @@ void remove_set_stats(char_data *ch, obj_data *obj, int flag) {
 				}
 				//Remove it
 				affect_from_char(ch, BASE_SETS + z);
-				if (!flag)
+				if (!flag && set_list[z].Set_Remove_Message != NULL)
 					send_to_char(set_list[z].Set_Remove_Message, ch);
 				break;
 			}
@@ -1798,6 +1957,27 @@ void affect_remove(CHAR_DATA *ch, struct affected_type *af, int flags) {
 			send_to_char("You feel ready to brew something again.\n\r", ch);
 		}
 		break;
+	case SKILL_SCRIBE_TIMER:
+		if (!(flags & SUPPRESS_MESSAGES)) {
+			send_to_char("You feel ready to scribe something again.\n\r", ch);
+		}
+		break;
+	case OBJ_LILITHRING:
+		if (IS_NPC(ch))
+		{
+			remove_memory(ch, 'h');
+			if (ch->master) {
+				if (ch->master->in_room == ch->in_room)
+				{
+					act("$N blinks, shakes their head and snaps out of their dark trance. $N looks pissed!", ch->master, 0, ch, TO_ROOM, 0);
+					act("$N blinks, shakes their head and snaps out of their dark trance. $N looks pissed!", ch->master, 0, ch, TO_CHAR, 0);
+
+				}
+				if (!(flags & SUPPRESS_CONSEQUENCES) )
+					add_memory(ch, GET_NAME(ch->master), 'h');
+				stop_follower(ch, BROKE_CHARM_LILITH);
+			}
+		}
 	default:
 		break;
 	}
@@ -2077,13 +2257,15 @@ int apply_ac(CHAR_DATA *ch, int eq_pos) {
 	return value;
 }
 
+
+
 // return 0 on failure
 // 1 on success
 int equip_char(CHAR_DATA *ch, struct obj_data *obj, int pos, int flag) {
 	int j;
 
 	if (!ch || !obj) {
-		log("Null ch or obj in equp_char()!", ANGEL, LOG_BUG);
+		log("Null ch or obj in equip_char()!", ANGEL, LOG_BUG);
 		return 0;
 	}
 	if (pos < 0 || pos >= MAX_WEAR) {
@@ -2136,6 +2318,30 @@ int equip_char(CHAR_DATA *ch, struct obj_data *obj, int pos, int flag) {
 		}
 	}
 
+	if (obj_index[obj->item_number].virt == 30010 && !ISSET(ch->affected_by, AFF_IGNORE_WEAPON_WEIGHT))
+	{
+			act("$p binds to your skin and won't let go. It hurts!", ch, obj, 0, TO_CHAR, 0);
+			act("$p binds to $n's skin!", ch, obj, 0, TO_ROOM, 0);
+			obj->obj_flags.timer = 0;
+
+	}
+	if (obj_index[obj->item_number].virt == 30036 && !ISSET(ch->affected_by, AFF_IGNORE_WEAPON_WEIGHT))
+	{
+			act("As you grasp the staff, raw magical energy surges through you.  You can barely control it!", ch, obj, 0, TO_CHAR, 0);
+			obj->obj_flags.timer = 0;
+	}
+	if (obj_index[obj->item_number].virt == 30033 && !ISSET(ch->affected_by, AFF_IGNORE_WEAPON_WEIGHT))
+	{
+			act("The Chaos Blade begins to pulse with a dull red light, your life force is being drained!", ch, obj, 0, TO_CHAR, 0);
+			obj->obj_flags.timer = 0;
+	}
+
+	if (obj_index[obj->item_number].virt == 30008 && !ISSET(ch->affected_by, AFF_IGNORE_WEAPON_WEIGHT))
+	{
+			act("Upon grasping Lyvenia the Song Staff, you feel more lively!", ch, obj, 0, TO_CHAR, 0);
+			obj->obj_flags.timer = 5;
+	}
+
 	ch->equipment[pos] = obj;
 	obj->equipped_by = ch;
 	if (!IS_NPC(ch))
@@ -2186,7 +2392,25 @@ struct obj_data *unequip_char(CHAR_DATA *ch, int pos, int flag) {
 	assert(pos>=0 && pos<MAX_WEAR);
 	assert(ch->equipment[pos]);
 
+
 	obj = ch->equipment[pos];
+
+	if (obj_index[obj->item_number].virt == 30036  && !ISSET(ch->affected_by, AFF_IGNORE_WEAPON_WEIGHT))
+	{
+			act("With great effort, you are able to separate the Staff of Eternity from your own magical aura, but it comes at a great cost...", ch, obj, 0, TO_CHAR, 0);
+			GET_MANA(ch) = GET_MANA(ch)/2;
+	}
+	if (obj_index[obj->item_number].virt == 30033  && !ISSET(ch->affected_by, AFF_IGNORE_WEAPON_WEIGHT))
+	{
+			act("The effort required to separate the Chaos Blade from your own life force is immense! The Blade exacts a toll...", ch, obj, 0, TO_CHAR, 0);
+			GET_HIT(ch) = GET_HIT(ch) /2;
+	}
+	if (obj_index[obj->item_number].virt == 30008  && !ISSET(ch->affected_by, AFF_IGNORE_WEAPON_WEIGHT))
+	{
+			act("The spring in your step has subsided.", ch, obj, 0, TO_CHAR, 0);
+			obj->obj_flags.timer = 0;
+	}
+
 	if (GET_ITEM_TYPE(obj) == ITEM_ARMOR)
 		GET_AC(ch) += apply_ac(ch, pos);
 
@@ -2262,7 +2486,8 @@ int get_number(char **name) {
 		// \0 between the number and the name as they appear in the string.
 		strcpy(number, *name);
 		// now number contains the number as a string
-		strncpy(buffer, ppos, MAX_INPUT_LENGTH);
+		strncpy(buffer, ppos, MAX_INPUT_LENGTH-1);
+		buffer[MAX_INPUT_LENGTH-1] = 0;
 		strcpy(*name, buffer);
 		// now the pointer that was passed into the function
 		// points to the name only.
@@ -3059,7 +3284,7 @@ void extract_obj(struct obj_data *obj) {
 }
 
 void update_object(struct obj_data *obj, int use) {
-	if (obj->obj_flags.timer > 0)
+	if (obj->obj_flags.timer > 0 && (obj_index[obj->item_number].virt != 30010 && obj_index[obj->item_number].virt != 30036 &&obj_index[obj->item_number].virt != 30033 && obj_index[obj->item_number].virt != 30097 && obj_index[obj->item_number].virt != 30019 ))
 		obj->obj_flags.timer -= use;
 	if (obj->contains)
 		update_object(obj->contains, use);
@@ -3838,7 +4063,10 @@ struct obj_data *get_obj_vis(CHAR_DATA *ch, char *name, bool loc) {
 
 	/* ok.. no luck yet. scan the entire obj list   */
 	for (i = object_list, j = 1; i && (j <= number); i = i->next) {
-		if (i->item_number == -1) continue;
+		// TODO
+		// For now they want me to remove this becuase portals and corpses are item_number -1
+		// if (i->item_number == -1) continue;
+		//
 		if (loc && IS_SET(i->obj_flags.more_flags, ITEM_NOLOCATE) &&
 		GET_LEVEL(ch) < 101)
 			continue;

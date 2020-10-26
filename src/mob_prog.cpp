@@ -59,6 +59,7 @@ extern struct index_data *obj_index;
 CHAR_DATA *rndm2;
 extern struct obj_data  *object_list;
 extern struct room_data ** world_array;
+int activeProgs = 0; // loop protection
 
 CHAR_DATA *activeActor = NULL;
 CHAR_DATA *activeRndm = NULL;
@@ -119,7 +120,7 @@ char *mprog_next_command( char *clist )
 
   for ( ; *pointer != '\0'; pointer++)
   {
-	if (!open && *pointer == '\n') break;
+	if (!open && (*pointer == '\n' || *pointer == '\r')) break;
 	if (*pointer == '{') open = TRUE;
 	if (open && *pointer == '}') open = FALSE;
   }
@@ -1150,7 +1151,9 @@ enum mprog_ifs
   eHASDONEQUEST1,
   eINSAMEZONE,
   eCLAN,
-  eISDAYTIME
+  eISDAYTIME,
+  eNUMOFOBJSINWORLD
+
 };
 
 
@@ -1163,7 +1166,7 @@ std::map<std::string,mprog_ifs> load_ifchecks()
   ifcheck_tmp["amtitems"] = eAMTITEMS;
   ifcheck_tmp["numpcs"] = eNUMPCS;
   ifcheck_tmp["numofmobsinworld"] = eNUMOFMOBSINWORLD;
-
+  ifcheck_tmp["numofobjsinworld"] = eNUMOFOBJSINWORLD;
   ifcheck_tmp["numofmobsinroom"] = eNUMOFMOBSINROOM;
   ifcheck_tmp["ispc"] = eISPC;
   ifcheck_tmp["iswielding"] = eISWIELDING;
@@ -1313,7 +1316,7 @@ int mprog_do_ifchck( char *ifchck, CHAR_DATA *mob, CHAR_DATA *actor,
       for( ; ; )
 	{
 	  if (*point == '.') { *valpt = '\0'; valpt = val2; point++;}
-	  else if ( ( *point != ' ' ) && ( *point == '\0' ) )
+	  else if (  *point == '\0' || *point == '\r' || *point == '\n')
 	    break;
 	  else
 	    *valpt++ = *point++; 
@@ -1464,6 +1467,23 @@ int mprog_do_ifchck( char *ifchck, CHAR_DATA *mob, CHAR_DATA *actor,
     		return false;
     	}
     });
+
+    return mprog_veval( count, opr, atoi(val) );
+   }
+   break;
+   case eNUMOFOBJSINWORLD:
+   {
+    int target = atoi(arg);
+    int count = 0;
+
+    OBJ_DATA *p;
+    for (p = object_list; p; p = p->next)
+    {
+        if (obj_index[p->item_number].virt == target)
+        {
+                count++;
+        }
+    }
 
     return mprog_veval( count, opr, atoi(val) );
    }
@@ -3230,6 +3250,14 @@ void mprog_driver ( char *com_list, CHAR_DATA *mob, CHAR_DATA *actor,
  mprog_cur_result = eSUCCESS;
  mprog_line_num = 0;
 
+ activeProgs++;
+ if (activeProgs > 20)
+ {
+        logf( IMMORTAL, LOG_WORLD, "Mob: %d : Too many active mobprograms : LOOP", mob_index[mob->mobdata->nr].virt );
+	activeProgs--;
+	return;
+ }
+
  //int cIfs[256]; // for MPPAUSE
  //int ifpos;
  ifpos = 0;
@@ -3249,12 +3277,13 @@ void mprog_driver ( char *com_list, CHAR_DATA *mob, CHAR_DATA *actor,
    activeActor = activeRndm = NULL;
    activeObj = NULL;
    activeVo = NULL;
+   activeProgs--;
    return;
  }
 
  // count valid random victs in room
  for ( vch = world[mob->in_room].people; vch; vch = vch->next_in_room )
-   if ( CAN_SEE( mob, vch, TRUE ) )
+   if ( CAN_SEE( mob, vch, TRUE ) && !IS_NPC(vch) )
        count++;
 
  if(count)
@@ -3264,7 +3293,7 @@ void mprog_driver ( char *com_list, CHAR_DATA *mob, CHAR_DATA *actor,
  {
    for ( vch = world[mob->in_room].people; vch && count; )
    {
-     if ( CAN_SEE( mob, vch, TRUE ) )
+     if ( CAN_SEE( mob, vch, TRUE ) && !IS_NPC(vch) )
        count--;
      if (count) vch = vch->next_in_room;
   }
@@ -3292,6 +3321,7 @@ void mprog_driver ( char *com_list, CHAR_DATA *mob, CHAR_DATA *actor,
 	   activeActor = activeRndm = NULL;
 	   activeObj = NULL;
 	   activeVo = NULL;
+	   activeProgs--;
          return;
 	}
      }
@@ -3305,7 +3335,8 @@ void mprog_driver ( char *com_list, CHAR_DATA *mob, CHAR_DATA *actor,
 		   activeActor = activeRndm = NULL;
 		   activeObj = NULL;
 		   activeVo = NULL;
-	         return;
+		   activeProgs--;
+        	  return;
 		}
 	}	
      }
@@ -3315,6 +3346,7 @@ void mprog_driver ( char *com_list, CHAR_DATA *mob, CHAR_DATA *actor,
    activeActor = activeRndm = NULL;
    activeObj = NULL;
    activeVo = NULL;
+   activeProgs--;
  return;
 
 }
@@ -3434,6 +3466,11 @@ void mprog_percent_check( CHAR_DATA *mob, CHAR_DATA *actor, OBJ_DATA *obj,
  bool done = FALSE;
  mprg = mob_index[mob->mobdata->nr].mobprogs;
  if (!mprg) { done = TRUE; mprg = mob_index[mob->mobdata->nr].mobspec; }
+
+ if (mob_index[mob->mobdata->nr].virt == 30013)
+ {
+	debugpoint();
+ }
 
  mprog_command_num = 0;
  for ( ; mprg != NULL; mprg = next )
@@ -3879,8 +3916,8 @@ void update_mprog_throws() {
 		vobj = NULL;
 		vict = NULL;
 
-		if (curr->data_num == -999)
-			debugpoint();
+//		if (curr->data_num == -999)
+//			debugpoint();
 
 		if (curr->tMob && charExists(curr->tMob) && curr->tMob->in_room >= 0) {
 			vict = curr->tMob;

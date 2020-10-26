@@ -43,6 +43,13 @@ extern struct descriptor_data *descriptor_list;
 extern CHAR_DATA *initiate_oproc(CHAR_DATA *ch, OBJ_DATA *obj);
 extern void end_oproc(CHAR_DATA *ch);
 
+extern void reset_zone(int zone);
+ extern struct obj_data * search_char_for_item(char_data * ch, int16 item_number, bool wearonly = FALSE);
+
+extern struct mprog_throw_type *g_mprog_throw_list;
+
+
+
 // TODO - go over emoting object stuff and make sure it's as effecient as we can get it
  
 struct obj_emote_data {
@@ -336,11 +343,207 @@ int pushwand(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg,
 	 obj_from_char(curr);
 	 extract_obj(curr);
 	 return eSUCCESS;
-       }       
+       }
      }
      return eFAILURE;
    } else return eFAILURE;
 }
+
+
+int dawnsword(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg, CHAR_DATA *invoker)
+{
+	if (cmd != CMD_SAY)
+		return eFAILURE;
+	if (str_cmp(arg, " liberate me ab inferis"))
+		return eFAILURE;
+	if (GET_ALIGNMENT(ch) < 350)
+	{
+		send_to_char("Dawn refuses your impure prayer.\r\n",ch);
+		return eSUCCESS;
+	}
+	if (isTimer(ch, OBJ_DAWNSWORD))
+	{
+		send_to_char("Dawn needs more time to recharge and is not ready to hear your prayer yet.",ch);
+		return eSUCCESS;
+	}
+	if (!ch->in_room || IS_SET(world[ch->in_room].room_flags, SAFE) || IS_SET(world[ch->in_room].room_flags, NO_MAGIC))
+	{
+		send_to_char("Something about this room blocks your command.\r\n", ch);
+		return eSUCCESS;
+	}
+	addTimer(ch, OBJ_DAWNSWORD, 24);
+
+	send_to_char("You whisper a prayer to Dawn and it responds in a brilliant flash of light!\r\n",ch);
+	CHAR_DATA *v;
+	struct affected_type af;
+	for (v = world[ch->in_room].people; v; v = v->next_in_room)
+	{
+		if (v==ch) continue;
+		if (GET_ALIGNMENT(v) >= 350)
+		{
+			act("$n whispers a quiet prayer and a glorious flash of holy light explodes from their weapon!",ch, 0, v, TO_VICT, 0);
+			continue;
+		}
+		if (IS_AFFECTED(v, AFF_BLIND)) continue; // no doubleblind
+		act("$n whispers a quiet prayer and a searing blast of white light suddenly blinds you!",ch, 0, v, TO_VICT, 0);
+		af.type      = SPELL_BLINDNESS;
+	        af.location  = APPLY_HITROLL;
+      		af.modifier  = has_skill(v,SKILL_BLINDFIGHTING)?skill_success(v,0,SKILL_BLINDFIGHTING)?-10:-20:-20;
+	        af.duration  = 2;
+      		af.bitvector = AFF_BLIND;
+   	 	affect_to_char(v, &af);
+    		af.location = APPLY_AC;
+ 		af.modifier  = has_skill(v,SKILL_BLINDFIGHTING)?skill_success(v,0,SKILL_BLINDFIGHTING)?20:40:40;
+	        affect_to_char(v, &af);
+	}
+
+	return eSUCCESS;
+
+}
+int songstaff(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg, CHAR_DATA *invoker)
+{
+	if (cmd) return eFAILURE;
+	if (obj->equipped_by == NULL || !obj->equipped_by->in_room) return eFAILURE;
+	ch = obj->equipped_by;
+	char buf[MAX_STRING_LENGTH];
+	if ((IS_SET(world[ch->in_room].room_flags, SAFE) || IS_SET(world[ch->in_room].room_flags, NO_MAGIC) || IS_SET(world[ch->in_room].room_flags, QUIET) )) return eFAILURE;
+
+	obj->obj_flags.timer--;
+	if (obj->obj_flags.timer > 0) return eFAILURE;
+	obj->obj_flags.timer = 5;
+
+	int heal;
+        for (char_data * tmp_char = world[ch->in_room].people; tmp_char; tmp_char = tmp_char->next_in_room) {
+                if (!ARE_GROUPED(ch, tmp_char))
+                        continue;
+
+                heal = 50 / 2 + ((GET_MAX_MOVE(tmp_char) * 2) / 100) + (number(0, 20) - 10);
+                if (heal < 5)
+                        heal = 5;
+
+                if (IS_PC(tmp_char) && IS_SET(tmp_char->pcdata->toggles, PLR_DAMAGE)) {
+                        if (tmp_char == ch) {
+                                csendf(tmp_char, "You feel your Travelling March recover %d moves for you.\r\n", heal);
+                        } else {
+                                sprintf(buf, "You feel %s's Travelling March recovering %d moves for you.\r\n", GET_NAME(ch), heal);
+                                send_to_char(buf, tmp_char);
+                        }
+                } else
+                        send_to_char("Your feet feel lighter.\r\n", tmp_char);
+                GET_MOVE(tmp_char) += heal;
+                if (GET_MOVE(tmp_char) > GET_MAX_MOVE(tmp_char))
+                        GET_MOVE(tmp_char) = GET_MAX_MOVE(tmp_char);
+        }
+
+
+	return eSUCCESS;
+}
+
+void check_eq(CHAR_DATA *ch);
+
+int lilithring(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg, CHAR_DATA *invoker)
+{
+	if (cmd != CMD_SAY)
+		return eFAILURE;
+	char arg1[MAX_INPUT_LENGTH];
+	char arg2[MAX_INPUT_LENGTH];
+	arg = one_argument(arg, arg1);
+	arg = one_argument(arg, arg2);
+	if (str_cmp(arg1, "ateni"))
+		return eFAILURE;
+	CHAR_DATA *victim;
+	if (!(victim = get_char_room_vis(ch, arg2))) {
+		send_to_char("Noone here by that name.\r\n", ch);
+		return eSUCCESS;
+	}
+	if (!IS_NPC(victim))
+	{
+		send_to_char("The Gods prohibit such evil.\r\n", ch);
+		return eSUCCESS;
+	}
+	if (isTimer(ch, OBJ_LILITHRING))
+	{
+		send_to_char("The ring remains dark and your command goes unheeded.\r\n",ch);
+		return eSUCCESS;
+	}
+
+       if (circle_follow(victim, ch)) {
+                send_to_char("Sorry, following in circles can not be allowed.\n\r", ch);
+		return eSUCCESS;
+        }
+
+        if ((!ISSET(victim->mobdata->actflags, ACT_BARDCHARM) && !ISSET(victim->mobdata->actflags, ACT_CHARM)) || GET_LEVEL(victim)>50) {
+		act("$N's soul is too powerful for you to command.", ch, 0, victim, TO_CHAR, 0);
+		return eSUCCESS;
+        }
+	if (GET_ALIGNMENT(ch) > -350)
+	{
+		send_to_char("Your soul is too pure for such an unclean act.\r\n",ch);
+		return eSUCCESS;
+	}
+
+	if (!ch->in_room || IS_SET(world[ch->in_room].room_flags, SAFE))
+	{
+		send_to_char("Something about this room blocks your command.\r\n", ch);
+		return eSUCCESS;
+	}
+	act("You speak the command and $N must comply. Lilith's Ring of Command glows with mirthful malevolence.", ch, 0, victim, TO_CHAR, 0);
+	act("$n whispers softly to $N. $N's eyes go blank and they now follow $n.", ch, 0, victim, TO_ROOM, 0);
+
+      addTimer(ch, OBJ_LILITHRING, 24);
+      if (victim->master)
+                stop_follower(victim, 0);
+
+        remove_memory(victim, 'h');
+
+        add_follower(victim, ch, 0);
+	struct affected_type af;
+
+        af.type = OBJ_LILITHRING;
+        af.duration = 3;
+        af.modifier = 0;
+        af.location = 0;
+        af.bitvector = AFF_CHARM;
+        affect_to_char(victim, &af);
+
+        /* remove any !charmie eq the charmie is wearing */
+        check_eq(victim);
+
+	return eSUCCESS;
+}
+
+
+int orrowand(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg, CHAR_DATA *invoker)
+{
+	if (cmd != CMD_SAY || str_cmp(arg, " recharge"))
+		return eFAILURE;
+
+	struct obj_data *curr;
+	struct obj_data *firstP = NULL, *secondP = NULL, *vial = NULL, *diamond = NULL;
+
+	for (curr = ch->carrying; curr; curr=curr->next_content)
+	{
+		if (obj_index[curr->item_number].virt == 17399) diamond = curr;
+		else if (obj_index[curr->item_number].virt == 27903 && firstP != NULL) secondP = curr;
+		else if (obj_index[curr->item_number].virt == 27903 )  firstP = curr;
+		else if (obj_index[curr->item_number].virt == 27904) vial = curr;
+	}
+
+	if (!firstP || !secondP || !vial || !diamond)
+	{
+		send_to_char("Recharge unsuccessful:  Missing required components.\r\n",ch);
+		return eSUCCESS;
+	}
+	obj_from_char(firstP); extract_obj(firstP);
+	obj_from_char(secondP); extract_obj(secondP);
+	obj_from_char(vial); extract_obj(vial);
+	obj_from_char(diamond); extract_obj(diamond);
+	obj->obj_flags.value[2] = 5;
+	send_to_char("The wand emits a soft \"beep\" and the display flashes \"Wand Recharged\"\r\n",ch);
+	return eSUCCESS;
+}
+
+
 
 int holyavenger(CHAR_DATA *ch, struct obj_data *obj,  int cmd, char *arg, 
                    CHAR_DATA *invoker)
@@ -612,28 +815,31 @@ int returner(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg,
    return eSUCCESS;
 }
 
-#define MAX_GEM_ASSEMBLER_ITEM   11
+#define MAX_GEM_ASSEMBLER_ITEM   10
 
-struct assembler_data {
+struct assemble_item {
    char * finish_to_char;
    char * finish_to_room;
-   char * missing_text;
-   int  pieces[MAX_GEM_ASSEMBLER_ITEM];
+   char * missing_to_char;
+   int components[MAX_GEM_ASSEMBLER_ITEM];
+   int item;
 };
 
-struct assembler_data gem_data[] = {
+struct assemble_item assemble_items[] = {
    // Item 0, the crystalline tir stuff
    { "A brilliant flash of light erupts from your hands as the gems mold themselves together and form a cohesive and flawless gem.\r\n",
      "A brilliant flash of light erupts from $n's hands as the gems $e holds form a new cohesive and flawless gem.",
      "One of the gems seems to be missing.\r\n",
-     { 2714, 2602, 12607, -1, -1, -1, -1, -1, -1, -1, 1506 }
+     { 2714, 2602, 12607, -1, -1, -1, -1, -1, -1, -1 },
+	 1506
    },
 
    // Item 1, Etala the Shadowblade
    { "Connecting the hilt and gem to the blade, you form a whole sword.\r\n",
      "$n fiddles around with some stuff in $s inventory.",
      "You seem to be missing a piece.\r\n",
-     { 181, 182, 183, -1, -1, -1, -1, -1, -1, -1, 184 }
+     { 181, 182, 183, -1, -1, -1, -1, -1, -1, -1 },
+	 184
    },
 
    // Item 2, Broadhead arrow from forage items
@@ -642,7 +848,8 @@ struct assembler_data gem_data[] = {
      "Finally, you shape the scorpion stinger into a deadly arrowhead and secure it to the front.\r\n",
      "$n sits down with some junk and tries $s hand at fletching.",
      "You don't have all the items required to fletch an arrow.\r\n",
-     { 3185, 3186, 3187, -1, -1, -1, -1, -1, -1, -1, 3188 }
+     { 3185, 3186, 3187, -1, -1, -1, -1, -1, -1, -1 },
+	 3188
    },
 
    // Item 3, Wolf tooh arrow from forage items
@@ -651,35 +858,48 @@ struct assembler_data gem_data[] = {
      "Finally, you hone the wolf's tooth stinger into a sharp arrowhead and secure it to the front.\r\n",
      "$n sits down with some junk and tries $s hand at fletching.",
      "You don't have all the items required to fletch an arrow.\r\n",
-     { 3185, 28301, 3187, -1, -1, -1, -1, -1, -1, -1, 3190 }
+     { 3185, 28301, 3187, -1, -1, -1, -1, -1, -1, -1 },
+	 3190
    },
 
    // Item 4, Gaiot key in DK
    { "The stone pieces join together to form a small statue of a dragon.\r\n",
      "$n assembles some stones together to form a black statue.\r\n",
      "The pieces click together but fall apart as if something is missing.\r\n",
-     { 9502, 9503, 9504, 9505, 9506, -1, -1, -1, -1, -1, 9501 }
+     { 9502, 9503, 9504, 9505, 9506, -1, -1, -1, -1, -1 },
+	 9501
    },
 
    // Item 5, ventriloquate dummy - rahz
    { "You are able to put the parts together, and create a ventriloquist's dummy.\r\n",
      "$n manages to the parts together, creating a ventriloquist's dummy.\r\n",
      "The pieces don't seem to fit together quite right.\r\n",
-     { 17349, 17350, 17351, 17352, 17353, 17354, -1, -1, -1, -1, 17348 }
+     { 17349, 17350, 17351, 17352, 17353, 17354, -1, -1, -1, -1 },
+	 17348
    },
 
    // Item 6, the Shield of the Beholder
    { "You place the two gems into the holes on the shield and it seems to hum with power.\n\r",
      "$n places two precious gemstones into a beholder's carapace to create a shield.\n\r",
      "You seem to be missing a piece.\n\r",
-     { 5260, 5261, 5262, -1, -1, -1, -1, -1, -1, -1, 5263 }
+     { 5260, 5261, 5262, -1, -1, -1, -1, -1, -1, -1 },
+	 5263
+   },
+
+   // Item 7, a curiously notched medallion
+   { "With a blinding flash, the gem makes the medallion whole.\n\r",
+     "As $n fiddles with the medallion pieces, you are dazed by a bright flash!\n\r",
+	 "You attempt to assemble the family medallion but something is missing.\n\r",
+     { 30084, 30085, 30086, 30087, 30088, -1, -1, -1, -1, -1 },
+	 30083
    },
 
    // Junk Item.  THIS MUST BE LAST IN THE ARRAY
-   { "Capulet",
-     "is a fatt",
-     "butt.",
-     { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 }
+   { "",
+     "",
+     "",
+     { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
+	 -1
    }
 
 };
@@ -722,134 +942,190 @@ int hellmouth_thing(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg,
   return eFAILURE; // So normal say function will execute after this
 }
 
-
-int gem_assembler(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg, 
-                   CHAR_DATA *invoker)
+int search_assemble_items(int vnum)
 {
-   obj_data * ptr_array[MAX_GEM_ASSEMBLER_ITEM - 1];
-   obj_data * reward = NULL;
-   int position, i, done;
-   bool haveall = FALSE;
-   char buf[200];
-   extern struct index_data *obj_index;
+	// This should never happen
+	if (vnum < 1) {
+		logf(ANGEL, LOG_BUG, "search_assemble_items passed vnumx=%d\n\r", vnum);
+		produce_coredump();
+		return -1;
+	}
 
-   if(cmd != CMD_ASSEMBLE)
-      return eFAILURE;
+	for (int item_index=0; assemble_items[item_index].item != -1; item_index++) {
+		// We search until MAX_GEM_ASSEMBLER_ITEM -1 because we don't want to include the last item
+		// which is the finished item vnum
+		for (int component_index=0; component_index < MAX_GEM_ASSEMBLER_ITEM; component_index++) {
+			if (assemble_items[item_index].components[component_index] == vnum) {
+				return item_index;
+			}
+		}
+	}
 
-   done = 0;
+	return -1;
+}
 
-   // Find our position in the array
-   for(position = 0; gem_data[position].pieces[0] != -1 && !done; position++)
-   {
-      for(i = 0; i < MAX_GEM_ASSEMBLER_ITEM; i++)
-      {
-         if(gem_data[position].pieces[i] == obj_index[obj->item_number].virt)
-         { 
-            for(int j=0;j<MAX_GEM_ASSEMBLER_ITEM;j++) {
-               if(gem_data[position].pieces[j] == -1) haveall = TRUE;
-               if(!(get_obj_in_list_num(real_object(gem_data[position].pieces[j]), ch->carrying)))
-                  break;
-            }
-            if(haveall) done = 1; 
-         }
-         if(done) break;
-         if(-1 == gem_data[position].pieces[i])
-            break;
-      }
-      if(done)
-        break;
-   }
 
-   if(gem_data[position].pieces[0] == -1)
-   {
-      // Could not locate obj in data array
-      sprintf(buf, "Item %d has gem_assembler proc with invalid data.", obj_index[obj->item_number].virt);
-      log(buf, ANGEL, LOG_BUG); // 102
-      send_to_char("You can't seem to assemble that.", ch);
-      return eSUCCESS;
-   }
+bool assemble_item_index(char_data *ch, int item_index)
+{
+	// This should never happen
+	if (item_index < 0) {
+		logf(ANGEL, LOG_BUG, "assemble_item_index passed item_index=%d\n\r", item_index);
+		produce_coredump();
+		return false;
+	}
 
-   done = 1;
-   // Make sure all our items exist in the world
-   for(i = 0; i < MAX_GEM_ASSEMBLER_ITEM; i++) 
-   {
-      if( -1 == gem_data[position].pieces[i] ) // last piece in list, skip to end
-      {
-        // if last piece doesn't exist, get out
-        if( -1 == real_object(gem_data[position].pieces[MAX_GEM_ASSEMBLER_ITEM - 1]) )
-          done = 0;
-        break;
-      } 
+	// Look through all the components of item_index and see if the player has them
+	for (int component_index=0; component_index < MAX_GEM_ASSEMBLER_ITEM; component_index++) {
 
-      // if object doesn't exist, get out
-      if( -1 == real_object(gem_data[position].pieces[i] ) )
-        { done = 0; break; }
-   }
+		int component_virt = assemble_items[item_index].components[component_index];
+		if (component_virt < 1) {
+			continue;
+		}
 
-   if(!done)
-   {
-      sprintf(buf, "Gem_assembler's objects not loading properly. Contact a god. (%d)\r\n", position);
-      send_to_char(buf, ch);
-      return eSUCCESS;
-   }
+		int component_real = real_object(component_virt);
+		if (component_real < 0) {
+			logf (ANGEL, LOG_BUG, "assemble_items[%d], component_index %d refers to invalid rnum %d for vnum %d.",
+					item_index, component_index, component_real, component_virt);
 
-   // make sure our ptr_array is clean
-   for(i = 0; i < (MAX_GEM_ASSEMBLER_ITEM - 1); i++)
-      ptr_array[i] = NULL;
+			send_to_char("There was an internal malfunction assembling your item. Contact an Immortal.\n\r", ch);
+			produce_coredump();
+			return true;
+		}
 
-   // go through and find all our pointers
-   for(i = 0; i < (MAX_GEM_ASSEMBLER_ITEM - 1); i++)
-   {
-      if(-1 == gem_data[position].pieces[i]) // last item in list
-      {
-         i--; // Set i to the last valid position
-         break;
-      }
-      if(!(ptr_array[i] = get_obj_in_list_num(real_object(gem_data[position].pieces[i]), ch->carrying)))
-      {
-         // we didn't have a piece
-         send_to_char(gem_data[position].missing_text, ch);
-         return eSUCCESS;
-      }
-   }
-   if (real_object(gem_data[position].pieces[MAX_GEM_ASSEMBLER_ITEM-1]) < 0)
-   {
-      send_to_char("Assembled item not found.\r\n",ch);
-      return eSUCCESS;
-   }
-  struct obj_data * search_char_for_item(char_data * ch, int16 item_number, bool wearonly = FALSE);
+	    if (get_obj_in_list_num(component_real, ch->carrying) == 0) {
+	    	return false;
+	    }
+	}
 
-  if(IS_SET(((OBJ_DATA*)obj_index[real_object(gem_data[position].pieces[MAX_GEM_ASSEMBLER_ITEM-1])].item)->obj_flags.more_flags, ITEM_UNIQUE)) {
-      if(search_char_for_item(ch, real_object(gem_data[position].pieces[MAX_GEM_ASSEMBLER_ITEM-1]))) {
-         send_to_char("You already have one of those!\r\n", ch);
-         return eSUCCESS;
-      }
+	// If we get to this point then all components for item_index were found
+	int item_vnum = assemble_items[item_index].item;
+	int item_real = real_object(item_vnum);
+	obj_data *item = (obj_data *)obj_index[item_real].item;
+
+	// Check if the item to be assembled is marked UNIQUE but the player already has one
+	if (IS_SET(item->obj_flags.more_flags, ITEM_UNIQUE)) {
+		if (search_char_for_item(ch, item_real)) {
+			send_to_char("You already have one of those!\r\n", ch);
+			return true;
+		}
+	}
+
+	// Send item specific assemble messages to the player and room
+	send_to_char(assemble_items[item_index].finish_to_char, ch);
+	act(assemble_items[item_index].finish_to_room, ch, 0, 0, TO_ROOM, 0);
+
+	// Remove all the components from the player
+	for (int component_index=0; component_index < MAX_GEM_ASSEMBLER_ITEM; component_index++) {
+		int component_virt = assemble_items[item_index].components[component_index];
+		if (component_virt < 1) {
+			continue;
+		}
+
+		int component_real = real_object(component_virt);
+		if (component_real < 0) {
+			logf (ANGEL, LOG_BUG, "assemble_items index %d, component_index %d refers to invalid rnum %d for vnum %d.",
+					item_index, component_index, component_real, component_virt);
+
+			send_to_char("There was an internal malfunction assembling your item. Contact an Immortal.\n\r", ch);
+			return true;
+		}
+
+		obj_data *component_obj = get_obj_in_list_num(component_real, ch->carrying);
+		obj_from_char(component_obj);
+		extract_obj(component_obj);
+	}
+
+	// make the new item
+	obj_data *reward_item = clone_object(item_real);
+	if (reward_item == 0) {
+		logf (ANGEL, LOG_BUG, "Unable to clone vnum %d, rnum %d.", item_vnum, item_real);
+		send_to_char("There was an internal malfunction cloning the new item. Contact an Immortal.\n\r", ch);
+		return true;
+	}
+
+	obj_to_char(reward_item, ch);
+
+	return true;
+}
+
+int do_assemble(struct char_data *ch, char *argument, int cmd)
+{
+	bool different_item_components = false;
+	int vnum, item_index = -1, last_item_index = -1;
+    char arg1[MAX_INPUT_LENGTH+1];
+    obj_data *obj;
+
+    one_argument(argument, arg1);
+
+    // if no arguments are given then look through entire inventory for items to assemble.
+    if (arg1[0] == 0) {
+    	// for each inventory item
+    	for (obj = ch->carrying; obj; obj = obj->next_content) {
+    		// if we can see it
+			if (CAN_SEE_OBJ(ch, obj, false)) {
+				vnum = obj_index[obj->item_number].virt;
+			    item_index = search_assemble_items(vnum);
+
+				// check if it's a component of an item to be assembled
+			    if (item_index != -1) {
+			    	// check if the current component is from a different item than the previous
+			    	// component that we found
+			    	if (last_item_index == -1) {
+			    		last_item_index = item_index;
+			    	} else if (last_item_index != item_index) {
+			    		different_item_components = true;
+			    	}
+
+			    	if (different_item_components) {
+			    		break;
+			    	}
+			    }
+			}
+    	}
+
+    	// If components from multiple items were found then make the player specify
+    	// the item that needs to be assembled
+    	if (different_item_components) {
+    		csendf(ch, "Assemble which object?\n\r");
+    		return eFAILURE;
+    	} else if (last_item_index == -1) {
+    		csendf(ch, "You don't have anything that can be assembled.\n\r");
+    		return eFAILURE;
+    	} else {
+    		// Attempt to assemble all the components
+    		if (assemble_item_index(ch, last_item_index) == false) {
+    			csendf(ch, "%s", assemble_items[last_item_index].missing_to_char);
+    			return eFAILURE;
+    		}
+    	}
+
+		return eSUCCESS;
     }
 
-   // if we get here, ptr_array[0 through i] contain all our objs
+    // if arguments are given, find object and see if it can be assembled.
+    obj = get_obj_in_list_vis(ch, arg1, ch->carrying);
+    if(obj == NULL)
+    {
+        act("You can't find it!", ch, 0, 0, TO_CHAR, 0);
+        return eFAILURE;
+    }
 
-   // send out the messages
-   send_to_char(gem_data[position].finish_to_char, ch);
-   act(gem_data[position].finish_to_room, ch, 0, 0, TO_ROOM, 0);
+    vnum = obj_index[obj->item_number].virt;
+    item_index = search_assemble_items(vnum);
 
-   // Remove the old items from the player's inventory
-   for(; -1 != i; i--)
-   {
-      obj_from_char(ptr_array[i]);
-      extract_obj(ptr_array[i]);
-   }
+    // Object specified is not part of an item that can be assembled
+	if (item_index == -1) {
+		csendf(ch, "That item can't be assembled into anything.\n\r");
+		return eFAILURE;
+	}
 
-   // make the new item
-   reward = clone_object(real_object(gem_data[position].pieces[MAX_GEM_ASSEMBLER_ITEM - 1]));
+	// Attempt to assemble all the components
+	if (assemble_item_index(ch, item_index) == false) {
+		csendf(ch, "%s", assemble_items[item_index].missing_to_char);
+		return eFAILURE;
+	}
 
-   if(!reward)
-   {
-      send_to_char("Your assemble was unable to clone the new obj.  Please alert a god.\r\n", ch);
-      return eSUCCESS;
-   }
-   
-   obj_to_char(reward, ch);
-   return eSUCCESS;
+    return eSUCCESS;
 }
 
 int stupid_button(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg,
@@ -878,7 +1154,7 @@ int gazeofgaiot(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg,
 		   CHAR_DATA *invoker)
 {
    CHAR_DATA *victim;
-   char vict[256];
+   char vict[MAX_INPUT_LENGTH]; // buffer overflow fix
 
    one_argument(arg, vict);
    if (cmd != CMD_GAZE) return eFAILURE;
@@ -1097,6 +1373,118 @@ void remove_eliara(CHAR_DATA *ch)
    REMBIT(ch->affected_by, AFF_SANCTUARY);
 
 }
+
+int dancevest(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg, 
+                   CHAR_DATA *invoker)
+{
+	if (!cmd || cmd != CMD_SAY || !ch || !ch->in_room || str_cmp(arg, " just dance"))
+	{
+		return eFAILURE;
+	}
+	do_say(ch, " just dance", CMD_SAY);
+	if (obj->obj_flags.timer > 0)
+	{
+		send_to_char("The vest remains silent.\r\n",ch);
+		return eSUCCESS;
+	}
+	char *command_list [] =
+	{
+		"dance", // 0
+		"shuffle",
+		"wiggle",
+		"bellydance",
+		"bounce",
+		"polka", //5
+		"waltz",
+		"boogie",
+		"headbang",
+		"showtune" // 9
+	};
+	CHAR_DATA *v;
+	send_to_char("As you intone the sacred words, phantom music swells around you and everyone within earshot joins in!\r\n",ch);
+	for (v = world[ch->in_room].people; v; v = v->next_in_room)
+	{
+		if (GET_POS(v) != POSITION_STANDING)
+		{
+			continue;
+		}
+		send_to_char("As phantom music swells around you, you are helpless to resist.  You must obey.\r\n", v);
+		char tmp_command[32];
+		strcpy(tmp_command, command_list[number(0,9)]);
+		command_interpreter(v, tmp_command);
+
+
+	}
+	obj->obj_flags.timer = 48;
+	return eSUCCESS;
+
+}
+
+int durendal(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg, 
+                   CHAR_DATA *invoker)
+{
+
+	if (!cmd)
+	{ // pulse
+	  if (obj->obj_flags.timer > 0)
+	  {
+		obj->obj_flags.timer--;
+	  }
+	  if (obj->obj_flags.timer < 322 && IS_SET(obj->obj_flags.more_flags, ITEM_TOGGLE))
+	  {
+		REMOVE_BIT(obj->obj_flags.more_flags, ITEM_TOGGLE);
+		if (obj->obj_flags.timer > 0 && obj->equipped_by && obj->equipped_by->in_room)
+		{
+		  send_to_char("The white fire surrounding Durendal gutters and flickers out.\r\n", obj->equipped_by);
+		  act("The flames surrounding $n's weapon gutters and fade.", obj->equipped_by, 0, 0, TO_ROOM, 0);
+		}
+
+
+	  }
+	  return eSUCCESS;
+	}
+
+
+	if (cmd != CMD_SAY || !ch || !ch->in_room || str_cmp(arg, " Gods forgive me") || obj->equipped_by != ch)
+	{
+		return eFAILURE;
+	}
+	if (obj->obj_flags.timer > 0)
+	{
+		send_to_char("Your plea goes unanswered. Durendal slumbers.\r\n",ch);
+		return eSUCCESS;
+	}
+	if (GET_ALIGNMENT(ch) < 350)
+	{
+		send_to_char("Your soul is impure. Durendel ignores your contrition.\r\n", ch);
+		return eSUCCESS;
+	}
+	if (IS_SET(world[ch->in_room].room_flags, SAFE))
+	{
+		send_to_char("Something about this room prohibits your prayer from being heard.\r\n",ch);
+		return eSUCCESS;
+	}
+	send_to_char("Upon hearing your plea, Durendal suddenly bursts into flame with a blinding flash of searing white heat!\r\n",ch);
+	act("$n mutters a quiet prayer and with a blinding flash, their weapon bursts into flame!", ch, 0, 0, TO_ROOM, 0);
+	CHAR_DATA *v, *vn;
+	for (v = world[ch->in_room].people; v; v = vn)
+	{
+		vn = v->next_in_room;
+		if (GET_ALIGNMENT(v) > -350 || ARE_GROUPED(ch, v))
+		{
+			continue;
+		}
+		send_to_char("You feel the evil in your soul being burned away!\r\n", v);
+		damage(ch, v, 250, TYPE_COLD, TYPE_UNDEFINED, 0);
+		act("The evil in $N's soul is burned away!", ch, 0, v, TO_CHAR, 0);
+
+	}
+	SET_BIT(obj->obj_flags.more_flags, ITEM_TOGGLE);
+	obj->obj_flags.timer = 360;
+	return eSUCCESS;
+
+}
+
 
 // When fighting an evil opponent, sancts PC
 int eliara_combat(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg, 
@@ -1835,6 +2223,159 @@ int pull_proc(struct char_data*ch, struct obj_data *obj, int cmd, char*arg, CHAR
 
    return eSUCCESS;
 }
+
+int szrildor_pass(struct char_data *ch, struct obj_data *obj, int cmd, char *arg, CHAR_DATA *invoker)
+{
+  struct obj_data *p;
+  // 30097
+  if (cmd && cmd == CMD_EXAMINE)
+  {
+    char target[MAX_INPUT_LENGTH];
+    one_argument(arg, target);
+    if (!str_cmp(target, "daypass") || !str_cmp(target, "pass"))
+    {
+      char buf[2000];
+      sprintf(buf, "There appears to be approximately %d minutes left of time before the pass expires.\r\n", ((1800 - obj->obj_flags.timer) * 4) / 60);
+      send_to_char(buf, ch);
+      return eSUCCESS;
+    }
+  }
+
+  if (cmd)
+    return eFAILURE;
+
+  if (obj->obj_flags.timer == 0)
+  {       // Just created - check if this is the first pass in existence and if so, repop zone 161
+    bool first = TRUE;
+    for (p = object_list; p; p = p->next)
+    {
+      if (obj_index[p->item_number].virt == 30097 && p != obj && p->obj_flags.timer != 0)  // if any exist that are not at 1800 timer
+      {
+        first = FALSE;
+        break;
+      }
+    }
+    if (first && real_room(30000) != -1)
+    {
+      int zone = world[real_room(30000)].zone;
+      auto &character_list = DC::instance().character_list;
+      for (auto &tmp_victim : character_list)
+      {
+        // This should never happen but it has before so we must investigate without crashing the whole MUD
+        if (tmp_victim == 0)
+        {
+          produce_coredump(tmp_victim);
+          continue;
+        }
+        if (GET_POS(tmp_victim) == POSITION_DEAD || tmp_victim->in_room == NOWHERE)
+        {
+          continue;
+        }
+        if (world[tmp_victim->in_room].zone == zone)
+        {
+          if (IS_NPC(tmp_victim))
+          {
+            for (int l = 0; l < MAX_WEAR; l++)
+            {
+              if (tmp_victim->equipment[l])
+                extract_obj(unequip_char(tmp_victim, l));
+            }
+            while (tmp_victim->carrying)
+              extract_obj(tmp_victim->carrying);
+            extract_char(tmp_victim, TRUE);
+          }
+        }
+      }
+      reset_zone(world[real_room(30000)].zone);
+
+    }
+
+  }
+
+  obj->obj_flags.timer++;
+  struct obj_data *n;
+  if (obj->obj_flags.timer >= 1800)
+  {
+    // once one expires, ALL expire.
+    for (p = object_list; p; p = n)
+    {
+      n = p->next;
+      if (obj_index[p->item_number].virt == 30097)
+      {
+        CHAR_DATA *v = p->carried_by;
+        if (v)
+        {
+          send_to_char("The Szrildor daypass crumbles into dust.\r\n", v);
+          extract_obj(p); // extract handles all variations of obj_from_char etc
+
+          if (IS_PC(v) && v->in_room && world[v->in_room].zone == 161 && GET_LEVEL(v) <= MORTAL && v->in_room != real_room(30000)
+              && v->in_room != real_room(30096))
+          {
+            act("As your pass expires and crumbles to dust, you begin to feel a bit fuzzy for a moment, then vanish into thin air", v, 0, 0, TO_CHAR, 0);
+            act("$n begins to look blurry for a moment, then winks out of existence with a \"pop\"!", v, 0, 0, TO_ROOM, 0);
+            move_char(v, real_room(30000));
+
+            struct mprog_throw_type *throwitem = NULL;
+            throwitem = (struct mprog_throw_type*) dc_alloc(1, sizeof(struct mprog_throw_type));
+            throwitem->target_mob_num = 30033;
+            strcpy(throwitem->target_mob_name, "");
+            throwitem->data_num = 99;
+            throwitem->delay = 0;
+            throwitem->mob = TRUE; // This is, surprisingly, a mob
+            throwitem->actor = v;
+            throwitem->obj = NULL;
+            throwitem->vo = NULL;
+            throwitem->rndm = NULL;
+            throwitem->opt = 0;
+            throwitem->var = NULL;
+            throwitem->next = g_mprog_throw_list;
+            g_mprog_throw_list = throwitem;
+          }
+        }
+      }
+    }
+  }
+  return eSUCCESS;
+}
+
+int szrildor_pass_checks(struct char_data *ch, struct obj_data *obj, int cmd, char *arg, CHAR_DATA *invoker)
+{
+  // 30096
+  if (cmd)
+    return eFAILURE;
+
+  int count = 0;
+  auto &character_list = DC::instance().character_list;
+  for (auto &i : character_list)
+  {
+    if (IS_NPC(i))
+      continue;
+    if (!i->in_room)
+      continue;
+    if (world[i->in_room].zone != 161)
+      continue;
+    if (GET_LEVEL(i) >= 100)
+      continue;
+    if (i->in_room == real_room(30000))
+      continue;
+    if (i->in_room == real_room(30096))
+      continue;
+
+    if (!search_char_for_item(i, real_object(30097)) || (++count) > 4)
+    {
+      act("Jeff arrives and frowns.\r\n$B$7Jeff says, 'Hey! You don't have a pass. Get the heck outta here!'$R", i, 0, 0, TO_CHAR, 0);
+      act("Jeff arrives and frowns at $n.\r\n$B$7Jeff says, 'Hey! You don't have a pass. Get the heck outta here!'$R", i, 0, 0, TO_ROOM, 0);
+      move_char(i, real_room(30000));
+    }
+
+  }
+  return eSUCCESS;
+}
+
+
+
+
+
 int moving_portals(struct char_data*ch, struct obj_data *obj, int cmd, 
 char*arg, CHAR_DATA *invoker)
 {
@@ -2643,6 +3184,101 @@ void do_talking_init()
 
 
 
+int chaosblade(struct char_data*ch, struct obj_data *obj, int cmd, char*arg, 
+                   CHAR_DATA *invoker)
+{
+	if (cmd) return eFAILURE;
+	if (!obj->equipped_by) return eFAILURE;
+
+	if ((++obj->obj_flags.timer) > 4)
+	{
+		int dam = number(175,250);
+		obj->obj_flags.timer = 0;
+		if (GET_HIT(obj->equipped_by) * 30 / 1000 > dam)
+		{
+			dam = GET_HIT(obj->equipped_by) * 30 / 1000;
+		}
+		if (dam >= GET_HIT(obj->equipped_by) )
+		{
+			dam = GET_HIT(obj->equipped_by) - 1;
+		}
+		if (dam > 0)
+		{
+			char buf[MAX_STRING_LENGTH];
+			sprintf(buf,"%d", dam);
+			send_damage("The Chaos Blade hungers!  You are drained for | damage.",  obj->equipped_by, 0, 0, buf, "The Chaos Blade hungers!  You feel your life force being drained!", TO_CHAR);
+			send_damage("The katana in $n's hand pulses with a dull red glow as it drains their life force for | damage!",  obj->equipped_by, 0, 0, buf, "The katana in $n's hand pulses with a dull red glow as it drains their life force!", TO_ROOM);
+			GET_HIT(obj->equipped_by) -= dam;
+		}
+	}
+	return eSUCCESS;
+}
+
+int rubybrooch(struct char_data*ch, struct obj_data *obj, int cmd, char*arg, 
+                   CHAR_DATA *invoker)
+{
+	if (cmd) return eFAILURE;
+	if (!obj->equipped_by) return eFAILURE;
+
+	if (obj->obj_flags.timer == 39)
+	{
+		csendf(obj->equipped_by, "You feel the ruby brooch's grip upon your neck loosen slightly.\r\n");
+	}
+	++obj->obj_flags.timer;
+
+	if ((obj->obj_flags.timer % 4) == 0 )
+	{
+		if ((obj->obj_flags.timer) == 44)
+		{
+			obj->obj_flags.timer = 40; // 40+ = can be removed
+		}
+		int dam = number(75,150);
+		if (dam >= GET_HIT(obj->equipped_by) )
+		{
+			dam = GET_HIT(obj->equipped_by) - 1;
+		}
+		if (dam > 0)
+		{
+			char buf[MAX_STRING_LENGTH];
+			sprintf(buf, "%d", dam);
+			send_damage("The ruby brooch squeezes your neck painfully for | damage!",  obj->equipped_by, 0, 0, buf, "The ruby brooch squeezes your neck painfully!", TO_CHAR);
+			send_damage("A ruby brooch constricts $n's neck for | damage and they cough violently.",  obj->equipped_by, 0, 0, buf, "A ruby brooch constricts $n's neck and they cough violently.", TO_ROOM);
+			GET_HIT(obj->equipped_by) -= dam;
+		}
+	}
+	return eSUCCESS;
+}
+
+int eternitystaff(struct char_data*ch, struct obj_data *obj, int cmd, char*arg, 
+                   CHAR_DATA *invoker)
+{
+	if (cmd) return eFAILURE;
+	if (!obj->equipped_by) return eFAILURE;
+
+	if ((++obj->obj_flags.timer) > 4)
+	{
+		int dam = number(175,200);
+		obj->obj_flags.timer = 0;
+		if (GET_MANA(obj->equipped_by) * 30 / 1000 > dam)
+		{
+			dam = GET_MANA(obj->equipped_by) * 30 / 1000;
+		}
+
+		if (dam >= GET_MANA(obj->equipped_by) )
+		{
+			dam = GET_MANA(obj->equipped_by) - 1;
+		}
+		if (dam > 0)
+		{
+			csendf(obj->equipped_by, "Your body hemorrhages magical energy as you struggle to control The Eternity Staff.\r\n");
+			GET_MANA(obj->equipped_by) -= dam;
+
+			act("$n is wracked by magical energies!", obj->equipped_by, 0, 0, TO_ROOM, 0);
+		}
+	}
+	return eSUCCESS;
+}
+
 
 
 int talkingsword(struct char_data*ch, struct obj_data *obj, int cmd, char*arg, 
@@ -2651,7 +3287,32 @@ int talkingsword(struct char_data*ch, struct obj_data *obj, int cmd, char*arg,
   char_data * vict = NULL;
   int unequip = -1;
   static bool init_done = false;
+  if (cmd)
+  {
+	if (cmd == CMD_GAG && (!str_cmp(arg, " sword") || !str_cmp(arg, " ghaerad")) && obj->equipped_by)
+	{
+			      char buf2[MAX_STRING_LENGTH] = "$B$7Ghaerad, Sword of Legends says, '";
 
+		if (IS_SET(obj->obj_flags.more_flags, ITEM_TOGGLE))
+		{
+			REMOVE_BIT(obj->obj_flags.more_flags, ITEM_TOGGLE);
+ 		        strcat(buf2, "And I'm back! Couldn\'t live without me eh?'$R\n\r");
+		        send_to_room(buf2, obj->equipped_by->in_room);
+		} else {
+			SET_BIT(obj->obj_flags.more_flags, ITEM_TOGGLE);
+ 		        strcat(buf2, "Fine, I will keep quiet for a while, but you will miss me!'$R\n\r");
+		        send_to_room(buf2, obj->equipped_by->in_room);
+		}
+		return eSUCCESS;
+	} else {
+		return eFAILURE;
+	}
+  }
+
+  if (IS_SET(obj->obj_flags.more_flags, ITEM_TOGGLE))
+  {
+	return eFAILURE;
+  }
   if(!init_done)
   {
     init_done = true;

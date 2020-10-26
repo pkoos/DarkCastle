@@ -688,6 +688,7 @@ extern  int size_restricted(struct char_data *ch, struct obj_data *obj);
 int do_reload(struct char_data *ch, char *argument, int cmd)
 {
   int do_reload_help(struct char_data *ch, char *argument, int cmd);
+  void reload_vaults(void);
   extern char motd[MAX_STRING_LENGTH];
   extern char imotd[MAX_STRING_LENGTH];
   extern char new_help[MAX_STRING_LENGTH];
@@ -696,6 +697,11 @@ int do_reload(struct char_data *ch, char *argument, int cmd)
   extern char story[MAX_STRING_LENGTH];
   extern char webpage[MAX_STRING_LENGTH];
   extern char info[MAX_STRING_LENGTH];
+  extern char greetings1[MAX_STRING_LENGTH];
+  extern char greetings2[MAX_STRING_LENGTH];
+  extern char greetings3[MAX_STRING_LENGTH];
+  extern char greetings4[MAX_STRING_LENGTH];
+
   char arg[256];
 
   one_argument(argument, arg);
@@ -709,6 +715,10 @@ int do_reload(struct char_data *ch, char *argument, int cmd)
     file_to_string(STORY_FILE, story);
     file_to_string(WEBPAGE_FILE, webpage);
     file_to_string(INFO_FILE, info);
+	file_to_string(GREETINGS1_FILE, greetings1);
+	file_to_string(GREETINGS2_FILE, greetings2);
+	file_to_string(GREETINGS3_FILE, greetings3);
+	file_to_string(GREETINGS4_FILE, greetings4);
   } else if (!str_cmp(arg, "credits"))
     file_to_string(CREDITS_FILE, credits);
   else if (!str_cmp(arg, "story"))
@@ -725,15 +735,22 @@ int do_reload(struct char_data *ch, char *argument, int cmd)
     file_to_string(NEW_HELP_PAGE_FILE, new_help);
   else if (!str_cmp(arg, "ihelp"))
     file_to_string(NEW_IHELP_PAGE_FILE, new_ihelp);
-  else if (!str_cmp(arg, "xhelp"))
+  else if (!str_cmp(arg, "xhelp")) {
     do_reload_help(ch, 0, 0);
-  else {
+    send_to_char("Done!\r\n", ch);
+  } else if (!str_cmp(arg, "greetings")) {
+	file_to_string(GREETINGS1_FILE, greetings1);
+	file_to_string(GREETINGS2_FILE, greetings2);
+	file_to_string(GREETINGS3_FILE, greetings3);
+	file_to_string(GREETINGS4_FILE, greetings4);
+  } else if (!str_cmp(arg, "vaults")) {
+	  reload_vaults();
+	  send_to_char("Done!\r\n", ch);
+  } else {
     send_to_char("Unknown reload option. Try 'help reload'.\r\n", ch);
     return eFAILURE;
   }
 
-  if (str_cmp(arg, "xhelp"))
-    send_to_char("Done!\r\n", ch);
   return eSUCCESS;
 }
 

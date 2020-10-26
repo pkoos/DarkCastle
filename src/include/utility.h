@@ -527,7 +527,7 @@ size_t nocolor_strlen(const char *s);
 
 #define MAX_THROW_NAME     60
 #define MPROG_CATCH_MIN    1
-#define MPROG_CATCH_MAX    50
+#define MPROG_CATCH_MAX    100
 
 struct mprog_throw_type {
    int target_mob_num;         // num of mob to recieve
@@ -581,5 +581,10 @@ const char *find_profession(int c_class, uint8_t profession);
 std::string get_isr_string(uint32, int8_t);
 
 void produce_coredump(void *ptr = 0);
+
+bool isDead(char_data *ch);
+bool isNowhere(char_data *ch);
+bool file_exists(string filename);
+bool char_file_exists(string name);
 
 #endif /* UTILITY_H_ */

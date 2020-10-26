@@ -3776,8 +3776,9 @@ struct obj_data *read_object(int nr, FILE *fl, bool zz)
 
 	obj->description = fread_string(fl, 1);
 	obj->action_description = fread_string(fl, 1);
-	if (obj->action_description && (obj->action_description[0] < 'A' || obj->action_description[0] > 'z')) {
-		logf( IMMORTAL, LOG_BUG, "read_object: vnum %d action description [ ] removed.", obj_index[nr].virt, obj->action_description);
+	if ((obj->action_description && (obj->action_description[0] < ' ' || obj->action_description[0] > '~'))
+			&& obj->action_description[0] != '\0') {
+		logf( IMMORTAL, LOG_BUG, "read_object: vnum %d action description [%s] removed.", obj_index[nr].virt, obj->action_description);
 		obj->action_description[0] = '\0';
 	}
 	obj->table = 0;
@@ -6005,9 +6006,18 @@ void copySaveData(obj_data *target, obj_data *source)
 	if (strcmp(GET_OBJ_SHORT(source), GET_OBJ_SHORT(target))) {
 		GET_OBJ_SHORT(target) = str_hsh(GET_OBJ_SHORT(source));
 	}
+	if (strcmp(source->description, target->description))
+	{
+		target->description = str_hsh(source->description);
+	}
 
 	if (strcmp(source->name, target->name)) {
 		target->name = str_hsh(source->name);
+	}
+
+	if (source->obj_flags.type_flag != target->obj_flags.type_flag)
+	{
+		target->obj_flags.type_flag = source->obj_flags.type_flag;
 	}
 
 	if (source->obj_flags.extra_flags != target->obj_flags.extra_flags) {

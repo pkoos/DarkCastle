@@ -35,11 +35,15 @@ extern "C"
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 }
 
 #include <iostream>
 #include <sstream>
 #include <map>
+#include <fmt/format.h>
 
 #include "innate.h"
 #include "structs.h"
@@ -77,6 +81,7 @@ extern CWorld world;
 extern index_data *mob_index;
 extern zone_data *zone_table;
 extern std::map<int, std::map<uint8_t, std::string> > professions;
+extern short bport;
 
 // extern funcs
 clan_data * get_clan(char_data *);
@@ -277,135 +282,151 @@ FILE * objects_log = 0;
 FILE * quest_log = 0;
 
 // writes a string to the log 
-void log( const char *str, int god_level, long type, char_data *vict)
+void log(const char *str, int god_level, long type, char_data *vict)
 {
-    long ct;
-    char *tmstr;
-    FILE **f = 0;
-    int stream = 1;
-    stringstream logpath;
-    extern short bport;
-    
-    if (bport) {
-    	logpath << "../blog/";
-    } else {
-    	logpath << "../log/";
+  long ct;
+  char *tmstr;
+  FILE **f = 0;
+  int stream = 1;
+  stringstream logpath;
+  extern short bport;
+
+  if (bport)
+  {
+    logpath << "../blog/";
+  } else
+  {
+    logpath << "../log/";
+  }
+
+  switch (type) {
+  default:
+    stream = 0;
+    break;
+  case LOG_BUG:
+    f = &bug_log;
+    logpath << BUG_LOG;
+    if (!(*f = dc_fopen(logpath.str().c_str(), "a")))
+    {
+      fprintf(stderr, "Unable to open bug log.\n");
+      exit(1);
     }
 
-    switch(type) {
-      default:
-	stream = 0;
-	break;
-      case LOG_BUG:
-         f = &bug_log;
-         logpath << BUG_LOG;
-         if(!(*f = dc_fopen(logpath.str().c_str(), "a"))) {
-           fprintf(stderr, "Unable to open bug log.\n");
-           exit(1);
-         }
+    // TODO - need some sort of thing to automatically have bugs switch from file to
+    //        to non-file when we're up in gdb
 
-        // TODO - need some sort of thing to automatically have bugs switch from file to 
-        //        to non-file when we're up in gdb
+    //stream = 0;
+    // I want bugs to be right in the gdblog.
+    // -Sadus
 
-	//stream = 0;
-	// I want bugs to be right in the gdblog.
-	// -Sadus
-
-	break;
-      case LOG_GOD:
-        f = &god_log;
-        logpath << GOD_LOG;
-        if(!(*f = dc_fopen(logpath.str().c_str(), "a"))) {
-          fprintf(stderr, "Unable to open god log.\n");
-          exit(1);
-        }
-	break;
-      case LOG_MORTAL:
-        f = &mortal_log;
-        logpath << MORTAL_LOG;
-        if(!(*f = dc_fopen(logpath.str().c_str(), "a"))) {
-          fprintf(stderr, "Unable to open mortal log.\n");
-          exit(1);
-        }
- 	break;
-     case LOG_SOCKET:
-        f = &socket_log;
-        logpath << SOCKET_LOG;
-        if(!(*f = dc_fopen(logpath.str().c_str(), "a"))) {
-          fprintf(stderr, "Unable to open socket log: %s\n", logpath.str().c_str());
-          exit(1);
-        }
-	break;
-      case LOG_PLAYER:
-        f = &player_log;
-        if (vict && vict->name) {
-        	logpath << PLAYER_DIR << vict->name;
-          if(!(*f = dc_fopen(logpath.str().c_str(), "a"))) {
-            fprintf(stderr, "Unable to open player log '%s'.\n",
-		    logpath.str().c_str());
-          }
-        } else {
-          logpath << PLAYER_LOG;
-          if(!(*f = dc_fopen(logpath.str().c_str(), "a"))) {
-            fprintf(stderr, "Unable to open player log.\n");
-          }
-        }
-	break;
-      case LOG_WORLD:
-        f = &world_log;
-        logpath << WORLD_LOG;
-        if(!(*f = dc_fopen(logpath.str().c_str(), "a"))) {
-          fprintf(stderr, "Unable to open world log.\n");
-          exit(1);
-        }
-        break;
-      case LOG_ARENA:
-        f = &arena_log;
-        logpath << ARENA_LOG;
-        if(!(*f = dc_fopen(logpath.str().c_str(), "a"))) {
-          fprintf(stderr, "Unable to open arena log.\n");
-          exit(1);
-        }
-        break;
-      case LOG_CLAN:
-        f = &clan_log;
-        logpath << CLAN_LOG;
-        if(!(*f = dc_fopen(logpath.str().c_str(), "a"))) {
-          fprintf(stderr, "Unable to open clan log.\n");
-          exit(1);
-        }
-        break;
-      case LOG_OBJECTS:
-        f = &objects_log;
-        logpath << OBJECTS_LOG;
-        if(!(*f = dc_fopen(logpath.str().c_str(), "a"))) {
-          fprintf(stderr, "Unable to open objects log.\n");
-          exit(1);
-        }
-	break;
-      case LOG_QUEST:
-        f = &quest_log;
-        logpath << QUEST_LOG;
-        if(!(*f = dc_fopen(logpath.str().c_str(), "a"))) {
-          fprintf(stderr, "Unable to open quest log.\n");
-          exit(1);
-        }
-        break;
+    break;
+  case LOG_GOD:
+    f = &god_log;
+    logpath << GOD_LOG;
+    if (!(*f = dc_fopen(logpath.str().c_str(), "a")))
+    {
+      fprintf(stderr, "Unable to open god log.\n");
+      exit(1);
     }
-    
-    ct		= time(0);
-    tmstr	= asctime(localtime(&ct));
-    *(tmstr + strlen(tmstr) - 1) = '\0';
-
-    if(!stream)
-      fprintf(stderr, "%s :: %s\n", tmstr, str);
-    else {
-      fprintf(*f, "%s :: %s\n", tmstr, str);
-      dc_fclose(*f);
+    break;
+  case LOG_MORTAL:
+    f = &mortal_log;
+    logpath << MORTAL_LOG;
+    if (!(*f = dc_fopen(logpath.str().c_str(), "a")))
+    {
+      fprintf(stderr, "Unable to open mortal log.\n");
+      exit(1);
     }
+    break;
+  case LOG_SOCKET:
+    f = &socket_log;
+    logpath << SOCKET_LOG;
+    if (!(*f = dc_fopen(logpath.str().c_str(), "a")))
+    {
+      fprintf(stderr, "Unable to open socket log: %s\n", logpath.str().c_str());
+      exit(1);
+    }
+    break;
+  case LOG_PLAYER:
+    f = &player_log;
+    if (vict && vict->name)
+    {
+      logpath << PLAYER_DIR << vict->name;
+      if (!(*f = dc_fopen(logpath.str().c_str(), "a")))
+      {
+        fprintf(stderr, "Unable to open player log '%s'.\n", logpath.str().c_str());
+      }
+    } else
+    {
+      logpath << PLAYER_LOG;
+      if (!(*f = dc_fopen(logpath.str().c_str(), "a")))
+      {
+        fprintf(stderr, "Unable to open player log.\n");
+      }
+    }
+    break;
+  case LOG_WORLD:
+    f = &world_log;
+    logpath << WORLD_LOG;
+    if (!(*f = dc_fopen(logpath.str().c_str(), "a")))
+    {
+      fprintf(stderr, "Unable to open world log.\n");
+      exit(1);
+    }
+    break;
+  case LOG_ARENA:
+    f = &arena_log;
+    logpath << ARENA_LOG;
+    if (!(*f = dc_fopen(logpath.str().c_str(), "a")))
+    {
+      fprintf(stderr, "Unable to open arena log.\n");
+      exit(1);
+    }
+    break;
+  case LOG_CLAN:
+    f = &clan_log;
+    logpath << CLAN_LOG;
+    if (!(*f = dc_fopen(logpath.str().c_str(), "a")))
+    {
+      fprintf(stderr, "Unable to open clan log.\n");
+      exit(1);
+    }
+    break;
+  case LOG_OBJECTS:
+    f = &objects_log;
+    logpath << OBJECTS_LOG;
+    if (!(*f = dc_fopen(logpath.str().c_str(), "a")))
+    {
+      fprintf(stderr, "Unable to open objects log.\n");
+      exit(1);
+    }
+    break;
+  case LOG_QUEST:
+    f = &quest_log;
+    logpath << QUEST_LOG;
+    if (!(*f = dc_fopen(logpath.str().c_str(), "a")))
+    {
+      fprintf(stderr, "Unable to open quest log.\n");
+      exit(1);
+    }
+    break;
+  }
 
-    if(god_level >= IMMORTAL)
-      send_to_gods(str, god_level, type);
+  ct = time(0);
+  tmstr = asctime(localtime(&ct));
+  *(tmstr + strlen(tmstr) - 1) = '\0';
+
+  if (!stream)
+  {
+    fprintf(stderr, "%s :: %s\n", tmstr, str);
+  } else
+  {
+    fprintf(*f, "%s :: %s\n", tmstr, str);
+    dc_fclose(*f);
+  }
+
+  if (god_level >= IMMORTAL)
+    send_to_gods(str, god_level, type);
 }
 
 // function for new SETBIT et al. commands
@@ -1571,30 +1592,29 @@ int do_beep(struct char_data *ch, char *argument, int cmd)
 
 
 // if a skill has a valid name, return it, else NULL
-char * get_skill_name(int skillnum)
-{
-    extern char *skills[];
-    extern char *spells[];
-    extern char *songs[];
-    extern char *ki[];
-    extern char *innate_skills[];
-    extern char *reserved[];
+char* get_skill_name(int skillnum) {
+  extern char *skills[];
+  extern char *spells[];
+  extern char *songs[];
+  extern char *ki[];
+  extern char *innate_skills[];
+  extern char *reserved[];
 
-    if(skillnum >= SKILL_SONG_BASE && skillnum <= SKILL_SONG_MAX)
-       return songs[skillnum-SKILL_SONG_BASE];
-    else if(skillnum >= SKILL_BASE && skillnum <= SKILL_MAX)
-       return skills[skillnum-SKILL_BASE];
-    else if(skillnum >= KI_OFFSET && skillnum <= (KI_OFFSET+MAX_KI_LIST))
-       return ki[skillnum-KI_OFFSET];
-    else if(skillnum >= 0 && skillnum <= MAX_SPL_LIST)
-       return spells[skillnum-1];
-    else if(skillnum >= SKILL_INNATE_BASE && skillnum <= SKILL_INNATE_MAX)
-       return innate_skills[skillnum-SKILL_INNATE_BASE];
-    else if (skillnum >= BASE_SETS && skillnum <= SET_MAX)
-	return set_list[skillnum-BASE_SETS].SetName;
-    else if (skillnum >= RESERVED_BASE && skillnum <= RESERVED_MAX)
-	return reserved[skillnum-RESERVED_BASE];
-   return NULL;      
+  if (skillnum >= SKILL_SONG_BASE && skillnum <= SKILL_SONG_MAX)
+    return songs[skillnum - SKILL_SONG_BASE];
+  else if (skillnum >= SKILL_BASE && skillnum <= SKILL_MAX)
+    return skills[skillnum - SKILL_BASE];
+  else if (skillnum >= KI_OFFSET && skillnum <= (KI_OFFSET + MAX_KI_LIST))
+    return ki[skillnum - KI_OFFSET];
+  else if (skillnum >= 0 && skillnum <= MAX_SPL_LIST)
+    return spells[skillnum - 1];
+  else if (skillnum >= SKILL_INNATE_BASE && skillnum <= SKILL_INNATE_MAX)
+    return innate_skills[skillnum - SKILL_INNATE_BASE];
+  else if (skillnum >= BASE_SETS && skillnum <= SET_MAX)
+    return set_list[skillnum - BASE_SETS].SetName;
+  else if (skillnum >= RESERVED_BASE && skillnum <= RESERVED_MAX)
+    return reserved[skillnum - RESERVED_BASE];
+  return NULL;
 }
 
 void double_dollars(char * destination, char * source)
@@ -2446,4 +2466,42 @@ string get_isr_string(uint32 isr, int8_t loc)
 	case 23: return "Fear";
 	default: return "ErCode: Somebodydunfuckedup";
    }
+}
+
+bool isDead(char_data *ch)
+{
+	return (ch && ch->position == POSITION_DEAD);
+}
+
+bool isNowhere(char_data *ch)
+{
+	return (ch && ch->in_room == NOWHERE);
+}
+
+bool file_exists(string filename)
+{
+  struct stat buffer;
+
+  if (stat(filename.c_str(), &buffer) == 0) {
+    return true;
+  }
+
+  return false;
+}
+
+bool char_file_exists(string name)
+{
+  if (all_of(name.begin(), name.end(), [](char i){return isalpha(i);}) == 0) {
+    return false;
+  }
+
+  string filename;
+
+  if (bport) {
+    filename = fmt::format("{}/{}", BSAVE_DIR, name);
+  } else {
+    filename = fmt::format("{}/{}", SAVE_DIR, name);
+  }
+
+  return file_exists(filename);
 }

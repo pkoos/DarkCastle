@@ -167,35 +167,36 @@ int damage_eq_once(obj_data * obj)
   return 1;
 }
 
-void object_activity() {
-    struct active_object *active_obj;
-    struct active_object *next_obj;
-  
-    for(active_obj = &active_head; active_obj && active_obj != (struct active_object *)0x95959595; active_obj = next_obj) {
-        next_obj = active_obj->next;                                
-        if(active_obj->obj && active_obj->obj != (struct obj_data *)0x95959595) { 
-	  if (obj_index[active_obj->obj->item_number].non_combat_func)  
-            obj_index[active_obj->obj->item_number].non_combat_func(NULL, active_obj->obj, 0, "", NULL);
-			else if (active_obj->obj->obj_flags.type_flag == ITEM_MEGAPHONE && active_obj->obj->ex_description && active_obj->obj->obj_flags.value[0]-- == 0) {
-  	      active_obj->obj->obj_flags.value[0] = ((obj_data *) obj_index[active_obj->obj->item_number].item)->obj_flags.value[1];
- 	      send_to_room(active_obj->obj->ex_description->description, active_obj->obj->in_room, TRUE);
-			} else {
-		int retval = 0;
-		extern struct zone_data *zone_table;
+void object_activity(uint64_t pulse_type) {
+  struct active_object *active_obj;
+  struct active_object *next_obj;
 
-		if (active_obj->obj->in_room != NOWHERE) {
-		    if(zone_table[world[active_obj->obj->in_room].zone].players)
-			retval = oprog_rand_trigger(active_obj->obj);
-		} else  retval = oprog_rand_trigger(active_obj->obj);
-		if (!SOMEONE_DIED(retval) && objExists(active_obj->obj))
-		  oprog_arand_trigger(active_obj->obj);
-	    }
-        } 
-        //else {
-        //}
+  for (active_obj = &active_head; active_obj && active_obj != (struct active_object*) 0x95959595; active_obj = next_obj) {
+    next_obj = active_obj->next;
+    if (active_obj->obj && active_obj->obj != (struct obj_data*) 0x95959595) {
+      if (obj_index[active_obj->obj->item_number].non_combat_func)
+        obj_index[active_obj->obj->item_number].non_combat_func(NULL, active_obj->obj, 0, "", NULL);
+      else if (active_obj->obj->obj_flags.type_flag == ITEM_MEGAPHONE && active_obj->obj->ex_description && active_obj->obj->obj_flags.value[0]-- == 0) {
+        active_obj->obj->obj_flags.value[0] = ((obj_data*) obj_index[active_obj->obj->item_number].item)->obj_flags.value[1];
+        send_to_room(active_obj->obj->ex_description->description, active_obj->obj->in_room, TRUE);
+      } else {
+        int retval = 0;
+        extern struct zone_data *zone_table;
+
+        if (active_obj->obj->in_room != NOWHERE) {
+          if (zone_table[world[active_obj->obj->in_room].zone].players)
+            retval = oprog_rand_trigger(active_obj->obj);
+        } else
+          retval = oprog_rand_trigger(active_obj->obj);
+        if (!SOMEONE_DIED(retval) && objExists(active_obj->obj))
+          oprog_arand_trigger(active_obj->obj);
+      }
     }
-    DC::instance().removeDead();
-    return;
+    //else {
+    //}
+  }
+  DC::instance().removeDead();
+  return;
 }
 
 void name_from_drinkcon(struct obj_data *obj)
@@ -1481,17 +1482,17 @@ int will_screwup_worn_sizes(char_data * ch, obj_data * obj, int add)
 
   // temporarily affect the person's height
   if(add) {
-	  logf(ANGEL, LOG_BUG, "will_screwup_worn_sizes: %s height %d by %d = %d", GET_NAME(ch), GET_HEIGHT(ch), mod, GET_HEIGHT(ch)+mod);
+//	  logf(ANGEL, LOG_BUG, "will_screwup_worn_sizes: %s height %d by %d = %d", GET_NAME(ch), GET_HEIGHT(ch), mod, GET_HEIGHT(ch)+mod);
 	  GET_HEIGHT(ch) += mod;
   } else {
-	  logf(ANGEL, LOG_BUG, "will_screwup_worn_sizes: %s height %d by -%d = %d", GET_NAME(ch), GET_HEIGHT(ch), mod, GET_HEIGHT(ch)-mod);
+//	  logf(ANGEL, LOG_BUG, "will_screwup_worn_sizes: %s height %d by -%d = %d", GET_NAME(ch), GET_HEIGHT(ch), mod, GET_HEIGHT(ch)-mod);
 	  GET_HEIGHT(ch) -= mod;
   }
 
   if(add == 1 && size_restricted(ch, obj))
   {
     // Only have to check the item itself if we're wearing it, not removing
-	  logf(ANGEL, LOG_BUG, "will_screwup_worn_sizes: %s height %d by -%d = %d", GET_NAME(ch), GET_HEIGHT(ch), mod, GET_HEIGHT(ch)-mod);
+//	  logf(ANGEL, LOG_BUG, "will_screwup_worn_sizes: %s height %d by -%d = %d", GET_NAME(ch), GET_HEIGHT(ch), mod, GET_HEIGHT(ch)-mod);
 	  GET_HEIGHT(ch) -= mod;
     send_to_char("After modifying your height that item would not fit!\r\n", ch);
     return TRUE;
@@ -1511,10 +1512,10 @@ int will_screwup_worn_sizes(char_data * ch, obj_data * obj, int add)
 
   // fix height back to normal
   if(add) {
-	  logf(ANGEL, LOG_BUG, "will_screwup_worn_sizes: %s height %d by -%d = %d", GET_NAME(ch), GET_HEIGHT(ch), mod, GET_HEIGHT(ch)-mod);
+//	  logf(ANGEL, LOG_BUG, "will_screwup_worn_sizes: %s height %d by -%d = %d", GET_NAME(ch), GET_HEIGHT(ch), mod, GET_HEIGHT(ch)-mod);
 	  GET_HEIGHT(ch) -= mod;
   } else {
-	  logf(ANGEL, LOG_BUG, "will_screwup_worn_sizes: %s height %d by %d = %d", GET_NAME(ch), GET_HEIGHT(ch), mod, GET_HEIGHT(ch)+mod);
+//	  logf(ANGEL, LOG_BUG, "will_screwup_worn_sizes: %s height %d by %d = %d", GET_NAME(ch), GET_HEIGHT(ch), mod, GET_HEIGHT(ch)+mod);
 	  GET_HEIGHT(ch) += mod;
   }
 
@@ -2285,17 +2286,18 @@ int do_remove(struct char_data *ch, char *argument, int cmd)
           if (ch->equipment[j] && CAN_SEE_OBJ(ch, ch->equipment[j])) 
           {
             obj_object =  ch->equipment[j];
-            if(obj_index[obj_object->item_number].virt == 27997 && number(0,3))
-            {
-              send_to_room("$B$7Ghaerad, Sword of Legends says, 'Haha, nope. Try again.'$R\n\r", ch->in_room);
-              continue;
-            }
             if(IS_SET(obj_object->obj_flags.extra_flags, ITEM_NODROP) && GET_LEVEL(ch) <= MORTAL) 
             {
               sprintf(arg1, "You can't remove %s, it must be CURSED!\n\r", obj_object->short_description);
               send_to_char(arg1, ch);
               continue;
 	    }
+ 	    if(obj_index[obj_object->item_number].virt == 30010 && obj_object->obj_flags.timer < 40)
+ 	    {
+		csendf(ch, "The ruby brooch is bound to your flesh. You cannot remove it!\r\n");
+		continue;
+   	    }
+
             if(obj_index[obj_object->item_number].virt == SPIRIT_SHIELD_OBJ_NUMBER)
             {
               send_to_room("The spirit shield shimmers brightly then fades away.\n\r", ch->in_room);
@@ -2305,7 +2307,7 @@ int do_remove(struct char_data *ch, char *argument, int cmd)
                obj_to_char(unequip_char(ch, j) , ch);
              act("You stop using $p.",ch,obj_object,0,TO_CHAR, 0);
              act("$n stops using $p.",ch,obj_object,0,TO_ROOM, INVIS_NULL);
-            
+
           }
         } else {
           send_to_char("You can't carry that many items.\n\r", ch);
@@ -2323,17 +2325,18 @@ int do_remove(struct char_data *ch, char *argument, int cmd)
       {
         if(CAN_CARRY_N(ch) != IS_CARRYING_N(ch)) 
         {
-          if(obj_index[obj_object->item_number].virt == 27997 && number(0,3))
-          {
-            send_to_room("$B$7Ghaerad, Sword of Legends says, 'Haha, nope. Try again.'$R\n\r", ch->in_room);
-            return eSUCCESS;
-          }
           if(IS_SET(obj_object->obj_flags.extra_flags, ITEM_NODROP) && GET_LEVEL(ch) <= MORTAL) 
           {
             sprintf(arg1, "You can't remove %s, it must be CURSED!\n\r", obj_object->short_description);
             send_to_char(arg1, ch);
             return eFAILURE;
 	  }
+ 	  if(obj_index[obj_object->item_number].virt == 30010 && obj_object->obj_flags.timer < 40)
+ 	  {
+	    csendf(ch, "The ruby brooch is bound to your flesh. You cannot remove it!\r\n");
+	    return eFAILURE;
+   	  }
+
           if(will_screwup_worn_sizes(ch, obj_object, 0))
           {
             // will_screwup_worn_sizes() takes care of the messages

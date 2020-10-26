@@ -116,6 +116,8 @@ void add_command_lag(CHAR_DATA *ch, int cmdnum, int lag);
 #define CMD_VOTE	203
 #define CMD_VEND	204
 #define CMD_FILTER	205
+#define CMD_EXAMINE	206
+#define CMD_GAG		207
 #define CMD_PRIZE	999
 #define CMD_GAZE	1820
 
@@ -197,6 +199,7 @@ DO_FUN do_ambush;
 DO_FUN do_anonymous;
 DO_FUN do_ansi;
 DO_FUN do_appraise;
+DO_FUN do_assemble;
 DO_FUN do_release;
 DO_FUN do_jab;
 DO_FUN do_areas;
@@ -359,7 +362,7 @@ DO_FUN do_memoryleak;
 DO_FUN do_mortal_set;
 //DO_FUN do_motdload;
 DO_FUN do_msave;
-DO_FUN do_mpedit;
+DO_FUN do_procedit;
 DO_FUN do_mpbestow;
 DO_FUN do_mpstat;
 DO_FUN do_opedit;

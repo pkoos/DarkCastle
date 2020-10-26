@@ -544,52 +544,59 @@ int do_mpmload( CHAR_DATA *ch, char *argument, int cmd )
     victim = clone_mobile( realnum );
     victim->hometown = world[ch->in_room].number;
     char_to_room( victim, ch->in_room );
+    mprog_load_trigger(victim); // victim not used after, no selfpurge checks, leave the selfpurge of the mobprog that is causing this load intact as whatever it is
+
     return eSUCCESS;
 }
 
-int do_mpoload( CHAR_DATA *ch, char *argument, int cmd )
+int do_mpoload(CHAR_DATA *ch, char *argument, int cmd)
 {
-    char arg1[ MAX_INPUT_LENGTH ];
-    OBJ_DATA       *obj;
-    int             realnum;
-    extern struct index_data *obj_index;
+  char arg1[ MAX_INPUT_LENGTH] = { 0 };
+  char arg2[ MAX_INPUT_LENGTH] = { 0 };
+  OBJ_DATA *obj;
+  int realnum;
+  extern struct index_data *obj_index;
 
-    if ( !IS_NPC( ch ) )
-    {
-        send_to_char( "Huh?\n\r", ch );
-	return eSUCCESS;
-    }
-
-    argument = one_argument( argument, arg1 );
- 
-    if ( arg1[0] == '\0' || !is_number( arg1 ) )
-    {
-        prog_error(ch, "Mpoload - Bad syntax.");
-        return eFAILURE|eINTERNAL_ERROR;
-    }
- 
-    if ( ( realnum = real_object( atoi( arg1 ) ) ) < 0 )
-    {
-	prog_error(ch, "Mpoload - Bad vnum arg.");
-	return eFAILURE|eINTERNAL_ERROR;
-    }
-    obj = clone_object( realnum );
-
-    if (obj_index[obj->item_number].virt == 393 && IS_SET(world[ch->in_room].room_flags, ARENA) && 
-        arena.type == POTATO && ArenaIsOpen()) {
-	return eFAILURE;
-    }
-
-    if ( CAN_WEAR(obj, ITEM_TAKE) )
-    {
-	obj_to_char( obj, ch );
-    }
-    else
-    {
-	obj_to_room( obj, ch->in_room );
-    }
-
+  if (!IS_NPC(ch))
+  {
+    send_to_char("Huh?\n\r", ch);
     return eSUCCESS;
+  }
+
+  argument = one_argument(argument, arg1);
+  one_argument(argument, arg2);
+
+  if (arg1[0] == '\0' || !is_number(arg1))
+  {
+    prog_error(ch, "Mpoload - Bad syntax.");
+    return eFAILURE | eINTERNAL_ERROR;
+  }
+
+  if ((realnum = real_object(atoi(arg1))) < 0)
+  {
+    prog_error(ch, "Mpoload - Bad vnum arg.");
+    return eFAILURE | eINTERNAL_ERROR;
+  }
+  obj = clone_object(realnum);
+
+  if (obj_index[obj->item_number].virt == 393 && IS_SET(world[ch->in_room].room_flags, ARENA) && arena.type == POTATO && ArenaIsOpen())
+  {
+    return eFAILURE;
+  }
+
+  if (!strcasecmp(arg2, "random")) {
+    randomize_object(obj);
+  }
+
+  if (CAN_WEAR(obj, ITEM_TAKE))
+  {
+    obj_to_char(obj, ch);
+  } else
+  {
+    obj_to_room(obj, ch->in_room);
+  }
+
+  return eSUCCESS;
 }
 
 /* lets the mobile purge all objects and other npcs in the room,
@@ -890,7 +897,7 @@ int do_mptransfer( CHAR_DATA *ch, char *argument, int cmd )
 	    {
 		char buf[MAX_STRING_LENGTH];
 		sprintf( buf, "%s %s", d->character->name, arg2 );
-		do_trans( ch, buf, 9 );
+		do_mptransfer( ch, buf, cmd );
 	    }
 	}
 	return eSUCCESS;
@@ -1928,13 +1935,13 @@ int process_math(char_data *ch, char *string)
       }
       curr = 0;
     }
-    if (*string == '\0') break; 
+    if (*string == '\0' || *string == '\r' || *string == '\n') break; 
     switch (*string)
     {
-	case '+': 
-	case '-': 
-        case '/': 
-	case '*': 
+	case '+':
+	case '-':
+        case '/':
+	case '*':
 	  curr = 0;
 	  lastsign = *string;
 	  break;

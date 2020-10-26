@@ -163,8 +163,8 @@ void backup_executable(char * const argv[])
 	// Make a copy of our executable so that in the event of a crash we have a
 	// known good copy to debug with.
 	stringstream backup_filename, cmd;
-	backup_filename << argv[0] << "." << getpid();
-
+        backup_filename << argv[0] << "." << DC::getVersion().c_str() << "." << getpid();   
+	
 	// If backup file does not exist already then link to it
 	if (stat(backup_filename.str().c_str(), &stat_buffer) == -1) {
 		if (link(argv[0], backup_filename.str().c_str()) == -1) {

@@ -387,9 +387,10 @@ void vault_stats(CHAR_DATA *ch, char *name) {
   int items = 0, weight = 0, accesses = 0, num = 0, unique = 0, count = 0, skipped = 0;
   char buf[MAX_STRING_LENGTH*4], buf1[MAX_STRING_LENGTH];
 
-  sprintf(buf, "###) Character Name        Gold     Items (Unique) Weight/  Max   Access\r\n");
-  for (vault = vault_table;vault;vault = vault->next, num++) {
-    if (!num) continue; // skip 0 cause its null
+  sprintf(buf, "###) Character Name        Gold     Items (Unique) Item Weight/Vault Weight/Vault Max Weight Access   Errors\r\n");
+  for (vault = vault_table; vault; vault = vault->next, num++) {
+
+    if (vault->owner == nullptr) continue; // skip 0 cause its null
 
     if (name && *name && vault->owner && strncasecmp(vault->owner, name, strlen(name))) continue;
     count++;
@@ -405,8 +406,8 @@ void vault_stats(CHAR_DATA *ch, char *name) {
       accesses++;
     }
 
-    sprintf(buf1, "%3d) %-15s $B$5%10llu$R     %5d (%4d  ) %6d/%5d %6d\r\n",
-                   count, vault->owner, vault->gold, items, unique, weight, vault->size, accesses);
+    sprintf(buf1, "%3d) %-15s $B$5%10llu$R     %5d (%4d  ) %11d/%12d/%16d %6d %s\r\n",
+                   count, vault->owner, vault->gold, items, unique, weight, vault->weight, vault->size, accesses, weight != vault->weight ? "$5mismatch$R" : "$1    none$R");
     if ((strlen(buf1) + strlen(buf)) < MAX_STRING_LENGTH*4)
       strcat(buf, buf1);
     else
@@ -1431,7 +1432,7 @@ int can_put_in_vault(struct obj_data *obj, int self, struct vault_data *vault, s
     return 0;
   }
 
-  if (IS_SET(obj->obj_flags.extra_flags, ITEM_NOSAVE))   { //nosave
+  if (IS_SET(obj->obj_flags.extra_flags, ITEM_NOSAVE) || IS_SET(obj->obj_flags.more_flags, ITEM_24H_SAVE))   { //nosave
     csendf(ch, "%s doesn't seem to be a permanent part of the world.\r\n", GET_OBJ_SHORT(obj));
     return 0;
   }
@@ -1448,6 +1449,11 @@ int can_put_in_vault(struct obj_data *obj, int self, struct vault_data *vault, s
 
   if ((GET_OBJ_WEIGHT(obj) + vault->weight) > vault->size) { // vault is full
     csendf(ch, "You can't seem to stuff %s in the vault.  Its too big!\r\n", GET_OBJ_SHORT(obj));
+    return 0;
+  }
+  if (obj->obj_flags.timer > 0)
+  {
+    csendf(ch, "%s cannot be placed in the vault right now.\r\n", GET_OBJ_SHORT(obj));
     return 0;
   }
 

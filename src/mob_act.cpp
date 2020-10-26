@@ -91,7 +91,7 @@ void mobile_activity(void)
   /* Examine all mobs. */
 	auto &character_list = DC::instance().character_list;
 	for (auto& ch : character_list) {
-	  if (GET_POS(ch) == POSITION_DEAD || ch->in_room == NOWHERE) {
+	  if (isDead(ch) || isNowhere(ch)) {
 	    continue;
 	  }
 	  
@@ -132,7 +132,7 @@ void mobile_activity(void)
     mprogTimer.stop();
 #endif
 
-      if(!IS_SET(retval, eFAILURE) || SOMEONE_DIED(retval))
+      if(!IS_SET(retval, eFAILURE) || SOMEONE_DIED(retval) || isDead(ch) || isNowhere(ch))
         continue;
     }
 
@@ -155,17 +155,22 @@ void mobile_activity(void)
 		try {
 			if (zone_table[world[ch->in_room].zone].players) {
 				retval = mprog_random_trigger(ch);
-				if (IS_SET(retval, eCH_DIED))
+				if (IS_SET(retval, eCH_DIED) || isDead(ch) || isNowhere(ch)) {
 					continue;
+				}
+      }
 
-				retval = mprog_arandom_trigger(ch);
-				if (IS_SET(retval, eCH_DIED) || selfpurge)
-					continue;
-			}
+			retval = mprog_arandom_trigger(ch);
+      if (IS_SET(retval, eCH_DIED) || selfpurge || isDead(ch) || isNowhere(ch)) {
+        continue;
+      }
 		} catch (...) {
 			log("error in mobile_activity. dumping core.", IMMORTAL, LOG_BUG);
-			produce_coredump();
+			produce_coredump(ch);
 		}
+
+
+
 
     // activate mprog act triggers
     if ( ch->mobdata->mpactnum > 0 )  // we check to make sure ch is mob in very beginning, so safe
@@ -182,10 +187,10 @@ void mobile_activity(void)
     mprogTimer.stop();
 #endif
              retval = mprog_cur_result;
-             if(IS_SET(retval, eCH_DIED))
+             if(IS_SET(retval, eCH_DIED) || isDead(ch) || isNowhere(ch))
                break; // break so we can continue with the next mob
         }
-        if(IS_SET(retval, eCH_DIED) || selfpurge)
+        if(IS_SET(retval, eCH_DIED) || selfpurge || isDead(ch) || isNowhere(ch))
           continue; // move on to next mob, this one is dead
 
 #ifdef USE_TIMING
@@ -311,6 +316,15 @@ void mobile_activity(void)
           else if(!IS_NPC(tmp_ch))  
           {
             act("$n screams, 'I am going to KILL YOU!'", ch, 0, 0, TO_ROOM, 0);
+#ifdef USE_TIMING
+            mprogTimer.start();
+#endif
+            retval = mprog_attack_trigger( ch, tmp_ch );
+#ifdef USE_TIMING
+            mprogTimer.stop();
+#endif
+            if(SOMEONE_DIED(retval))
+              break;
             attack(ch, tmp_ch, 0);
             done = 1;
             break;
