@@ -12,11 +12,11 @@
  *  This is free software and you are benefitting.  We hope that you       *
  *  share your changes too.  What goes around, comes around.               *
  ***************************************************************************/
-#include <db.h>
-#include <room.h>
-#include <levels.h>
-#include <player.h>
-#include <utility.h>
+#include "db.h"
+#include "room.h"
+#include "levels.h"
+#include "player.h"
+#include "utility.h"
 
 typedef int    SPEC_FUN  (struct char_data * ch, struct obj_data *obj, int cmd, char *argument, 
                           struct char_data * owner);
@@ -54,28 +54,24 @@ void assign_mobiles(void)
 
 void assign_one_mob_non(int mob_num, int (*func)(CHAR_DATA*, struct obj_data *, int, char*, CHAR_DATA*))
 {
-	extern short code_testing_mode;
-
 	int mob = real_mobile(mob_num);
 
 	if(mob < 0)
 	{
-		if(!code_testing_mode)
-			logf(IMMORTAL, LOG_WORLD, "Assigning non_combat proc to non-existant mob '%d'.", mob_num);
+	  if (DC::instance().cf.test_world == false) {
+	    logf(IMMORTAL, LOG_WORLD, "Assigning non_combat proc to non-existant mob '%d'.", mob_num);
+	  }
 	}
 	else mob_index[mob].non_combat_func = func;
 }
 
 void assign_one_mob_com(int mob_num, int (*func)(CHAR_DATA*, struct obj_data *, int, char*, CHAR_DATA*))
 {
-	extern short code_testing_mode;
-
 	int mob = real_mobile(mob_num);
 
 	if(mob < 0)
 	{
-		if(!code_testing_mode)
-			logf(IMMORTAL, LOG_WORLD, "Assigning combat proc to non-existant mob '%d'.", mob_num);
+		logf(IMMORTAL, LOG_WORLD, "Assigning combat proc to non-existant mob '%d'.", mob_num);
 	}
 	else mob_index[mob].combat_func = func;
 }

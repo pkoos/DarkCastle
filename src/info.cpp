@@ -20,28 +20,28 @@ extern "C"
 }
 
 #include <cstdlib>
-#include <structs.h>
-#include <room.h>
-#include <character.h>
-#include <obj.h>
-#include <utility.h>
-#include <terminal.h>
-#include <player.h>
-#include <levels.h>
-#include <mobile.h>
-#include <clan.h>
-#include <handler.h>
-#include <db.h> // exp_table
-#include <interp.h>
-#include <connect.h>
-#include <spells.h>
-#include <race.h>
-#include <act.h>
-#include <set.h>
-#include <returnvals.h>
-#include <fileinfo.h>
-#include <utility.h>
-#include <isr.h>
+#include "structs.h"
+#include "room.h"
+#include "character.h"
+#include "obj.h"
+#include "utility.h"
+#include "terminal.h"
+#include "player.h"
+#include "levels.h"
+#include "mobile.h"
+#include "clan.h"
+#include "handler.h"
+#include "db.h" // exp_table
+#include "interp.h"
+#include "connect.h"
+#include "spells.h"
+#include "race.h"
+#include "act.h"
+#include "set.h"
+#include "returnvals.h"
+#include "fileinfo.h"
+#include "utility.h"
+#include "isr.h"
 #include "Leaderboard.h"
 
 #include <map>
@@ -1719,7 +1719,7 @@ int do_time(struct char_data *ch, char *argument, int cmd)
 {
    char buf[100], *suf;
    int weekday, day;
-   long ct;
+   time_t timep;
    long h,m;
    // long s;
    extern struct time_info_data time_info;
@@ -1766,14 +1766,14 @@ int do_time(struct char_data *ch, char *argument, int cmd)
 
    // Changed to the below code without seconds in an attempt to stop
    // the timing of bingos... - pir 2/7/1999
-   ct = time(0);
+   timep = time(0);
    if(GET_LEVEL(ch) > IMMORTAL) {
-  	sprintf( buf, "The system time is %ld.\n\r", ct );
+  	sprintf( buf, "The system time is %ld.\n\r", timep );
 
     	send_to_char(buf, ch);
    }
 
-   pTime = localtime(&ct);
+   pTime = localtime(&timep);
    if(!pTime)
       return eFAILURE;
 
@@ -1795,10 +1795,10 @@ int do_time(struct char_data *ch, char *argument, int cmd)
 #endif
    send_to_char(buf, ch);
 
-   ct -= start_time;
-   h = ct / 3600;
-   m = (ct % 3600) / 60;
-   // 	s = ct % 60;
+   timep -= start_time;
+   h = timep / 3600;
+   m = (timep % 3600) / 60;
+   // 	s = timep % 60;
    // 	sprintf (buf, "The mud has been running for: %02li:%02li:%02li \n\r",
    // 			h,m,s);
    sprintf (buf, "The mud has been running for: %02li:%02li \n\r", h,m);

@@ -30,30 +30,30 @@ extern "C"
 #include <math.h> // pow(double,double)
 }
 
-#include <room.h>
-#include <connect.h>
-#include <obj.h>
-#include <race.h>
-#include <character.h>
-#include <spells.h>
-#include <magic.h>
-#include <player.h>
-#include <fight.h>
-#include <utility.h>
-#include <structs.h>
-#include <handler.h>
-#include <mobile.h>
-#include <interp.h>
-#include <levels.h>
-#include <weather.h>
-#include <isr.h>
-#include <db.h>
-#include <act.h>
-#include <clan.h>
-#include <arena.h>
-#include <innate.h>
-#include <returnvals.h>
-#include <arena.h>
+#include "room.h"
+#include "connect.h"
+#include "obj.h"
+#include "race.h"
+#include "character.h"
+#include "spells.h"
+#include "magic.h"
+#include "player.h"
+#include "fight.h"
+#include "utility.h"
+#include "structs.h"
+#include "handler.h"
+#include "mobile.h"
+#include "interp.h"
+#include "levels.h"
+#include "weather.h"
+#include "isr.h"
+#include "db.h"
+#include "act.h"
+#include "clan.h"
+#include "arena.h"
+#include "innate.h"
+#include "returnvals.h"
+#include "arena.h"
 
 /* Extern Structures */
 
@@ -10461,7 +10461,7 @@ int cast_herb_lore(ubyte level, CHAR_DATA *ch, char *arg, int type, CHAR_DATA *v
      healamount = number(healamount-(healamount/10), healamount+(healamount/10));
      if(OUTSIDE(ch))    GET_HIT(victim) += healamount;   
      else { /* if not outside */
-       healamount = dam_percent(skill,80);
+       healamount = dam_percent(skill,150);
        healamount = number(healamount-(healamount/10), healamount+(healamount/10));
        GET_HIT(victim) += healamount;
        send_to_char("Your spell is less effective because you are indoors!\n\r", ch);

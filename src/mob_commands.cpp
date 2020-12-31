@@ -35,24 +35,24 @@ extern "C"
 #include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <fileinfo.h> 
-#include <act.h>
-#include <player.h>
-#include <levels.h>
-#include <room.h>
-#include <structs.h>
-#include <fight.h>
-#include <spells.h>
-#include <utility.h>
-#include <connect.h>
-#include <interp.h>
-#include <handler.h>
-#include <db.h>
-#include <comm.h>
-#include <returnvals.h>
-#include <innate.h>
-#include <arena.h>
-#include <race.h>
+#include "fileinfo.h" 
+#include "act.h"
+#include "player.h"
+#include "levels.h"
+#include "room.h"
+#include "structs.h"
+#include "fight.h"
+#include "spells.h"
+#include "utility.h"
+#include "connect.h"
+#include "interp.h"
+#include "handler.h"
+#include "db.h"
+#include "comm.h"
+#include "returnvals.h"
+#include "innate.h"
+#include "arena.h"
+#include "race.h"
 #include <stdarg.h>
 
 // external vars
@@ -1222,7 +1222,7 @@ int do_mpsettemp(CHAR_DATA *ch, char *argument, int cmd)
     if (IS_NPC(ch)) {
       int num = mob_index[ch->mobdata->nr].virt;
       sprintf(arg, "Mob %d lacking argument for mpsettemp.", num);
-      log(arg, 104, LOG_BUG);
+      logf(104, LOG_BUG, arg);
     }
     return eFAILURE;
   }

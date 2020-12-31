@@ -31,28 +31,28 @@ extern "C" {
 	#include <mmsystem.h>
 #endif
 }
-#include <character.h>
-#include <comm.h>
-#include <connect.h>
-#include <race.h>
-#include <player.h>
-#include <structs.h> // TRUE
-#include <utility.h>
-#include <levels.h>
-#include <ki.h>
-#include <clan.h>
-#include <fileinfo.h> // SAVE_DIR
-#include <db.h> // init_char..
-#include <mobile.h>
-#include <interp.h>
-#include <room.h>
-#include <act.h>
-#include <clan.h>
-#include <spells.h>
-#include <fight.h>
-#include <handler.h>
+#include "character.h"
+#include "comm.h"
+#include "connect.h"
+#include "race.h"
+#include "player.h"
+#include "structs.h" // TRUE
+#include "utility.h"
+#include "levels.h"
+#include "ki.h"
+#include "clan.h"
+#include "fileinfo.h" // SAVE_DIR
+#include "db.h" // init_char..
+#include "mobile.h"
+#include "interp.h"
+#include "room.h"
+#include "act.h"
+#include "clan.h"
+#include "spells.h"
+#include "fight.h"
+#include "handler.h"
 #include <string.h>
-#include <vault.h>
+#include "vault.h"
 #include <queue>
 
 #define STATE(d)    ((d)->connected)
@@ -83,8 +83,6 @@ extern struct descriptor_data *descriptor_list;
 extern OBJ_DATA *object_list;
 extern struct index_data *obj_index;
 extern CWorld world;
-extern short bport;
-extern bool allow_imp_password;
 extern CVoteData *DCVote;
             
 extern int learn_skill(char_data * ch, int skill, int amount, int maximum);
@@ -957,7 +955,7 @@ void nanny(struct descriptor_data *d, char *arg)
          return;
       }
       else {
-	if (bport && strcmp(tmp_name,"Ubertestchar")) 
+	if (DC::instance().cf.bport && strcmp(tmp_name,"Ubertestchar"))
 	{
 	  SEND_TO_Q("New chars not allowed on this port.\r\nEnter a new name: ", d);
 	  return;
@@ -977,7 +975,7 @@ void nanny(struct descriptor_data *d, char *arg)
       password = ch->pcdata->pwd;
 
       // If -P option passed and one of your other characters is an imp, allow this char with that imp's password
-      if (allow_imp_password && allowed_host(d->host)) {
+      if (DC::instance().cf.allow_imp_password && allowed_host(d->host)) {
 	for (descriptor_data *ad = descriptor_list; ad && ad != (descriptor_data *)0x95959595; ad = ad->next) {
 	  if (ad != d && !str_cmp(d->host, ad->host)) {
 	    if (ad->character && GET_LEVEL(ad->character) == IMP && IS_PC(ad->character)) {

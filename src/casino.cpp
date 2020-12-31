@@ -10,27 +10,27 @@ extern "C"
 #include <ctype.h>
 #include <string.h>
 }
-#include <structs.h>
-#include <room.h>
-#include <character.h>
-#include <obj.h>
-#include <utility.h>
-#include <terminal.h>
-#include <player.h>
-#include <levels.h>
-#include <mobile.h>
-#include <clan.h>
-#include <handler.h>
-#include <db.h>
-#include <interp.h>
-#include <connect.h>
-#include <spells.h>
-#include <race.h>
-#include <act.h>
-#include <set.h>
-#include <returnvals.h>
-#include <timeinfo.h>
-#include <DC.h>
+#include "structs.h"
+#include "room.h"
+#include "character.h"
+#include "obj.h"
+#include "utility.h"
+#include "terminal.h"
+#include "player.h"
+#include "levels.h"
+#include "mobile.h"
+#include "clan.h"
+#include "handler.h"
+#include "db.h"
+#include "interp.h"
+#include "connect.h"
+#include "spells.h"
+#include "race.h"
+#include "act.h"
+#include "set.h"
+#include "returnvals.h"
+#include "timeinfo.h"
+#include "DC.h"
 #include <algorithm>
 
 using namespace std;
@@ -2055,7 +2055,6 @@ void reel_spin(void *arg1, void *arg2, void *arg3)
          send_to_room("The jackpot lights flash and loud noises come from all around you!\n\r", machine->obj->in_room);
          csendf(machine->ch, "$BJACKPOT!!!!!!  You win the jackpot of %d %s!!$R\n\r", (int)machine->jackpot, machine->gold?"coins":"plats");
 	 sprintf(buf, "##%s just won the JACKPOT for %d %s!\r\n", GET_NAME(machine->ch), (int)machine->jackpot, machine->gold?"coins":"plats");
- 	 extern void send_info(char *messg);
 	 send_info(buf);
 
          logf( IMMORTAL, LOG_MORTAL, "Jackpot win! %s won the jackpot of %d %s!",

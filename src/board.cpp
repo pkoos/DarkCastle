@@ -46,24 +46,24 @@ extern "C"
   #include <string.h> // memset()
   #include <ctype.h> // isspace(), isdigit()
 }
-#include <room.h>
-#include <obj.h>
-#include <player.h> // MAX_*
-#include <connect.h> // CON_WRITE_BOARD
-#include <terminal.h> // BOLD
-#include <fileinfo.h> // for the board files
-#include <levels.h> // levels..
-#include <clan.h>
-#include <character.h> 
-#include <utility.h> // FALSE
-#include <memory.h>
-#include <act.h>
-#include <db.h>
-#include <returnvals.h>
+#include "room.h"
+#include "obj.h"
+#include "player.h" // MAX_*
+#include "connect.h" // CON_WRITE_BOARD
+#include "terminal.h" // BOLD
+#include "fileinfo.h" // for the board files
+#include "levels.h" // levels..
+#include "clan.h"
+#include "character.h" 
+#include "utility.h" // FALSE
+#include "memory.h"
+#include "act.h"
+#include "db.h"
+#include "returnvals.h"
 #include <string>
 #include <map>
 #include <vector>
-#include <interp.h>
+#include "interp.h"
 #include <sstream>
 
 #define MAX_MESSAGE_LENGTH 	2048
@@ -722,7 +722,7 @@ void new_edit_board_unlock_board(CHAR_DATA *ch, int abort)
 void board_write_msg(CHAR_DATA *ch, char *arg, std::map<string,BOARD_INFO>::iterator board) 
 {
   char buf[MAX_STRING_LENGTH];
-  long ct; // clock time
+  time_t timep; // clock time
   char *tmstr;
   
 
@@ -771,8 +771,8 @@ void board_write_msg(CHAR_DATA *ch, char *arg, std::map<string,BOARD_INFO>::iter
 
   reserve->new_post.author = GET_NAME(ch);
 
-  ct = time(0);
-  tmstr = asctime(localtime(&ct));
+  timep = time(0);
+  tmstr = asctime(localtime(&timep));
   *(tmstr + strlen(tmstr) - 1) = '\0';
   sprintf(buf, "%.10s", tmstr);
 

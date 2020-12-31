@@ -23,28 +23,28 @@ extern "C" {
 #include <assert.h>
 }
 
-#include <magic.h>
-#include <spells.h>
-#include <room.h>
-#include <obj.h>
-#include <character.h>
-#include <player.h> // APPLY
-#include <utility.h> // LOWER
-#include <clan.h>
-#include <levels.h>
-#include <db.h>
-#include <mobile.h>
-#include <connect.h> // descriptor_data
-#include <handler.h> // FIND_CHAR_ROOM
-#include <interp.h> // do_return
-#include <machine.h> // index
-#include <act.h>
-#include <isr.h>
-#include <race.h>
-#include <fight.h>
-#include <returnvals.h>
-#include <innate.h>
-#include <set.h>
+#include "magic.h"
+#include "spells.h"
+#include "room.h"
+#include "obj.h"
+#include "character.h"
+#include "player.h" // APPLY
+#include "utility.h" // LOWER
+#include "clan.h"
+#include "levels.h"
+#include "db.h"
+#include "mobile.h"
+#include "connect.h" // descriptor_data
+#include "handler.h" // FIND_CHAR_ROOM
+#include "interp.h" // do_return
+#include "machine.h" // index
+#include "act.h"
+#include "isr.h"
+#include "race.h"
+#include "fight.h"
+#include "returnvals.h"
+#include "innate.h"
+#include "set.h"
 #include <sys/time.h>
 #include "DC.h"
 #include <algorithm>
@@ -55,7 +55,6 @@ extern struct obj_data *object_list;
 extern struct index_data *mob_index;
 extern struct index_data *obj_index;
 extern struct descriptor_data *descriptor_list;
-extern struct active_object active_head;
 extern struct zone_data *zone_table;
 
 bool has_random(OBJ_DATA *obj);
@@ -144,6 +143,11 @@ int isname2(const char *str, const char *namel)
    }
 
    return 0;
+}
+
+int isname(string str, const char *namelist)
+{
+  return isname(str.c_str(), namelist);
 }
 
 /************************************************************************
@@ -2131,9 +2135,9 @@ int char_from_room(CHAR_DATA *ch, bool stop_all_fighting) {
 			REMOVE_BIT(world[ch->in_room].room_flags, NO_TRACK);
 		}
 	if (IS_NPC(ch))
-		if (ISSET(ch->mobdata->actflags, ACT_NOKI) && !kimore && IS_SET(world[ch->in_room].iFlags, NO_TRACK)) {
-			REMOVE_BIT(world[ch->in_room].iFlags, NO_TRACK);
-			REMOVE_BIT(world[ch->in_room].room_flags, NO_TRACK);
+		if (ISSET(ch->mobdata->actflags, ACT_NOKI) && !kimore && IS_SET(world[ch->in_room].iFlags, NO_KI)) {
+			REMOVE_BIT(world[ch->in_room].iFlags, NO_KI);
+			REMOVE_BIT(world[ch->in_room].room_flags, NO_KI);
 		}
 	if (IS_NPC(ch) && ISSET(ch->mobdata->actflags, ACT_NOMAGIC) && !Other && IS_SET(world[ch->in_room].iFlags, NO_MAGIC)) {
 		REMOVE_BIT(world[ch->in_room].iFlags, NO_MAGIC);
@@ -3198,29 +3202,7 @@ void object_list_new_new_owner(struct obj_data *list, CHAR_DATA *ch) {
 // Extract an object from the world
 void extract_obj(struct obj_data *obj) {
 	struct obj_data *temp1;
-	//struct obj_data *temp2;
-	struct active_object *active_obj = NULL, *last_active = NULL;
-
 	huntclear_item(obj);
-
-	if (obj_index[obj->item_number].non_combat_func || obj->obj_flags.type_flag == ITEM_MEGAPHONE || has_random(obj)) {
-		active_obj = &active_head;
-		while (active_obj) {
-			if ((active_obj->obj == obj) && (last_active)) {
-				last_active->next = active_obj->next;
-				dc_free(active_obj);
-				break;
-			} else if (active_obj->obj == obj) {
-				active_head.obj = active_obj->next->obj;
-				active_head.next = active_obj->next->next;
-//		last_active->next = active_obj->next;
-				dc_free(active_obj);
-				break;
-			}
-			last_active = active_obj;
-			active_obj = active_obj->next;
-		}
-	}
 
 	// if we're going away, unhook myself from my owner
 	if (GET_ITEM_TYPE(obj) == ITEM_BEACON && obj->equipped_by) {
@@ -3278,9 +3260,11 @@ void extract_obj(struct obj_data *obj) {
 			temp1->next = obj->next;
 	}
 
-	if (obj->item_number >= 0)
+	if (obj->item_number >= 0) {
 		(obj_index[obj->item_number].number)--;
-	free_obj(obj);
+	}
+
+	DC::instance().obj_free_list.insert(obj);
 }
 
 void update_object(struct obj_data *obj, int use) {
