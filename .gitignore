@@ -6,3 +6,4 @@ src/showplayer
 src/libdcastle.a
 src/.sconsign.dblite
 src/Makefile
+src/.qmake.stash
