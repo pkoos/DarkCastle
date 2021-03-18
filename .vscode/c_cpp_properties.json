@@ -3,7 +3,10 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"            ],
+                "${workspaceFolder}/**",
+                "/usr/include/**",
+                "/usr/include/qt6/**"
+            ],
             "defines": [],
             "compilerPath": "/usr/bin/g++-10",
             "cStandard": "c17",
