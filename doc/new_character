@@ -1,0 +1,48 @@
+Note: If you see a word that is entirely CAPITALIZED and $Bbold$R then there
+exits a helpfile for that word which you can lookup with the command
+help keyword or help KEYWORD.
+
+Dark Castle supports two ways picking your beginning $BATTRIBUTES$R such as
+$BSTR$R ($BSTRENGTH$R), $BDEX$R ($BDEXTERITY$R), $BCON$R ($BCONSTITUION$R),
+$BINT$R ($BINTELLIGENCE$R) or $BWIS$R ($BWISDOM$R). The first method is
+rolling virtual dice. The virtual dice consisting of either three 6-sided
+dice or six 3-sided dice. The game picks the larger group of those two
+separate sets of dice rolls and throws out any sets with a sum less than 12.
+You can roll virtual dice as many times as you like. The second method is you
+get 12 points in each attribute and 21 points you can divide among those five
+attributes. Using this method gives you a total of 81 attribute points.
+
+Choose a method of assigning attribute points:
+1. Roll virtual dice
+2. Assign pre-set points
+
+Which method do you choose? 2
+
+Current attributes:
+Str: 12
+Dex: 12
+Con: 12
+Int: 12
+Wis: 12
+You have 21 points to assign.
+
+Type an attribute name or abbreviation such as str, dex, con, int or wis to
+assign 1 point to that attribute, cancel to go back to the previous question
+or reset to start over: dex
+
+Current attributes:
+Str: 12
+Dex: 13
+Con: 12
+Int: 12
+Wis: 12
+You have 20 points to assign.
+
+Type an attribute name or abbreviation such as str, dex, con, int or wis to
+assign 1 point to that attribute, cancel to go back to the previous question
+or reset to start over:
+
+
+
+
+
