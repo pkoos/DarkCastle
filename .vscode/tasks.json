@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "scons -C src -j 128",
+            "label": "make -j128",
             "type": "shell",
-            "command": "scons -C src -j 128",
+            "command": "make -C src -j 128",
             "problemMatcher": {
                 "base": "$gcc",
                 "fileLocation": [
