@@ -43,7 +43,7 @@
 // if you change, make sure you update char *connected_states[] in const.C
 // also update connected_types[]
 
-#define MAX_RAW_INPUT_LENGTH  512
+#define MAX_RAW_INPUT_LENGTH  65536
 
 struct stat_shit
 {   
@@ -69,7 +69,7 @@ struct descriptor_data {
   int max_str; /*	-			*/
   char buf[10 * MAX_INPUT_LENGTH]; /* buffer for raw input	*/
   char last_input[MAX_INPUT_LENGTH]; /* the last input	*/
-  char *output; /* queue of strings to send	*/
+  QString output; /* queue of strings to send	*/
   char inbuf[MAX_RAW_INPUT_LENGTH];
   TXT_Q input; /* queue of unprocessed input	*/
   CHAR_DATA *character; /* linked to char		*/
@@ -81,9 +81,6 @@ struct descriptor_data {
   int reallythere; /* Goddamm #&@$*% sig 13 (hack) */
   int prompt_mode;
   txt_block *large_outbuf;
-  int bufptr;
-  int bufspace;
-  char small_outbuf[SMALL_BUFSIZE];
   ubyte idle_tics;
   time_t login_time;
   struct stat_shit *stats;            // for rolling up a char
