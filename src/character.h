@@ -18,6 +18,8 @@
 #include "mobile.h"
 #include "sing.h"
 #include "quest.h"
+#include "DC.h"
+#include "terminal.h"
 
 extern "C" {
 #include <sys/time.h>
@@ -30,7 +32,7 @@ extern "C" {
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "DC.h"
+#include <QString>
 
 #define ASIZE 32
 #define MAX_GOLEMS           2 // amount of golems above +1
@@ -438,8 +440,40 @@ struct char_data
     int spec;
 
     struct room_direction_data *brace_at, *brace_exit; //exits affected by brace
-};
 
+public:
+    QString getName();
+    QString getColorName();
+    static const char *cond_colorcodes[];
+    quint64 getGold();
+    quint64 getPlatinum();
+
+    quint64 getHP();
+    quint64 getMaxHP();
+    qreal getHPPercent();
+
+    quint64 getMana();
+    quint64 getMaxMana();
+    qreal getManaPercent();
+
+    quint64 getMove();
+    quint64 getMaxMove();
+    qreal getMovePercent();
+
+    quint64 getKi();
+    quint64 getMaxKi();
+    qreal getKiPercent();
+
+    quint64 getXP();
+    qint64 getXPtoLevel();
+
+    quint64 getLevel();
+    qint64 getAlignment();
+
+    QString getCondition();
+    QString getConditionColor();
+    void show(QString messg);
+};
 
 // This structure is written to the disk.  DO NOT MODIFY THIS STRUCTURE
 // There is a method in save.C for adding additional items to the pfile
