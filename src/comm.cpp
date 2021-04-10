@@ -10,43 +10,27 @@
 ************************************************************************ */
 
 #include <errno.h>
-#include "terminal.h"
 #include <string.h>
-
-#ifndef WIN32
-	#include <unistd.h>
-	#include <sys/wait.h>
-	#include <sys/socket.h>
-	#include <sys/resource.h>
-	#include <sys/time.h>
-	#include <netinet/in.h>
-	#include <netdb.h>
-	#include <arpa/telnet.h>
-	#include <arpa/inet.h>
-#else
-	#include <direct.h>
-	#include <winsock2.h>
-	#include <process.h>
-	#include <mmsystem.h>
-
-	// swipe some defined out of arpa telnet
-	#define	IAC				255		/* interpret as command: */
-	#define	WONT			252		/* I won't use option */
-	#define	WILL			251		/* I will use option */
-	#define TELOPT_NAOCRD	10	/* negotiate about CR disposition */
-	#define TELOPT_ECHO		1	/* echo */
-	#define TELOPT_NAOFFD	13	/* negotiate about formfeed disposition */
-
-#endif
+#include <unistd.h>
+#include <sys/wait.h>
+#include <sys/socket.h>
+#include <sys/resource.h>
+#include <sys/time.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/telnet.h>
+#include <arpa/inet.h>
 #include <fcntl.h>
-
 #include <sys/types.h>
-
-
-
+#include <fmt/format.h>
+#include <fmt/chrono.h>
 #include <signal.h>
 #include <ctype.h>
+#include <cassert>
 
+
+
+#include "terminal.h"
 #include "fileinfo.h"
 #include "act.h"
 #include "player.h"
@@ -71,14 +55,14 @@
 #include <sstream>
 #include <iostream>
 #include <list>
-#include "dc_xmlrpc.h"
+//#include "dc_xmlrpc.h"
 #ifdef USE_TIMING
 #include "Timer.h"
 #endif
 #include "DC.h"
 #include "CommandStack.h"
-#include <algorithm>
-
+#include <QStringTokenizer>
+#include <QDebug>
 struct multiplayer {
   char *host;
   char *name1;
@@ -146,7 +130,7 @@ int pulse_regen;
 int pulse_time;
 int pulse_short; // short timer, for archery
 
-XmlRpcServer *xmlrpc_s;
+//XmlRpcServer *xmlrpc_s;
 
 #ifdef USE_SQL
 Database db;
@@ -160,7 +144,7 @@ void short_activity();
 void skip_spaces(char **string);
 char *any_one_arg(char *argument, char *first_arg);
 char * calc_color(int hit, int max_hit);
-void generate_prompt(CHAR_DATA *ch, char *prompt);
+QString generate_prompt(CHAR_DATA *ch);
 int get_from_q(struct txt_q *queue, char *dest, int *aliased);
 void signal_setup(void);
 int new_descriptor(int s);
@@ -169,7 +153,6 @@ int process_input(struct descriptor_data *t);
 void flush_queues(struct descriptor_data *d);
 int perform_subst(struct descriptor_data *t, char *orig, char *subst);
 int perform_alias(struct descriptor_data *d, char *orig);
-void make_prompt(struct descriptor_data *point, char *prompt);
 void check_idle_passwords(void);
 void init_heartbeat();
 void heartbeat();
@@ -282,8 +265,8 @@ int write_hotboot_file(char **new_argv)
   fclose(fp);
   log("Hotboot descriptor file successfully written.", 0, LOG_MISC);
   
-  log("Shutting down xmlrpc server.", 0, LOG_MISC);
-  xmlrpc_s->shutdown();
+//  log("Shutting down xmlrpc server.", 0, LOG_MISC);
+//  xmlrpc_s->shutdown();
 
   chdir("../bin/");
 
@@ -321,7 +304,7 @@ int write_hotboot_file(char **new_argv)
 int load_hotboot_descs() 
 {
   FILE *fp;
-  char chr[MAX_INPUT_LENGTH], host[MAX_INPUT_LENGTH] ,buf[MAX_STRING_LENGTH];
+  char chr[MAX_INPUT_LENGTH] = { 0 }, host[MAX_INPUT_LENGTH] = { 0 } ,buf[MAX_STRING_LENGTH*3] = { 0 };
   int desc;
   struct descriptor_data *d;
   /* Azrack - do these need to be here
@@ -348,7 +331,6 @@ int load_hotboot_descs()
 
   while(!feof(fp)) {
     desc =0;
-    *chr = '\0';
     *host = '\0';
     fscanf(fp, "%d\n%s\n%s\n", &desc, chr, host);
     d = (struct descriptor_data *)dc_alloc(1, sizeof(struct descriptor_data));
@@ -356,13 +338,8 @@ int load_hotboot_descs()
     d->idle_time = 0;
     d->idle_tics               = 0;
     d->wait                    = 1;
-    d->bufptr                  = 0;
     d->prompt_mode             = 1;
-    d->output                  = d->small_outbuf;
-//    *d->output                 = '\0';
-    d->input.head             = 0;
-    strcpy(d->output, chr); // store it for later
-    d->bufspace                = SMALL_BUFSIZE - 1;
+    d->input.head              = 0;
     d->login_time              = time(0);
 
     if ( write_to_descriptor( desc, "Recovering...\r\n" ) == -1) {
@@ -411,8 +388,8 @@ void finish_hotboot()
   {
     write_to_descriptor( d->descriptor, "Reconnecting your link to your character...\r\n" );
 
-    if (!load_char_obj(d, d->output)) {
-      sprintf(buf, "Could not load char '%s' in hotboot.",  d->output);
+    if (!load_char_obj(d, d->output.toStdString().c_str())) {
+      sprintf(buf, "Could not load char '%s' in hotboot.",  d->output.toStdString().c_str());
       log(buf, 0, LOG_MISC);
       write_to_descriptor( d->descriptor, "Link Failed!  Tell an Immortal when you can.\n\r" );
       close_socket(d);
@@ -421,7 +398,7 @@ void finish_hotboot()
 
     write_to_descriptor( d->descriptor, "Success...May your visit continue to suck...\n\r" );
 
-    *d->output = '\0';
+    d->output.clear();
 
     auto &character_list = DC::instance().character_list;
     character_list.insert(d->character);
@@ -504,6 +481,7 @@ void DC::init_game(void)
     finish_hotboot();
   }
 
+/*
   if (DC::instance().cf.bport == true)
   {
     logf(0, LOG_MISC, "Initializing xmlrpc server on port: %d", 8889);
@@ -513,6 +491,7 @@ void DC::init_game(void)
     logf(0, LOG_MISC, "Initializing xmlrpc server on port: %d", 8888);
     xmlrpc_s = xmlrpc_init(8888);
   }
+*/
 
   log("Signal trapping.", 0, LOG_MISC);
   signal_setup();
@@ -855,7 +834,7 @@ void DC::game_loop(void)
 		/* send queued output out to the operating system (ultimately to user) */
 		for (d = descriptor_list; d; d = next_d) {
 			next_d = d->next;
-			if ((FD_ISSET(d->descriptor, &output_set) && *(d->output)) || d->prompt_mode)
+			if ((FD_ISSET(d->descriptor, &output_set) && d->output.count() > 0) || d->prompt_mode)
 				if (process_output(d) < 0)
 					close_socket(d);
 			// else
@@ -865,14 +844,14 @@ void DC::game_loop(void)
 		outputTimer.stop();
 		//timingDebugStr << "output: " << outputTimer << endl;
 		
-		static Timer xmlrpcTimer;
-		xmlrpcTimer.start();
+//		static Timer xmlrpcTimer;
+//		xmlrpcTimer.start();
 #endif
 			
-		xmlrpc_s->work(0);
+//		xmlrpc_s->work(0);
 		
 #ifdef USE_TIMING		
-		xmlrpcTimer.stop();
+//		xmlrpcTimer.stop();
 		//timingDebugStr << "xmlrpc: " << xmlrpcTimer << endl;
 #endif
 		// we're done with this pulse.  Now calculate the time until the next pulse and sleep until then
@@ -1237,139 +1216,72 @@ char * cond_txtz[] = {
   "dead as a doornail"
 };
 
-char * cond_txtc[] = {
-  BOLD GREEN  "excellent condition"  NTEXT,
-  GREEN "a few scratches" NTEXT,
-  BOLD YELLOW "slightly hurt" NTEXT,
-  YELLOW "fairly fucked up" NTEXT,
-  RED "bleeding freely" NTEXT,
-  BOLD RED "covered in blood" NTEXT,
-  BOLD GREY "near death" NTEXT,
-  "dead as a doornail"
-};
-
-char * cond_colorcodes[] = {
-  BOLD GREEN,
-  GREEN,
-  BOLD YELLOW ,
-  YELLOW,
-  RED,
-  BOLD RED,
-  BOLD GREY,
-};
-
-
-string calc_name(CHAR_DATA *ch, bool colour = FALSE)
+QString make_prompt(struct descriptor_data *d)
 {
-  int percent;
-  string name;
-
-  if(GET_HIT(ch) == 0 || GET_MAX_HIT(ch) == 0)
-    percent = 0;
-  else
-    percent = GET_HIT(ch) * 100 / GET_MAX_HIT(ch);
-
-  if (colour == TRUE) {
-    if(percent >= 100)
-      name = cond_colorcodes[0];
-    else if(percent >= 90)
-      name = cond_colorcodes[1];
-    else if(percent >= 75)
-      name = cond_colorcodes[2];
-    else if(percent >= 50)
-      name = cond_colorcodes[3];
-    else if(percent >= 30)
-      name = cond_colorcodes[4];
-    else if(percent >= 15)
-      name = cond_colorcodes[5];
-    else if(percent >= 0) 
-      name = cond_colorcodes[6];
+  if (d->character == nullptr)
+  {
+    return QString();
   }
 
-  if(!IS_NPC(ch)) name += ch->name;
-  else name += ch->short_desc;
-
-  name += NTEXT;
-
-  return name;
-}
-
-char * calc_condition(CHAR_DATA *ch, bool colour = FALSE)
-{
-  int percent;
-  char *cond_txt[8];// = cond_txtz;
-
-  if (colour)
-   memcpy(cond_txt, cond_txtc, sizeof(cond_txtc));
-  else
-   memcpy(cond_txt, cond_txtz, sizeof(cond_txtz));
-
-  if(GET_HIT(ch) == 0 || GET_MAX_HIT(ch) == 0)
-    percent = 0;
-  else
-    percent = GET_HIT(ch) * 100 / GET_MAX_HIT(ch);
-
-  if(percent >= 100)
-      return cond_txt[0];
-  else if(percent >= 90)
-    return cond_txt[1];
-  else if(percent >= 75)
-    return cond_txt[2];
-  else if(percent >= 50)
-    return cond_txt[3];
-  else if(percent >= 30)
-    return cond_txt[4];
-  else if(percent >= 15)
-    return cond_txt[5];
-  else if(percent >= 0) 
-    return cond_txt[6];
-  else
-    return cond_txt[7];
-}
-
-
-void make_prompt(struct descriptor_data *d, char *prompt)
-{
-     char buf[MAX_STRING_LENGTH];
-     if(!d->character) {
-         return;
-     }
-     if (d->showstr_count) {
-     sprintf(buf,
-             "\r\n[ Return to continue, (q)uit, (r)efresh, (b)ack, or page number (%d %d) ]",
-              d->showstr_page, d->showstr_count);
-     strcat(prompt, buf);
-     } else if(d->strnew) {
-       if (IS_PC(d->character) && IS_SET(d->character->pcdata->toggles, PLR_EDITOR_WEB)) {
-	 strcat(prompt, "Web Editor] ");
-       } else {
-         strcat(prompt, "*] ");
-       }
-     } else if(d->hashstr) {
-         strcat(prompt, "] ");
-     } else if(STATE(d) != CON_PLAYING) {
-         return;
-     } else if(IS_MOB(d->character)) {
-        generate_prompt(d->character, prompt);
-     } else if(GET_LEVEL(d->character) < IMMORTAL) {
-         if (!IS_SET(GET_TOGGLES(d->character), PLR_COMPACT))
-            strcat(prompt, "\n\r");
-         if(!GET_PROMPT(d->character))
-            strcat(prompt, "type 'help prompt'> ");
-         else
-             generate_prompt(d->character, prompt);
-     } else {
-        if (!IS_SET(GET_TOGGLES(d->character), PLR_COMPACT))
-            strcat(prompt, "\n\r");
-
-        struct room_data *rm = &world[d->character->in_room];
-        sprintf(buf,
-                IS_SET(GET_TOGGLES(d->character), PLR_ANSI) ?
-                "Z:" RED "%d " NTEXT "R:" GREEN "%d " NTEXT "I:" YELLOW "%ld" NTEXT "> " :
-                "Z:%d R:%d I:%ld> ",
-                rm->zone, rm->number, d->character->pcdata->wizinvis);
-        strcat(prompt, buf);
+  QString prompt;
+  if (d->showstr_count > 0)
+  {
+    prompt = QString::fromStdString(fmt::format("\r\n[ Return to continue, (q)uit, (r)efresh, (b)ack, or page number ({} {}) ]", d->showstr_page, d->showstr_count));
+  }
+  else if (d->strnew)
+  {
+    if (d->character->pcdata && IS_SET(d->character->pcdata->toggles, PLR_EDITOR_WEB))
+    {
+      prompt = "Web Editor] ";
     }
+    else
+    {
+      prompt = "*] ";
+    }
+  }
+  else if (d->hashstr)
+  {
+    prompt = "] ";
+  }
+  else if (STATE(d) != CON_PLAYING)
+  {
+    return QString();
+  }
+  else if (IS_MOB(d->character))
+  {
+    prompt = generate_prompt(d->character);
+  }
+  else if (GET_LEVEL(d->character) < IMMORTAL)
+  {
+    if (!IS_SET(GET_TOGGLES(d->character), PLR_COMPACT))
+    {
+      prompt = "\n\r";
+    }
+
+    if (!GET_PROMPT(d->character))
+    {
+      prompt += "type 'help prompt'> ";
+    } else {
+      prompt += generate_prompt(d->character);
+    }
+  }
+  else
+  {
+    if (!IS_SET(GET_TOGGLES(d->character), PLR_COMPACT))
+      prompt = "\n\r";
+
+    struct room_data *rm = &world[d->character->in_room];
+    if (IS_SET(GET_TOGGLES(d->character), PLR_ANSI))
+    {
+      prompt += QString::fromStdString(fmt::format("Z:" RED "{} " NTEXT "R:" GREEN "{} " NTEXT "I:" YELLOW "{}" NTEXT "> ", rm->zone, rm->number, d->character->pcdata->wizinvis));
+    }
+    else
+    {
+      prompt += QString::fromStdString(fmt::format("Z:{} R:{} I:{}> ", rm->zone, rm->number, d->character->pcdata->wizinvis));
+    }
+  }
+
+  return prompt;
 }
 
 CHAR_DATA* get_charmie(CHAR_DATA *ch)
@@ -1385,246 +1297,228 @@ CHAR_DATA* get_charmie(CHAR_DATA *ch)
   return NULL;
 }
 
-void generate_prompt(CHAR_DATA *ch, char *prompt)
+QString generate_prompt(CHAR_DATA *ch)
 {
-  CHAR_DATA *charmie;
-  char gprompt[MAX_STRING_LENGTH];
-  char *source;
-  char *pro;
-  pro = gprompt;
-  char * mobprompt = "HP: %i/%H %f >";
-
-  if(IS_NPC(ch))
-    source = mobprompt;
-  else source = GET_PROMPT(ch);
-
-  for(; *source != '\0';) {
-     if(*source != '%') {
-       *pro = *source;
-       ++pro; ++source;
-       *pro = '\0';
-       continue;
-     }
-     ++source;
-     if(*source == '\0') {
-       strcpy(prompt, "1There is a fucked up code in your prompt> ");
-       return;
-     }
-
-     switch(*source) {
-       default:
-         strcat(prompt, "2There is a fucked up code in your prompt> ");
-         return;
-        case 'p':
-	  if (ch->fighting && ch->fighting->fighting) {
-	    sprintf(pro, "%s", calc_name(ch->fighting->fighting).c_str());
-	  }
-          else sprintf(pro, " ");
-	  break;
-        case 'P':
-	  if (ch->fighting && ch->fighting->fighting) {
-	    sprintf(pro, "%s", calc_name(ch->fighting->fighting,TRUE).c_str());
-	  }
-          else sprintf(pro, " ");
-        break;
-        case 'q':
-	  if (ch->fighting) {
-	    sprintf(pro, "%s", calc_name(ch->fighting).c_str());
-	  }
-          else sprintf(pro, " ");
-	  break;
-        case 'Q':
-	  if (ch->fighting) {
-	    sprintf(pro, "%s", calc_name(ch->fighting,TRUE).c_str());
-	  }
-          else sprintf(pro, " ");
-        break;
-       case 'd':
-         sprintf(pro, "%s", time_look[weather_info.sunlight]);
-         break;
-       case 'D':
-	 if (OUTSIDE(ch))
-           sprintf(pro, "%s", sky_look[weather_info.sky]);
-	 else
-	   sprintf(pro, "indoors");
-         break;
-       case 'g':
-         sprintf(pro, "%lld", GET_GOLD(ch));
-         break;
-       case 'G':
-         sprintf(pro, "%d", (int32) (GET_GOLD(ch)/20000));
-         break;
-       case '$':
-         sprintf(pro, "%d", GET_PLATINUM(ch));
-         break;
-       case 'h':
-         sprintf(pro, "%d", GET_HIT(ch));
-         break;
-       case 'H':
-         sprintf(pro, "%d", GET_MAX_HIT(ch));
-         break;
-       case 'm':
-         sprintf(pro, "%d", GET_MANA(ch));
-         break;
-       case 'M':
-         sprintf(pro, "%d", GET_MAX_MANA(ch));
-         break;
-       case 'v':
-         sprintf(pro, "%d", GET_MOVE(ch));
-         break;
-       case 'V':
-         sprintf(pro, "%d", GET_MAX_MOVE(ch));
-         break;
-       case 'k':
-         sprintf(pro, "%d", GET_KI(ch));
-         break;
-       case 'K':
-         sprintf(pro, "%d", GET_MAX_KI(ch));
-         break;
-       case 'l':
-         sprintf(pro, "%s%d%s", calc_color(GET_KI(ch), GET_MAX_KI(ch)),
-                 GET_KI(ch), NTEXT);
-         break;
-       case 'i':
-         sprintf(pro, "%s%d%s", calc_color(GET_HIT(ch), GET_MAX_HIT(ch)),
-                 GET_HIT(ch), NTEXT);
-         break;
-       case 'n':
-         sprintf(pro, "%s%d%s", calc_color(GET_MANA(ch), GET_MAX_MANA(ch)),
-                 GET_MANA(ch), NTEXT);
-         break;
-       case 'w':
-         sprintf(pro, "%s%d%s", calc_color(GET_MOVE(ch), GET_MAX_MOVE(ch)),
-                 GET_MOVE(ch), NTEXT);
-         break;
-       case 'y':
-         charmie = get_charmie(ch);
-         if(charmie != NULL)
-           sprintf(pro, "%d", (GET_HIT(charmie)*100)/GET_MAX_HIT(charmie));
-         else
-           sprintf(pro, " ");
-         break;
-       case 'Y':
-         charmie = get_charmie(ch);
-         if(charmie != NULL)
-           sprintf(pro, "%s%d%s", calc_color(GET_HIT(charmie), GET_MAX_HIT(charmie)), 
-                     (GET_HIT(charmie)*100)/GET_MAX_HIT(charmie), NTEXT);
-         else
-           sprintf(pro, " ");
-         break;
-       case 'I':
-         sprintf(pro, "%d", ((GET_HIT(ch) * 100)/GET_MAX_HIT(ch)));
-         break;
-       case 'N':
-         sprintf(pro, "%d", ((GET_MANA(ch) * 100)/GET_MAX_MANA(ch)));
-         break;
-       case 'W':
-         sprintf(pro, "%d", ((GET_MOVE(ch) * 100)/GET_MAX_MOVE(ch)));
-         break;
-       case 'L':
-         sprintf(pro, "%d", ((GET_KI(ch) * 100)/GET_MAX_KI(ch)));
-         break;
-       case 'x':
-         sprintf(pro, "%lld", GET_EXP(ch));
-         break;
-       case 'X':
-         sprintf(pro, "%lld", (int64)(exp_table[(int)GET_LEVEL(ch) + 1] -
-                                  (int64)GET_EXP(ch)));
-         break;
-       case '%':
-         sprintf(pro, "%%");
-         break;
-       case 'a':
-         sprintf(pro, "%hd", GET_ALIGNMENT(ch));
-         break;
-       case 'A':
-         sprintf(pro, "%s%hd%s", calc_color_align(GET_ALIGNMENT(ch)), GET_ALIGNMENT(ch), NTEXT);
-         break;
-       case 'c':
-         if(ch->fighting)
-           sprintf(pro, "<%s>", calc_condition(ch));
-/* added by pir to stop "prompt %c" crash bug */
-         else sprintf(pro, " ");
-         break;
-	case 'C':
-         if(ch->fighting)
-           sprintf(pro, "<%s>", calc_condition(ch,TRUE));
-/* added by pir to stop "prompt %c" crash bug */
-         else sprintf(pro, " ");
-         break;
-
-       case 'f':
-         if(ch->fighting)
-           sprintf(pro, "(%s)", calc_condition(ch->fighting));
-/* added by pir to stop "prompt %c" crash bug */
-         else sprintf(pro, " ");
-         break;
-	case 'F':
-         if(ch->fighting)
-           sprintf(pro, "(%s)", calc_condition(ch->fighting,TRUE));
-/* added by pir to stop "prompt %c" crash bug */
-         else sprintf(pro, " ");
-         break;
-
-       case 't':
-         if(ch->fighting && ch->fighting->fighting)
-           sprintf(pro, "[%s]",
-           calc_condition(ch->fighting->fighting));
-/* added by pir to stop "prompt %c" crash bug */
-         else sprintf(pro, " ");
-         break;
-        case 'T':
-         if(ch->fighting && ch->fighting->fighting)
-           sprintf(pro, "[%s]", calc_condition(ch->fighting->fighting,TRUE));
-/* added by pir to stop "prompt %c" crash bug */
-         else sprintf(pro, " ");
-         break;
-
-       case 's':
-         if(world_array[ch->in_room])
-           sprintf(pro, "%s", sector_types[world[ch->in_room].sector_type]);
-         else sprintf(pro, " ");
-         break;
-       case '0':
-         sprintf(pro, "%s", NTEXT);
-         break;
-       case '1':
-         sprintf(pro, "%s", RED);
-         break;
-       case '2':
-         sprintf(pro, "%s", GREEN);
-         break;
-       case '3':
-         sprintf(pro, "%s", YELLOW);
-         break;
-       case '4':
-         sprintf(pro, "%s", BLUE);
-         break;
-       case '5':
-         sprintf(pro, "%s", PURPLE);
-         break;
-       case '6':
-         sprintf(pro, "%s", CYAN);
-         break;
-       case '7':
-         sprintf(pro, "%s", GREY);
-         break;
-       case '8':
-         sprintf(pro, "%s", BOLD);
-         break;
-       case 'r':
-         sprintf(pro, "%c%c", '\n', '\r');
-         break;
-     }
-     ++source;
-     while(*pro != '\0')
-       pro++;
+  QString prompt;
+  if (ch == nullptr)
+  {
+    return prompt;
   }
-  *pro = ' ';
-  *(pro+1) = '\0';
-  strcat(prompt, gprompt);
-}
 
+  char_data *charmie = get_charmie(ch);
+
+  if (IS_NPC(ch))
+  {
+    prompt = "HP: %i/%H %f >";
+  }
+  else
+  {
+    prompt = GET_PROMPT(ch);
+  }
+
+  QString result;
+  bool errorsDetected = false;
+  for (auto t : QStringTokenizer{prompt, QString("%")})
+  {
+    if (t.size() > 0)
+    {
+      QString token = t.toString();
+      QChar tokenType = token[0];
+      QString value = " ";
+      switch (tokenType.toLatin1())
+      {
+      case 'p': // %p - Name of current tank
+        if (ch->fighting && ch->fighting->fighting)
+        {
+          value = ch->fighting->fighting->getName();
+        }
+        break;
+      case 'P': // %P - Name of tank in "condition" colors
+        if (ch->fighting && ch->fighting->fighting)
+        {
+          value = ch->fighting->fighting->getColorName();
+        }
+        break;
+      case 'q': // %q - Name of current opponent
+        if (ch->fighting)
+        {
+          value = ch->fighting->getName();
+        }
+        break;
+      case 'Q': // %Q - Name of opponent with color
+        if (ch->fighting)
+        {
+          value = ch->fighting->getColorName();
+        }
+        break;
+      case 'd': // Indicate time of day
+        value = time_look[weather_info.sunlight];
+        break;
+      case 'D': // Indicate weather conditions
+        if (OUTSIDE(ch))
+          value = sky_look[weather_info.sky];
+        else
+          value = "indoors";
+        break;
+      case 'g': // Current gold
+        value = QString::number(ch->getGold());
+        break;
+      case 'G': // Current gold/20000
+        value = QString::number((int64)(ch->getGold() / 20000));
+        break;
+      case '$': // %$ - Current platinum
+        value = QString::number(ch->getPlatinum());
+        break;
+      case 'h': // Current hitpoints
+        value = QString::number(ch->getHP());
+        break;
+      case 'H': // %H - Max hitpoints
+        value = QString::number(ch->getMaxHP());
+        break;
+      case 'm': // %m - Current mana
+        value = QString::number(ch->getMana());
+        break;
+      case 'M': // %M - Max mana
+        value = QString::number(ch->getMaxMana());
+        break;
+      case 'v': // %v - Current moves
+        value = QString::number(ch->getMove());
+        break;
+      case 'V': // %V - Max moves
+        value = QString::number(ch->getMaxMove());
+        break;
+      case 'k': // %k - Current ki
+        value = QString::number(ch->getKi());
+        break;
+      case 'K': // %K - Max ki
+        value = QString::number(ch->getMaxKi());
+        break;
+      case 'l': // %l - Current ki with color
+        value = calc_color(ch->getKi(), ch->getMaxKi()) + QString::number(ch->getKi()) + NTEXT;
+        break;
+      case 'i': // %i - Current hp with color
+        value = calc_color(ch->getHP(), ch->getMaxHP()) + QString::number(ch->getHP()) + NTEXT;
+        break;
+      case 'n': // %n - Current mana with color
+        value = calc_color(ch->getMana(), ch->getMaxMana()) + QString::number(ch->getMana()) + NTEXT;
+        break;
+      case 'w': // %w - Current moves with color
+        value = calc_color(ch->getMove(), ch->getMaxMove()) + QString::number(ch->getMove()) + NTEXT;
+        break;
+      case 'y': // %y - Follower's condition
+        if (charmie != nullptr)
+        {
+          value = QString::number(charmie->getHPPercent());
+        }
+        break;
+      case 'Y': // %Y - Follower's condition with color
+        if (charmie != nullptr)
+        {
+          value = calc_color(charmie->getHP(), charmie->getMaxHP()) + QString::number(charmie->getHPPercent()) + NTEXT;
+        }
+        break;
+      case 'I': // %I - Current hp as a percent 
+        value = QString::number(ch->getHPPercent());
+        break;
+      case 'N':
+        value = QString::number(ch->getManaPercent());
+        break;
+      case 'W':
+        value = QString::number(ch->getMovePercent());
+        break;
+      case 'L':
+        value = QString::number(ch->getKiPercent());
+        break;
+      case 'x':
+        value = QString::number(ch->getXP());
+        break;
+      case 'X':
+        value = QString::number(ch->getXPtoLevel());
+        break;
+      case '%':
+        value = "%";
+        break;
+      case 'a':
+        value = QString::number(ch->getAlignment());
+        break;
+      case 'A':
+        value = calc_color_align(ch->getAlignment()) + QString::number(ch->getAlignment()) + NTEXT;
+        break;
+      case 'c':
+        if (ch->fighting)
+          value = "<" + ch->getCondition() + ">";
+        break;
+      case 'C':
+        if (ch->fighting)
+           value = "<" + ch->getConditionColor() + ">";
+        break;
+      case 'f':
+        if (ch->fighting)
+          value = "<" + ch->fighting->getCondition() + ">";
+        break;
+      case 'F':
+        if (ch->fighting)
+          value = "<" + ch->fighting->getConditionColor() + ">";
+        break;
+      case 't':
+        if (ch->fighting && ch->fighting->fighting)
+          value = "[" + ch->fighting->fighting->getCondition() + "]";
+        break;
+      case 'T':
+        if (ch->fighting && ch->fighting->fighting)
+          value = "[" + ch->fighting->fighting->getConditionColor() + "]";
+        break;
+      case 's':
+        if (ch->in_room >= 0 && world_array[ch->in_room])
+          value = sector_types[world[ch->in_room].sector_type];
+        break;
+      case '0':
+        value = NTEXT;
+        break;
+      case '1':
+        value = RED;
+        break;
+      case '2':
+        value = GREEN;
+        break;
+      case '3':
+        value = YELLOW;
+        break;
+      case '4':
+        value = BLUE;
+        break;
+      case '5':
+        value = PURPLE;
+        break;
+      case '6':
+        value = CYAN;
+        break;
+      case '7':
+        value = GREY;
+        break;
+      case '8':
+        value = BOLD;
+        break;
+      case 'r':
+        value = "\n\r";
+        break;
+      default:
+        value = "?";
+        errorsDetected = true;
+        break;
+      }
+      token.replace(0, 1, value);
+      result += token;
+    }
+  }
+
+  if (errorsDetected == true)
+  {
+    result += "\n\rYour prompt has invalid prompt codes in it> ";
+  }
+
+  return prompt;
+}
 
 void write_to_q(char *txt, struct txt_q *queue, int aliased)
 {
@@ -1685,8 +1579,10 @@ void flush_queues(struct descriptor_data *d)
     bufpool = d->large_outbuf;
   }
   while (get_from_q(&d->input, buf2, &dummy));
-  if(d->output) 
-         write_to_descriptor(d->descriptor, d->output);
+  if(d->output.length() > 0) 
+  {
+    write_to_descriptor(d->descriptor, d->output);
+  }
 }
 
 void free_buff_pool_from_memory()
@@ -1702,103 +1598,263 @@ void free_buff_pool_from_memory()
   }
 }
 
-void scramble_text( char * txt )
+QString scramble_text( QString curr )
 {
-  char * curr = txt;
-
-  for( ; *curr; curr++)
+  for (auto &ch : curr)
+  {
     // only scramble letters, but not 'm' cause 'm' is used in ansi codes
-    if(number(1, 5) == 5 && ((*curr >= 'a' && *curr <= 'z') || (*curr >= 'A' && *curr <= 'Z'))
-       && *curr != 'm')
+    if(number(1, 5) == 5 && ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))
+       && ch != 'm')
     {
-      *curr = number(0, 1) ? (char) number('a', 'z') : (char) number('A', 'Z');
+      ch = number(0, 1) ? (char) number('a', 'z') : (char) number('A', 'Z');
     }
+  }
+
+    return curr;
 }
 
-/* Add a new string to a player's output queue */
-void write_to_output(const char *txt, struct descriptor_data *t)
+char * handle_ansi_old(char * s, char_data * ch)
 {
-  int size;
-  char buf[MAX_STRING_LENGTH];
-  char * temp = NULL;
-  char * handle_ansi(char * s, char_data * ch);
+  char * t;
+  char* tp, *sp, *i;
 
+  char nullstring[] = "";
+  char dollarstring[] = "$";
+
+  // Worse case scenario is a string of color codes that are all $R's.  These take up
+  // 11 characters each.  So to handle that, we'll count the number of $'s and multiply
+  // that by 11 for the amount of extra space we need.
+
+  int numdollars = 0;
+
+  t = s;
+  while((t = strstr(t, "$"))) {
+    numdollars++;
+    t++;
+  }
+  
+#ifdef LEAK_CHECK
+  t = (char *)calloc((strlen(s) + numdollars*11 + 1), sizeof(char));
+#else
+  t = (char *)dc_alloc((strlen(s) + numdollars*11 + 1), sizeof(char));
+#endif
+  *t = '\0';
+
+  i = nullstring;
+  tp = t;
+  sp = s;
+  while(*sp) {
+    if(*sp != '$') {
+      *tp++ = *sp++;
+    } else {
+       if(IS_MOB(ch) || IS_SET(ch->pcdata->toggles, PLR_ANSI)) {
+          switch(*++sp) {
+//             case 'B':  i = BLACK; break;
+//             case 'R':  i = RED; break;
+//             case 'g':  i = GREEN; break;
+//             case 'Y':  i = YELLOW; break;
+//             case 'b':  i = BLUE; break;
+//             case 'P':  i = PURPLE; break;
+//             case 'C':  i = CYAN; break;
+//             case 'G':  i = GREY; break;
+//             case '!':  i = BOLD; break;
+//             case 'N':  i = NTEXT; break;
+
+             case '0':  i = BLACK; break;
+             case '1':  i = BLUE; break;
+             case '2':  i = GREEN; break;
+             case '3':  i = CYAN; break;
+             case '4':  i = RED; break;
+             case '5':  i = YELLOW; break;
+             case '6':  i = PURPLE; break;
+             case '7':  i = GREY; break;
+             case 'B':  i = BOLD; break;
+             case 'R':  i = NTEXT; break;
+	     case 'L':  i = FLASH;break;
+	     case 'K':  i = BLINK;break;
+             case 'I':  i = INVERSE; break;
+             case '$':  i = dollarstring; break;
+             case '\0': // this happens if we end a line with $
+                        sp--; // back up to the $ char so we don't go past our \0
+                        // no break here so the default catchs it and uses a nullstring
+             default: i = nullstring; break;
+          }
+       } else {
+         sp++;
+         if(*sp == '$')
+           i = dollarstring;
+         else i = nullstring;
+       }
+       while((*tp++ = *i++));
+       tp--;
+       sp++;
+    }
+  }
+  *tp = '\0';
+
+  return t;
+}
+
+QString handle_ansi(QString buffer, char_data *ch)
+{
+  size_t bufferSize = buffer.size();
+  char *copyOfBuffer = new char [bufferSize+1];
+  strncpy(copyOfBuffer, buffer.toStdString().c_str(), bufferSize);
+  copyOfBuffer[bufferSize] = '\0';
+
+  char *oldResult = handle_ansi_old(copyOfBuffer, ch);
+  QString result = QString(oldResult);
+
+  // DO NOT CHECKIN
+  assert(result == QString(oldResult));
+  
+  /*
+  char nullstring[] = "";
+  char dollarstring[] = "$";
+
+  for (string::iterator i = buffer.begin(); i != buffer.end(); i++)
+  {
+    if (*i != '$')
+    {
+      result += *i;
+    }
+    else
+    {
+      if (IS_MOB(ch) || IS_SET(ch->pcdata->toggles, PLR_ANSI))
+      {
+        switch (*i)
+        {
+        case '0':
+          i = BLACK;
+          break;
+        case '1':
+          i = BLUE;
+          break;
+        case '2':
+          i = GREEN;
+          break;
+        case '3':
+          i = CYAN;
+          break;
+        case '4':
+          i = RED;
+          break;
+        case '5':
+          i = YELLOW;
+          break;
+        case '6':
+          i = PURPLE;
+          break;
+        case '7':
+          i = GREY;
+          break;
+        case 'B':
+          i = BOLD;
+          break;
+        case 'R':
+          i = NTEXT;
+          break;
+        case 'L':
+          i = FLASH;
+          break;
+        case 'K':
+          i = BLINK;
+          break;
+        case 'I':
+          i = INVERSE;
+          break;
+        case '$':
+          i = dollarstring;
+          break;
+        case '\0': // this happens if we end a line with $
+          sp--;    // back up to the $ char so we don't go past our \0
+                   // no break here so the default catchs it and uses a nullstring
+        default:
+          i = nullstring;
+          break;
+        }
+      }
+      else
+      {
+        sp++;
+        if (*sp == '$')
+          i = dollarstring;
+        else
+          i = nullstring;
+      }
+    }
+  }
+*/
+
+  return result;
+}
+
+/*
+       if(IS_MOB(ch) || IS_SET(ch->pcdata->toggles, PLR_ANSI)) {
+          switch(*++sp) {
+//             case 'B':  i = BLACK; break;
+//             case 'R':  i = RED; break;
+//             case 'g':  i = GREEN; break;
+//             case 'Y':  i = YELLOW; break;
+//             case 'b':  i = BLUE; break;
+//             case 'P':  i = PURPLE; break;
+//             case 'C':  i = CYAN; break;
+//             case 'G':  i = GREY; break;
+//             case '!':  i = BOLD; break;
+//             case 'N':  i = NTEXT; break;
+
+             case '0':  i = BLACK; break;
+             case '1':  i = BLUE; break;
+             case '2':  i = GREEN; break;
+             case '3':  i = CYAN; break;
+             case '4':  i = RED; break;
+             case '5':  i = YELLOW; break;
+             case '6':  i = PURPLE; break;
+             case '7':  i = GREY; break;
+             case 'B':  i = BOLD; break;
+             case 'R':  i = NTEXT; break;
+	     case 'L':  i = FLASH;break;
+	     case 'K':  i = BLINK;break;
+             case 'I':  i = INVERSE; break;
+             case '$':  i = dollarstring; break;
+             case '\0': // this happens if we end a line with $
+                        sp--; // back up to the $ char so we don't go past our \0
+                        // no break here so the default catchs it and uses a nullstring
+             default: i = nullstring; break;
+          }
+       } else {
+         sp++;
+         if(*sp == '$')
+           i = dollarstring;
+         else i = nullstring;
+       }
+       while((*tp++ = *i++));
+       tp--;
+       sp++;
+    }
+  }
+  *tp = '\0';
+
+*/
+
+
+/* Add a new string to a player's output queue */
+void write_to_output(QString buffer, descriptor_data *t)
+{
   /* if there's no descriptor, don't worry about output */
   if (t->descriptor == 0)
     return;
 
-  /* if we're in the overflow state already, ignore this new output */
-  if (t->bufptr < 0)
-    return;
-
   if (t->connected != CON_EDITING && t->connected != CON_WRITE_BOARD && t->connected != CON_EDIT_MPROG) {
-    temp = handle_ansi((char*)txt, t->character);
-    txt = temp;
+    buffer = handle_ansi(buffer, t->character);
   }
-
-  strncpy(buf, txt, MAX_STRING_LENGTH);
-  size = strlen(buf);
-
 
   if(t->character && IS_AFFECTED(t->character, AFF_INSANE) && t->connected == CON_PLAYING)
   {
-//    temp = str_dup(txt);
-//    scramble_text(temp);
-//    txt = temp;
-
-    scramble_text(buf);
+    buffer = scramble_text(buffer);
   }
 
-  /* if we have enough space, just write to buffer and that's it! */
-  if (t->bufspace >= size) {
-    strcpy(t->output + t->bufptr, buf);
-    t->bufspace -= size;
-    t->bufptr += size;
-    if(temp)
-      dc_free(temp);
-    return;
-  }
-  /*
-   * If we're already using the large buffer, or if even the large buffer
-   * is too small to handle this new text, chuck the text and switch to the
-   * overflow state.
-   */
-  if (t->large_outbuf || ((size + strlen(t->output)) > LARGE_BUFSIZE)) {
-    t->bufptr = -1;
-    buf_overflows++;
-    if(temp)
-      dc_free(temp);
-    return;
-  }
-  buf_switches++;
-
-  /* if the pool has a buffer in it, grab it */
-  if (bufpool != NULL) {
-    t->large_outbuf = bufpool;
-    bufpool = bufpool->next;
-  } else {			/* else create a new one */
-#ifdef LEAK_CHECK
-    t->large_outbuf = (struct txt_block *)calloc(1, sizeof(struct txt_block));
-    t->large_outbuf->text = (char *)calloc(1, LARGE_BUFSIZE);
-#else
-    t->large_outbuf = (struct txt_block *)dc_alloc(1, sizeof(struct txt_block));
-    t->large_outbuf->text = (char *)dc_alloc(1, LARGE_BUFSIZE);
-#endif
-    buf_largecount++;
-  }
-
-  strcpy(t->large_outbuf->text, t->output);	/* copy to big buffer */
-  t->output = t->large_outbuf->text;	/* make big buffer primary */
-  strcat(t->output, buf);	/* now add new text */
-
-  /* calculate how much space is left in the buffer */
-  t->bufspace = LARGE_BUFSIZE - 1 - strlen(t->output);
-
-  /* set the pointer for the next write */
-  t->bufptr = strlen(t->output);
-
-  if(temp)
-    dc_free(temp);
+  t->output += buffer;
 }
 
 
@@ -1873,8 +1929,6 @@ int new_descriptor(int s)
   newd->idle_tics = 0;
   newd->idle_time = 0;
   newd->wait = 1;
-  newd->output = newd->small_outbuf;
-  newd->bufspace = SMALL_BUFSIZE - 1;
   newd->next = descriptor_list;
   newd->login_time = time(0);
   newd->astr = 0;
@@ -1893,33 +1947,24 @@ int new_descriptor(int s)
 
 int process_output(struct descriptor_data *t)
 {
-  static char i[LARGE_BUFSIZE + GARBAGE_SPACE + MAX_STRING_LENGTH];
   static int result;
-
-  /* we may need this \r\n for later -- see below */
-  strcpy(i, "\r\n");
-
-  /* now, append the 'real' output */
-  strcpy(i + 2, t->output);
-  
-  extern void blackjack_prompt(CHAR_DATA *ch, char *prompt, bool ascii);
   if (t->character && t->connected == CON_PLAYING)
-  blackjack_prompt(t->character,i,t->character->pcdata&&!IS_SET(t->character->pcdata->toggles, PLR_ASCII));
-  make_prompt(t, i);
-
-  /* if we're in the overflow state, notify the user */
-  if (t->bufptr < 0)
-    strcat(i, "**OVERFLOW**");
+  {
+    t->output += blackjack_prompt(t->character, t->character->pcdata && !IS_SET(t->character->pcdata->toggles, PLR_ASCII));
+  }
+  
+  t->output += make_prompt(t);
 
   /*
    * now, send the output.  If this is an 'interruption', use the prepended
    * CRLF, otherwise send the straight output sans CRLF.
    */
   if (!t->prompt_mode) {		/* && !t->connected) */
-    result = write_to_descriptor(t->descriptor, i);
+     t->output = "\r\n" + t->output;
+    result = write_to_descriptor(t->descriptor, t->output);
     t->prompt_mode = 0;
   } else {
-    result = write_to_descriptor(t->descriptor, i + 2);
+    result = write_to_descriptor(t->descriptor, t->output);
     t->prompt_mode = 0;
   }
   /* handle snooping: prepend "% " and send to snooper */
@@ -1928,60 +1973,45 @@ int process_output(struct descriptor_data *t)
     SEND_TO_Q(t->output, t->snoop_by);
     SEND_TO_Q("%%", t->snoop_by);
   }
-  /*
-   * if we were using a large buffer, put the large buffer on the buffer pool
-   * and switch back to the small one
-   */
-  if (t->large_outbuf) {
-    t->large_outbuf->next = bufpool;
-    bufpool = t->large_outbuf;
-    t->large_outbuf = NULL;
-    t->output = t->small_outbuf;
-  }
-  /* reset total bufspace back to that of a small buffer */
-  t->bufspace = SMALL_BUFSIZE - 1;
-  t->bufptr = 0;
-  *(t->output) = '\0';
+  t->output.clear();
 
   return result;
 }
 
-
-
-int write_to_descriptor(socket_t desc, char *txt)
+int write_to_descriptor(socket_t desc, QString txt)
 {
   int total, bytes_written;
 
-  total = strlen(txt);
+  total = txt.size();
 
-  do {
-#ifndef WIN32
-    if ((bytes_written = write(desc, txt, total)) < 0) {
-#else
-	if ((bytes_written = send(desc, txt, total, 0)) < 0) {
-#endif
+  do
+  {
+    if ((bytes_written = write(desc, txt.toStdString().c_str(), total)) < 0)
+    {
 #ifdef EWOULDBLOCK
       if (errno == EWOULDBLOCK)
-	errno = EAGAIN;
+        errno = EAGAIN;
 #endif /* EWOULDBLOCK */
-      if (errno == EAGAIN) {
-	// log("process_output: socket write would block",
-        //     0, LOG_MISC);
+      if (errno == EAGAIN)
+      {
+        log("process_output: socket write would block", 0, LOG_MISC);
       }
-      else {
-	perror("Write to socket");
-        return(-1);
+      else
+      {
+        perror("Write to socket");
+        return (-1);
       }
-      return(0);
-    } else {
-      txt += bytes_written;
+      return (0);
+    }
+    else
+    {
+      txt = txt.remove(0, bytes_written);
       total -= bytes_written;
     }
   } while (total > 0);
 
   return 0;
 }
-
 
 /*
  * ASSUMPTION: There will be no newlines in the raw input buffer when this
@@ -2003,52 +2033,49 @@ int process_input(struct descriptor_data *t)
   read_point = t->inbuf + buf_length;
   space_left = MAX_RAW_INPUT_LENGTH - buf_length - 1;
 
-  do {
-    if (space_left <= 0) {
-      log("process_input: about to close connection: input overflow", ANGEL,
-           LOG_SOCKET);
-      return -1;
+  do
+  {
+    if (space_left <= 0)
+    {
+//      log("process_input: input overflow", ANGEL,LOG_SOCKET);
+          
+      break;
     }
-#ifndef WIN32
-    if ((bytes_read = read(t->descriptor, read_point, space_left)) < 0) {
-#else
-	if((bytes_read = recv(t->descriptor, read_point, space_left, 0)) < 0) {
-		if(WSAGetLastError() == WSAEWOULDBLOCK) {
-			return(0);
-		}
-#endif
-
+    if ((bytes_read = read(t->descriptor, read_point, space_left)) < 0)
+    {
 
 #ifdef EWOULDBLOCK
       if (errno == EWOULDBLOCK)
-	errno = EAGAIN;
+        errno = EAGAIN;
 #endif /* EWOULDBLOCK */
-      if (errno != EAGAIN) {
-	perror("process_input: about to lose connection");
-	return -1;		/* some error condition was encountered on
+      if (errno != EAGAIN)
+      {
+        perror("process_input: about to lose connection");
+        return -1; /* some error condition was encountered on
 				 * read */
-      } else
-	return 0;		/* the read would have blocked: just means no
+      }
+      else
+        return 0; /* the read would have blocked: just means no
 				 * data there but everything's okay */
-    } else if (bytes_read == 0) {
-	  if (strcmp(t->host, "127.0.0.1")) {
-	    log("EOF on socket read (connection broken by peer)", ANGEL, LOG_SOCKET);
-	  }
+    }
+    else if (bytes_read == 0)
+    {
+      log("EOF on socket read (connection broken by peer)", ANGEL, LOG_SOCKET);
       return -1;
     }
     /* at this point, we know we got some data from the read */
 
-    *(read_point + bytes_read) = '\0';	/* terminate the string */
+    *(read_point + bytes_read) = '\0'; /* terminate the string */
 
     /* search for a newline in the data we just read */
     for (ptr = read_point; *ptr && !nl_pos; ptr++)
       if (ISNEWL(*ptr) || (t->connected != CON_WRITE_BOARD && t->connected != CON_EDITING && t->connected != CON_EDIT_MPROG && *ptr == '|'))
-	nl_pos = ptr;
+        nl_pos = ptr;
 
     read_point += bytes_read;
     space_left -= bytes_read;
 
-/*
+    /*
  * on some systems such as AIX, POSIX-standard nonblocking I/O is broken,
  * causing the MUD to hang when it encounters input not terminated by a
  * newline.  This was causing hangs at the Password: prompt, for example.
@@ -2066,66 +2093,80 @@ int process_input(struct descriptor_data *t)
 
   read_point = t->inbuf;
 
-  while (nl_pos != NULL) {
+  while (nl_pos != NULL)
+  {
     write_point = tmp;
     space_left = MAX_INPUT_LENGTH - 1;
 
-    for (ptr = read_point; (space_left > 0) && (ptr < nl_pos); ptr++) {
-      if (*ptr == '\b') {	// handle backspacing 
-	if (write_point > tmp) {
-	  if ((*(--write_point) == '$') && (write_point > tmp) &&    // if backup to $ AND room left AND
+    for (ptr = read_point; (space_left > 0) && (ptr < nl_pos); ptr++)
+    {
+      if (*ptr == '\b')
+      { // handle backspacing
+        if (write_point > tmp)
+        {
+          if ((*(--write_point) == '$') && (write_point > tmp) &&    // if backup to $ AND room left AND
               (!t->character || GET_LEVEL(t->character) < IMMORTAL)) //    (no char OR mortal)
           {
             // need to backspace twice if it's a $ to keep morts from the $codes
             // need the write_point > tmp check to make sure we don't backspace past beginning
-	    write_point--;
-	    space_left += 2;
-	  } else
-	    space_left++;
-	}
-// BEGIN NEW HERE - replacing how $'s are handled to make it more intelligent
-// and to stop it from overwriting our buffer
-      } else if((*ptr == '$')) {
-        if(!t->character || (GET_LEVEL(t->character) < IMMORTAL))
-        { 
+            write_point--;
+            space_left += 2;
+          }
+          else
+            space_left++;
+        }
+        // BEGIN NEW HERE - replacing how $'s are handled to make it more intelligent
+        // and to stop it from overwriting our buffer
+      }
+      else if ((*ptr == '$'))
+      {
+        if (!t->character || (GET_LEVEL(t->character) < IMMORTAL))
+        {
           // if it's a $, and I'm a mortal, or have no character yet, handle it.
           // if there is a $, double it if there is room, and keep going
-          if(space_left > 2) {
+          if (space_left > 2)
+          {
             *write_point++ = *ptr;
             *write_point++ = '$';
             space_left -= 2;
           }
-          else space_left = 0; // so it truncates properly
+          else
+            space_left = 0; // so it truncates properly
           // do nothing, which junks the $
         }
-        else {
+        else
+        {
           // gods can use $codes but only ones for color UNLESS inside a MOBProg editor
           // I have to let them use $codes inside the editor or they can't write MOBProgs
           // tmp_ptr is just so I don't have to put ptr+1 7 times....
-          tmp_ptr = (ptr+1);
-          if(isdigit(*tmp_ptr) || *tmp_ptr == 'I' || *tmp_ptr == 'L' ||
-                                  *tmp_ptr == '*' || *tmp_ptr == 'R' ||
-                                  *tmp_ptr == 'B' || t->connected == CON_EDIT_MPROG ||
-				  t->connected == CON_EDITING
-            )
+          tmp_ptr = (ptr + 1);
+          if (isdigit(*tmp_ptr) || *tmp_ptr == 'I' || *tmp_ptr == 'L' ||
+              *tmp_ptr == '*' || *tmp_ptr == 'R' ||
+              *tmp_ptr == 'B' || t->connected == CON_EDIT_MPROG ||
+              t->connected == CON_EDITING)
           { // write it like normal
             *write_point++ = *ptr;
             space_left--;
-          } else if(space_left > 2) { // any other code, double up the $
+          }
+          else if (space_left > 2)
+          { // any other code, double up the $
             *write_point++ = *ptr;
             *write_point++ = '$';
             space_left -= 2;
           }
-          else space_left = 0; // if no space left, so it truncates properly
-                               // do nothing, which junks the $
+          else
+            space_left = 0; // if no space left, so it truncates properly
+                            // do nothing, which junks the $
         }
-      } else if (isascii(*ptr) && isprint(*ptr)) {
-	*write_point++ = *ptr;
+      }
+      else if (isascii(*ptr) && isprint(*ptr))
+      {
+        *write_point++ = *ptr;
         space_left--;
       }
-// END NEW HERE
-      
-/* BEGIN OLD HERE
+      // END NEW HERE
+
+      /* BEGIN OLD HERE
       } else if (isascii(*ptr) && isprint(*ptr)) {
 	if (((*(write_point++) = *ptr) == '$') && 
              ((*(ptr+1) != '$') || doublesign))
@@ -2153,14 +2194,16 @@ END OLD HERE */
 
     *write_point = '\0';
 
-    if ((space_left <= 0) && (ptr < nl_pos)) {
+    if ((space_left <= 0) && (ptr < nl_pos))
+    {
       char buffer[MAX_INPUT_LENGTH + 64];
 
-      sprintf(buffer, "Line too long.  Truncated to:\r\n%s\r\n", tmp);
-      if (write_to_descriptor(t->descriptor, buffer) < 0)
-	return -1;
+      sprintf(buffer, "Line too long.  Truncated to:\r\n%s (%d)\r\n", tmp, strlen(tmp));
+      if (write_to_descriptor(t->descriptor, QString(buffer)) < 0)
+        return -1;
     }
-    if (t->snoop_by) {
+    if (t->snoop_by)
+    {
       SEND_TO_Q("% ", t->snoop_by);
       SEND_TO_Q(tmp, t->snoop_by);
       SEND_TO_Q("\r\n", t->snoop_by);
@@ -2169,15 +2212,17 @@ END OLD HERE */
 
     if (*tmp == '!')
       strcpy(tmp, t->last_input);
-    else if (*tmp == '^') {
+    else if (*tmp == '^')
+    {
       if (!(failed_subst = perform_subst(t, t->last_input, tmp)))
-	strcpy(t->last_input, tmp);
-    } else
+        strcpy(t->last_input, tmp);
+    }
+    else
       strcpy(t->last_input, tmp);
 
-    if (!failed_subst) 
+    if (!failed_subst)
       write_to_q(tmp, &t->input, 0);
-    
+
     /* find the end of this line */
     //while (ISNEWL(*nl_pos))
     while (ISNEWL(*nl_pos) || (t->connected != CON_WRITE_BOARD && t->connected != CON_EDITING && t->connected != CON_EDIT_MPROG && *nl_pos == '|'))
@@ -2187,8 +2232,8 @@ END OLD HERE */
     read_point = ptr = nl_pos;
     for (nl_pos = NULL; *ptr && !nl_pos; ptr++)
       if (ISNEWL(*ptr) || (t->connected != CON_WRITE_BOARD && t->connected != CON_EDITING && t->connected != CON_EDIT_MPROG && *ptr == '|'))
-	nl_pos = ptr;
-      //if (ISNEWL(*ptr))
+        nl_pos = ptr;
+    //if (ISNEWL(*ptr))
   }
 
   /* now move the rest of the buffer up to the beginning for the next pass */
@@ -2199,8 +2244,6 @@ END OLD HERE */
 
   return 1;
 }
-
-
 
 /*
  * perform substitution for the '^..^' csh-esque syntax
