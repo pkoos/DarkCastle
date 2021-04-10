@@ -24,6 +24,7 @@ extern "C" {
 #include "character.h"
 #include "weather.h"
 #include "handler.h"
+
 #include <string>
 #include <vector>
 #include <fstream>
@@ -80,7 +81,7 @@ struct error_range_int {};
 #define BANNED_SITE_LENGTH 100 
 
 struct ban_list_element {
-   char site[BANNED_SITE_LENGTH + 1];
+   string site;
    int type;
    time_t date;
    char name[100];
