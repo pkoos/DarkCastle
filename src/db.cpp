@@ -2353,7 +2353,7 @@ void write_one_zone(FILE * fl, int zon)
 void read_one_zone(FILE * fl, int zon)
 {
 	struct reset_com reset_tab[MAX_RESET];
-	char *check, buf[161], ch;
+	char *check, buf[MAX_STRING_LENGTH+1], ch;
 	int reset_top, i, tmp;
 	char * skipper = NULL;
 	int version = 1;
@@ -2443,7 +2443,7 @@ void read_one_zone(FILE * fl, int zon)
 
 		if (reset_tab[reset_top].command == '*')
 				{
-			fgets(buf, 160, fl); /* skip command */
+			fgets(buf, MAX_STRING_LENGTH, fl); /* skip command */
 			// skip any space
 			skipper = buf;
 			while (*skipper == ' ' || *skipper == '\t')
