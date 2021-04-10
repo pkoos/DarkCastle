@@ -134,8 +134,6 @@ int do_report(struct char_data *ch, char *argument, int cmd)
 */
 int send_to_gods(const char *str, int god_level, long type)
 {
-  char buf1[MAX_STRING_LENGTH];
-  char buf[MAX_STRING_LENGTH];
   char typestr[30];
   struct descriptor_data *i;
 
@@ -202,9 +200,8 @@ int send_to_gods(const char *str, int god_level, long type)
 	  break;
   }
 
-  sprintf(buf, "//(%s) %s\n\r", typestr, str);
-  sprintf(buf1, "%s%s//%s(%s)%s %s%s %s%s%s\n\r",
-          BOLD, RED, NTEXT, typestr, BOLD, YELLOW, str, RED, NTEXT, GREY);
+  QString buf = "//(" + QString(typestr) + ") " + str + "\n\r";
+  QString buf1 = QString(BOLD RED) + "//" + NTEXT + "(" + typestr + ")" + BOLD + " " + YELLOW + str + " " + RED + NTEXT + GREY + "\n\r";
 
   for(i = descriptor_list; i; i = i->next) {
     if((i->character == NULL) || (GET_LEVEL(i->character) <= MORTAL))
@@ -215,9 +212,9 @@ int send_to_gods(const char *str, int god_level, long type)
       continue;
     if(!i->connected && GET_LEVEL(i->character) >= god_level) {
       if (IS_MOB(i->character) || IS_SET(i->character->pcdata->toggles, PLR_ANSI))
-        send_to_char(buf1, i->character);
+        i->character->show(buf1);
       else 
-        send_to_char(buf, i->character);
+        i->character->show(buf);
     }
   }
   return(1);
