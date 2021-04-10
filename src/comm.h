@@ -10,11 +10,7 @@ using namespace std;
 typedef int socket_t;
 
 #define SEND_TO_Q(messg, desc)  write_to_output((messg), desc)
-#ifndef WIN32
 #define CLOSE_SOCKET(sock) close(sock)
-#else
-#define CLOSE_SOCKET(sock) closesocket(sock)
-#endif
 
 #define SMALL_BUFSIZE           1024
 #define LARGE_BUFSIZE           (24 * 2048)
@@ -53,11 +49,13 @@ struct pulse_info {
 #include "character.h"
 
 //void     write_to_output(const char *txt, struct descriptor_data *d);
-void     write_to_output(const char *txt, struct descriptor_data *d);
-void     scramble_text(char * txt);
+void write_to_output(QString buffer, struct descriptor_data *t);
 void     warn_if_duplicate_ip(char_data * ch);
 void     record_msg(char *messg, char_data *ch);
 int      write_hotboot_file(char **argv);
 void  send_info(string messg);
 void  send_info(const char *messg);
+QString make_prompt(descriptor_data *d);
+
+
 #endif
