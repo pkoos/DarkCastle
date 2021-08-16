@@ -396,7 +396,7 @@ int do_ignore(struct char_data *ch, char *arg, int cmd)
     strcat(buf2, " ");
     buf[0] = UPPER(buf[0]);
     strcat(buf2, buf);
-    dc_free(ch->pcdata->ignoring);
+    delete[] ch->pcdata->ignoring;
     ch->pcdata->ignoring = str_dup(buf2);
     csendf(ch, "You now ignore anyone named %s.\n\r", buf);
   }
@@ -410,7 +410,7 @@ int do_ignore(struct char_data *ch, char *arg, int cmd)
         break;
       strcat(new_list, " ");
     }
-    dc_free(ch->pcdata->ignoring);
+    delete[] ch->pcdata->ignoring;    
     ch->pcdata->ignoring = str_dup(new_list);
     csendf(ch, "You stop ignoring %s\n\r", buf);
   }
@@ -630,7 +630,7 @@ void load_hints()
       strcpy(hints[num-1],buf);
    }
 
-   dc_free(buf);
+   delete[] buf;
 
    dc_fclose(fl);
 
