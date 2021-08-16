@@ -34,7 +34,7 @@ public:
 	virtual ~Timer();
 	void start();
 	void stop();
-	void setCount(uint16_t c) { stopCount = c; }
+	void setCount(uint_fast64_t c) { stopCount = c; }
 private:
 	TimeVal starttv;
 	TimeVal diff_cur;
