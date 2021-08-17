@@ -596,11 +596,7 @@ void add_commands_to_radix(void)
 {
   int x;
 
-#ifdef LEAK_CHECK
-  cmd_radix = (struct cmd_hash_info *)calloc(1, sizeof(struct cmd_hash_info));
-#else
-  cmd_radix = (struct cmd_hash_info *)dc_alloc(1, sizeof(struct cmd_hash_info));
-#endif
+  cmd_radix = new cmd_hash_info;
   cmd_radix->command = &cmd_info[0];
   cmd_radix->left    = 0;
   cmd_radix->right   = 0;
@@ -639,11 +635,7 @@ void add_command_to_radix(struct command_info *cmd)
     temp = curr;
     }
 
-#ifdef LEAK_CHECK
-  curr = (struct cmd_hash_info *)calloc(1, sizeof(struct cmd_hash_info));
-#else
-  curr = (struct cmd_hash_info *)dc_alloc(1, sizeof(struct cmd_hash_info));
-#endif
+  curr = new cmd_hash_info;
   curr->command = cmd;
   curr->left  = 0;
   curr->right = 0;
@@ -798,7 +790,7 @@ int command_interpreter( CHAR_DATA *ch, char *pcomm, bool procced  )
         //search bestowable_god_commands for the command skill number to lookup with has_skill
         int command_skill=0;
         for (int i = 0; *bestowable_god_commands[i].name != '\n'; i++) {
-          if (bestowable_god_commands[i].name == found->command_name) {
+          if (string(bestowable_god_commands[i].name) == string(found->command_name)) {
             command_skill=bestowable_god_commands[i].num;
             break;
           }
@@ -1423,13 +1415,7 @@ void add_command_lag(CHAR_DATA *ch, int cmdnum, int lag)
   if (!ch) return;
 
   struct command_lag *cmdl;
-#ifdef LEAK_CHECK
-        cmdl = (struct command_lag *)
-                        calloc(1, sizeof(struct command_lag));
-#else
-        cmdl = (struct command_lag *)
-                        dc_alloc(1, sizeof(struct command_lag));
-#endif
+  cmdl = new command_lag;
   cmdl->next = command_lag_list;
   command_lag_list = cmdl;
   cmdl->ch = ch;
