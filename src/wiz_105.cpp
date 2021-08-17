@@ -438,11 +438,7 @@ int do_sqedit(struct char_data *ch, char *argument, int cmd)
              clas = x;
           }
 
-      #ifdef LEAK_CHECK
-	newOne = (struct skill_quest *) calloc(1, sizeof(struct skill_quest));
-      #else
-	newOne = (struct skill_quest *) dc_alloc(1,sizeof(struct skill_quest));
-      #endif
+	newOne = new skill_quest;
 	newOne->num = i;
 	newOne->level = 1;
         newOne->message = str_dup("New skillquest.");
