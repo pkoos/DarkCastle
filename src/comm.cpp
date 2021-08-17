@@ -219,47 +219,51 @@ int write_hotboot_file(char **new_argv)
     fprintf(fp, "%d\n", fd);
   });
 
-  for (d=descriptor_list;d;d=sd)
+  for (d = descriptor_list; d; d = sd)
   {
-    sd = d->next;  
-    if (STATE(d) != CON_PLAYING || !d->character || GET_LEVEL(d->character) < 2) {
+    sd = d->next;
+    if (STATE(d) != CON_PLAYING || !d->character || GET_LEVEL(d->character) < 1)
+    {
       // Kick out anyone not currently playing in the game.
-      write_to_descriptor(d->descriptor,"We are rebooting, come back in a minute.");
+      write_to_descriptor(d->descriptor, "We are rebooting, come back in a minute.");
       close_socket(d);
-    } else {
+    }
+    else
+    {
       STATE(d) = CON_PLAYING; // if editors.
-      if(d->original) {
-        fprintf(fp,"%d\n%s\n%s\n",d->descriptor,GET_NAME(d->original),d->host);
-	if (d->original->pcdata){
-   	 if(d->original->pcdata->last_site)
-     	 dc_free(d->original->pcdata->last_site);
-#ifdef LEAK_CHECK
-	    d->original->pcdata->last_site = (char *)calloc(strlen(d->host) + 1, sizeof(char));
-#else
-	    d->original->pcdata->last_site = (char *)dc_alloc(strlen(d->host) + 1, sizeof(char));
-#endif
-	    strcpy (d->original->pcdata->last_site, d->original->desc->host);
-	    d->original->pcdata->time.logon = time(0);
-	}
-        save_char_obj(d->original);
+      if (d->original)
+      {
+        fprintf(fp, "%d\n%s\n%s\n", d->descriptor, GET_NAME(d->original), d->host);
+        if (d->original->pcdata)
+        {
+          if (d->original->pcdata->last_site)
+          {
+            delete[] d->original->pcdata->last_site;
+          }
 
+          d->original->pcdata->last_site = new char[(strlen(d->host) + 1)];
+          strcpy(d->original->pcdata->last_site, d->original->desc->host);
+          d->original->pcdata->time.logon = time(0);
+        }
+        save_char_obj(d->original);
       }
-      else {
-        fprintf(fp,"%d\n%s\n%s\n",d->descriptor,GET_NAME(d->character),d->host);
-	if (d->character->pcdata){
-   	 if(d->character->pcdata->last_site)
-     	 dc_free(d->character->pcdata->last_site);
-#ifdef LEAK_CHECK
-	    d->character->pcdata->last_site = (char *)calloc(strlen(d->host) + 1, sizeof(char));
-#else
-	    d->character->pcdata->last_site = (char *)dc_alloc(strlen(d->host) + 1, sizeof(char));
-#endif
-	    strcpy (d->character->pcdata->last_site, d->character->desc->host);
-	    d->character->pcdata->time.logon = time(0);
-	}
+      else
+      {
+        fprintf(fp, "%d\n%s\n%s\n", d->descriptor, GET_NAME(d->character), d->host);
+        if (d->character->pcdata)
+        {
+          if (d->character->pcdata->last_site)
+          {
+            delete[] d->character->pcdata->last_site;
+          }
+          
+          d->character->pcdata->last_site = new char[strlen(d->host) + 1];
+          strcpy(d->character->pcdata->last_site, d->character->desc->host);
+          d->character->pcdata->time.logon = time(0);
+        }
         save_char_obj(d->character);
       }
-      write_to_descriptor(d->descriptor,"Attempting to maintain your link during reboot.\r\nPlease wait..");
+      write_to_descriptor(d->descriptor, "Attempting to maintain your link during reboot.\r\nPlease wait..");
     }
   }
   fclose(fp);
@@ -333,7 +337,7 @@ int load_hotboot_descs()
     desc =0;
     *host = '\0';
     fscanf(fp, "%d\n%s\n%s\n", &desc, chr, host);
-    d = (struct descriptor_data *)dc_alloc(1, sizeof(struct descriptor_data));
+    d = new descriptor_data;
     memset((char *) d, 0, sizeof(struct descriptor_data));
     d->idle_time = 0;
     d->idle_tics               = 0;
@@ -341,6 +345,7 @@ int load_hotboot_descs()
     d->prompt_mode             = 1;
     d->input.head              = 0;
     d->login_time              = time(0);
+    d->output                  = chr;
 
     if ( write_to_descriptor( desc, "Recovering...\r\n" ) == -1) {
       sprintf(buf,"Host %s Char %s Desc %d FAILED to recover from hotboot.",host,chr,desc);
@@ -1524,25 +1529,20 @@ void write_to_q(char *txt, struct txt_q *queue, int aliased)
 {
   struct txt_block *new_block;
 
-#ifdef LEAK_CHECK  
-  new_block = (struct txt_block *)calloc(1, sizeof(struct txt_block));
-  new_block->text = (char *)calloc(1, strlen(txt) + 1);
-#else
-  new_block = (struct txt_block *)dc_alloc(1, sizeof(struct txt_block));
-  new_block->text = (char *)dc_alloc(1, strlen(txt) + 1);
-#endif
+  new_block = new txt_block;
+  new_block->text = new char[strlen(txt) + 1];
 
   strcpy(new_block->text, txt);
   new_block->aliased = aliased;
 
   /* queue empty? */
   if (!queue->head) {
-    new_block->next = NULL;
+    new_block->next = nullptr;
     queue->head = queue->tail = new_block;
   } else {
     queue->tail->next = new_block;
     queue->tail = new_block;
-    new_block->next = NULL;
+    new_block->next = nullptr;
   }
 }
 
@@ -1561,8 +1561,8 @@ int get_from_q(struct txt_q *queue, char *dest, int *aliased)
   *aliased = queue->head->aliased;
   queue->head = queue->head->next;
 
-  dc_free(tmp->text);
-  dc_free(tmp);
+  delete[] tmp->text;
+  delete tmp;
   return 1;
 }
 
@@ -1633,12 +1633,9 @@ char * handle_ansi_old(char * s, char_data * ch)
     t++;
   }
   
-#ifdef LEAK_CHECK
-  t = (char *)calloc((strlen(s) + numdollars*11 + 1), sizeof(char));
-#else
-  t = (char *)dc_alloc((strlen(s) + numdollars*11 + 1), sizeof(char));
-#endif
-  *t = '\0';
+  size_t size = (strlen(s) + (numdollars*11) + 1) * sizeof(char);
+  t = new char[size];
+  memset(t, 0, size);
 
   i = nullstring;
   tp = t;
@@ -1901,11 +1898,7 @@ int new_descriptor(int s)
 #endif
 
   /* create a new descriptor */
-#ifdef LEAK_CHECK
-  newd = (struct descriptor_data *)calloc(1, sizeof(struct descriptor_data));
-#else
-  newd = (struct descriptor_data *)dc_alloc(1, sizeof(struct descriptor_data));
-#endif
+  newd = new descriptor_data;
   memset((char *) newd, 0, sizeof(struct descriptor_data));
   strcpy(newd->host, inet_ntoa(peer.sin_addr));
 
@@ -2358,7 +2351,7 @@ int close_socket(struct descriptor_data *d)
 //			GET_NAME(d->character));
 //		log(buf, 110, LOG_HMM);
 	}
-			free_char(d->character);
+			delete d->character;
     }
   }
 //   Removed this log caues it's so fricken annoying
