@@ -502,11 +502,11 @@ int attack(CHAR_DATA *ch, CHAR_DATA *vict, int type, int weapon)
     return eINTERNAL_ERROR;
   }
 
+  // victim could be dead if a skill like do_ki causes folowers to autojoin and kill
+  // before attack gets called
   if (GET_POS(vict) == POSITION_DEAD) {
-    log("Dead victim sent to attack. Wtf ;)", -1, LOG_BUG);
-    produce_coredump();
-    
-    return eINTERNAL_ERROR;
+    stop_fighting(ch);
+    return eFAILURE;
   }
 
   if (!can_attack(ch))                          return eFAILURE;
@@ -4823,16 +4823,18 @@ void raw_kill(CHAR_DATA * ch, CHAR_DATA * victim)
     )
     make_dust(victim);
   else make_corpse(victim);
-  
-  if(IS_NPC(victim)) { 
-    if (ch == victim) {
-	logf(IMMORTAL, LOG_BUG, "selfpurge on %s to %s", GET_NAME(ch), GET_NAME(victim));
-	selfpurge = 1;
+
+  if (IS_NPC(victim))
+  {
+    if (ch == victim)
+    {
+      logf(IMMORTAL, LOG_BUG, "selfpurge on %s to %s", GET_NAME(ch), GET_NAME(victim));
+      selfpurge = true;
     }
     extract_char(victim, TRUE);
     return;
   }
-  
+
   if (victim->followers || victim->master)
   {
      stop_grouped_bards(victim,!IS_SINGING(victim));

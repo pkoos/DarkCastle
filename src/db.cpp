@@ -4440,7 +4440,7 @@ void reset_zone(int zone)
 					last_cmd = 1;
 					last_mob = 1;
 					extern bool selfpurge;
-					selfpurge = FALSE;
+					selfpurge = false;
 					mprog_load_trigger(mob);
 					if (selfpurge) {
 						mob = NULL;
@@ -6108,13 +6108,15 @@ void copySaveData(obj_data *target, obj_data *source)
 			target->obj_flags.value[2] = source->obj_flags.value[2];
 
 			// If new object does not have enough room for affects to be copied then realloc it
-			if (source->num_affects != target->num_affects)
+			if (source->num_affects > target->num_affects)
 			{
+				errno=0;
 				target->affected = (obj_affected_type *)realloc(target->affected,
 																(sizeof(obj_affected_type) * source->num_affects));
 				if (target->affected == NULL)
 				{
 					perror("realloc");
+					abort();
 					exit(EXIT_FAILURE);
 				}
 				target->num_affects = source->num_affects;
