@@ -575,7 +575,7 @@ void mob_stat(struct char_data *ch, struct char_data *k)
   }
   if (IS_NPC(k))
   {
-    sprintf(buf, "$3Mobspec$R: %d  $3Progtypes$R: %d\r\n", (int)(mob_index[k->mobdata->nr].mobspec), mob_index[k->mobdata->nr].progtypes);
+    sprintf(buf, "$3Mobspec$R: %p  $3Progtypes$R: %d\r\n", (mob_index[k->mobdata->nr].mobspec), mob_index[k->mobdata->nr].progtypes);
     send_to_char(buf,ch);
   }
  sprintf(buf, "$3Height$R:[%d]  $3Weight$R:[%d]  $3Sex$R:[", GET_HEIGHT(k), GET_WEIGHT(k));
@@ -1700,11 +1700,7 @@ void begin_hunt(int item, int duration, int amount, char *huntname)
   struct tm *pTime = NULL;
   time_t ct;
 
-#ifdef LEAK_CHECK
-  n = (struct hunt_data *)calloc(1, sizeof(struct hunt_data));
-#else
-  n = (struct hunt_data *)dc_alloc(1, sizeof(struct hunt_data));
-#endif
+  n = new hunt_data;
   n->next = hunt_list;
   hunt_list = n;
   n->itemnum = item;
@@ -1771,11 +1767,7 @@ void begin_hunt(int item, int duration, int amount, char *huntname)
     struct obj_data *obj = clone_object(rnum);
     obj_to_char(obj, vict);
     struct hunt_items *ni;
-#ifdef LEAK_CHECK
-  ni = (struct hunt_items *)calloc(1, sizeof(struct hunt_items));
-#else
-  ni = (struct hunt_items *)dc_alloc(1, sizeof(struct hunt_items));
-#endif
+    ni = new hunt_items;
     ni->hunt = n;
     ni->obj = obj;
     ni->mobname = str_dup(vict->short_desc);
