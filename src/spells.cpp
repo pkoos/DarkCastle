@@ -900,6 +900,14 @@ const char *spells[]=
    "\n"
 };
 
+int stat_mod [] = {
+0,-5,-5,-4,-4,-3,-3,-2,-2,-1,-1,
+0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,
+7,8,9,10
+};
+
+extern int skillmax(struct char_data *ch, int skill, int eh);
+
 bool canPerform(char_data * const &ch, const int_fast32_t &skillType,
 		string failMessage) {
 	if (IS_PC(ch) && has_skill(ch, skillType) == 0 && GET_LEVEL(ch) < ARCHANGEL) {
@@ -989,14 +997,19 @@ void affect_update(int32 duration_type) {
 				af->duration--;
 				if (af->type == SPELL_ICESTORM)
 					af->modifier = 0 - af->duration;
-				if (!(af->caster).empty()) //means bard song
+				if (!af->caster.isNull()) //means bard song
 				{
 					CHAR_DATA *get_pc_room_vis_exact(CHAR_DATA *ch, const char *name);
-					CHAR_DATA *bard = get_pc_room_vis_exact(i, (af->caster).c_str());
-					if (!bard || !ARE_GROUPED(i, bard)) {
+          char_data *caster = findCharacter(af->caster);
+          char_data *bard = nullptr;
+          if (caster)
+          {
+					  bard = get_pc_room_vis_exact(i, GET_NAME(caster));
+          }
+					if (bard == nullptr || !ARE_GROUPED(i, bard)) {
 						send_to_char("Away from the music, the effect weakens...\n\r", i);
 						af->duration = 1;
-						(af->caster).clear();
+						af->caster = QUuid();
 					}
 				}
 			} else if (af->duration == 1) {
@@ -1250,11 +1263,7 @@ void add_follower(CHAR_DATA *ch, CHAR_DATA *leader, int cmd)
 
     ch->master = leader;
 
-#ifdef LEAK_CHECK
-    k = (struct follow_type *)calloc(1, sizeof(struct follow_type));
-#else
-    k = (struct follow_type *)dc_alloc(1, sizeof(struct follow_type));
-#endif
+    k = new follow_type;
 
     k->follower = ch;
     k->next = leader->followers;
@@ -1525,22 +1534,14 @@ int do_release(CHAR_DATA *ch, char *argument, int cmd)
 
 int skill_value(CHAR_DATA *ch, int skillnum, int min = 33)
 {
-  struct char_skill_data * curr = ch->skills;
-
-  while(curr) {
-    if(curr->skillnum == skillnum)
-      return MAX(min, (int)curr->learned);
-    curr = curr->next;
+  ch_skills_t::iterator i = ch->skills.find(skillnum);
+  if (i != ch->skills.end())
+  {
+    return MAX(min, (int)i->second.learned);
   }
+
   return 0;
 }
-
-int stat_mod [] = {
-0,-5,-5,-4,-4,-3,-3,-2,-2,-1,-1,
-0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,
-7,8,9,10
-};
-extern int skillmax(struct char_data *ch, int skill, int eh);
 
 int get_difficulty(int skillnum)
 {
@@ -2923,4 +2924,47 @@ int spl_lvl(int lev)
   if(lev >= MIN_GOD)
     return 0;
   return lev;
+}
+
+// search through a character's list to see if they have a particular skill
+// if so, return their level of knowledge
+// if not, return 0
+int has_skill(CHAR_DATA *ch, int16 skill)
+{
+	struct obj_data *o = nullptr;
+	int bonus = 0;
+
+	if (IS_MOB(ch))
+		return 0;
+
+	if (affected_by_spell(ch, SKILL_DEFENDERS_STANCE) && skill == SKILL_DODGE)
+		return affected_by_spell(ch, SKILL_DEFENDERS_STANCE)->modifier;
+
+	if (affected_by_spell(ch, SPELL_VILLAINY))
+		bonus += affected_by_spell(ch, SPELL_VILLAINY)->modifier / 5;
+
+	if (affected_by_spell(ch, SPELL_HEROISM))
+		bonus += affected_by_spell(ch, SPELL_HEROISM)->modifier / 5;
+
+	ch_skills_t::iterator i = ch->skills.find(skill);
+	if (i != ch->skills.end())
+	{
+		if (!IS_NPC(ch))
+			for (o = ch->pcdata->skillchange; o; o = o->next_skill)
+			{
+				int a;
+				for (a = 0; a < o->num_affects; a++)
+				{
+					if (o->affected[a].location == skill * 1000)
+					{
+						bonus += o->affected[a].modifier;
+						if ((int)i->second.learned + bonus > 150)
+							bonus = 150 - i->second.learned;
+					}
+				}
+			}
+		return ((int)i->second.learned) + bonus;
+	}
+
+	return 0;
 }
