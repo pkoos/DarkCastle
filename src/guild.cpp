@@ -167,43 +167,41 @@ char *how_good(int percent)
 
 // return a 1 if I just learned skill for first time
 // else 0
-int learn_skill(char_data * ch, int skill, int amount, int maximum)
+int learn_skill(char_data *ch, int skill, int amount, int maximum)
 {
-  struct char_skill_data * curr = ch->skills;
-  int old;
-  while(curr)
-    if(curr->skillnum == skill)
-      break;
-    else curr = curr->next;
-
-  if(curr) 
+  map<int16, char_skill_data>::iterator i = ch->skills.find(skill);
+  if (i != ch->skills.end())
   {
-    old = curr->learned;
-    curr->learned += amount;
+    char_skill_data curr = i->second;
+    int16 old = curr.learned;
+    curr.learned += amount;
+
     if (skill == SKILL_MAGIC_RESIST)
-      barb_magic_resist(ch, old, curr->learned);
-    if(curr->learned > maximum)
-      curr->learned = maximum;
+    {
+      barb_magic_resist(ch, old, curr.learned);
+    }
+    if (curr.learned > maximum)
+    {
+      curr.learned = maximum;
+    }
   }
-  else 
+  else
   {
-#ifdef LEAK_CHECK
-    curr = (char_skill_data *)calloc(1, sizeof(char_skill_data));
-#else
-    curr = (char_skill_data *)dc_alloc(1, sizeof(char_skill_data));
-#endif
+    char_skill_data curr;
     if (skill == SKILL_MAGIC_RESIST)
+    {
       barb_magic_resist(ch, 0, amount);
-    curr->skillnum = skill;
-    curr->learned = amount;
-    curr->next = ch->skills;
-    ch->skills = curr;
-
-   // could save processing power by making it's own function since skillnum is already known
-   // but *shrug*
+    }
+    curr.skillnum = skill;
+    curr.learned = amount;
+    ch->skills[skill] = curr;
+    ch->skillsSaveLoadOrder.push(skill);
+    // could save processing power by making it's own function since skillnum is already known
+    // but *shrug*
     prepare_character_for_sixty(ch);
     return 1;
   }
+
   return 0;
 }
 
@@ -504,7 +502,7 @@ void output_praclist(struct char_data *ch, class_skill_defines *skilllist)
 
 int skills_guild ( struct char_data *ch, char *arg, struct char_data *owner )
 {
-  char buf[160];
+  char buf[MAX_STRING_LENGTH];
   int known, x;
   int skillnumber;
   int percent;
@@ -825,15 +823,16 @@ int guild(struct char_data *ch, struct obj_data *obj, int cmd, char *arg,
 
     send_to_char("Your profession skills have been reset.\n\r", ch);
     struct class_skill_defines * skilllist = get_skill_list(ch);
-    struct char_skill_data * skill;
 
     for(int i = 0; *skilllist[i].skillname != '\n'; i++) 
       if(skilllist[i].group == groupnumber) {
-        skill = ch->skills;
-        while(skill) {
-          if(skill->skillnum == skilllist[i].skillnum)
-            skill->learned = 0;
-          skill = skill->next;
+        int skillnum = skilllist[i].skillnum;
+        ch_skills_t::iterator sk = ch->skills.find(skillnum);
+        if (sk != ch->skills.end())
+        {
+          char_skill_data skill = sk->second;
+          skill.learned = 0;
+          ch->skills[skillnum] = skill;
         }
       }
 
@@ -1168,18 +1167,19 @@ void skill_increase_check(char_data * ch, int skill, int learned, int difficulty
    csendf(ch, "$R$B$5You feel more competent in your %s ability. It increased to %d out of %d.$R\r\n", skillname, learned, maximum);
 }
 
-
 void verify_max_stats(CHAR_DATA *ch)
 {
-          struct char_skill_data * curr = ch->skills;
-          while(curr) {
-
-	   if (get_max(ch, curr->skillnum) && get_max(ch, curr->skillnum) < curr->learned)
-		curr->learned = get_max(ch, curr->skillnum);
-	
-	   curr = curr->next;
-          }
-  
+  queue<int16> copy = ch->skillsSaveLoadOrder;
+  while (copy.size() > 0)
+  {
+    int16 skillnum = copy.front();
+    char_skill_data skill = ch->skills[skillnum];
+    if (get_max(ch, skill.skillnum) && get_max(ch, skill.skillnum) < skill.learned)
+    {
+      skill.learned = get_max(ch, skill.skillnum);
+      ch->skills[skillnum] = skill;
+    }
+  }
 }
 
 int get_max(CHAR_DATA *ch, int skill)
@@ -1223,60 +1223,57 @@ int get_max(CHAR_DATA *ch, int skill)
 
 void check_maxes(CHAR_DATA *ch)
 {
-   int maximum;
-   class_skill_defines * skilllist = get_skill_list(ch);
-   if(!skilllist)
-     return;  // class has no skills by default
-   maximum = 0;
-   int i;
-   for(i = 0; *skilllist[i].skillname != '\n'; i++)
-     {
-       maximum = skilllist[i].maximum;
-       float percent = maximum*0.75;
-       if (skilllist[i].attrs)
-            percent += maximum/100.0 * get_stat_bonus(ch,skilllist[i].attrs);
+  int maximum;
+  class_skill_defines *skilllist = get_skill_list(ch);
+  if (!skilllist)
+    return; // class has no skills by default
+  maximum = 0;
+  int i;
+  for (i = 0; *skilllist[i].skillname != '\n'; i++)
+  {
+    maximum = skilllist[i].maximum;
+    float percent = maximum * 0.75;
+    if (skilllist[i].attrs)
+      percent += maximum / 100.0 * get_stat_bonus(ch, skilllist[i].attrs);
 
-       percent = MIN(maximum, percent);
-       percent = MAX(maximum*0.75, percent);
+    percent = MIN(maximum, percent);
+    percent = MAX(maximum * 0.75, percent);
 
-       percent = (int)percent;
+    percent = (int)percent;
 
-       if (has_skill(ch,skilllist[i].skillnum) > percent)
-       {
-	  struct char_skill_data * curr = ch->skills;
+    if (has_skill(ch, skilllist[i].skillnum) > percent)
+    {
+      int16_t skillnum = skilllist[i].skillnum;
+      ch_skills_t::iterator i = ch->skills.find(skillnum);
+      if (i != ch->skills.end())
+      {
+        i->second.learned = (int)percent;
+        cerr << i->second.learned << " = " << (int)percent << "?" << endl;
+      }
+    }
+  }
+  skilllist = g_skills;
+  for (i = 0; *skilllist[i].skillname != '\n'; i++)
+  {
+    maximum = skilllist[i].maximum;
+    float percent = maximum * 0.75;
+    if (skilllist[i].attrs)
+      percent += maximum / 100.0 * get_stat_bonus(ch, skilllist[i].attrs);
 
-  	  while(curr)
-    	  if(curr->skillnum == skilllist[i].skillnum)
-      	  break;
-    	  else curr = curr->next;
+    percent = MIN(maximum, percent);
+    percent = MAX(maximum * 0.75, percent);
 
-	  if (curr) curr->learned = (int)percent;
-       }
-   }
-   skilllist = g_skills;
-   for(i = 0; *skilllist[i].skillname != '\n'; i++)
-     {
-       maximum = skilllist[i].maximum;
-       float percent = maximum*0.75;
-       if (skilllist[i].attrs)
-            percent += maximum/100.0 * get_stat_bonus(ch,skilllist[i].attrs);
+    percent = (int)percent;
 
-       percent = MIN(maximum, percent);
-       percent = MAX(maximum*0.75, percent);
-
-       percent = (int)percent;
-
-       if (has_skill(ch,skilllist[i].skillnum) > percent)
-       {
-	  struct char_skill_data * curr = ch->skills;
-
-  	  while(curr)
-    	  if(curr->skillnum == skilllist[i].skillnum)
-      	  break;
-    	  else curr = curr->next;
-
-	  if (curr) curr->learned = (int)percent;
-       }
-   }
-
+    if (has_skill(ch, skilllist[i].skillnum) > percent)
+    {
+      int16_t skillnum = skilllist[i].skillnum;
+      ch_skills_t::iterator i = ch->skills.find(skillnum);
+      if (i != ch->skills.end())
+      {
+        i->second.learned = (int)percent;
+      }
+      
+    }
+  }
 }
