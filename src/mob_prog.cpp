@@ -93,7 +93,7 @@ int mprog_line_num = 0;
 
 int	mprog_seval		( char* lhs, char* opr, char* rhs );
 int	mprog_veval		( int lhs, char* opr, int rhs );
-int	mprog_do_ifchck		( char* ifchck, CHAR_DATA* mob,
+bool	mprog_do_ifchck		( char* ifchck, CHAR_DATA* mob,
 				       CHAR_DATA* actor, OBJ_DATA* obj,
 				       void* vo, CHAR_DATA* rndm );
 char *	mprog_process_if	( char* ifchck, char* com_list, 
@@ -1242,7 +1242,7 @@ std::map<std::string,mprog_ifs> load_ifchecks()
 
 std::map<std::string,mprog_ifs> ifcheck = load_ifchecks();
 
-int mprog_do_ifchck( char *ifchck, CHAR_DATA *mob, CHAR_DATA *actor,
+bool mprog_do_ifchck( char *ifchck, CHAR_DATA *mob, CHAR_DATA *actor,
 		     OBJ_DATA *obj, void *vo, CHAR_DATA *rndm)
 {
 
@@ -1984,38 +1984,38 @@ int mprog_do_ifchck( char *ifchck, CHAR_DATA *mob, CHAR_DATA *actor,
 	}
 
 	if (fvict)
-	  return (int)(affected_by_spell(fvict, find_skill_num(val)));
+	  return (affected_by_spell(fvict, find_skill_num(val)));
 	if (ye) return FALSE;
      switch (arg[1]) 
      {
         case 'i': // mob
-		return (int)(affected_by_spell(mob, find_skill_num(val)));
+		return (affected_by_spell(mob, find_skill_num(val)));
 	case 'z': if (mob->beacon)
-             return (int)(affected_by_spell(((CHAR_DATA*)mob->beacon), find_skill_num(val)));
+             return (affected_by_spell(((CHAR_DATA*)mob->beacon), find_skill_num(val)));
            else return -1;
 
 	case 'n': // actor
 	 	if (actor)
-                return (int)(affected_by_spell(actor, find_skill_num(val)));
+                return (affected_by_spell(actor, find_skill_num(val)));
 		else return -1;
 	case 't': // vict
 		if (vict)
-                return (int)(affected_by_spell(vict, find_skill_num(val)));
+                return (affected_by_spell(vict, find_skill_num(val)));
 		else return -1;
 	case 'r': //rand
 		if (rndm)
-                return (int)(affected_by_spell(rndm, find_skill_num(val)));
+                return (affected_by_spell(rndm, find_skill_num(val)));
 		return -1;
         case 'f': if (actor && actor->fighting)
-                    return (int)(affected_by_spell(actor->fighting, find_skill_num(val)));
+                    return (affected_by_spell(actor->fighting, find_skill_num(val)));
                   else return -1;
         case 'g': if (mob && mob->fighting)
-                    return (int)(affected_by_spell(mob->fighting, find_skill_num(val)));
+                    return (affected_by_spell(mob->fighting, find_skill_num(val)));
                   else return 0;
 	default:
 	  logf( IMMORTAL, LOG_WORLD,  "Mob: %d bad argument to 'isspelled'",
 	       mob_index[mob->mobdata->nr].virt ); 
-	  return -1;
+	  return false;
 
      }
   }
@@ -3868,80 +3868,91 @@ int mprog_speech_trigger( char *txt, CHAR_DATA *mob )
 
 }
 
-int mprog_catch_trigger(char_data * mob, int catch_num, char *var, int opt, char_data *actor, obj_data *obj, void *vo, char_data *rndm)
+int mprog_catch_trigger(char_data *mob, int catch_num, char *var, int opt, char_data *actor, obj_data *obj, void *vo, char_data *rndm)
 {
- MPROG_DATA *mprg;
- MPROG_DATA *next;
- int curr_catch;
- bool done = FALSE;
- mprog_cur_result = eFAILURE;
+	MPROG_DATA *mprg;
+	MPROG_DATA *next;
+	int curr_catch;
+	bool done = FALSE;
+	mprog_cur_result = eFAILURE;
 
- if ( IS_NPC( mob )
-     && ( mob_index[mob->mobdata->nr].progtypes & CATCH_PROG ) && isPaused(mob) == false)
- {
- mprg = mob_index[mob->mobdata->nr].mobprogs;
- if (!mprg || (opt & 1)) { done = TRUE; mprg = mob_index[mob->mobdata->nr].mobspec; }
+	if (IS_NPC(mob) && (mob_index[mob->mobdata->nr].progtypes & CATCH_PROG) && isPaused(mob) == false)
+	{
+		mprg = mob_index[mob->mobdata->nr].mobprogs;
 
- mprog_command_num = 0;
- for ( ; mprg != NULL; mprg = next )
-     {
-       mprog_command_num++;
-	next = mprg->next;
-       if ( mprg->type & CATCH_PROG )
-       {
-         if(!check_range_valid_and_convert(curr_catch, mprg->arglist, MPROG_CATCH_MIN, MPROG_CATCH_MAX)) {
-           logf( IMMORTAL, LOG_WORLD, "Invalid catch argument: vnum %d", 
-             mob_index[mob->mobdata->nr].virt);
-           return eFAILURE;
-         }
-         if(curr_catch == catch_num) {
-	  if (var) {
-		struct tempvariable *eh;
-		for (eh = mob->tempVariable; eh; eh = eh->next)
+		if (!mprg || (opt & 1))
 		{
-		  if (!str_cmp(eh->name, "throw")) break;
+			done = TRUE;
+			mprg = mob_index[mob->mobdata->nr].mobspec;
 		}
-		if (eh) {
-		  dc_free(eh->data);
-		  eh->data = var;
-		} else {
-#ifdef LEAK_CHECK
-        	eh = (struct tempvariable *)
-                        calloc(1, sizeof(struct tempvariable));
-#else
-	       eh = (struct tempvariable *)
-                        dc_alloc(1, sizeof(struct tempvariable));
-#endif
 
-	     eh->data = var;
-	     eh->name = str_dup("throw");
-	   	  eh->next = mob->tempVariable;
-    		 mob->tempVariable = eh;
+		mprog_command_num = 0;
+		for (; mprg != NULL; mprg = next)
+		{
+			mprog_command_num++;
+			next = mprg->next;
+			if (mprg->type & CATCH_PROG)
+			{
+				if (!check_range_valid_and_convert(curr_catch, mprg->arglist, MPROG_CATCH_MIN, MPROG_CATCH_MAX))
+				{
+					logf(IMMORTAL, LOG_WORLD, "Invalid catch argument: vnum %d",
+						 mob_index[mob->mobdata->nr].virt);
+					return eFAILURE;
+				}
+				if (curr_catch == catch_num)
+				{
+					if (var)
+					{
+						struct tempvariable *eh;
+						for (eh = mob->tempVariable; eh; eh = eh->next)
+						{
+							if (!str_cmp(eh->name, "throw"))
+								break;
+						}
+						if (eh)
+						{
+							dc_free(eh->data);
+							eh->data = var;
+						}
+						else
+						{
+							eh = new tempvariable;
 
+							eh->data = var;
+							eh->name = str_dup("throw");
+							eh->next = mob->tempVariable;
+							mob->tempVariable = eh;
+						}
+					}
+					mprog_driver(mprg->comlist, mob, actor, obj, vo, NULL, rndm);
+					if (selfpurge)
+						return mprog_cur_result;
+
+					break;
+				}
+			}
+			if (!next && !done)
+			{
+				done = TRUE;
+				next = mob_index[mob->mobdata->nr].mobspec;
+			}
 		}
-	  }
-           mprog_driver( mprg->comlist, mob,actor, obj, vo, NULL, rndm );
-		if (selfpurge) return mprog_cur_result;
-
-           break;
-         }
-       }
-	if (!next && !done){done = TRUE; next = mob_index[mob->mobdata->nr].mobspec;}
-
-     }
-}
- return mprog_cur_result;
+	}
+	return mprog_cur_result;
 }
 
-void update_mprog_throws() {
+void update_mprog_throws()
+{
 	struct mprog_throw_type *curr;
 	struct mprog_throw_type *action;
 	struct mprog_throw_type *last = NULL;
 	char_data *vict;
 	obj_data *vobj;
-	for (curr = g_mprog_throw_list; curr;) {
+	for (curr = g_mprog_throw_list; curr;)
+	{
 		// update
-		if (curr->delay > 0) {
+		if (curr->delay > 0)
+		{
 			curr->delay--;
 			last = curr;
 			curr = curr->next;
@@ -3950,19 +3961,27 @@ void update_mprog_throws() {
 		vobj = NULL;
 		vict = NULL;
 
-//		if (curr->data_num == -999)
-//			debugpoint();
+		//		if (curr->data_num == -999)
+		//			debugpoint();
 
-		if (curr->tMob && charExists(curr->tMob) && curr->tMob->in_room >= 0) {
+		if (curr->tMob && charExists(curr->tMob) && curr->tMob->in_room >= 0)
+		{
 			vict = curr->tMob;
-		} else if (curr->mob) {
+		}
+		else if (curr->mob)
+		{
 			// find target
-			if (*curr->target_mob_name) { // find me by name
+			if (*curr->target_mob_name)
+			{ // find me by name
 				vict = get_mob(curr->target_mob_name);
-			} else {                 // find me by num
+			}
+			else
+			{ // find me by num
 				vict = get_mob_vnum(curr->target_mob_num);
 			}
-		} else {
+		}
+		else
+		{
 			if (*curr->target_mob_name)
 				vobj = get_obj(curr->target_mob_name);
 			else
@@ -3970,12 +3989,15 @@ void update_mprog_throws() {
 		}
 
 		// remove from list
-		if (last) {
+		if (last)
+		{
 			last->next = curr->next;
 			action = curr;
 			curr = last->next;
 			// last doesn't move
-		} else {
+		}
+		else
+		{
 			g_mprog_throw_list = curr->next;
 			action = curr;
 			curr = g_mprog_throw_list;
@@ -3984,16 +4006,19 @@ void update_mprog_throws() {
 		// This is done this way in case the 'catch' does a 'throw' inside of it
 
 		// if !vict, oh well....remove it anyway.  Someone killed him.
-		if (action->data_num == -999 && vict) { // 'tis a pause
+		if (action->data_num == -999 && vict)
+		{ // 'tis a pause
 			// Only resume a MPPAUSE <duration> if we're not in the middle of a MPPAUSE all <duration>
 			if (isPaused(action->tMob) == false)
 			{
 				mprog_driver(action->orig, vict, action->actor, action->obj, action->vo, action, action->rndm);
 			}
-			
+
 			dc_free(action->orig);
 			action->orig = 0;
-		} else if (action->data_num == -1000 && vict) {
+		}
+		else if (action->data_num == -1000 && vict)
+		{
 			if (isPaused(action->tMob))
 			{
 				action->tMob->mobdata->paused = false;
@@ -4001,11 +4026,16 @@ void update_mprog_throws() {
 			mprog_driver(action->orig, vict, action->actor, action->obj, action->vo, action, action->rndm);
 			dc_free(action->orig);
 			action->orig = 0;
-		} else if (vict)  {// activate
-			if (vict->in_room >= 0) {
+		}
+		else if (vict)
+		{ // activate
+			if (vict->in_room >= 0)
+			{
 				mprog_catch_trigger(vict, action->data_num, action->var, action->opt, action->actor, action->obj, action->vo, action->rndm);
 			}
-		} else if (vobj) {
+		}
+		else if (vobj)
+		{
 			oprog_catch_trigger(vobj, action->data_num, action->var, action->opt, action->actor, action->obj, action->vo, action->rndm);
 		}
 
@@ -4023,7 +4053,7 @@ CHAR_DATA *initiate_oproc(CHAR_DATA *ch, OBJ_DATA *obj)
   if (ch)    char_to_room(temp, ch->in_room);
   else       char_to_room(temp,obj->in_room);
   if (ch) temp->beacon = (OBJ_DATA*) ch;
-  temp->mobdata->last_room = (int)obj;
+  temp->mobdata->obj = obj;
 //  temp->master = ch;
  // dc_free(temp->short_desc);
   temp->short_desc = str_hsh(obj->short_description);
@@ -4148,31 +4178,28 @@ int oprog_catch_trigger(obj_data *obj, int catch_num, char *var, int opt, char_d
              obj_index[obj->item_number].virt);
            return eFAILURE;
          }
-         if(curr_catch == catch_num) {
-	   vmob = initiate_oproc(NULL, obj);
-           if (var) {
-	     struct tempvariable *eh;
-	     
-#ifdef LEAK_CHECK
-     		eh = (struct tempvariable *)
-                        calloc(1, sizeof(struct tempvariable));
-#else
-	       eh = (struct tempvariable *)
-                        dc_alloc(1, sizeof(struct tempvariable));
-#endif
+		 if (curr_catch == catch_num)
+		 {
+			 vmob = initiate_oproc(NULL, obj);
+			 if (var)
+			 {
+				 struct tempvariable *eh;
 
-	     eh->data = var;
-	     eh->name = str_dup("throw");
-	     eh->next = vmob->tempVariable;
-	     vmob->tempVariable = eh;
-           }
+				 eh = new tempvariable;
 
-           mprog_driver( mprg->comlist, vmob, actor, obj2, vo, NULL, rndm );
-		if (selfpurge) return mprog_cur_result;
-	   end_oproc(vmob);
-	   break;
-         }
-       }
+				 eh->data = var;
+				 eh->name = str_dup("throw");
+				 eh->next = vmob->tempVariable;
+				 vmob->tempVariable = eh;
+			 }
+
+			 mprog_driver(mprg->comlist, vmob, actor, obj2, vo, NULL, rndm);
+			 if (selfpurge)
+				 return mprog_cur_result;
+			 end_oproc(vmob);
+			 break;
+		 }
+	   }
 
      }
 }
