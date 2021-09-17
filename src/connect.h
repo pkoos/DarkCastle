@@ -51,6 +51,7 @@ struct stat_shit
 };
 
 struct descriptor_data {
+  descriptor_data();
   int descriptor; /* file descriptor for socket	*/
   int desc_num;
   char *name; /* Copy of the player name	*/
