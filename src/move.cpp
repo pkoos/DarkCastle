@@ -107,11 +107,7 @@ void record_track_data(CHAR_DATA *ch, int cmd) {
 	if (world[ch->in_room].sector_type == SECT_WATER_SWIM || world[ch->in_room].sector_type == SECT_WATER_NOSWIM)
 		return;
 
-#ifdef LEAK_CHECK
-	newScent = (room_track_data *)calloc(1, sizeof(struct room_track_data));
-#else
-	newScent = (room_track_data *) dc_alloc(1, sizeof(struct room_track_data));
-#endif
+	newScent = new room_track_data;
 	newScent->direction = cmd;
 	newScent->weight = (int) ch->weight;
 	newScent->race = (int) ch->race;
@@ -661,12 +657,7 @@ int do_simple_move(CHAR_DATA *ch, int cmd, int following) {
 		if (IS_NPC(chaser) && chaser->hunting == 0) {
 			if (GET_LEVEL(ch) - GET_LEVEL(chaser) / 2 >= 0 || GET_LEVEL(ch) >= 50) {
 				add_memory(chaser, GET_NAME(ch), 't');
-				struct timer_data *timer;
-#ifdef LEAK_CHECK
-				timer = (struct timer_data *)calloc(1, sizeof(struct timer_data));
-#else
-				timer = (struct timer_data *) dc_alloc(1, sizeof(struct timer_data));
-#endif
+				struct timer_data *timer = new timer_data;
 				timer->arg1 = (void*) chaser->hunting;
 				timer->arg2 = (void*) chaser;
 				timer->function = clear_hunt;
