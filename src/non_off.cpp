@@ -340,7 +340,7 @@ int do_title(struct char_data *ch, char *argument, int cmd)
   }
 
   if(ch->title) // this should always be true, but why not check anyway?
-    dc_free(ch->title); 
+    delete ch->title; 
   ch->title = str_dup(argument);
   sprintf(buf,"Your title is now: %s\n\r", argument);
   send_to_char(buf,ch);
