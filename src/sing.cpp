@@ -39,7 +39,6 @@ char_data *origsing = NULL;
 using namespace std;
 
 extern struct zone_data *zone_table;
-void remove_memory(CHAR_DATA *ch, char type);
 extern int check_social(CHAR_DATA *ch, char *pcomm, int length, char *arg);
 void check_eq(CHAR_DATA *ch);
 
@@ -624,7 +623,7 @@ int do_sing(CHAR_DATA *ch, char *arg, int cmd) {
 				struct songInfo data;
 				data.song_number = spl;
 				data.song_timer = 0;
-				data.song_data = 0;
+				data.song_data = nullptr;
 				ch->songs.push_back(data);
 			}
 
@@ -661,11 +660,11 @@ void update_bard_singing() {
 					}
 				}
 				(*j).song_timer = 0;
+
 				if ((*j).song_data) {
-					if ((int) (*j).song_data > 10) // Otherwise it's a temp variable.
-			dc_free((*j).song_data);
-			(*j).song_data = 0;
-		}
+					delete (*j).song_data;
+					(*j).song_data = nullptr;
+				}
 		i->songs.erase(j);
 		--j;
 		return false;
@@ -700,9 +699,8 @@ void update_bard_singing() {
 				}
 			}
 			if ((*j).song_data) {
-				if ((int) (*j).song_data > 10) // Otherwise it's a temp variable.
-				dc_free((*j).song_data);
-				(*j).song_data = 0;
+				delete (*j).song_data;
+				(*j).song_data = nullptr;
 			}
 			(*j).song_timer = 0;
 			i->songs.erase(j);
@@ -728,9 +726,8 @@ void update_bard_singing() {
 				}
 			}
 			if ((*j).song_data) {
-				if ((int) (*j).song_data > 10) // Otherwise it's a temp variable.
-				dc_free((*j).song_data);
-				(*j).song_data = 0;
+				delete (*j).song_data;
+				(*j).song_data = nullptr;
 			}
 			i->songs.erase(j);
 			--j;
@@ -751,9 +748,8 @@ void update_bard_singing() {
 				}
 				(*j).song_timer = 0;
 				if ((*j).song_data) {
-					if ((int) (*j).song_data > 10) // Otherwise it's a temp variable.
-					dc_free((*j).song_data);
-					(*j).song_data = 0;
+					delete (*j).song_data;
+					(*j).song_data = nullptr;
 				}
 				i->songs.erase(j);
 				--j;
@@ -842,12 +838,12 @@ int execute_song_hypnotic_harmony(ubyte level, CHAR_DATA *ch, char *Arg, CHAR_DA
 
 	if (!(victim = get_char_room_vis(ch, (*i).song_data))) {
 		dc_free((*i).song_data);
-		(*i).song_data = 0;
+		(*i).song_data = nullptr;
 		send_to_char("They seem to have left.\r\nIn the middle of your performance too!\r\n", ch);
 		return eFAILURE;
 	}
 	dc_free((*i).song_data);
-	(*i).song_data = 0;
+	(*i).song_data = nullptr;
 
 	WAIT_STATE(ch, PULSE_VIOLENCE);
 	if (!IS_NPC(victim) || !ISSET(victim->mobdata->actflags, ACT_BARDCHARM)) {
@@ -1187,7 +1183,7 @@ int execute_song_note_of_knowledge(ubyte level, CHAR_DATA *ch, char *arg, CHAR_D
 		corpse = NULL;
 
 	dc_free((*i).song_data);
-	(*i).song_data = 0;
+	(*i).song_data = nullptr;
 
 	if (obj) {
 		spell_identify(GET_LEVEL(ch), ch, 0, obj, 0);
@@ -1404,7 +1400,7 @@ int execute_song_traveling_march(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DAT
 	af.duration = 1;
 	af.location = APPLY_AC;
 	af.bitvector = -1;
-	af.caster = GET_NAME(ch);
+	af.caster = ch->getUUID();
 
 	for (char_data * tmp_char = world[ch->in_room].people; tmp_char; tmp_char = tmp_char->next_in_room) {
 		if (!ARE_GROUPED(ch, tmp_char))
@@ -1604,7 +1600,7 @@ int execute_song_astral_chanty(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA 
 					// free our stored char name
 					if ((*i).song_data) {
 						dc_free((*i).song_data);
-						(*i).song_data = 0;
+						(*i).song_data = nullptr;
 					}
 
 					return eFAILURE;
@@ -1632,7 +1628,7 @@ int execute_song_astral_chanty(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA 
 	// free our stored char name
 	if ((*i).song_data) {
 		dc_free((*i).song_data);
-		(*i).song_data = 0;
+		(*i).song_data = nullptr;
 	}
 
 	return status;
@@ -1675,11 +1671,11 @@ int execute_song_forgetful_rhythm(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DA
 	if (!(victim = get_char_room_vis(ch, (*i).song_data))) {
 		send_to_char("You don't see that person here.\r\n", ch);
 		dc_free((*i).song_data);
-		(*i).song_data = 0;
+		(*i).song_data = nullptr;
 		return eFAILURE;
 	}
 	dc_free((*i).song_data);
-	(*i).song_data = 0;
+	(*i).song_data = nullptr;
 
 	act("$n sings to $N about beautiful rainbows.", ch, 0, victim, TO_ROOM, NOTVICT);
 
@@ -1741,11 +1737,11 @@ int execute_song_shattering_resonance(ubyte level, CHAR_DATA *ch, char *arg, CHA
 	if (!(obj = get_obj_in_list((*i).song_data, world[ch->in_room].contents))) {
 		send_to_char("You don't see that object here.\r\n", ch);
 		dc_free((*i).song_data);
-		(*i).song_data = 0;
+		(*i).song_data = nullptr;
 		return eFAILURE;
 	}
 	dc_free((*i).song_data);
-	(*i).song_data = 0;
+	(*i).song_data = nullptr;
 
 	// code to shatter a beacon
 	if (GET_ITEM_TYPE(obj) == ITEM_BEACON) {
@@ -1824,7 +1820,7 @@ int execute_song_insane_chant(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *
 	af.modifier = 0;
 	af.location = APPLY_INSANE_CHANT;
 	af.bitvector = -1;
-	af.caster = GET_NAME(ch);
+	af.caster = ch->getUUID();
 
 	act("$n's singing starts to drive you INSANE!!!", ch, 0, 0, TO_ROOM, 0);
 	send_to_char("Your singing drives everyone around you INSANE!!!\r\n", ch);
@@ -1872,7 +1868,7 @@ int execute_song_flight_of_bee(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA 
 	af.duration = 1 + skill / 10;
 	af.modifier = 0;
 	af.location = 0;
-	af.caster = GET_NAME(ch);
+	af.caster = ch->getUUID();
 	af.bitvector = AFF_FLYING;
 
 	for (char_data * tmp_char = world[ch->in_room].people; tmp_char; tmp_char = tmp_char->next_in_room) {
@@ -1927,7 +1923,7 @@ int execute_song_searching_song(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA
 	target = get_char((*i).song_data);
 
 	dc_free((*i).song_data);
-	(*i).song_data = 0;
+	(*i).song_data = nullptr;
 
 	act("$n's song ends and quietly fades away.", ch, 0, 0, TO_ROOM, 0);
 
@@ -2072,7 +2068,7 @@ int execute_song_jig_of_alacrity(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DAT
 	af.duration = 1;
 	af.modifier = 0;
 	af.location = 0;
-	af.caster = GET_NAME(ch);
+	af.caster = ch->getUUID();
 	af.bitvector = AFF_HASTE;
 
 	for (char_data * tmp_char = world[ch->in_room].people; tmp_char; tmp_char = tmp_char->next_in_room) {
@@ -2124,21 +2120,21 @@ int execute_song_fanatical_fanfare(ubyte level, CHAR_DATA *ch, char *arg, CHAR_D
 	af1.modifier = 0;
 	af1.location = 0;
 	af1.bitvector = AFF_INSOMNIA;
-	af1.caster = GET_NAME(ch);
+	af1.caster = ch->getUUID();
 
 	af2.type = SKILL_SONG_FANATICAL_FANFARE;
 	af2.duration = skill / 30;
 	af2.modifier = 0;
 	af2.location = 0;
 	af2.bitvector = AFF_FEARLESS;
-	af2.caster = GET_NAME(ch);
+	af2.caster = ch->getUUID();
 
 	af3.type = SKILL_SONG_FANATICAL_FANFARE;
 	af3.duration = skill / 30;
 	af3.modifier = 0;
 	af3.location = 0;
 	af3.bitvector = AFF_NO_PARA;
-	af3.caster = GET_NAME(ch);
+	af3.caster = ch->getUUID();
 
 	for (char_data * tmp_char = world[ch->in_room].people; tmp_char; tmp_char = tmp_char->next_in_room) {
 		if (!ARE_GROUPED(ch, tmp_char))
@@ -2187,7 +2183,7 @@ int execute_song_mking_charge(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *
 	af.duration = 1;
 	af.modifier = 0;
 	af.location = 0;
-	af.caster = GET_NAME(ch);
+	af.caster = ch->getUUID();
 
 	if (skill > 80)
 		af.bitvector = AFF_HASTE;
@@ -2367,14 +2363,14 @@ int execute_song_glitter_dust(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *
 	af.modifier = 0;
 	af.location = APPLY_GLITTER_DUST;
 	af.bitvector = -1;
-	af.caster = GET_NAME(ch);
+	af.caster = ch->getUUID();
 
 	af2.type = SKILL_GLITTER_DUST;
 	af2.duration = (GET_LEVEL(ch) > 25) ? 2 : 1;
 	af2.modifier = 10 + has_skill(ch, SKILL_SONG_GLITTER_DUST) / 3;
 	af2.location = APPLY_AC;
 	af2.bitvector = -1;
-	af2.caster = GET_NAME(ch);
+	af2.caster = ch->getUUID();
 
 	act("The dust in the air clings to you, and begins to shine!", ch, 0, 0, TO_ROOM, 0);
 	send_to_char("Your dust clings to everyone, showing where they are!\r\n", ch);
@@ -2475,7 +2471,7 @@ int execute_song_dischordant_dirge(ubyte level, CHAR_DATA *ch, char *arg, CHAR_D
 	target = get_char_room_vis(ch, (*i).song_data);
 
 	dc_free((*i).song_data);
-	(*i).song_data = 0;
+	(*i).song_data = nullptr;
 
 	act("$n's dirge ends in a shriek.", ch, 0, 0, TO_ROOM, 0);
 
@@ -2609,7 +2605,7 @@ int execute_song_synchronous_chord(ubyte level, CHAR_DATA *ch, char *arg, CHAR_D
 	target = get_char_room_vis(ch, (*i).song_data);
 
 	dc_free((*i).song_data);
-	(*i).song_data = 0;
+	(*i).song_data = nullptr;
 
 	act("$n's song ends with an abrupt stop.", ch, 0, 0, TO_ROOM, 0);
 
@@ -2695,12 +2691,12 @@ int execute_song_sticky_lullaby(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA
 		else {
 			send_to_char("You don't see that person here.\r\n", ch);
 			dc_free((*i).song_data);
-			(*i).song_data = 0;
+			(*i).song_data = nullptr;
 			return eFAILURE;
 		}
 	}
 	dc_free((*i).song_data);
-	(*i).song_data = 0;
+	(*i).song_data = nullptr;
 	if (number(1, 100) < get_saves(victim, SAVE_TYPE_POISON)) {
 		act("$N resists your sticky lullaby!", ch, NULL, victim, TO_CHAR, 0);
 		act("$N resists $n's sticky lullaby!", ch, NULL, victim, TO_ROOM, NOTVICT);
@@ -2750,21 +2746,21 @@ int execute_song_vigilant_siren(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA
 	af1.modifier = 0;
 	af1.location = 0;
 	af1.bitvector = AFF_ALERT;
-	af1.caster = GET_NAME(ch);
+	af1.caster = ch->getUUID();
 
 	af2.type = SKILL_SONG_VIGILANT_SIREN;
 	af2.duration = 1;
 	af2.modifier = 0;
 	af2.location = 0;
 	af2.bitvector = AFF_NO_CIRCLE;
-	af2.caster = GET_NAME(ch);
+	af2.caster = ch->getUUID();
 
 	af3.type = SKILL_SONG_VIGILANT_SIREN;
 	af3.duration = 1;
 	af3.modifier = 0;
 	af3.location = 0;
 	af3.bitvector = AFF_NO_BEHEAD;
-	af3.caster = GET_NAME(ch);
+	af3.caster = ch->getUUID();
 
 	for (char_data * tmp_char = world[ch->in_room].people; tmp_char; tmp_char = tmp_char->next_in_room) {
 		if (!ARE_GROUPED(ch, tmp_char))
@@ -2912,7 +2908,7 @@ int song_crushing_crescendo(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *vi
 			break;
 
 	(*i).song_timer = song_info[(*i).song_number].beats;
-	(*i).song_data = 0; // first round.
+	(*i).song_data = nullptr; // first round.
 
 	return eSUCCESS;
 }
@@ -2942,11 +2938,11 @@ int execute_song_crushing_crescendo(ubyte level, CHAR_DATA *ch, char *arg, CHAR_
 
 	int j;
 	dam = ((has_skill(ch, SKILL_SONG_CRUSHING_CRESCENDO)) + 25);
-	for (j = 0; j < (int) (*i).song_data; j++)
+	for (j = 0; j < (*i).song_value; j++)
 		dam = dam * 2;
 	dam += combat * 5; // Make it hurt some more.
 //   if ((int)(*i).song_data < 3) // Doesn't help beyond that.
-	(*i).song_data = (char*) ((int) (*i).song_data + 1); // Add one round.
+	(*i).song_value = ((*i).song_value + 1); // Add one round.
 	// Bleh, C allows easier pointer manipulation
 	if (IS_SET(victim->immune, ISR_SONG)) {
 		act("$N laughs at your crushing crescendo!", ch, 0, victim, TO_CHAR, 0);
@@ -2961,7 +2957,7 @@ int execute_song_crushing_crescendo(ubyte level, CHAR_DATA *ch, char *arg, CHAR_
 		}
 		char dmgmsg[MAX_STRING_LENGTH];
 		sprintf(dmgmsg, "$B%d$R", dam);
-		switch ((int) (*i).song_data) {
+		switch ((int) (*i).song_value) {
 		case 1:
 			send_damage("$N is injured for | damage by the strength of your music!", ch, 0, victim, dmgmsg, "$N is injured by the strength of your music!",
 			TO_CHAR);
@@ -3015,16 +3011,16 @@ int execute_song_crushing_crescendo(ubyte level, CHAR_DATA *ch, char *arg, CHAR_
 		return retval;
 	}
 
-	if ((int) (*i).song_data > has_skill(ch, SKILL_SONG_CRUSHING_CRESCENDO) / 20 || (int) (*i).song_data > 3) {
+	if ((*i).song_value > has_skill(ch, SKILL_SONG_CRUSHING_CRESCENDO) / 20 || (*i).song_value > 3) {
 		send_to_char("You run out of lyrics and end the song.\r\n", ch);
 		ch->songs.erase(i);
 		return eEXTRA_VALUE;
 	}
 
-	if (((int) (*i).song_data) != 3) {
+	if (((int) (*i).song_value) != 3) {
 		if (GET_KI(ch) < song_info[(*i).song_number].min_useski) {
 			send_to_char("Having run out of ki, your song ends abruptly.\r\n", ch);
-			(*i).song_data = 0; // Reset, just in case.
+			(*i).song_value = 0; // Reset, just in case.
 			return eSUCCESS;
 		}
 		GET_KI(ch) -= song_info[(*i).song_number].min_useski;
@@ -3055,7 +3051,7 @@ int execute_song_submariners_anthem(ubyte level, CHAR_DATA *ch, char *arg, CHAR_
 	af.type = SKILL_SONG_SUBMARINERS_ANTHEM;
 	af.duration = 1 + (skill / 10);
 	af.modifier = 0;
-	af.caster = GET_NAME(ch);
+	af.caster = ch->getUUID();
 	af.location = APPLY_NONE;
 	af.bitvector = -1;
 
