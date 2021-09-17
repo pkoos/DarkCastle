@@ -68,10 +68,6 @@ int strncasecmp(char *s1, const char *s2, int len);
 void save_corpses(void);
 int do_fall(CHAR_DATA *ch, short dir);
 
-/* internal procedures */
-void remove_memory(CHAR_DATA *ch, char type);
-void add_memory(CHAR_DATA *ch, char *victim, char type);
-
 //TIMERS
 
 bool isTimer(CHAR_DATA *ch, int spell) {
@@ -1537,13 +1533,7 @@ void affect_to_char(CHAR_DATA *ch, struct affected_type *af, int32 duration_type
 	struct affected_type *affected_alloc;
 	if (af->location >= 1000)
 		return; // Skill aff;
-#ifdef LEAK_CHECK
-		affected_alloc = new (nothrow) affected_type;
-#else
 	affected_alloc = new (nothrow) affected_type;
-	// affected_alloc = (struct affected_type *) dc_alloc(1, sizeof(struct affected_type));
-#endif
-
 	*affected_alloc = *af;
 	affected_alloc->duration_type = duration_type;
 	affected_alloc->next = ch->affected;
@@ -2398,7 +2388,7 @@ struct obj_data *unequip_char(CHAR_DATA *ch, int pos, int flag) {
 
 	obj = ch->equipment[pos];
 
-	if (obj_index[obj->item_number].virt == 30036  && !ISSET(ch->affected_by, AFF_IGNORE_WEAPON_WEIGHT))
+	if (obj && obj->item_number < top_of_objt && obj_index[obj->item_number].virt == 30036  && !ISSET(ch->affected_by, AFF_IGNORE_WEAPON_WEIGHT))
 	{
 			act("With great effort, you are able to separate the Staff of Eternity from your own magical aura, but it comes at a great cost...", ch, obj, 0, TO_CHAR, 0);
 			GET_MANA(ch) = GET_MANA(ch)/2;
@@ -2506,7 +2496,7 @@ int get_number(char **name) {
 }
 
 /* Search a given list for an object, and return a pointer to that object */
-struct obj_data *get_obj_in_list(char *name, struct obj_data *list) {
+struct obj_data *get_obj_in_list(const char *name, struct obj_data *list) {
 	struct obj_data *i;
 	int j, number;
 	char tmpname[MAX_INPUT_LENGTH];
@@ -3359,8 +3349,8 @@ void extract_char(CHAR_DATA *ch, bool pull) {
 
 	// If I was the leader of a group, free the group name from memory
 	if (ch->group_name) {
-		dc_free(ch->group_name);
-		ch->group_name = NULL;
+		delete ch->group_name;
+		ch->group_name = nullptr;
 		REMBIT(ch->affected_by, AFF_GROUP); // shrug
 	}
 
@@ -3392,8 +3382,8 @@ void extract_char(CHAR_DATA *ch, bool pull) {
 
 	// make sure their ambush target is free'd
 	if (ch->ambush) {
-		dc_free(ch->ambush);
-		ch->ambush = NULL;
+		delete ch->ambush;
+		ch->ambush = nullptr;
 	}
 
 	// I'm guarding someone.  Remove myself from their guarding list
@@ -4071,15 +4061,8 @@ struct obj_data *create_money(int amount) {
 		return (0);
 	}
 
-#ifdef LEAK_CHECK
-	obj = (struct obj_data *)calloc(1, sizeof(struct obj_data));
-	new_new_descr = (struct extra_descr_data *)
-	calloc(1, sizeof(struct extra_descr_data));
-#else
-	obj = (struct obj_data *) dc_alloc(1, sizeof(struct obj_data));
-	new_new_descr = (struct extra_descr_data *) dc_alloc(1, sizeof(struct extra_descr_data));
-#endif
-
+	obj = new obj_data;
+	new_new_descr = new extra_descr_data;
 	clear_object(obj);
 
 	if (amount == 1) {
@@ -4272,17 +4255,13 @@ void remove_memory(CHAR_DATA *ch, char type, CHAR_DATA *vict) {
 		if (!isname(GET_NAME(vict), ch->mobdata->hatred))
 			return;
 		if (strstr(ch->mobdata->hatred, " ")) {
-#ifdef LEAK_CHECK
-			temp = (char *)calloc((strlen(ch->mobdata->hatred) - strlen(GET_NAME(vict))), sizeof(char));
-#else
-			temp = (char *) dc_alloc((strlen(ch->mobdata->hatred) - strlen(GET_NAME(vict))), sizeof(char));
-#endif
+			temp = new char[(strlen(ch->mobdata->hatred) - strlen(GET_NAME(vict)))*sizeof(char)];
 			curr = strstr(ch->mobdata->hatred, GET_NAME(vict));
 			if (curr == ch->mobdata->hatred) {
 				// This has to work, cause we checked it on our first if statement
 				curr = strstr(curr, " ");
 				strcpy(temp, curr + 1);
-				dc_free(ch->mobdata->hatred);
+				delete ch->mobdata->hatred;
 				ch->mobdata->hatred = temp;
 				return;
 			}
@@ -4293,11 +4272,11 @@ void remove_memory(CHAR_DATA *ch, char type, CHAR_DATA *vict) {
 			// If there is anything else after the one we removed, slap it (and space) in
 			if ((curr = strstr(curr, " ")))
 				strcat(temp, curr);
-			dc_free(ch->mobdata->hatred);
+			delete ch->mobdata->hatred;
 			ch->mobdata->hatred = temp;
 		} else {
-			dc_free(ch->mobdata->hatred);
-			ch->mobdata->hatred = NULL;
+			delete ch->mobdata->hatred;
+			ch->mobdata->hatred = nullptr;
 		}
 	}
 
@@ -4329,8 +4308,8 @@ void remove_memory(CHAR_DATA *ch, char type) {
 		return;
 
 	if (type == 'h' && ch->mobdata->hatred) {
-		dc_free(ch->mobdata->hatred);
-		ch->mobdata->hatred = NULL;
+		delete ch->mobdata->hatred;
+		ch->mobdata->hatred = nullptr;
 	}
 
 	if (type == 'f')
@@ -4356,13 +4335,9 @@ void add_memory(CHAR_DATA *ch, char *victim, char type) {
 				return;
 
 			// name 1 + name 2 + a space + terminator
-#ifdef LEAK_CHECK
-			buf = (char *)calloc( (strlen(ch->mobdata->hatred) + strlen(victim) + 2), sizeof(char));
-#else
-			buf = (char *) dc_alloc((strlen(ch->mobdata->hatred) + strlen(victim) + 2), sizeof(char));
-#endif
+			buf = new char[(strlen(ch->mobdata->hatred) + strlen(victim) + 2)*sizeof(char)];
 			sprintf(buf, "%s %s", ch->mobdata->hatred, victim);
-			dc_free(ch->mobdata->hatred);
+			delete ch->mobdata->hatred;
 			ch->mobdata->hatred = buf;
 		}
 	} else if (type == 'f')
