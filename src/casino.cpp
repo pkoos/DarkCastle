@@ -48,7 +48,6 @@ struct table_data;
 void addtimer(struct timer_data *add);
 int hand_number(struct player_data *plr);
 int hands(struct player_data *plr);
-void blackjack_prompt(CHAR_DATA *ch, char *prompt, bool ascii);
 bool charExists(CHAR_DATA *ch);
 void reel_spin(void *, void *, void *);
 
@@ -87,7 +86,7 @@ struct table_data
   int options;
   CHAR_DATA *dealer;
   int hand_data[21]; // dealer
-  int handnr;
+  qint64 handnr;
   int state;
   int won;
   int lost;
@@ -97,11 +96,7 @@ struct table_data
 struct cDeck *create_deck(int decks)
 {
     struct cDeck *Deck;
-    #ifdef LEAK_CHECK
-         Deck = (struct cDeck *)calloc(1, sizeof(struct cDeck));
-    #else
-         Deck = (struct cDeck *)dc_alloc(1, sizeof(struct cDeck));
-    #endif
+    Deck = new cDeck;
     Deck->cards = new int[decks*52+1];
     Deck->decks = decks;
     Deck->pos = 0;
@@ -312,12 +307,8 @@ bool canSplit(struct player_data *plr)
 
 struct player_data *createPlayer(CHAR_DATA *ch, struct table_data *tbl, int noadd = 0)
 {
-  struct player_data *plr;
- #ifdef LEAK_CHECK
-  plr = (struct player_data *)calloc(1, sizeof(struct player_data));
- #else
-  plr = (struct player_data *)dc_alloc(1, sizeof(struct player_data));
- #endif
+ struct player_data *plr;
+ plr = new player_data;
  plr->table = tbl;
  plr->ch = ch;
  for (int i = 0; i < 21;i++) plr->hand_data[i] = 0;
@@ -426,16 +417,12 @@ void check_active(void *arg1, void *arg2, void *arg3)
   if (!ptmp) return; // handled elsewhere
   if (!verify(plr) ) return;
 
-  if ((int)arg2 == plr->table->handnr || (int)arg2 == (plr->table->handnr+100) *2)
+  if ((qint64)arg2 == plr->table->handnr || (qint64)arg2 == (plr->table->handnr+100) *2)
   {
 	  struct timer_data *timer;
- #ifdef LEAK_CHECK
-	  timer = (struct timer_data *)calloc(1, sizeof(struct timer_data));
- #else
-	  timer = (struct timer_data *)dc_alloc(1, sizeof(struct timer_data));
- #endif
+	  timer = new timer_data;
 	  timer->arg1 = (void*)plr;
-	  timer->arg2 = (void*)(((int)arg2 + 100)*2);
+	  timer->arg2 = (void*)(((qint64)arg2 + 100)*2);
 	  timer->arg3 = (void*)plr->table;
 	  timer->function = check_active;
 	  timer->timeleft = 10;
@@ -445,7 +432,7 @@ void check_active(void *arg1, void *arg2, void *arg3)
 	  send_to_table(buf, plr->table, plr);
 	  send_to_char("The dealer nudges you.\r\n",plr->ch);	  
   }
-  if ((int)arg2 == (((plr->table->handnr+100)*2+100)*2))
+  if ((qint64)arg2 == (((plr->table->handnr+100)*2+100)*2))
   {// inactive
 	struct table_data *tbl = plr->table;
 	CHAR_DATA *ch = plr->ch;
@@ -479,11 +466,7 @@ void addtimer(struct timer_data *add)
 void add_timer(struct player_data *plr)
 {
   struct timer_data *timer;
- #ifdef LEAK_CHECK
-  timer = (struct timer_data *)calloc(1, sizeof(struct timer_data));
- #else
-  timer = (struct timer_data *)dc_alloc(1, sizeof(struct timer_data));
- #endif
+  timer = new timer_data;  
   timer->arg1 = (void*)plr;
   timer->arg2 = (void*)plr->table->handnr;
   timer->arg3 = (void*)plr->table;
@@ -503,12 +486,8 @@ void  bj_dealer_aiz(void *arg1, void *arg2, void *arg3)
 
 void add_timer_bj_dealer(struct table_data *tbl)
 {
-  struct timer_data *timer;
- #ifdef LEAK_CHECK
-  timer = (struct timer_data *)calloc(1, sizeof(struct timer_data));
- #else
-  timer = (struct timer_data *)dc_alloc(1, sizeof(struct timer_data));
- #endif
+  timer_data *timer = new timer_data;
+
   timer->arg1 = (void*)tbl;
   timer->arg2 = 0;
   if (tbl->state != 3)
@@ -521,12 +500,7 @@ void add_timer_bj_dealer(struct table_data *tbl)
 
 void add_timer_bj_dealer2(struct table_data *tbl, int time = 10)
 {
-  struct timer_data *timer;
- #ifdef LEAK_CHECK
-  timer = (struct timer_data *)calloc(1, sizeof(struct timer_data));
- #else
-  timer = (struct timer_data *)dc_alloc(1, sizeof(struct timer_data));
- #endif
+  timer_data *timer = new timer_data;
   timer->arg1 = (void*)tbl;
   timer->arg2 = (void*)(++tbl->handnr);
   if (tbl->handnr == 0) // not plausible, but possible
@@ -544,12 +518,7 @@ void bj_finish(void *arg1, void *arg2, void *arg3)
 
 void add_new_bets(struct table_data *tbl)
 {
-  struct timer_data *timer;
- #ifdef LEAK_CHECK
-  timer = (struct timer_data *)calloc(1, sizeof(struct timer_data));
- #else
-  timer = (struct timer_data *)dc_alloc(1, sizeof(struct timer_data));
- #endif
+  timer_data *timer = new timer_data;
   timer->arg1 = (void*)tbl;
   timer->function = bj_finish;
   timer->timeleft = 2;
@@ -637,7 +606,7 @@ void check_winner(struct table_data *tbl)
 void bj_dealer_ai(void *arg1, void *arg2, void *arg3)
 {
   struct table_data *tbl = (table_data *) arg1;
-  int a = (int)arg2;
+  int a = (qint64)arg2;
   char buf[MAX_STRING_LENGTH];
   if (a && tbl->handnr != a) return; // handled earlier
   bool cont = FALSE;
@@ -706,8 +675,8 @@ void check_blackjacks(struct table_data *tbl)
 	next = plr->next;
 	if (!verify(plr)) continue;
 	buf[0] = '\0';
-	blackjack_prompt(plr->ch, buf, !IS_SET(plr->ch->pcdata->toggles, PLR_ASCII));
-	send_to_char(buf, plr->ch);
+   QString buffer = blackjack_prompt(plr->ch, !IS_SET(plr->ch->pcdata->toggles, PLR_ASCII));
+	send_to_char(buffer.toStdString(), plr->ch);
 	
     }
 	check_winner(tbl);
@@ -728,8 +697,8 @@ void check_blackjacks(struct table_data *tbl)
 
 		send_to_char(buf, plr->ch);
 		buf[0] = '\0';
-		blackjack_prompt(plr->ch, buf, !IS_SET(plr->ch->pcdata->toggles, PLR_ASCII));
-		send_to_char(buf, plr->ch);
+		QString prompt = blackjack_prompt(plr->ch, !IS_SET(plr->ch->pcdata->toggles, PLR_ASCII));
+		send_to_char(prompt.toStdString(), plr->ch);
 
 		if (plr->table->gold)
 		GET_GOLD(plr->ch) += (uint32)(plr->bet*2.5);
@@ -778,12 +747,7 @@ void check_insurance(struct table_data *tbl)
   { // ace showing
      tbl->state = 1;
      send_to_table("$B$7The dealer says 'Blackjack insurance is available. Type INSURANCE to buy some.'$R\r\n",tbl);
-     struct timer_data *timer;
- #ifdef LEAK_CHECK
-     timer = (struct timer_data *)calloc(1, sizeof(struct timer_data));
- #else
-     timer = (struct timer_data *)dc_alloc(1, sizeof(struct timer_data));
- #endif
+     timer_data *timer = new timer_data;
      timer->arg1 = (void*)tbl;
      timer->arg2 = 0;
      timer->function = check_insurance2;
@@ -842,12 +806,7 @@ void pulse_table_bj(struct table_data *tbl, int recall )
 
 void create_table(struct obj_data *obj)
 {
-  struct table_data *table;
- #ifdef LEAK_CHECK
-  table = (struct table_data *)calloc(1, sizeof(struct table_data));
- #else
-  table = (struct table_data *)dc_alloc(1, sizeof(struct table_data));
- #endif
+ table_data *table = new table_data;
   table->obj = obj;
   if (obj->obj_flags.value[2]) table->gold = FALSE;
   else table->gold = TRUE;
@@ -962,125 +921,165 @@ int hand_number(struct player_data *plr)
   return i;
 }
 
-void blackjack_prompt(CHAR_DATA *ch, char *prompt, bool ascii)
+QString blackjack_prompt(CHAR_DATA *ch, bool ascii)
 {
-  if (ch->in_room < 21902 || ch->in_room > 21905)
-    if (ch->in_room != 44)
- 	return;
-  struct obj_data *obj;
-  for (obj = world[ch->in_room].contents;obj;obj = obj->next_content)
-	if (obj->table) break;
-  if (!obj || !obj->table->plr) return;
- // Prompt-time
-  int plrsdone = 0;
-  char buf[MAX_STRING_LENGTH];
-  buf[0] = '\0';
-  lineTwo[0] = '\0';
-  lineTop[0] = '\0';
-  struct player_data *plr,*pnext;
-  for (plr = obj->table->plr; plr; plr = pnext)
-  {
-	pnext = plr->next;
-	if (!verify(plr)) continue;
-	if (!plr->hand_data[0]) continue;
-	if (plr->ch == ch) {
-  	  char buf2[MAX_STRING_LENGTH];
-	  buf2[0] = '\0';
-          if (plr->table->cr == plr)
-	  {
-	    strcat(buf2, "HIT STAY ");
-	    if (plr->hand_data[2] == 0)
-		strcat(buf2, "DOUBLE ");
-	  }
-	  if (canInsurance(plr))
-		strcat(buf2, "INSURANCE ");
-	  if (canSplit(plr))
-		strcat(buf2, "SPLIT ");
-	  if (buf2[0] != '\0')
-	  {
-	    strcat(prompt, "You can: ");
-	    strcat(prompt, BOLD CYAN);
-	    strcat(prompt, buf2);
-	    strcat(prompt, NTEXT);
-	    strcat(prompt, "\r\n");
-	  }
-	if (hands(plr) > 1)
-	{
-	sprintf(tempBuf, "%s, hand %d: ", GET_NAME(plr->ch), hand_number(plr));
-       sprintf(buf,"%s%s%s%s, hand %d%s: %s = %d   ",buf, BOLD,  plr==plr->table->cr?GREEN:"",GET_NAME(plr->ch), hand_number(plr), NTEXT, show_hand(plr->hand_data, 0,ascii), hand_strength(plr));
-	padnext = hand_strength(plr) > 9 ? 8:7;
-	}
-	else {
-	sprintf(tempBuf, "%s: ", GET_NAME(plr->ch));
-       sprintf(buf,"%s%s%s%s%s: %s = %d   ",buf, BOLD, plr==plr->table->cr?GREEN:"",GET_NAME(plr->ch), NTEXT, show_hand(plr->hand_data, 0,ascii), hand_strength(plr));
-	padnext = hand_strength(plr) > 9 ? 8:7;
-        }
-	}
-//    }
-   else {
-   if (hands(plr) > 1) {
-  sprintf(tempBuf, "%s, hand %d: ", GET_NAME(plr->ch), hand_number(plr));
-    sprintf(buf,"%s%s%s, hand %d%s: %s ",buf, plr==plr->table->cr?BOLD GREEN:"",GET_NAME(plr->ch),hand_number(plr),
-	NTEXT, show_hand(plr->hand_data, 0,ascii));
-      padnext = 1;
-    }
-   else {
-  sprintf(tempBuf, "%s: ", GET_NAME(plr->ch));
-    
-    sprintf(buf,"%s%s%s%s: %s ",buf,plr==plr->table->cr?BOLD GREEN:"", GET_NAME(plr->ch),
-	NTEXT,show_hand(plr->hand_data, 0,ascii));
-      padnext = 1;
-  }
-   }
-    if (++plrsdone % 3 == 0)
-    {
-  if (buf[0]!= '\0'){
-  strcat(prompt,"\r\n");
-  if (ascii) {
-  strcat(prompt,lineTop);
-  strcat(prompt,"\r\n"); }
-  strcat(prompt,buf);
-  strcat(prompt,"\r\n");
-  if (ascii) {
-  strcat(prompt,lineTwo); 
-  strcat(prompt,"\r\n"); }
+   QString prompt;
 
-  for (int z = 0; lineTop[z];z++)
-	if (lineTop[z] == ',') lineTop[z] = '\'';
-  if (ascii) {
-  strcat(prompt,lineTop);
-  strcat(prompt,"\r\n"); }
-  buf[0] = '\0';
-  lineTwo[0] = '\0';
-  lineTop[0] = '\0';
-  padnext = 0;
-  }  
-	
-    }
-  }
-  if (obj->table->hand_data[0]) {
-  sprintf(tempBuf, "Dealer: ");
-  sprintf(buf, "%s%sDealer%s: %s",buf,BOLD YELLOW, NTEXT,obj->table->state < 2?
-	show_hand(obj->table->hand_data, 1,ascii):show_hand(obj->table->hand_data, 0,ascii));
-  sprintf(buf, "%s\r\n",buf); }
-  //fixPadding(&buf[0]);
-  if (buf[0]!= '\0'){
-  strcat(prompt,"\r\n");
-  if (ascii) {
-  strcat(prompt,lineTop);
-  strcat(prompt,"\r\n"); }
-  strcat(prompt,buf);
-  if (ascii) {
-  strcat(prompt,lineTwo);
-  strcat(prompt,"\r\n"); }
-  for (int z = 0; lineTop[z];z++)
-	if (lineTop[z] == ',') lineTop[z] = '\'';
-	else if (lineTop[z] == '_') lineTop[z] = '-';
-  if (ascii) {
-  strcat(prompt,lineTop);
-  strcat(prompt,"\r\n");
-  }
-  }  
+   if (ch->in_room < 21902 || ch->in_room > 21905)
+      if (ch->in_room != 44)
+         return prompt;
+
+   struct obj_data *obj;
+   for (obj = world[ch->in_room].contents; obj; obj = obj->next_content)
+      if (obj->table)
+         break;
+
+   if (!obj || !obj->table->plr)
+      return prompt;
+
+   // Prompt-time
+   int plrsdone = 0;
+   QString buf;
+   lineTwo[0] = '\0';
+   lineTop[0] = '\0';
+   struct player_data *plr, *pnext;
+   for (plr = obj->table->plr; plr; plr = pnext)
+   {
+      pnext = plr->next;
+      if (!verify(plr))
+         continue;
+      if (!plr->hand_data[0])
+         continue;
+      if (plr->ch == ch)
+      {
+         QString buf2;
+         if (plr->table->cr == plr)
+         {
+            buf2 += "HIT STAY ";
+            if (plr->hand_data[2] == 0)
+               buf2 += "DOUBLE ";
+         }
+         if (canInsurance(plr))
+            buf2 += "INSURANCE ";
+         if (canSplit(plr))
+            buf2 += "SPLIT ";
+         if (buf2[0] != '\0')
+         {
+            prompt += "You can: ";
+            prompt += BOLD CYAN;
+            prompt += buf2;
+            prompt += NTEXT;
+            prompt += "\r\n";
+         }
+
+         QString cr;
+         if (plr == plr->table->cr)
+         {
+            cr = GREEN;
+         }
+         padnext = hand_strength(plr) > 9 ? 8 : 7;
+         if (hands(plr) > 1)
+         {
+            sprintf(tempBuf, "%s, hand %d: ", GET_NAME(plr->ch), hand_number(plr));
+            prompt += BOLD + cr +  plr->ch->getName() + ", hand " + QString::number(hand_number(plr)) + NTEXT + ": " + show_hand(plr->hand_data, 0, ascii) + " = " + QString::number(hand_strength(plr));            
+         }
+         else
+         {
+            sprintf(tempBuf, "%s: ", GET_NAME(plr->ch));
+            prompt += BOLD + cr + plr->ch->getName() + NTEXT + ": " + show_hand(plr->hand_data, 0, ascii) + " = " + QString::number(hand_strength(plr));
+         }
+      }
+      else
+      {
+         QString cr;
+         if (plr == plr->table->cr)
+         {
+            cr = GREEN;
+         }
+         padnext = 1;
+         if (hands(plr) > 1)
+         {
+            sprintf(tempBuf, "%s, hand %d: ", GET_NAME(plr->ch), hand_number(plr));
+            prompt += cr + plr->ch->getName() + ", hand " + QString::number(hand_number(plr)) + NTEXT + ": " + show_hand(plr->hand_data, 0, ascii);
+         }
+         else
+         {
+            sprintf(tempBuf, "%s: ", GET_NAME(plr->ch));
+            prompt += cr + plr->ch->getName() + NTEXT + ": " + show_hand(plr->hand_data, 0, ascii);
+         }
+      }
+      if (++plrsdone % 3 == 0)
+      {
+         if (buf[0] != '\0')
+         {
+            prompt += "\r\n";
+            if (ascii)
+            {
+               prompt += lineTop;
+               prompt += "\r\n";
+            }
+            prompt += "\r\n";
+            if (ascii)
+            {
+               prompt += lineTwo;
+               prompt += "\r\n";
+            }
+
+            for (int z = 0; lineTop[z]; z++)
+               if (lineTop[z] == ',')
+                  lineTop[z] = '\'';
+            if (ascii)
+            {
+               prompt += lineTop;
+               prompt += "\r\n";
+            }
+            buf[0] = '\0';
+            lineTwo[0] = '\0';
+            lineTop[0] = '\0';
+            padnext = 0;
+         }
+      }
+   }
+   if (obj->table->hand_data[0])
+   {
+
+      sprintf(tempBuf, "Dealer: ");
+      QString state;
+      if (obj->table->state < 2)
+      {
+         state = show_hand(obj->table->hand_data, 1, ascii);
+      }
+      else 
+      {
+          state = show_hand(obj->table->hand_data, 0, ascii);
+      }
+      prompt += QString(BOLD YELLOW) + "Dealer" + NTEXT + ": " + state + "\r\n";
+   }
+   //fixPadding(&buf[0]);
+   if (buf[0] != '\0')
+   {
+      prompt += "\r\n";
+      if (ascii)
+      {
+         prompt += lineTop;
+         prompt += "\r\n";
+      }
+      if (ascii)
+      {
+         prompt += lineTwo;
+         prompt += "\r\n";
+      }
+      for (int z = 0; lineTop[z]; z++)
+         if (lineTop[z] == ',')
+            lineTop[z] = '\'';
+         else if (lineTop[z] == '_')
+            lineTop[z] = '-';
+      if (ascii)
+      {
+         prompt += lineTop;
+         prompt += "\r\n";
+      }
+   }
 }
 
 int blackjack_table(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg,
@@ -1721,14 +1720,9 @@ int find_highhand(struct tplayer *tplr)
 struct tplayer *createTplayer(struct ttable *ttbl)
 {
   int seat = has_seat(ttbl);
-  if (seat < 0) return NULL; 
-  struct tplayer *tplr;
-  
-#ifdef LEAK_CHECK
-  tplr = (struct tplayer*) calloc(1, sizeof(struct tplayer));
-#else
-  tplr = (struct tplayer*) dc_alloc(1, sizeof(struct tplayer));
-#endif
+  if (seat < 0) return NULL;
+
+  tplayer *tplr = new tplayer;
   ttbl->player[seat] = tplr;
   tplr->nw = TRUE;
   tplr->table=ttbl;
@@ -1917,12 +1911,7 @@ void save_slot_machines()
 
 void create_slot(OBJ_DATA *obj)
 {
-   struct machine_data *slot;
- #ifdef LEAK_CHECK
-   slot = (struct machine_data *)calloc(1, sizeof(struct machine_data));
- #else
-   slot = (struct machine_data *)dc_alloc(1, sizeof(struct machine_data));
- #endif
+   machine_data *slot = new machine_data;
 
    slot->obj = obj;
    slot->ch = NULL;
@@ -1988,12 +1977,7 @@ void update_linked_slots(struct machine_data *machine)
 
 void slot_timer(struct machine_data *machine, int stop1, int stop2, int delay)
 {
-  struct timer_data *timer;
- #ifdef LEAK_CHECK
-  timer = (struct timer_data *)calloc(1, sizeof(struct timer_data));
- #else
-  timer = (struct timer_data *)dc_alloc(1, sizeof(struct timer_data));
- #endif
+   timer_data *timer = new timer_data;
 
    timer->arg1 = (void*)machine;
    timer->arg2 = (void*)stop1;
@@ -2006,8 +1990,8 @@ void slot_timer(struct machine_data *machine, int stop1, int stop2, int delay)
 void reel_spin(void *arg1, void *arg2, void *arg3)
 {
    struct machine_data *machine = (struct machine_data *) arg1;
-   int stop1 = (int)arg2;
-   int stop2 = (int)arg3;
+   int stop1 = (qint64)arg2;
+   int stop2 = (qint64)arg3;
 
    char buf[MAX_STRING_LENGTH];
 
@@ -2221,22 +2205,15 @@ struct wheel_data
 
 void create_wheel(OBJ_DATA *obj)
 {
-   struct wheel_data *wheel;
- #ifdef LEAK_CHECK
-   wheel = (struct wheel_data *)calloc(1, sizeof(struct wheel_data));
- #else
-   wheel = (struct wheel_data *)dc_alloc(1, sizeof(struct wheel_data));
- #endif
+   wheel_data *wheel = new wheel_data;
    wheel->obj = obj;
    for(int i=0;i<6;i++) {
- #ifdef LEAK_CHECK
-   wheel->plr[i] = (struct roulette_player *)calloc(1, sizeof(struct roulette_player));
- #else
-   wheel->plr[i] = (struct roulette_player *)dc_alloc(1, sizeof(struct roulette_player));
- #endif
+      wheel->plr[i] = new roulette_player;
       wheel->plr[i]->ch = NULL;
       for(int j=0;j<48;j++)
+      {
          wheel->plr[i]->bet_array[j] = 0;
+      }
    }
    wheel->countdown = 11;
    wheel->spinning = FALSE;
@@ -2415,12 +2392,7 @@ void pulse_countdown(void *arg1, void *arg2, void *arg3);
 
 void roulette_timer(struct wheel_data *wheel, int spin)
 {
-  struct timer_data *timer;
- #ifdef LEAK_CHECK
-  timer = (struct timer_data *)calloc(1, sizeof(struct timer_data));
- #else
-  timer = (struct timer_data *)dc_alloc(1, sizeof(struct timer_data));
- #endif
+   timer_data *timer = new timer_data;
 
    timer->arg1 = (void*)wheel;
    timer->arg2 = (void*)spin;
@@ -2432,7 +2404,7 @@ void roulette_timer(struct wheel_data *wheel, int spin)
 void pulse_countdown(void *arg1, void *arg2, void *arg3)
 {
    struct wheel_data *wheel = (struct wheel_data *) arg1;
-   int spin = (int) arg2;
+   int spin = (qint64)arg2;
    char buf[MAX_STRING_LENGTH];
 
    if(wheel->countdown <= 0 && !spin) {
