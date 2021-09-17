@@ -927,55 +927,106 @@ void heartbeat() {
 	if (--pulse_violence < 1) {
 		pulse_violence = PULSE_VIOLENCE;
 
-    PerfTimers["violence+"].start();
+    PerfTimers["violence"].start();
 		perform_violence();
 		update_characters();
 		affect_update(PULSE_VIOLENCE);
 		check_silence_beacons();
-    PerfTimers["violence+"].stop();
+    PerfTimers["violence"].stop();
 	}
 
 	if (--pulse_tensec < 1) {
 		pulse_tensec = PULSE_TENSEC;
+    PerfTimers["consecrate"].start();
 		checkConsecrate(PULSE_TENSEC);
+    PerfTimers["consecrate"].stop();
 	}
 
 	if (--pulse_weather < 1) {
 		pulse_weather = PULSE_WEATHER;
+    PerfTimers["weather"].start();
 		weather_update();
+    PerfTimers["weather"].stop();
+
+    PerfTimers["auctionexp"].start();
 		auction_expire();
+    PerfTimers["auctionexp"].stop();
 	}
 
 	if (--pulse_regen < 1) {
+    PerfTimers["pulse_regen"].start();
 		// random pulse timer for regen to make tick sleeping impossible
-		pulse_regen = number(PULSE_REGEN - 8 * PASSES_PER_SEC, PULSE_REGEN + 5 * PASSES_PER_SEC);
+		pulse_regen = number(PULSE_REGEN - 8 * PASSES_PER_SEC, PULSE_REGEN + 5 * PASSES_PER_SEC);    
 		point_update();
 		pulse_takeover();
 		affect_update(PULSE_REGEN);
 		checkConsecrate(PULSE_REGEN);
 		if (!number(0, 2))
+    {
 			send_hint();
+    }
+    PerfTimers["pulse_regen"].stop();
 	}
 
 	if (--pulse_time < 1) {
 		pulse_time = PULSE_TIME;
-		zone_update();
-		time_update();
-		food_update();
-		affect_update(PULSE_TIME);
-		update_corpses_and_portals();
-		check_idle_passwords();
-		quest_update();
+    PerfTimers["pulse_time"].start();
 
+    PerfTimers["zone_update"].start();
+		zone_update();
+    PerfTimers["zone_update"].stop();
+
+    PerfTimers["time_update"].start();
+		time_update();
+    PerfTimers["time_update"].stop();
+
+    PerfTimers["food_update"].start();
+		food_update();
+    PerfTimers["food_update"].stop();
+
+    PerfTimers["affect_update"].start();
+		affect_update(PULSE_TIME);
+    PerfTimers["affect_update"].stop();
+
+    PerfTimers["update_corpses"].start();
+		update_corpses_and_portals();
+    PerfTimers["update_corpses"].stop();
+
+    PerfTimers["check_idle"].start();
+		check_idle_passwords();
+    PerfTimers["check_idle"].stop();
+
+    PerfTimers["quest_update"].start();
+		quest_update();
+    PerfTimers["quest_update"].stop();
+
+    PerfTimers["leaderboard"].start();
 		leaderboard.check(); //good place to put this
+    PerfTimers["leaderboard"].stop();
 
 		if (DC::instance().cf.bport == false) {
+      PerfTimers["check_champ"].start();
 			check_champion_and_website_who_list();
+      PerfTimers["check_champ"].stop();
 		}
+
+    PerfTimers["save_slot"].start();
 		save_slot_machines();
+    PerfTimers["save_slot"].stop();
+
+    PerfTimers["pulse_hunts"].start();
 		pulse_hunts();
+    PerfTimers["pulse_hunts"].stop();
+
+    PerfTimers["redo_shop"].start();
 		if (!number(0, 47))
+    {
 			redo_shop_profit();
+    }
+    PerfTimers["redo_shop"].stop();
+
+
+    PerfTimers["pulse_time"].stop();
 	}
 }
 
@@ -2787,52 +2838,79 @@ char *any_one_arg(char *argument, char *first_arg)
   return argument;
 }
 
-void warn_if_duplicate_ip(char_data * ch)
+bool is_multi(char_data *ch)
 {
-   char buf[256];
-   int highlev = 51;
+  for (descriptor_data *d = descriptor_list; d; d = d->next)
+  {
+    if (d->character &&
+        strcmp(GET_NAME(ch), GET_NAME(d->character)) &&
+        !strcmp(d->host, ch->desc->host))
+    {
+      return true;
+    }
+  }
 
-   list<multiplayer> multi_list;
-
-   for(descriptor_data * d = descriptor_list; d; d = d->next) 
-   {
-      if( d->character && 
-          strcmp(GET_NAME(ch), GET_NAME(d->character)) &&
-          !strcmp(d->host, ch->desc->host)
-        ) {
-	multiplayer m;
-	m.host = d->host;
-	m.name1 = GET_NAME(ch);
-	m.name2 = GET_NAME(d->character);
-
-	multi_list.push_back(m);
-
-	highlev = MAX(GET_LEVEL(d->character), GET_LEVEL(ch));
-	highlev = MAX(highlev, OVERSEER);
-      }
-   }
-
-   for(list<multiplayer>::iterator i=multi_list.begin(); i != multi_list.end(); ++i) {
-     snprintf(buf, 256, "MultipleIP: %s -> %s / %s ", (*i).host, (*i).name1, (*i).name2);
-     log(buf, highlev, LOG_WARNINGS );
-   }
-
+  return false;
 }
 
-int do_editor(CHAR_DATA *ch, char *argument, int cmd)
+void warn_if_duplicate_ip(char_data *ch)
 {
-  char arg1[MAX_INPUT_LENGTH];
-  if (argument == 0)
-    return eFAILURE;
+  char buf[256];
+  int highlev = 51;
 
-  if (IS_MOB(ch))
-    return eFAILURE;
+  list<multiplayer> multi_list;
 
-  csendf(ch, "Current editor: %s\n\r\n\r", IS_SET(ch->pcdata->toggles, PLR_EDITOR_WEB) ? "web" : "game");
+  for (descriptor_data *d = descriptor_list; d; d = d->next)
+  {
+    if (d->character &&
+        strcmp(GET_NAME(ch), GET_NAME(d->character)) &&
+        !strcmp(d->host, ch->desc->host))
+    {
+      multiplayer m;
+      m.host = d->host;
+      m.name1 = GET_NAME(ch);
+      m.name2 = GET_NAME(d->character);
 
-  one_argument(argument, arg1);
+      multi_list.push_back(m);
 
-  if (*arg1) {
+      highlev = MAX(GET_LEVEL(d->character), GET_LEVEL(ch));
+      highlev = MAX(highlev, OVERSEER);
+
+      // Mark both characters as multi-playing until they log out
+      // This will be used elsewhere to enable automatic logging
+      if (ch->pcdata)
+      {
+        ch->pcdata->multi = true;
+      }
+
+      if (d->character->pcdata)
+      {
+        d->character->pcdata->multi = true;
+      }
+    }
+  }
+
+  for (list<multiplayer>::iterator i = multi_list.begin(); i != multi_list.end(); ++i)
+  {
+    logf(108, LOG_WARNINGS, "MultipleIP: %s -> %s / %s ", (*i).host, (*i).name1, (*i).name2);
+  }
+}
+
+  int do_editor(CHAR_DATA * ch, char *argument, int cmd)
+  {
+    char arg1[MAX_INPUT_LENGTH];
+    if (argument == 0)
+      return eFAILURE;
+
+    if (IS_MOB(ch))
+      return eFAILURE;
+
+    csendf(ch, "Current editor: %s\n\r\n\r", IS_SET(ch->pcdata->toggles, PLR_EDITOR_WEB) ? "web" : "game");
+
+    one_argument(argument, arg1);
+
+    if (*arg1)
+    {
       if (!strcmp(arg1, "web")) {
 	  SET_BIT(ch->pcdata->toggles, PLR_EDITOR_WEB);
 	  send_to_char("Changing to web editor.\n\r", ch);

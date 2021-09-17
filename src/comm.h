@@ -55,7 +55,6 @@ void     record_msg(char *messg, char_data *ch);
 int      write_hotboot_file(char **argv);
 void  send_info(string messg);
 void  send_info(const char *messg);
+bool is_multi(char_data *ch);
 QString make_prompt(descriptor_data *d);
-
-
 #endif

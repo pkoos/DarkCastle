@@ -4828,7 +4828,7 @@ void raw_kill(CHAR_DATA * ch, CHAR_DATA * victim)
   {
     if (ch == victim)
     {
-      logf(IMMORTAL, LOG_BUG, "selfpurge on %s to %s", GET_NAME(ch), GET_NAME(victim));
+      logf(0, LOG_BUG, "selfpurge on %s to %s", GET_NAME(ch), GET_NAME(victim));
       selfpurge = true;
     }
     extract_char(victim, TRUE);
@@ -5812,7 +5812,8 @@ void do_pkill(CHAR_DATA *ch, CHAR_DATA *victim, int type, bool vict_is_attacker)
 //    sprintf(killer_message,"\n\r##%s just commited SUICIDE!\n\r", GET_NAME(victim));
     else if(GET_LEVEL(victim) < PKILL_COUNT_LIMIT || ch == victim)
       //sprintf(killer_message,"\n\r##%s just DIED!\n\r", GET_NAME(victim));
-      sprintf(killer_message,"\n\r##%s was just introduced to the warm hospitality of Dark Castle!!\n\r", GET_NAME(victim));
+      //sprintf(killer_message,"\n\r##%s was just introduced to the warm hospitality of Dark Castle!!\n\r", GET_NAME(victim));
+      sprintf(killer_message,"");
     else if ( num == 1000 ) 
       sprintf(killer_message,"\n\r##%s was just ANALLY PROBED by %s!\n\r", GET_NAME(victim), GET_NAME(ch));
     else if(IS_AFFECTED(ch, AFF_FAMILIAR) && ch->master)

@@ -34,6 +34,7 @@ extern "C" {
 using namespace std;
 
 extern struct obj_data  *object_list;
+extern int top_of_world;
 
 struct index_data;
 struct error_eof {};

@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "tuple": "cpp",
-        "sstream": "cpp",
-        "cmath": "cpp",
-        "*.tcc": "cpp"
-    }
-}

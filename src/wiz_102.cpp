@@ -183,7 +183,7 @@ int do_check(struct char_data *ch, char *arg, int cmd) {
   }
 
   display_punishes(ch, vict);
-
+  
   if(connected) 
     if(vict->desc) {
       if(GET_LEVEL(ch) >= OVERSEER && GET_LEVEL(ch) >= GET_LEVEL(vict))

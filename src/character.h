@@ -259,6 +259,7 @@ struct pc_data
     char *last_prompt;
     std::multimap<int, std::pair<timeval, timeval> > *lastseen;
     uint8_t profession;
+    bool multi;
 };
 
 enum mob_type_t { MOB_NORMAL = 0, MOB_GUARD, MOB_CLAN_GUARD, MOB_TYPE_FIRST = MOB_NORMAL, MOB_TYPE_LAST = MOB_CLAN_GUARD };
@@ -291,6 +292,7 @@ struct mob_data
     struct threat_struct *threat;
     struct reset_com *reset;
 	mob_flag_data mob_flags;            /* Mobile information               */
+    bool paused;
 };
 
 // CHAR_DATA, char_data
@@ -547,5 +549,6 @@ struct profession {
 void clear_hunt(void *arg1, void *arg2, void *arg3);
 void clear_hunt(char *arg1, CHAR_DATA *arg2, void *arg3);
 void prepare_character_for_sixty(CHAR_DATA *ch);
+bool isPaused(char_data *mob);
 
 #endif
