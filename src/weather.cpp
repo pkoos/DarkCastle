@@ -289,3 +289,15 @@ void weather_change(void)
       default : break;
    }
 }
+
+weather_data::weather_data()
+{
+    pressure=0;      // How is the pressure ( Mb ) 
+    change=0;        // How fast and what way does it change. 
+    sky=0;           // How is the sky. 
+    sunlight=0;      // And how much sun. 
+    windspeed=0;     // How fast wind is blowing
+    winddirection=0; // What direction it is blowing in
+    temperature=0;   // Duh...
+    modifiers=0;     // fog?  Ice?
+};
