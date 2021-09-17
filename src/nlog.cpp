@@ -85,18 +85,16 @@ char *str_hsh(const char *arg)
      temp = current;
   }
 
-#ifdef LEAK_CHECK
-  current = (struct hash_info *)calloc(1, sizeof(struct hash_info));
-#else
-  current = (struct hash_info *)dc_alloc(1, sizeof(struct hash_info));
-#endif
+  current = new hash_info;
 
   current->right = current->left = NULL;
   if(scratch < 0)
     temp->left  = current;
   else
     temp->right = current;
-  current->name   = (char *)str_dup(arg);
+  current->name   = new char[strlen(arg)+1];
+  memset(current->name, 0, strlen(arg)+1);
+  strncpy(current->name, arg, strlen(arg));
 
   return(current->name);
 }
@@ -115,102 +113,27 @@ void logf(int level, long type, const char *arg, ...)
   log(s, level, type);
 }
 
-int csendf(struct char_data *ch, const char *arg, ...)
+int csendf(struct char_data *ch, const char *fmt, ...)
 { 
-  va_list args;
-  char s[MAX_STRING_LENGTH];
+  va_list args1, args2;
 
-  va_start(args, arg);
-  /* vsnprintf(s, MAX_STRING_LENGTH, arg, args); */
-  vsprintf(s, arg, args); 
-  va_end(args);
+  va_start(args1, fmt);
 
-  send_to_char(s, ch);
+  // backup the variable argument list to args2
+  va_copy(args2, args1);
 
-  return(1);
-}
+  auto size = vsnprintf(nullptr, 0, fmt, args1);
+  va_end(args1);
 
+  // create vector to hold incoming vsnprintf output
+  vector<char> vbuffer(size+1);
+  vsnprintf(vbuffer.data(), vbuffer.size(), fmt, args2);
+  va_end(args2);
 
-char * handle_ansi(char * s, char_data * ch)
-{
-  char * t;
-  char* tp, *sp, *i;
+  string buffer = vbuffer.data();;
+  send_to_char(buffer, ch);
 
-  char nullstring[] = "";
-  char dollarstring[] = "$";
-
-  // Worse case scenario is a string of color codes that are all $R's.  These take up
-  // 11 characters each.  So to handle that, we'll count the number of $'s and multiply
-  // that by 11 for the amount of extra space we need.
-
-  int numdollars = 0;
-
-  t = s;
-  while((t = strstr(t, "$"))) {
-    numdollars++;
-    t++;
-  }
-  
-#ifdef LEAK_CHECK
-  t = (char *)calloc((strlen(s) + numdollars*11 + 1), sizeof(char));
-#else
-  t = (char *)dc_alloc((strlen(s) + numdollars*11 + 1), sizeof(char));
-#endif
-  *t = '\0';
-
-  i = nullstring;
-  tp = t;
-  sp = s;
-  while(*sp) {
-    if(*sp != '$') {
-      *tp++ = *sp++;
-    } else {
-       if(IS_MOB(ch) || IS_SET(ch->pcdata->toggles, PLR_ANSI)) {
-          switch(*++sp) {
-//             case 'B':  i = BLACK; break;
-//             case 'R':  i = RED; break;
-//             case 'g':  i = GREEN; break;
-//             case 'Y':  i = YELLOW; break;
-//             case 'b':  i = BLUE; break;
-//             case 'P':  i = PURPLE; break;
-//             case 'C':  i = CYAN; break;
-//             case 'G':  i = GREY; break;
-//             case '!':  i = BOLD; break;
-//             case 'N':  i = NTEXT; break;
-
-             case '0':  i = BLACK; break;
-             case '1':  i = BLUE; break;
-             case '2':  i = GREEN; break;
-             case '3':  i = CYAN; break;
-             case '4':  i = RED; break;
-             case '5':  i = YELLOW; break;
-             case '6':  i = PURPLE; break;
-             case '7':  i = GREY; break;
-             case 'B':  i = BOLD; break;
-             case 'R':  i = NTEXT; break;
-	     case 'L':  i = FLASH;break;
-	     case 'K':  i = BLINK;break;
-             case 'I':  i = INVERSE; break;
-             case '$':  i = dollarstring; break;
-             case '\0': // this happens if we end a line with $
-                        sp--; // back up to the $ char so we don't go past our \0
-                        // no break here so the default catchs it and uses a nullstring
-             default: i = nullstring; break;
-          }
-       } else {
-         sp++;
-         if(*sp == '$')
-           i = dollarstring;
-         else i = nullstring;
-       }
-       while((*tp++ = *i++));
-       tp--;
-       sp++;
-    }
-  }
-  *tp = '\0';
-
-  return t;
+  return 1;
 }
 
 
