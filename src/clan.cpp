@@ -131,12 +131,7 @@ void boot_clans(void) {
 				break;
 			if (b != 'R')
 				continue;
-#ifdef LEAK_CHECK
-			new_new_room = (struct clan_room_data *)calloc(1, sizeof(struct clan_room_data));
-#else
-			new_new_room = (struct clan_room_data *) dc_alloc(1,
-					sizeof(struct clan_room_data));
-#endif
+			new_new_room = new clan_room_data;
 			new_new_room->next = new_new_clan->rooms;
 			tempint = fread_int(fl, 0, 50000);
 			new_new_room->room_number = (int16) tempint;
@@ -199,12 +194,7 @@ void boot_clans(void) {
 				break;
 			}
 			case 'M': { // read a member
-#ifdef LEAK_CHECK
-			new_new_member = (struct clan_member_data *)calloc(1, sizeof(struct clan_member_data));
-#else
-				new_new_member = (struct clan_member_data *) dc_alloc(1,
-						sizeof(struct clan_member_data));
-#endif
+				new_new_member = new clan_member_data;
 				new_new_member->member_name = fread_string(fl, 0);
 				new_new_member->member_rights = fread_int(fl, 0, LONG_MAX);
 				new_new_member->member_rank = fread_int(fl, 0, LONG_MAX);
@@ -511,12 +501,7 @@ void add_clan_member(clan_data * theClan, struct char_data * ch)
     return;
   }
 
-#ifdef LEAK_CHECK
-  pmember = (struct clan_member_data *)calloc(1, sizeof(struct clan_member_data));
-#else
-  pmember = (struct clan_member_data *)dc_alloc(1, sizeof(struct clan_member_data));
-#endif
-
+  pmember = new clan_member_data;
   pmember->member_name   = str_dup(GET_NAME(ch));
   pmember->member_rights = 0;
   pmember->member_rank   = 0;
@@ -1067,7 +1052,10 @@ int do_outcast(CHAR_DATA *ch, char *arg, int cmd)
   log(buf, IMP, LOG_CLAN);
 
   do_save(victim,"",666);
-  if(!connected) free_char(victim);
+  if (!connected) {
+    delete victim;
+    victim = nullptr;
+  }
 
   return eSUCCESS;
 }
@@ -1866,11 +1854,7 @@ void do_god_clans(CHAR_DATA *ch, char *arg, int cmd)
       }
 
       SET_BIT(world[real_room(skill)].room_flags, CLAN_ROOM);
-#ifdef LEAK_CHECK
-      newroom = (struct clan_room_data *)calloc(1, sizeof(clan_room_data));
-#else
-      newroom = (struct clan_room_data *)dc_alloc(1, sizeof(clan_room_data));
-#endif
+      newroom = new clan_room_data;
       newroom->room_number = skill;
       newroom->next = tarclan->rooms;
       tarclan->rooms = newroom;
@@ -2918,12 +2902,7 @@ bool can_challenge(int clan, int zone)
 
 void takeover_pause(int clan, int zone)
 {
-    struct takeover_pulse_data *pl;
-    #ifdef LEAK_CHECK
-         pl = (struct takeover_pulse_data *)calloc(1, sizeof(struct takeover_pulse_data));
-    #else
-         pl = (struct takeover_pulse_data *)dc_alloc(1, sizeof(struct takeover_pulse_data));
-    #endif
+    takeover_pulse_data *pl = new takeover_pulse_data;
     pl->next = pulse_list;
     pl->clan1 = clan;
     pl->clan2 = -2;
@@ -3028,7 +3007,7 @@ void check_victory(struct takeover_pulse_data *take)
 
 void check_quitter(void *arg1, void *arg2,void *arg3)
 {
-  int clan = (int)arg1;
+  int clan = (qint64)arg1;
   char buf[MAX_STRING_LENGTH];
   if (count_controlled_areas(clan) > online_clan_members(clan))
   { // One needs to go.
@@ -3070,12 +3049,7 @@ void check_quitter(CHAR_DATA *ch) {
 	if (!ch->clan || GET_LEVEL(ch) >= 100)
 		return;
 
-	struct timer_data *timer;
-#ifdef LEAK_CHECK
-	timer = (struct timer_data *)calloc(1, sizeof(struct timer_data));
-#else
-	timer = (struct timer_data *) dc_alloc(1, sizeof(struct timer_data));
-#endif
+	timer_data *timer = new timer_data;
 	timer->arg1 = (void*) ch->clan;
 	timer->function = check_quitter;
 	timer->timeleft = 30;
@@ -3379,12 +3353,7 @@ int do_clanarea(CHAR_DATA *ch, char *argument, int cmd)
     affect_to_char(ch, &af, PULSE_TIMER);
 
     // no point checking for noclaim flag, at this point it already IS under someone's control    
-    struct takeover_pulse_data *pl;
-    #ifdef LEAK_CHECK
-         pl = (struct takeover_pulse_data *)calloc(1, sizeof(struct takeover_pulse_data));
-    #else
-         pl = (struct takeover_pulse_data *)dc_alloc(1, sizeof(struct takeover_pulse_data));
-    #endif
+    takeover_pulse_data *pl = new takeover_pulse_data;
     pl->next = pulse_list;
     pl->clan1 = zone_table[world[ch->in_room].zone].clanowner;
     pl->clan2 = ch->clan;
