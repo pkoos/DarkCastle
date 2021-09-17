@@ -748,18 +748,18 @@ void boot_the_shops()
         buf = fread_string( fp , 0);
         if ( *buf == '$' )
         {
-            dc_free(buf);
+            delete[] buf;
             break;
         }
         if ( *buf != '#' )
         {
-            dc_free(buf);
+            delete[] buf;
             continue;
         }
 
         // we don't seem to use buff after this point, so I'm going to free it
         // otherise, we're leaking memory
-        dc_free(buf);
+        delete[] buf;
 
         if ( max_shop >= MAX_SHOP )
         {
@@ -813,13 +813,13 @@ void boot_the_shops()
 	  sprintf(log_buf, "BAD SHOP IN ROOM %d -- FIX THIS!", temp);
 	  log(log_buf, 0, LOG_MISC);
           /* Free the memory from bad shops */
-          dc_free(shop_index[max_shop].no_such_item1);
-          dc_free(shop_index[max_shop].no_such_item2);
-          dc_free(shop_index[max_shop].do_not_buy);
-          dc_free(shop_index[max_shop].missing_cash1);
-          dc_free(shop_index[max_shop].missing_cash2);
-          dc_free(shop_index[max_shop].message_buy);
-          dc_free(shop_index[max_shop].message_sell);
+          delete[] shop_index[max_shop].no_such_item1;
+          delete[] shop_index[max_shop].no_such_item2;
+          delete[] shop_index[max_shop].do_not_buy;
+          delete[] shop_index[max_shop].missing_cash1;
+          delete[] shop_index[max_shop].missing_cash2;
+          delete[] shop_index[max_shop].message_buy;
+          delete[] shop_index[max_shop].message_sell;
 
 	  continue;
 	  /* This way we don't increment if it was bad */
@@ -880,11 +880,11 @@ void fix_shopkeepers_inventory( )
 // return pointer to new shop on success
 player_shop * read_one_player_shop(FILE *fp)
 {
-  long count;
+  long count = 0;
   char code[4];
 
   player_shop_item * item = NULL;
-  player_shop * shop = (player_shop *)dc_alloc(1, sizeof(player_shop));
+  player_shop * shop = new player_shop;
 
   fread(&shop->owner, sizeof(char), PC_SHOP_OWNER_SIZE, fp);
   fread(&shop->room_num, sizeof(int32), 1, fp);
@@ -908,7 +908,7 @@ player_shop * read_one_player_shop(FILE *fp)
   shop->sale_list = NULL;
   for(int i = 0; i < count; i++)
   {
-    item = (player_shop_item *)dc_alloc(1, sizeof(player_shop_item));
+    item = new player_shop_item;
     
     fread(&item->item_vnum, sizeof(int), 1, fp);
     fread(&item->price, sizeof(int), 1, fp);
@@ -1120,7 +1120,7 @@ void player_shopping_stock(char * arg, char_data * ch, char_data * keeper)
    }
 
    // add it to list
-   player_shop_item * newitem = (player_shop_item *)dc_alloc(1, sizeof(player_shop_item));
+   player_shop_item * newitem = new player_shop_item;
    newitem->item_vnum = obj_index[obj->item_number].virt;
    newitem->price = value;
    newitem->next = shop->sale_list;
