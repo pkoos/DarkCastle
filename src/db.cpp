@@ -117,7 +117,7 @@ CWorld world;
 
 struct zone_data zone_table_array[MAX_ZONE + 50];
 struct zone_data *zone_table = zone_table_array;
-#define zone_table  zone_table_array
+
 /* table of reset data             */
 int top_of_zone_table = 0;
 struct message_list fight_messages[MAX_MESSAGES]; /* fighting messages   */
@@ -157,7 +157,7 @@ struct index_data *obj_index = obj_index_array;
 #define obj_index   obj_index_array
 
 struct help_index_element *help_index = 0;
-struct help_index_element_new *new_help_table = 0;
+vector<help_index_element_new> new_help_table;
 
 int top_of_mobt = 0; /* top of mobile index table       */
 int top_of_objt = 0; /* top of object index table       */
@@ -179,7 +179,6 @@ void load_banned();
 void boot_world(void);
 void do_godlist();
 void half_chop(char *string, char *arg1, char *arg2);
-void remove_memory(CHAR_DATA *ch, char type);
 world_file_list_item * new_mob_file_item(char * temp, long room_nr);
 world_file_list_item * new_obj_file_item(char * temp, long room_nr);
 
@@ -281,14 +280,7 @@ void add_to_bard_list(char_data * ch)
 	if (GET_CLASS(ch) != CLASS_BARD)
 		return;
 
-#ifdef LEAK_CHECK
-	curr = (struct pulse_data *)
-	calloc(1, sizeof(struct pulse_data));
-#else
-	curr = (struct pulse_data *)
-			dc_alloc(1, sizeof(struct pulse_data));
-#endif
-
+	curr = new pulse_data;
 	curr->thechar = ch;
 	curr->next = bard_list;
 	bard_list = curr;
@@ -473,12 +465,7 @@ void load_skillquests()
 
 	while ((i = fread_int(fl, 0, 1000)) != 0)
 	{
-#ifdef LEAK_CHECK
-		newsq = (struct skill_quest *) calloc(1, sizeof(struct skill_quest));
-#else
-		newsq = (struct skill_quest *)dc_alloc(1, sizeof(struct skill_quest));
-#endif
-
+		newsq = new skill_quest;
 		newsq->num = i;
 		if (find_sq(i)) {
 			char buf[512];
@@ -572,7 +559,7 @@ void boot_db(void)
 		perror( NEW_HELP_FILE);
 		abort();
 	}
-	CREATE(new_help_table, struct help_index_element_new, help_rec_count);
+	new_help_table = vector<help_index_element_new>(help_rec_count);
 	load_new_help(new_help_fl, 0, 0);
 	dc_fclose(new_help_fl);
 	// end new help files
@@ -1583,13 +1570,7 @@ int read_one_room(FILE *fl, int & room_nr)
 				// strip off the \n after the E
 				if (fread_char(fl) != '\n')
 					fseek(fl, -1, SEEK_CUR);
-#ifdef LEAK_CHECK
-				new_new_descr = (struct extra_descr_data *)
-				calloc(1, sizeof(struct extra_descr_data));
-#else
-				new_new_descr = (struct extra_descr_data *)
-						dc_alloc(1, sizeof(struct extra_descr_data));
-#endif
+				new_new_descr = new extra_descr_data;
 				new_new_descr->keyword = fread_string(fl, 0);
 				new_new_descr->description = fread_string(fl, 0);
 				new_new_descr->next = world[room_nr].ex_description;
@@ -1598,11 +1579,7 @@ int read_one_room(FILE *fl, int & room_nr)
 			else if (ch == 'B')
 					{
 				struct deny_data *deni;
-#ifdef LEAK_CHECK
-				deni = (struct deny_data *)calloc(1,sizeof(struct deny_data));
-#else
-				deni = (struct deny_data *)dc_alloc(1, sizeof(struct deny_data));
-#endif
+				deni = new deny_data;
 				deni->vnum = fread_int(fl, -1, LONG_MAX);
 				deni->next = world[room_nr].denied;
 				world[room_nr].denied = deni;
@@ -1631,14 +1608,14 @@ char * read_next_worldfile_name(FILE * flWorldIndex)
 	// Check for end of file marker
 	if (!strcmp(temp, "$"))
 			{
-		dc_free(temp);
-		return NULL;
+		delete[] temp;
+		return nullptr;
 	}
 
 	// Check for comments
 	if (!strncmp(temp, "*", 1))
 			{
-		dc_free(temp);
+		delete[] temp;
 		// Whee!  recursive loops!
 		temp = read_next_worldfile_name(flWorldIndex);
 	}
@@ -1857,14 +1834,14 @@ void free_world_from_memory()
 
 void free_mobs_from_memory()
 {
-	struct char_data * curr = NULL;
+	struct char_data * curr = nullptr;
 
 	for (int i = 0; i <= top_of_mobt; i++)
 			{
 		if ((curr = (struct char_data *)mob_index[i].item))
 		{
-			free_char(curr);
-			mob_index[i].item = NULL;
+			delete curr;
+			mob_index[i].item = nullptr;
 		}
 	}
 }
@@ -1886,11 +1863,7 @@ world_file_list_item * one_new_world_file_item(char * temp, long room_nr)
 {
 	world_file_list_item * curr = NULL;
 
-#ifdef LEAK_CHECK
-	curr = (world_file_list_item *) calloc(1, sizeof(world_file_list_item));
-#else
-	curr = (world_file_list_item *)dc_alloc(1, sizeof(world_file_list_item));
-#endif
+	curr = new world_file_list_item;
 
 	curr->filename = temp;
 	curr->firstnum = room_nr;
@@ -2026,13 +1999,7 @@ void setup_dir(FILE *fl, int room, int dir)
 		dc_free(world[room].dir_option[dir]);
 	}
 
-#ifdef LEAK_CHECK
-	world[room].dir_option[dir] = (struct room_direction_data *)
-	calloc(1, sizeof(struct room_direction_data));
-#else
-	world[room].dir_option[dir] = (struct room_direction_data *)
-			dc_alloc(1, sizeof(struct room_direction_data));
-#endif
+	world[room].dir_option[dir] = new room_direction_data;
 
 	world[room].dir_option[dir]->general_description =
 			fread_string(fl, 0);
@@ -2235,16 +2202,11 @@ void free_zones_from_memory()
 	for (int i = 0; i < MAX_ZONE; i++)
 			{
 		if (zone_table[i].name)
-			dc_free(zone_table[i].name);
-		if (zone_table[i].cmd)
 		{
-//      We're str_hsh'ing this now, so we don't need to worry about it
-//      for(int j = 0; zone_table[i].cmd[j].command != 'S'; j++)
-//        if(zone_table[i].cmd[j].comment)
-//          dc_free(zone_table[i].cmd[j].comment);
-			dc_free(zone_table[i].cmd);
-			// don't have to free zone_table[i].cmd.comment cause it's str_hsh'd
+			delete[] zone_table[i].name;
 		}
+
+		zone_table[i].cmd.clear();
 	}
 }
 #define ZCMD zone_table[zone].cmd[cmd_no]
@@ -2514,12 +2476,7 @@ void read_one_zone(FILE * fl, int zon)
 
 	} // for( ;; ) til end of zone commands
 
-#ifdef LEAK_CHECK
-	zone_table[zon].cmd = ((struct reset_com *) calloc(reset_top, sizeof(struct reset_com)));
-#else
-	zone_table[zon].cmd = ((struct reset_com *)dc_alloc(reset_top, sizeof(struct reset_com)));
-#endif
-
+	zone_table[zon].cmd.reserve(reset_top);
 	zone_table[zon].reset_total = reset_top;
 
 	// copy the temp into the memory
@@ -2588,7 +2545,7 @@ void boot_zones(void)
 		zon++;
 //    if (num > zon) zon = num;
 		dc_fclose(fl);
-		dc_free(temp);
+		delete[] temp;
 	}
 
 	log("Zone Boot done.", 0, LOG_MISC);
@@ -2614,11 +2571,7 @@ CHAR_DATA *read_mobile(int nr, FILE *fl)
 
 	i = nr;
 
-#ifdef LEAK_CHECK
-	mob = (CHAR_DATA *)calloc(1, sizeof(CHAR_DATA));
-#else
-	mob = (CHAR_DATA *)dc_alloc(1, sizeof(CHAR_DATA));
-#endif
+	mob = new char_data;
 
 	clear_char(mob);
 	GET_RACE(mob) = 0;
@@ -2634,11 +2587,7 @@ CHAR_DATA *read_mobile(int nr, FILE *fl)
 	mob->description = fread_string(fl, 1);
 	mob->title = 0;
 
-#ifdef LEAK_CHECK
-	mob->mobdata = (mob_data *) calloc(1, sizeof(mob_data));
-#else
-	mob->mobdata = (mob_data *)dc_alloc(1, sizeof(mob_data));
-#endif
+	mob->mobdata = new mob_data;
 	mob->mobdata->reset = NULL;
 	/* *** Numeric data *** */
 	j = 0;
@@ -3288,22 +3237,14 @@ CHAR_DATA *clone_mobile(int nr)
 	if (nr < 0)
 		return 0;
 
-#ifdef LEAK_CHECK
-	mob = (CHAR_DATA *)calloc(1, sizeof(CHAR_DATA));
-#else
-	mob = (CHAR_DATA *)dc_alloc(1, sizeof(CHAR_DATA));
-#endif
+	mob = new char_data;
 
 	clear_char(mob);
 	old = ((CHAR_DATA *)(mob_index[nr].item)); /* cast void pointer */
 
 	*mob = *old;
 
-#ifdef LEAK_CHECK
-	mob->mobdata = (mob_data *)calloc(1, sizeof(mob_data));
-#else
-	mob->mobdata = (mob_data *)dc_alloc(1, sizeof(mob_data));
-#endif
+	mob->mobdata = new mob_data;
 
 	memcpy(mob->mobdata, old->mobdata, sizeof(mob_data));
 
@@ -3380,12 +3321,7 @@ int create_blank_item(int nr)
 
 	// create
 
-#ifdef LEAK_CHECK
-	obj = (struct obj_data *)calloc(1, sizeof(struct obj_data));
-#else
-	obj = (struct obj_data *)dc_alloc(1, sizeof(struct obj_data));
-#endif
-
+	obj = new obj_data;
 	clear_object(obj);
 	obj->name = str_hsh("empty obj");
 	obj->short_description = str_hsh("An empty obj");
@@ -3476,11 +3412,7 @@ int create_blank_mobile(int nr)
 
 	// create
 
-#ifdef LEAK_CHECK
-	mob = (struct char_data *)calloc(1, sizeof(struct char_data));
-#else
-	mob = (struct char_data *)dc_alloc(1, sizeof(struct char_data));
-#endif
+	mob = new char_data;
 
 	clear_char(mob);
 	reset_char(mob);
@@ -3500,11 +3432,8 @@ int create_blank_mobile(int nr)
 	GET_RAW_CON(mob) = 11;
 	mob->height = 198;
 	mob->weight = 200;
-#ifdef LEAK_CHECK
-	mob->mobdata = (mob_data *) calloc(1, sizeof(mob_data));
-#else
-	mob->mobdata = (mob_data *)dc_alloc(1, sizeof(mob_data));
-#endif
+	mob->mobdata = new mob_data;
+
 	int i;
 	for (i = 0; i < ACT_MAX / ASIZE + 1; i++)
 		mob->mobdata->actflags[i] = 0;
@@ -3751,12 +3680,7 @@ struct obj_data *read_object(int nr, FILE *fl, bool zz)
 		return 0;
 	}
 
-#ifdef LEAK_CHECK
-	obj = (struct obj_data *)calloc(1, sizeof(struct obj_data));
-#else
-	obj = (struct obj_data *)dc_alloc(1, sizeof(struct obj_data));
-#endif
-
+	obj = new obj_data;
 	clear_object(obj);
 
 	/* *** string data *** */
@@ -3823,11 +3747,7 @@ struct obj_data *read_object(int nr, FILE *fl, bool zz)
 			case '\n':
 			break;
 		case 'E':
-			#ifdef LEAK_CHECK
-			new_new_descr = (struct extra_descr_data *) calloc(1, sizeof(struct extra_descr_data));
-#else
-			new_new_descr = (struct extra_descr_data *)dc_alloc(1, sizeof(struct extra_descr_data));
-#endif
+			new_new_descr = new extra_descr_data;
 			new_new_descr->keyword = fread_string(fl, 1);
 			new_new_descr->description = fread_string(fl, 1);
 			new_new_descr->next = obj->ex_description;
@@ -3956,11 +3876,7 @@ ifstream& operator>>(ifstream &in, obj_data *obj)
 			case '\n':
 			break;
 		case 'E':
-			#ifdef LEAK_CHECK
-			new_new_descr = (struct extra_descr_data *) calloc(1, sizeof(struct extra_descr_data));
-#else
-			new_new_descr = (struct extra_descr_data *)dc_alloc(1, sizeof(struct extra_descr_data));
-#endif
+			new_new_descr = new extra_descr_data;
 			new_new_descr->keyword = fread_string(in, 1);
 			new_new_descr->description = fread_string(in, 1);
 			new_new_descr->next = obj->ex_description;
@@ -4225,13 +4141,7 @@ struct obj_data *clone_object(int nr)
 	/* *** extra descriptions *** */
 	obj->ex_description = 0;
 	for (descr = old->ex_description; descr; descr = descr->next) {
-#ifdef LEAK_CHECK
-		new_new_descr = (struct extra_descr_data *)
-		calloc(1, sizeof(struct extra_descr_data));
-#else
-		new_new_descr = (struct extra_descr_data *)
-				dc_alloc(1, sizeof(struct extra_descr_data));
-#endif
+		new_new_descr = new extra_descr_data;
 		new_new_descr->keyword = str_hsh(descr->keyword);
 		new_new_descr->description = str_hsh(descr->description);
 		new_new_descr->next = obj->ex_description;
@@ -4407,7 +4317,7 @@ void reset_zone(int zone)
 		last_no++;
 
 	for (cmd_no = 0; cmd_no <= last_no; cmd_no++) {
-		if ((zone_table[zone].cmd + cmd_no) == 0) {
+		if (cmd_no >= zone_table[zone].cmd.size()) {
 			sprintf(buf,
 					"Trapped zone error, Command is null, zone: %d cmd_no: %d",
 					zone, cmd_no);
@@ -4853,23 +4763,15 @@ char *fread_string(FILE *fl, int hasher)
 				}
 			} else if (hasher) {
 				*pBufLast++ = '\0';
-#ifdef LEAK_CHECK
-				pAlloc = (char *)calloc(pBufLast - buf, sizeof(char));
-#else
-				pAlloc = (char *)dc_alloc(pBufLast - buf, sizeof(char));
-#endif
+				pAlloc = new char[pBufLast - buf];
 				memcpy(pAlloc, buf, pBufLast - buf);
 				temp = str_hsh(pAlloc);
-				dc_free(pAlloc);
+				delete[] pAlloc;
 				pAlloc = temp;
 			}
 			else {
 				*pBufLast++ = '\0';
-#ifdef LEAK_CHECK
-				pAlloc = (char *)calloc(pBufLast - buf, sizeof(char));
-#else
-				pAlloc = (char *)dc_alloc(pBufLast - buf, sizeof(char));
-#endif
+				pAlloc = new char[pBufLast - buf];
 				memcpy(pAlloc, buf, pBufLast - buf);
 			}
 			return pAlloc;
@@ -4923,23 +4825,15 @@ char *fread_word(FILE *fl, int hasher)
 			}
 			else if (hasher) {
 				*pBufLast++ = '\0';
-#ifdef LEAK_CHECK
-				pAlloc = (char *)calloc(pBufLast - buf, sizeof(char));
-#else
-				pAlloc = (char *)dc_alloc(pBufLast - buf, sizeof(char));
-#endif
+				pAlloc = new char[pBufLast - buf];
 				memcpy(pAlloc, buf, pBufLast - buf);
 				temp = str_hsh(pAlloc);
-				dc_free(pAlloc);
+				delete[] pAlloc;
 				pAlloc = temp;
 			}
 			else {
 				*pBufLast++ = '\0';
-#ifdef LEAK_CHECK
-				pAlloc = (char *)calloc(pBufLast - buf, sizeof(char));
-#else
-				pAlloc = (char *)dc_alloc(pBufLast - buf, sizeof(char));
-#endif
+				pAlloc = new char[(pBufLast - buf)*sizeof(char)];
 				memcpy(pAlloc, buf, pBufLast - buf);
 			}
 			return pAlloc;
@@ -5271,114 +5165,6 @@ char fread_char(FILE *fl)
 	return ch;
 }
 
-/* release memory allocated for a char struct */
-void free_char(CHAR_DATA *ch)
-{
-	int iWear;
-//  struct affected_type *af;
-	struct char_player_alias * x;
-	struct char_player_alias * next;
-	MPROG_ACT_LIST * currmprog;
-	auto &character_list = DC::instance().character_list;
-
-	character_list.erase(ch);
-
-	if (ch->tempVariable)
-	{
-		struct tempvariable *temp, *tmp;
-		for (temp = ch->tempVariable; temp; temp = tmp)
-				{
-			tmp = temp->next;
-			dc_free(temp->name);
-			dc_free(temp->data);
-			dc_free(temp);
-		}
-	}
-	SETBIT(ch->affected_by, AFF_IGNORE_WEAPON_WEIGHT); // so weapons stop falling off
-
-	for (iWear = 0; iWear < MAX_WEAR; iWear++) {
-		if (ch->equipment[iWear])
-			obj_to_char(unequip_char(ch, iWear, 1), ch);
-	}
-	while (ch->carrying)
-		extract_obj(ch->carrying);
-
-	if (!IS_NPC(ch)) {
-		if (ch->name)
-			dc_free(ch->name);
-		if (ch->short_desc)
-			dc_free(ch->short_desc);
-		if (ch->long_desc)
-			dc_free(ch->long_desc);
-		if (ch->description)
-			dc_free(ch->description);
-		if (ch->pcdata)
-		{
-			// these won't be here if you free an unloaded char
-			ch->pcdata->skillchange = 0;
-			if (ch->pcdata->last_site)
-				dc_free(ch->pcdata->last_site);
-			if (ch->pcdata->ignoring)
-				dc_free(ch->pcdata->ignoring);
-			if (ch->pcdata->poofin)
-				dc_free(ch->pcdata->poofin);
-			if (ch->pcdata->poofout)
-				dc_free(ch->pcdata->poofout);
-			if (ch->pcdata->prompt)
-				dc_free(ch->pcdata->prompt);
-			if (ch->pcdata->last_prompt)
-				dc_free(ch->pcdata->last_prompt);
-			if (ch->pcdata->last_tell)
-				dc_free(ch->pcdata->last_tell);
-			if (ch->pcdata->golem)
-				log("Error, golem not released properly", ANGEL, LOG_BUG);
-			if (ch->pcdata->joining)
-				dc_free(ch->pcdata->joining);
-			/* Free aliases... (I was to lazy to do before. ;) */
-			for (x = ch->pcdata->alias; x; x = next) {
-				next = x->next;
-				if (x->keyword)
-					dc_free(x->keyword);
-				if (x->command)
-					dc_free(x->command);
-				dc_free(x);
-			}
-
-			if (ch->pcdata->away_msgs)
-				delete ch->pcdata->away_msgs;
-
-			if (ch->pcdata->lastseen)
-				delete ch->pcdata->lastseen;
-
-			dc_free(ch->pcdata);
-		}
-	}
-	else {
-		remove_memory(ch, 'f');
-		remove_memory(ch, 'h');
-		while (ch->mobdata->mpact) {
-			currmprog = ch->mobdata->mpact->next;
-			if (ch->mobdata->mpact->buf)
-				dc_free(ch->mobdata->mpact->buf);
-			dc_free(ch->mobdata->mpact);
-			ch->mobdata->mpact = currmprog;
-		}
-		dc_free(ch->mobdata);
-	}
-
-	if (ch->title)
-		dc_free(ch->title);
-	ch->title = NULL;
-
-	remove_memory(ch, 't');
-
-// Since affect_remove updates the linked list itself, do it this way
-	while (ch->affected)
-		affect_remove(ch, ch->affected, SUPPRESS_ALL);
-
-	dc_free(ch);
-}
-
 /* release memory allocated for an obj struct */
 void free_obj(struct obj_data *obj)
 {
@@ -5537,7 +5323,12 @@ void reset_char(CHAR_DATA *ch)
  */
 void clear_char(CHAR_DATA *ch)
 {
-	memset((char *)ch, (char)'\0', (int)sizeof(CHAR_DATA));
+	if (ch == nullptr)
+	{
+		return;
+	}
+
+	*ch = char_data();
 
 	ch->in_room = NOWHERE;
 	ch->position = POSITION_STANDING;
@@ -5684,7 +5475,8 @@ void init_char(CHAR_DATA *ch)
 /* returns the real number of the room with given virt number */
 int real_room(int virt)
 {
-	if (virt < 0 || virt > top_of_world)
+	
+	if (virt < 0 || virt > top_of_world || top_of_world == 0)
 		return -1;
 	if (world_array[virt])
 		return virt;
@@ -5879,11 +5671,7 @@ void mprog_file_read(char *f, long i)
 			return;
 		default:
 			SET_BIT(mob_index[i].progtypes, type);
-#ifdef LEAK_CHECK
-			mprog = (MPROG_DATA *) calloc(1, sizeof(MPROG_DATA));
-#else
-			mprog = (MPROG_DATA *)dc_alloc(1, sizeof(MPROG_DATA));
-#endif
+			mprog = new mob_prog_data;
 			mprog->type = type;
 			mprog->arglist = fread_string(fp, 0);
 			mprog->comlist = fread_string(fp, 0);
@@ -5955,11 +5743,7 @@ void mprog_read_programs(FILE *fp, long i, bool zz)
 					SET_BIT(obj_index[i].progtypes, type);
 			}
 			if (!zz) {
-#ifdef LEAK_CHECK
-				mprog = (MPROG_DATA *) calloc(1, sizeof(MPROG_DATA));
-#else
-				mprog = (MPROG_DATA *)dc_alloc(1, sizeof(MPROG_DATA));
-#endif
+				mprog = new mob_prog_data;
 			} else
 				mprog = &lmprog;
 			mprog->type = type;
@@ -6247,3 +6031,55 @@ bool verify_item(struct obj_data **obj)
 	return TRUE;
 }
 
+zone_data::zone_data()
+{
+	name = nullptr; /* name of this zone                  */
+	lifespan = 0;	/* how long between resets (minutes)  */
+	age = 0;		/* current age of ths zone (minutes) */
+	top = 0;		/* upper limit for room vnums in this zone */
+	bottom_rnum = 0;
+	top_rnum = 0;
+	zone_flags = 0; /* flags for the entire zone eg: !teleport */
+
+	players = 0; // Number of PCs in the zone
+
+	filename = nullptr; /* name of the file this zone is kept in */
+
+	reset_mode = 0; /* conditions for reset (see below)   */
+
+	cmd = vector<reset_com>();	 /* command table for reset             */
+	reset_total = 0; /* total number item in currently allocated
+                             * reset_com array.  This is used in the 
+                             * do_zedit command so we don't have to realloc
+                             * every time we add/delete a command
+                             */
+
+	weather_info = weather_data();
+
+	num_mob_first_repop = 0; // number of mobs in this zone that were repoped in first repop
+	num_mob_on_repop = 0;	 // number of mobs in this zone that were repoped in last repop
+	death_counter = 0;		 // +- counter for how often mobs in zone are killed
+	counter_mod = 0;		 // how quickly mobs are taken off the death_counter
+	died_this_tick = 0;		 // number of mobs that have died in this zone this pop
+	clanowner = 0;
+	gold = 0;				   // gold (possibly the most descriptive comment of all time)
+	continent = 0;			   // what continent the zone belongs to
+	repops_without_deaths = 0; // Number of repops in a row with no deaths
+	repops_with_bonus = 0;	   // Number of repops where a 10% bonus occurred.
+}
+
+reset_com::reset_com()
+{
+    command = 0;
+    if_flag = 0;
+    arg1 = 0;
+    arg2 = 0;
+    arg3 = 0;
+    comment = nullptr;
+    active=0;
+    last = time_t();
+    lastPop = nullptr;
+    lastSuccess = time_t();
+    attempts = 0;
+    successes = 0;
+}
