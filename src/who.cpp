@@ -25,52 +25,9 @@
 
 clan_data * get_clan(struct char_data *);
 
-//#define GWHOBUFFERSIZE   (MAX_STRING_LENGTH*2)
-//char gWhoBuffer[GWHOBUFFERSIZE];
-
-// We now use a allocated pointer for the who buffer stuff.  It stays allocated, so
-// we're not repeatedly allocing it, and it grows as needed to fit all the data (like a CString)
-// That way we never have to worry about having a bunch of players on, and overflowing it.
-// -pir 2/20/01
-char * gWhoBuffer = NULL;
-long gWhoBufferCurSize = 0;
-long gWhoBufferMaxSize = 0;
- 
-void add_to_who(char * strAdd)
-{
-   long strLength = 0;
-
-   if(!strAdd)                                    return;
-   if(!(strLength = strlen(strAdd)))              return;
-
-   if((strLength + gWhoBufferCurSize) >= gWhoBufferMaxSize)  { // expand the buffer
-     gWhoBufferMaxSize += (strLength + 500);                   // expand by the size + 500
-#ifdef LEAK_CHECK
-     gWhoBuffer = (char *) realloc(gWhoBuffer, gWhoBufferMaxSize);
-     if(!gWhoBuffer) {
-       fprintf(stderr, "Unable to realloc in who.C add_to_who");
-       abort();
-     }
-#else       
-     gWhoBuffer = (char *) dc_realloc(gWhoBuffer, gWhoBufferMaxSize);
-#endif
-   }
-
-   // guaranteed to work, since we just allocated enough for it + 500
-   strcat(gWhoBuffer, strAdd);
-   gWhoBufferCurSize += strLength; // update current data size
-}
-
-void clear_who_buffer()
-{
-  if(gWhoBuffer)
-    *gWhoBuffer = '\0';     // kill the string
-  gWhoBufferCurSize = 0;  // update the size
-}
-
 int do_whogroup(struct char_data *ch, char *argument, int cmd)
 {
-
+   QString output;
    descriptor_data *d;
    char_data *k, *i;
    follow_type *f;
@@ -90,12 +47,10 @@ int do_whogroup(struct char_data *ch, char *argument, int cmd)
      "$7($4:$7)=======================================================================($4:$7)$R\n\r", ch);
 
    if(*target) {
-     sprintf(gWhoBuffer, "Searching for '$B%s$R'...\r\n", target);
-     send_to_char(gWhoBuffer, ch);
+     sprintf(tempbuffer, "Searching for '$B%s$R'...\r\n", target);
+     send_to_char(tempbuffer, ch);
    }
      
-   clear_who_buffer();
-
    for( d = descriptor_list; d; d = d->next ) {
       foundtarget = 0;
 
@@ -108,7 +63,7 @@ int do_whogroup(struct char_data *ch, char *argument, int cmd)
 //         continue;
           
       i = d->character;
-
+      
       // If I'm the leader of my group, process it
       if ((!i->master) && (IS_AFFECTED(i, AFF_GROUP))) 
       {
@@ -121,7 +76,7 @@ int do_whogroup(struct char_data *ch, char *argument, int cmd)
                              IS_MOB(k) ? 0 : k->pcdata->group_kills, 
                              IS_MOB(k) ? 0 : (k->pcdata->group_kills ?  
                                                (k->pcdata->grplvl/k->pcdata->group_kills) : 0));
-         add_to_who(tempbuffer);
+         output += QString(tempbuffer);
 
          // If we're searching, see if this is the target
          if(is_abbrev(target, GET_NAME(i)))
@@ -140,7 +95,7 @@ int do_whogroup(struct char_data *ch, char *argument, int cmd)
                  "   $B%-18s %-10s Anonymous                      $1($7Leader$1)$R \n\r", 
                  GET_NAME(k), race_info[(int)GET_RACE(k)].singular_name);
          }
-         add_to_who(tempbuffer);
+         output += QString(tempbuffer);
 
          // loop through my followers and process them
          for(f = k->followers; f; f = f->next) {
@@ -158,7 +113,7 @@ int do_whogroup(struct char_data *ch, char *argument, int cmd)
                      sprintf(tempbuffer,
                           "   %-18s %-10s Anonymous            \n\r",
                           GET_NAME(f->follower), race_info[(int)GET_RACE(f->follower)].singular_name);
-                  add_to_who(tempbuffer);
+                  output += QString(tempbuffer);
                }
          } // for f = k->followers
       } //  ((!i->master) && (IS_AFFECTED(i, AFF_GROUP)) )
@@ -170,26 +125,25 @@ int do_whogroup(struct char_data *ch, char *argument, int cmd)
       // -pir
       if(*target && !foundtarget)
       {
-         clear_who_buffer();
          foundgroup = 0; 
       }
       else if(*target && foundtarget)
       {
-         send_to_char(gWhoBuffer, ch);
-         clear_who_buffer();
+         send_to_char(output.toStdString(), ch);
       }
    }    // End for(d).
 
    if(0 == foundgroup) 
-     add_to_who("\n\rNo groups found.\n\r");
+     output += QString("\n\rNo groups found.\n\r");
 
    // page it to the player.  the 1 tells page_string to make it's own copy of the data
-   page_string(ch->desc, gWhoBuffer, 1);
+   page_string(ch->desc, output.toStdString().c_str(), 1);
    return eSUCCESS;
 }
 
 int do_whosolo(struct char_data *ch, char *argument, int cmd)
 {
+   QString output;
    descriptor_data *d;
    char_data *i;
    char tempbuffer[800];
@@ -203,8 +157,6 @@ int do_whosolo(struct char_data *ch, char *argument, int cmd)
     "$7|$5/$7|                      $5Current SOLO Adventurers                         $7|$5/$7|\n\r"
     "$7($4:$7)=======================================================================($4:$7)$R\n\r"
     "   $BName            Race      Class        Level  PKs Deaths Avg-vict-level$R\n\r", ch);
-
-   clear_who_buffer();
 
    for(d = descriptor_list; d; d = d->next) {
       foundtarget = FALSE;
@@ -241,17 +193,18 @@ int do_whosolo(struct char_data *ch, char *argument, int cmd)
                  IS_MOB(i) ? 0 : (i->pcdata->totalpkills ? 
                                   (i->pcdata->totalpkillslv/i->pcdata->totalpkills) : 0)
 	        );
-            add_to_who(tempbuffer);
+            output += QString(tempbuffer);
          } // if is affected by group
    } // End For Loop.
 
    // page it to the player.  the 1 tells page_string to make it's own copy of the data
-   page_string(ch->desc, gWhoBuffer, 1);
+   page_string(ch->desc, output.toStdString().c_str(), 1);
    return eSUCCESS;
 }
 
 int do_who(struct char_data *ch, char *argument, int cmd)
 {
+    QString output;
     struct descriptor_data *d;
     struct char_data *i;
     clan_data * clan;
@@ -391,9 +344,7 @@ int do_who(struct char_data *ch, char *argument, int cmd)
     send_to_char("[$4:$R]===================================[$4:$R]\n\r"
 		 "|$5/$R|      $BDenizens of Dark Castle$R      |$5/$R|\n\r"
 		 "[$4:$R]===================================[$4:$R]\n\r\n\r", ch);
-    
-    clear_who_buffer();
-    
+       
     for (d = descriptor_list; d; d = d->next) {
       // we have an invalid match arg, so nothing is going to match
       if (nomatch) {
@@ -560,16 +511,16 @@ int do_who(struct char_data *ch, char *argument, int cmd)
       if (addimmbuf) {
 	strcat(immbuf, buf);
       } else {
-	add_to_who(buf);
+	output += QString(buf);
       }
     }
     
     if (numPC && numImmort) {
-      add_to_who("\n\r");
+      output += QString("\n\r");
     }
     
     if (numImmort) {
-      add_to_who(immbuf);
+      output += QString(immbuf);
     }
     
     if ((numPC + numImmort) > max_who) {
@@ -582,10 +533,10 @@ int do_who(struct char_data *ch, char *argument, int cmd)
 	    "    (Max this boot is %d)\n\r",
 	    numPC, numImmort, max_who);
     
-    add_to_who(buf);
+    output += QString(buf);
     
     // page it to the player.  the 1 tells page_string to make it's own copy of the data
-    page_string(ch->desc, gWhoBuffer, 1);
+    page_string(ch->desc, output.toStdString().c_str(), 1);
     
     return eSUCCESS;
 }
