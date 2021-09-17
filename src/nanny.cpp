@@ -49,6 +49,7 @@ extern "C" {
 #include "handler.h"
 #include "vault.h"
 #include "const.h"
+#include "guild.h"
 
 #define STATE(d)    ((d)->connected)
 
@@ -79,21 +80,10 @@ extern OBJ_DATA *object_list;
 extern struct index_data *obj_index;
 extern CWorld world;
 extern CVoteData *DCVote;
-            
-extern int learn_skill(char_data * ch, int skill, int amount, int maximum);
 
-
-#ifndef WIN32
 extern "C" {
   char *crypt(const char *key, const char *salt);
 }
-#else
- 
-char *crypt(const char *key, const char *salt)
-{
-	return((char *)key);
-}
-#endif
 
 
 int isbanned(char *hostname);
@@ -108,6 +98,7 @@ bool on_forbidden_name_list(char *name);
 void check_hw(char_data *ch);
 
 char *str_str(char *first, char *second);
+
 
 int is_race_eligible(CHAR_DATA *ch, int race)
 {
@@ -301,337 +292,282 @@ OBJ_DATA *clan_altar(char_data *ch)
   return NULL;
 }
 
-// stuff that has to be done on both a normal login, as well as on 
+// stuff that has to be done on both a normal login, as well as on
 // a hotboot login
-void do_on_login_stuff(char_data * ch)
+void do_on_login_stuff(char_data *ch)
 {
-    void add_to_bard_list(char_data * ch);
+   void add_to_bard_list(char_data * ch);
 
-    add_to_bard_list(ch);
-    ch->pcdata->bad_pw_tries = 0;
-    redo_hitpoints (ch);
-    redo_mana (ch);
-    redo_ki(ch);
-    do_inate_race_abilities(ch);
-    check_hw(ch);
-    /* Add a character's skill item's to the list. */
-    ch->pcdata->skillchange = NULL;
-    ch->spellcraftglyph = 0;
-    for (int i = 0;i < MAX_WEAR;i++)
-    {
-       if (!ch->equipment[i]) continue;
-       for (int a =0; a < ch->equipment[i]->num_affects; a++)
-       {
-	 if (ch->equipment[i]->affected[a].location >= 1000)
-	 {
-		ch->equipment[i]->next_skill = ch->pcdata->skillchange;
-		ch->pcdata->skillchange = ch->equipment[i];
-		ch->equipment[i]->next_skill = NULL;
-	  }
-       }
-    }
-    // add character base saves to saving throws
-    for(int i = 0; i <= SAVE_TYPE_MAX; i++) {
-      ch->saves[i] += GET_LEVEL(ch)/4;
-      ch->saves[i] += ch->pcdata->saves_mods[i];
-    }
-
-    if(GET_TITLE(ch) == NULL) {
-       GET_TITLE(ch) = str_dup("is a virgin.");
-    }
-    
-    if (GET_CLASS(ch) == CLASS_MONK)
-    {
-       GET_AC(ch) -= (GET_LEVEL(ch) * 2);
-    }
-    GET_AC(ch) -= has_skill(ch, SKILL_COMBAT_MASTERY)/2;
-
-    GET_AC(ch) -= GET_AC_METAS(ch);
-
-    if (affected_by_spell(ch,INTERNAL_SLEEPING))
-    {
-      affect_from_char(ch,INTERNAL_SLEEPING);
-    }
-    /* Set ISR's cause they're not saved...   */
-    isr_set(ch);
-    ch->altar = clan_altar(ch);    
-    
-    if(!IS_MOB(ch) && GET_LEVEL(ch) >= IMMORTAL) {
-       ch->pcdata->holyLite   = TRUE;
-       GET_COND(ch, THIRST) = -1;
-       GET_COND(ch, FULL) = -1;
-    }
-    add_totem_stats(ch);
-    if (GET_LEVEL(ch) < 5 && GET_AGE(ch) < 21) 	 char_to_room( ch, real_room(200));
-    else if(ch->in_room >= 2)                 char_to_room( ch, ch->in_room );
-    else if(GET_LEVEL(ch) >=  IMMORTAL)  char_to_room( ch, real_room(17) );
-    else                                 char_to_room( ch, real_room(START_ROOM) );
-
-    ch->curLeadBonus = 0;
-    ch->changeLeadBonus = FALSE;
-    ch->cRooms = 0;
-    REMBIT(ch->affected_by, AFF_BLACKJACK_ALERT);
-    for(int i=0;i<QUEST_MAX;i++) {
-       ch->pcdata->quest_current[i] = -1;
-       ch->pcdata->quest_current_ticksleft[i] = 0;
-    }
-    struct vault_data *vault = has_vault(GET_NAME(ch));
-    if(ch->pcdata->time.logon < 1172204700) {
-      if(vault) {
-        int adder = GET_LEVEL(ch) - 50;
-	if (adder < 0) adder = 0; // Heh :P
-        vault->size += adder * 10;
-        if(vault->size < 100) vault->size = 100;
-        save_vault(vault->owner);
+   add_to_bard_list(ch);
+   ch->pcdata->bad_pw_tries = 0;
+   redo_hitpoints(ch);
+   redo_mana(ch);
+   redo_ki(ch);
+   do_inate_race_abilities(ch);
+   check_hw(ch);
+   /* Add a character's skill item's to the list. */
+   ch->pcdata->skillchange = NULL;
+   ch->spellcraftglyph = 0;
+   for (int i = 0; i < MAX_WEAR; i++)
+   {
+      if (!ch->equipment[i])
+         continue;
+      for (int a = 0; a < ch->equipment[i]->num_affects; a++)
+      {
+         if (ch->equipment[i]->affected[a].location >= 1000)
+         {
+            ch->equipment[i]->next_skill = ch->pcdata->skillchange;
+            ch->pcdata->skillchange = ch->equipment[i];
+            ch->equipment[i]->next_skill = NULL;
+         }
       }
-    }
+   }
+   // add character base saves to saving throws
+   for (int i = 0; i <= SAVE_TYPE_MAX; i++)
+   {
+      ch->saves[i] += GET_LEVEL(ch) / 4;
+      ch->saves[i] += ch->pcdata->saves_mods[i];
+   }
 
-    if(vault) {
-      if (vault->size < (unsigned)(GET_LEVEL(ch) * 10)) {
-	logf(IMMORTAL, LOG_BUG, "%s's vault reset from %d to %d during login.", GET_NAME(ch), vault->size, GET_LEVEL(ch) * 10);
-	vault->size = GET_LEVEL(ch) * 10;
+   if (GET_TITLE(ch) == NULL)
+   {
+      GET_TITLE(ch) = str_dup("is a virgin.");
+   }
+
+   if (GET_CLASS(ch) == CLASS_MONK)
+   {
+      GET_AC(ch) -= (GET_LEVEL(ch) * 2);
+   }
+   GET_AC(ch) -= has_skill(ch, SKILL_COMBAT_MASTERY) / 2;
+
+   GET_AC(ch) -= GET_AC_METAS(ch);
+
+   if (affected_by_spell(ch, INTERNAL_SLEEPING))
+   {
+      affect_from_char(ch, INTERNAL_SLEEPING);
+   }
+   /* Set ISR's cause they're not saved...   */
+   isr_set(ch);
+   ch->altar = clan_altar(ch);
+
+   if (!IS_MOB(ch) && GET_LEVEL(ch) >= IMMORTAL)
+   {
+      ch->pcdata->holyLite = TRUE;
+      GET_COND(ch, THIRST) = -1;
+      GET_COND(ch, FULL) = -1;
+   }
+   add_totem_stats(ch);
+   if (GET_LEVEL(ch) < 5 && GET_AGE(ch) < 21)
+      char_to_room(ch, real_room(200));
+   else if (ch->in_room >= 2)
+      char_to_room(ch, ch->in_room);
+   else if (GET_LEVEL(ch) >= IMMORTAL)
+      char_to_room(ch, real_room(17));
+   else
+      char_to_room(ch, real_room(START_ROOM));
+
+   ch->curLeadBonus = 0;
+   ch->changeLeadBonus = FALSE;
+   ch->cRooms = 0;
+   REMBIT(ch->affected_by, AFF_BLACKJACK_ALERT);
+   for (int i = 0; i < QUEST_MAX; i++)
+   {
+      ch->pcdata->quest_current[i] = -1;
+      ch->pcdata->quest_current_ticksleft[i] = 0;
+   }
+   struct vault_data *vault = has_vault(GET_NAME(ch));
+   if (ch->pcdata->time.logon < 1172204700)
+   {
+      if (vault)
+      {
+         int adder = GET_LEVEL(ch) - 50;
+         if (adder < 0)
+            adder = 0; // Heh :P
+         vault->size += adder * 10;
+         if (vault->size < 100)
+            vault->size = 100;
+         save_vault(vault->owner);
+      }
+   }
+
+   if (vault)
+   {
+      if (vault->size < (unsigned)(GET_LEVEL(ch) * 10))
+      {
+         logf(IMMORTAL, LOG_BUG, "%s's vault reset from %d to %d during login.", GET_NAME(ch), vault->size, GET_LEVEL(ch) * 10);
+         vault->size = GET_LEVEL(ch) * 10;
       }
 
       save_vault(vault->owner);
-    }
-    
-    if(ch->pcdata->time.logon < 1151506181) {
-       ch->pcdata->quest_points = 0;
-       for(int i=0;i<QUEST_CANCEL;i++)
-          ch->pcdata->quest_cancel[i] = 0;
-       for(int i=0;i<QUEST_TOTAL/ASIZE;i++)
-          ch->pcdata->quest_complete[i] = 0;
-    }
-    if (ch->pcdata->time.logon < 1151504181)
-       SET_BIT(ch->misc, CHANNEL_TELL);
+   }
 
-    if (ch->pcdata->time.logon < 1171757100) {
-      switch (GET_CLASS(ch)) {
-        case CLASS_MAGE: GET_AC(ch) += 100; break;
-        case CLASS_DRUID: GET_AC(ch) += 85; break;
-        case CLASS_CLERIC: GET_AC(ch) += 70; break;
-        case CLASS_ANTI_PAL: GET_AC(ch) += 55; break;
-        case CLASS_THIEF: GET_AC(ch) += 40; break;
-        case CLASS_BARD: GET_AC(ch) += 25; break;
-        case CLASS_BARBARIAN: GET_AC(ch) += 10; break;
-        case CLASS_RANGER: GET_AC(ch) -= 5; break;
-        case CLASS_PALADIN: GET_AC(ch) -= 20; break;
-        case CLASS_WARRIOR: GET_AC(ch) -= 35; break;
-        case CLASS_MONK: GET_AC(ch) -= 50; break;
-        default: break;
+   if (ch->pcdata->time.logon < 1151506181)
+   {
+      ch->pcdata->quest_points = 0;
+      for (int i = 0; i < QUEST_CANCEL; i++)
+         ch->pcdata->quest_cancel[i] = 0;
+      for (int i = 0; i < QUEST_TOTAL / ASIZE; i++)
+         ch->pcdata->quest_complete[i] = 0;
+   }
+   if (ch->pcdata->time.logon < 1151504181)
+      SET_BIT(ch->misc, CHANNEL_TELL);
+
+   if (ch->pcdata->time.logon < 1171757100)
+   {
+      switch (GET_CLASS(ch))
+      {
+      case CLASS_MAGE:
+         GET_AC(ch) += 100;
+         break;
+      case CLASS_DRUID:
+         GET_AC(ch) += 85;
+         break;
+      case CLASS_CLERIC:
+         GET_AC(ch) += 70;
+         break;
+      case CLASS_ANTI_PAL:
+         GET_AC(ch) += 55;
+         break;
+      case CLASS_THIEF:
+         GET_AC(ch) += 40;
+         break;
+      case CLASS_BARD:
+         GET_AC(ch) += 25;
+         break;
+      case CLASS_BARBARIAN:
+         GET_AC(ch) += 10;
+         break;
+      case CLASS_RANGER:
+         GET_AC(ch) -= 5;
+         break;
+      case CLASS_PALADIN:
+         GET_AC(ch) -= 20;
+         break;
+      case CLASS_WARRIOR:
+         GET_AC(ch) -= 35;
+         break;
+      case CLASS_MONK:
+         GET_AC(ch) -= 50;
+         break;
+      default:
+         break;
       }
-    }
+   }
 
-    if (GET_CLASS(ch) == CLASS_MONK && GET_LEVEL(ch) > 10)
-    {
-	  struct char_skill_data * curr = ch->skills;
-	  while(curr) {
-	   if (curr->skillnum == SKILL_SHIELDBLOCK)
-		curr->skillnum = SKILL_DEFENSE;
-	   curr = curr->next;
-          }
-    }
-    if (GET_CLASS(ch) == CLASS_PALADIN && GET_LEVEL(ch) >= 41)
-    {
-	  struct char_skill_data * curr = ch->skills;
-	  while(curr) {
-	   if (curr->skillnum == SPELL_ARMOR)
-		curr->skillnum = SPELL_AEGIS;
-           if (curr->skillnum == SPELL_POWER_HARM)
-              curr->skillnum = SPELL_DIVINE_FURY;
-	   curr = curr->next;
-          }
-    }
-    if (GET_CLASS(ch) == CLASS_RANGER && GET_LEVEL(ch) > 9)
-    {
-          struct char_skill_data * curr = ch->skills;
-          while(curr) {
-           if (curr->skillnum == SKILL_SHIELDBLOCK) {
-              curr->skillnum = SKILL_DODGE;
-              curr->learned = MIN(curr->learned, 50);
-           }
-           curr = curr->next;
-          }
-    }
-    if (GET_CLASS(ch) == CLASS_ANTI_PAL && GET_LEVEL(ch) >= 44)
-    {
-	  struct char_skill_data * curr = ch->skills;
-	  while(curr) {
-	   if (curr->skillnum == SPELL_STONE_SKIN)
-		curr->skillnum = SPELL_U_AEGIS;
-	   curr = curr->next;
-          }
-    }
-    if (GET_CLASS(ch) == CLASS_BARD && GET_LEVEL(ch) >= 30)
-    {
-	  struct char_skill_data * curr = ch->skills;
-	  while(curr) {
-	   if (curr->skillnum == SKILL_BLUDGEON_WEAPONS)
-		curr->skillnum = SKILL_STINGING_WEAPONS;
-	   curr = curr->next;
-          }
-    }
-    if (GET_CLASS(ch) == CLASS_CLERIC && GET_LEVEL(ch) >= 42)
-    {
-	  struct char_skill_data * curr = ch->skills, *prev = NULL;
-	  while(curr) {
-	   if (curr->skillnum == SPELL_RESIST_FIRE)
-		curr->skillnum = SPELL_RESIST_MAGIC;
-	   if (curr->skillnum == SPELL_RESIST_COLD) {
-  	     if (prev) prev->next = curr->next;
-	     else ch->skills = curr->next;
-	     struct char_skill_data *o = curr;
-	     curr = curr->next;
-	     dc_free(o); // so little memory, why do I even bother.
-	     continue;
-	   }
-	   prev = curr;
-	   curr = curr->next;
-          }
-    }
-    if (GET_CLASS(ch) == CLASS_MAGIC_USER)
-    {
-	  struct char_skill_data * curr = ch->skills, *prev = NULL;
-	  while(curr) {
-	   if (curr->skillnum == SPELL_SLEEP) {
-  	     if (prev) prev->next = curr->next;
-	     else ch->skills = curr->next;
-	     struct char_skill_data *o = curr;
-	     curr = curr->next;
-	     dc_free(o); // so little memory, why do I even bother.
-	     continue;
-	   }
-	   if (curr->skillnum == SPELL_RESIST_COLD) {
-  	     if (prev) prev->next = curr->next;
-	     else ch->skills = curr->next;
-	     struct char_skill_data *o = curr;
-	     curr = curr->next;
-	     dc_free(o); // so little memory, why do I even bother.
-	     continue;
-	   }
-	   if (curr->skillnum == SPELL_KNOW_ALIGNMENT) {
-  	     if (prev) prev->next = curr->next;
-	     else ch->skills = curr->next;
-	     struct char_skill_data *o = curr;
-	     curr = curr->next;
-	     dc_free(o); // so little memory, why do I even bother.
-	     continue;
-	   }
-	   prev = curr;
-	   curr = curr->next;
-          }
-    }
-    // Remove pick if they're no longer allowed to have it.
-     if (GET_CLASS(ch) == CLASS_THIEF && GET_LEVEL(ch) < 22 &&
-		has_skill(ch, SKILL_PICK_LOCK))
-     {
-	  struct char_skill_data * curr = ch->skills, *prev = NULL;
-	  while(curr)
-	    if(curr->skillnum == SKILL_PICK_LOCK)
-    	    {
-		if (prev) prev->next = curr->next;
-		else ch->skills = curr->next;
-		FREE(curr);
-		break;
-	    }
-	    else { prev = curr; curr = curr->next; }
-	
-     }
-     if (GET_CLASS(ch) == CLASS_BARD && has_skill(ch, SKILL_HIDE))
-     {
-	  struct char_skill_data * curr = ch->skills, *prev = NULL;
-	  while(curr)
-	    if(curr->skillnum == SKILL_HIDE)
-    	    {
-		if (prev) prev->next = curr->next;
-		else ch->skills = curr->next;
-		FREE(curr);
-		break;
-	    }
-	    else { prev = curr; curr = curr->next; }
+   if (GET_CLASS(ch) == CLASS_MONK && GET_LEVEL(ch) > 10)
+   {
+      ch->swapSkills(SKILL_SHIELDBLOCK, SKILL_DEFENSE);
+   }
 
-     }
+   if (GET_CLASS(ch) == CLASS_PALADIN && GET_LEVEL(ch) >= 41)
+   {
+      ch->swapSkills(SPELL_ARMOR, SPELL_AEGIS);
+      ch->swapSkills(SPELL_POWER_HARM, SPELL_DIVINE_FURY);
+   }
+
+   if (GET_CLASS(ch) == CLASS_RANGER && GET_LEVEL(ch) > 9)
+   {
+      ch->swapSkills(SKILL_SHIELDBLOCK, SKILL_DODGE);
+      ch_skills_t::iterator i = ch->skills.find(SKILL_DODGE);
+      if (i != ch->skills.end())
+      {
+         i->second.learned = MIN(i->second.learned, 50);
+      }
+   }
+
+   if (GET_CLASS(ch) == CLASS_ANTI_PAL && GET_LEVEL(ch) >= 44)
+   {
+      ch->swapSkills(SPELL_STONE_SKIN, SPELL_U_AEGIS);
+   }
+
+   if (GET_CLASS(ch) == CLASS_BARD && GET_LEVEL(ch) >= 30)
+   {
+      ch->swapSkills(SKILL_BLUDGEON_WEAPONS, SKILL_STINGING_WEAPONS);
+   }
+
+   if (GET_CLASS(ch) == CLASS_CLERIC && GET_LEVEL(ch) >= 42)
+   {
+      ch->swapSkills(SPELL_RESIST_FIRE, SPELL_RESIST_MAGIC);
+      ch->removeSkill(SPELL_RESIST_COLD);
+   }
+
+   if (GET_CLASS(ch) == CLASS_MAGIC_USER)
+   {
+      ch->removeSkill(SPELL_SLEEP);
+      ch->removeSkill(SPELL_RESIST_COLD);
+      ch->removeSkill(SPELL_KNOW_ALIGNMENT);
+   }
+
+   // Remove pick if they're no longer allowed to have it.
+   if (GET_CLASS(ch) == CLASS_THIEF && GET_LEVEL(ch) < 22)
+   {
+      ch->removeSkill(SKILL_PICK_LOCK);
+   }
+
+   if (GET_CLASS(ch) == CLASS_BARD)
+   {
+      ch->removeSkill(SKILL_HIDE);
+   }
+
    // Remove listsongs
-     if (GET_CLASS(ch) == CLASS_BARD && has_skill(ch, SKILL_SONG_LIST_SONGS)) {
-          struct char_skill_data * curr = ch->skills, *prev = NULL;
-          while(curr)
-            if(curr->skillnum == SKILL_SONG_LIST_SONGS) {
-                if (prev) prev->next = curr->next;
-                else ch->skills = curr->next;
-                FREE(curr);
-                break;
-            } else { prev = curr; curr = curr->next; }
-      }
-    // Replace shieldblock on barbs
-     if (GET_CLASS(ch) == CLASS_BARBARIAN && has_skill(ch, SKILL_SHIELDBLOCK)) {
-          struct char_skill_data * curr = ch->skills;
-          while(curr)
-            if(curr->skillnum == SKILL_SHIELDBLOCK) {
-		curr->skillnum = SKILL_DODGE;
-                break;
-            } else { curr = curr->next; }
-      }
-    // Replace eagleeye on druids
-     if (GET_CLASS(ch) == CLASS_DRUID && has_skill(ch, SPELL_EAGLE_EYE)) {
-          struct char_skill_data * curr = ch->skills;
-          while(curr)
-            if(curr->skillnum == SPELL_EAGLE_EYE) {
-		curr->skillnum = SPELL_GHOSTWALK;
-                break;
-            } else { curr = curr->next; }
-      }
-    // Replace crushing on bards
-     if (GET_CLASS(ch) == CLASS_BARD && has_skill(ch, SKILL_CRUSHING_WEAPONS)) {
-          struct char_skill_data * curr = ch->skills;
-          while(curr)
-            if(curr->skillnum == SKILL_CRUSHING_WEAPONS) {
-		curr->skillnum = SKILL_WHIPPING_WEAPONS;
-                break;
-            } else { curr = curr->next; }
-      }
-    // Replace crushing on thieves
-     if (GET_CLASS(ch) == CLASS_THIEF && has_skill(ch, SKILL_CRUSHING_WEAPONS)) {
-          struct char_skill_data * curr = ch->skills;
-          while(curr)
-            if(curr->skillnum == SKILL_CRUSHING_WEAPONS) {
-		curr->skillnum = SKILL_STINGING_WEAPONS;
-                break;
-            } else { curr = curr->next; }
-      }
-    // Replace firestorm on antis
-     if (GET_CLASS(ch) == CLASS_ANTI_PAL && has_skill(ch, SPELL_FIRESTORM)) {
-          struct char_skill_data * curr = ch->skills;
-          while(curr)
-            if(curr->skillnum == SPELL_FIRESTORM) {
-		curr->skillnum = SPELL_LIFE_LEECH;
-                break;
-            } else { curr = curr->next; }
+   if (GET_CLASS(ch) == CLASS_BARD)
+   {
+      ch->removeSkill(SKILL_SONG_LIST_SONGS);
+   }
+
+   // Replace shieldblock on barbs
+   if (GET_CLASS(ch) == CLASS_BARBARIAN)
+   {
+      ch->swapSkills(SKILL_SHIELDBLOCK, SKILL_DODGE);
+   }
+
+   // Replace eagleeye on druids
+   if (GET_CLASS(ch) == CLASS_DRUID)
+   {
+      ch->swapSkills(SPELL_EAGLE_EYE, SPELL_GHOSTWALK);
+   }
+
+   // Replace crushing on bards
+   if (GET_CLASS(ch) == CLASS_BARD)
+   {
+      ch->swapSkills(SKILL_CRUSHING_WEAPONS, SKILL_WHIPPING_WEAPONS);
+   }
+
+   // Replace crushing on thieves
+   if (GET_CLASS(ch) == CLASS_THIEF)
+      {
+         ch->swapSkills(SKILL_CRUSHING_WEAPONS, SKILL_STINGING_WEAPONS);
       }
 
-      
+   // Replace firestorm on antis
+   if (GET_CLASS(ch) == CLASS_ANTI_PAL)
+      {
+         ch->swapSkills(SPELL_FIRESTORM, SPELL_LIFE_LEECH);
+      }
 
-          struct char_skill_data *  curr = ch->skills; 
-	  struct char_skill_data *  prev = NULL;
-	  int search_skills2(int arg, class_skill_defines * list_skills);
-	  struct class_skill_defines * get_skill_list(char_data * ch);
- 	  struct class_skill_defines *a = get_skill_list(ch);
+   int search_skills2(int arg, class_skill_defines *list_skills);
+   struct class_skill_defines *get_skill_list(char_data * ch);
+   struct class_skill_defines *a = get_skill_list(ch);
 
-	while (curr) {
-		if (curr->skillnum < 600 && search_skills2(curr->skillnum,a)==-1 && search_skills2(curr->skillnum, g_skills) == -1 && curr->skillnum != 385) {
-			printf("Removing skill %d from %s\n", curr->skillnum, GET_NAME(ch));
-			struct char_skill_data *a = curr->next;
-			if (prev)
-				prev->next = curr->next;
-			else
-				ch->skills = curr->next;
-
-			FREE(curr);
-			curr = a;
-		} else {
-			prev = curr;
-			curr = curr->next;
-		}
-	}
+   queue<int16> copy = ch->skillsSaveLoadOrder;
+   while (copy.size() > 0)
+   {
+      int16 skillnum = copy.front();
+      ch_skills_t::iterator i = ch->skills.find(skillnum);
+      if (i != ch->skills.end())
+      {
+         char_skill_data skill = i->second;
+         if (skillnum < 600 &&
+            search_skills2(skillnum, a) == -1 &&
+            search_skills2(skillnum, g_skills) == -1 &&
+            skillnum != 385)
+         {
+            printf("Removing skill %d from %s\n", skillnum, GET_NAME(ch));
+            ch->skills.erase(i);
+         }
+      }
+      copy.pop();
+   }
    
    barb_magic_resist(ch, 0, has_skill(ch, SKILL_MAGIC_RESIST));
   /* meta reimbursement */
@@ -1065,11 +1001,7 @@ void nanny(struct descriptor_data *d, char *arg)
          STATE(d) = CON_GET_NEW_PASSWORD;
          // at this point, pcdata hasn't yet been created.  So we're going to go ahead and
          // allocate it since a new character is obviously a PC
-#ifdef LEAK_CHECK
-         ch->pcdata = (pc_data *)calloc(1, sizeof(pc_data));
-#else
-         ch->pcdata = (pc_data *)dc_alloc(1, sizeof(pc_data));
-#endif
+         ch->pcdata = new pc_data;
          break;
          
       case 'n': case 'N':
@@ -1129,11 +1061,7 @@ void nanny(struct descriptor_data *d, char *arg)
          return;
       }
 
-#ifdef LEAK_CHECK
-      ch->desc->stats = (struct stat_shit *)calloc(1, sizeof(struct stat_shit));
-#else
-      ch->desc->stats = (struct stat_shit *)dc_alloc(1, sizeof(struct stat_shit));
-#endif
+      ch->desc->stats = new stat_shit;
       
       STATE(d) = CON_CHOOSE_STATS;
       *arg = '\0';
@@ -1152,8 +1080,8 @@ void nanny(struct descriptor_data *d, char *arg)
             GET_RAW_WIS(ch) = ch->desc->stats->wis[y-1];
             GET_RAW_DEX(ch) = ch->desc->stats->dex[y-1];
             GET_RAW_CON(ch) = ch->desc->stats->con[y-1];
-            dc_free(ch->desc->stats);
-            ch->desc->stats = NULL;
+            delete ch->desc->stats;
+            ch->desc->stats = nullptr;
             SEND_TO_Q("\n\rChoose a race(races you can select are marked with a *).\n\r", d );
             sprintf(buf, "  %c1: Human\n\r  %c2: Elf\n\r  %c3: Dwarf\n\r"
                "  %c4: Hobbit\n\r  %c5: Pixie\n\r  %c6: Ogre\n\r"
@@ -1431,8 +1359,8 @@ is_race_eligible(ch,7)?'*':' ',is_race_eligible(ch,8)?'*':' ',is_race_eligible(c
           if (GET_LEVEL(ch) > 0)
           {
              strcpy(tmp_name, GET_NAME(ch));
-             free_char(d->character);
-             d->character = 0;
+             delete d->character;
+             d->character = nullptr;
              load_char_obj(d, tmp_name);
              ch = d->character;
              if (!ch)
@@ -1499,13 +1427,9 @@ is_race_eligible(ch,7)?'*':' ',is_race_eligible(ch,8)?'*':' ',is_race_eligible(c
           if(ch->description) {
              SEND_TO_Q("Old description:\n\r", d);
              SEND_TO_Q(ch->description, d);
-             dc_free(ch->description);
+             delete ch->description;
           }
-#ifdef LEAK_CHECK
-          ch->description = (char *)calloc(540, sizeof(char));
-#else
-          ch->description = (char *)dc_alloc(540, sizeof(char));
-#endif
+          ch->description = new char[540];
 
  // TODO - what happens if I get to this point, then disconnect, and reconnect?  memory leak?
 
@@ -1619,8 +1543,8 @@ is_race_eligible(ch,7)?'*':' ',is_race_eligible(ch,8)?'*':' ',is_race_eligible(c
           // this prevents a dupe bug
           strcpy(blah1, GET_NAME(ch));
           strcpy(blah2, ch->pcdata->pwd);
-          free_char(d->character);
-          d->character = 0;
+          delete d->character;
+          d->character = nullptr;
           load_char_obj(d, blah1);
           ch = d->character;
           strcpy(ch->pcdata->pwd, blah2);
@@ -1724,7 +1648,7 @@ bool check_reconnect( struct descriptor_data *d, char *name, bool fReconnect )
 //      else {
 
        if(fReconnect == TRUE) {
-         free_char( d->character );
+         delete d->character;
          d->character            = tmp_ch;
          tmp_ch->desc            = d;
          tmp_ch->timer  = 0;
@@ -1777,8 +1701,8 @@ bool check_playing(struct descriptor_data *d, char *name)
          continue;
       
       if(STATE(dold) == CON_GET_OLD_PASSWORD) {
-         free_char(dold->character);
-         dold->character = 0;
+         delete dold->character;
+         dold->character = nullptr;
          close_socket(dold);
          continue;
       }
