@@ -77,7 +77,6 @@ void do_dam_msgs(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int attacktype, int 
 void inform_victim(CHAR_DATA *ch, CHAR_DATA *vict, int dam);
 void update_stuns(CHAR_DATA *ch);
 int is_fighting_mob(CHAR_DATA *ch);
-void remove_memory(CHAR_DATA *ch, char type, CHAR_DATA *vict);
 void clan_death (char_data *ch, char_data *victim);
 void remove_active_potato(CHAR_DATA *vict);
 
@@ -403,11 +402,7 @@ void add_threat(CHAR_DATA *mob, CHAR_DATA *ch, int amt)
 	return;
      }
    }
-   #ifdef LEAK_CHECK
-     thr = (struct threat_struct *) calloc(1, sizeof(struct threat_struct));
-   #else
-     thr = (struct threat_struct *) dc_alloc(1, sizeof(struct threat_struct));
-   #endif 
+   thr = new threat_struct;
    thr->next = mob->mobdata->threat;
    thr->threat = amt;
    thr->name = str_dup(GET_NAME(ch));
@@ -1345,10 +1340,14 @@ int one_hit(CHAR_DATA *ch, CHAR_DATA *vict, int type, int weapon)
     w_type = SKILL_JAB;
   
   if(wielded)  {
-    if(affected_by_spell(ch, SKILL_SMITE) && affected_by_spell(ch, SKILL_SMITE)->modifier == (int)vict)
+    affected_type *af = affected_by_spell(ch, SKILL_SMITE);
+    if(af && vict && !af->victim.isNull() && af->victim == vict->getUUID())
+    {      
       for(int i = 0; i < wielded->obj_flags.value[1]; i++)
+      {
         dam += wielded->obj_flags.value[2] - number(0,1);
-    else 
+      }
+  } else 
       dam = dice(wielded->obj_flags.value[1], wielded->obj_flags.value[2]);
     if(IS_NPC(ch)) {
       dam = dice(ch->mobdata->damnodice, ch->mobdata->damsizedice);
@@ -3507,13 +3506,7 @@ void load_messages(char *file, int base)
        exit(0);
      }
      
-#ifdef LEAK_CHECK
-     messages = (struct message_type *)
-       calloc(1, sizeof(struct message_type));
-#else
-     messages = (struct message_type *)
-       dc_alloc(1, sizeof(struct message_type));
-#endif
+     messages = new message_type;
      if (!base)
      fight_messages[i].number_of_attacks++;
      fight_messages[i].a_type = type;
@@ -3620,11 +3613,7 @@ void set_fighting(CHAR_DATA * ch, CHAR_DATA * vict)
           {
                 add_memory(vict, GET_NAME(ch), 't');
                 struct timer_data *timer;
-                #ifdef LEAK_CHECK
-                  timer = (struct timer_data *)calloc(1, sizeof(struct timer_data));
-                #else
-                  timer = (struct timer_data *)dc_alloc(1, sizeof(struct timer_data));
-                #endif
+                timer = new timer_data;
                 timer->arg1 = (void*)vict->hunting;
                 timer->arg2 = (void*)vict;
                 timer->function = clear_hunt;
@@ -3632,31 +3621,23 @@ void set_fighting(CHAR_DATA * ch, CHAR_DATA * vict)
                 timer_list = timer;
                 timer->timeleft = (ch->level / 4) * 60;
            }
-  if (!IS_NPC(vict) && IS_NPC(ch))
-     if (!ISSET(ch->mobdata->actflags, ACT_STUPID) && !ch->hunting)
-     {
-       if (GET_LEVEL(vict) - (GET_LEVEL(ch)/2) > 0 || 
-		GET_LEVEL(vict) == 60)
-          {
-                add_memory(ch, GET_NAME(vict), 't');
-                struct timer_data *timer;
-                #ifdef LEAK_CHECK
-                  timer = (struct timer_data *)calloc(1, sizeof(struct 
-timer_data));
-                #else
-                  timer = (struct timer_data *)dc_alloc(1, sizeof(struct 
-timer_data));
-                #endif
-                timer->arg1 = (void*)ch->hunting;
-                timer->arg2 = (void*)ch;
-                timer->function = clear_hunt;
-               timer->next = timer_list;
-                timer_list = timer;
-                timer->timeleft = (vict->level/4)*60;
-           }
+           if (!IS_NPC(vict) && IS_NPC(ch))
+             if (!ISSET(ch->mobdata->actflags, ACT_STUPID) && !ch->hunting)
+             {
+               if (GET_LEVEL(vict) - (GET_LEVEL(ch) / 2) > 0 ||
+                   GET_LEVEL(vict) == 60)
+               {
+                 add_memory(ch, GET_NAME(vict), 't');
+                 timer_data *timer = new timer_data;
+                 timer->arg1 = (void *)ch->hunting;
+                 timer->arg2 = (void *)ch;
+                 timer->function = clear_hunt;
+                 timer->next = timer_list;
+                 timer_list = timer;
+                 timer->timeleft = (vict->level / 4) * 60;
+               }
+             }
      }
-     }
-
 
   for (k = combat_list; k; k = next_char) {
     next_char = k->next_fighting;
@@ -3825,11 +3806,7 @@ void make_scraps(CHAR_DATA *ch, struct obj_data *obj)
   char buf[MAX_STRING_LENGTH];
   /*int i;*/
   
-#ifdef LEAK_CHECK
-  corpse = (struct obj_data *)calloc(1, sizeof(struct obj_data));
-#else
-  corpse = (struct obj_data *)dc_alloc(1, sizeof(struct obj_data));
-#endif
+  corpse = new obj_data;
   clear_object(corpse);
   
   corpse->item_number = NOWHERE;
@@ -3873,11 +3850,7 @@ void make_corpse(CHAR_DATA * ch)
   char buf[MAX_STRING_LENGTH];
   int i;
   
-#ifdef LEAK_CHECK
-  corpse = (struct obj_data *)calloc(1, sizeof(struct obj_data));
-#else
-  corpse = (struct obj_data *)dc_alloc(1, sizeof(struct obj_data));
-#endif
+  corpse = new obj_data;
   clear_object(corpse);
   
   corpse->item_number = NOWHERE;
@@ -4011,7 +3984,7 @@ void make_corpse(CHAR_DATA * ch)
           break;
         }
       }
-      if(recipeitem > 0)
+      if(recipeitem != 0)
       {
         obj_to_obj(recipeitem, corpse);
       }
@@ -4154,11 +4127,7 @@ void make_husk(CHAR_DATA *ch) {
   struct obj_data *corpse;
   char buf[MAX_STRING_LENGTH];
   
-#ifdef LEAK_CHECK
-  corpse = (struct obj_data*)calloc(1, sizeof(struct obj_data));
-#else
-  corpse = (struct obj_data*)dc_alloc(1, sizeof(struct obj_data));
-#endif
+  corpse = new obj_data;
   clear_object(corpse);
   corpse->item_number = NOWHERE;
   corpse->in_room = NOWHERE;
@@ -4192,11 +4161,7 @@ void make_head(CHAR_DATA * ch)
   struct obj_data *corpse;
   char buf[MAX_STRING_LENGTH];
   
-#ifdef LEAK_CHECK
-  corpse = (struct obj_data *)calloc(1, sizeof(struct obj_data));
-#else
-  corpse = (struct obj_data *)dc_alloc(1, sizeof(struct obj_data));
-#endif
+  corpse = new obj_data;
   clear_object(corpse);
   
   corpse->item_number = NOWHERE;
@@ -4239,11 +4204,7 @@ void make_arm(CHAR_DATA * ch)
   struct obj_data *corpse;
   char buf[MAX_STRING_LENGTH];
   
-#ifdef LEAK_CHECK
-  corpse = (struct obj_data *)calloc(1, sizeof(struct obj_data));
-#else
-  corpse = (struct obj_data *)dc_alloc(1, sizeof(struct obj_data));
-#endif
+  corpse = new obj_data;
   clear_object(corpse);
   
   corpse->item_number = NOWHERE;
@@ -4286,11 +4247,7 @@ void make_leg(CHAR_DATA * ch)
   struct obj_data *corpse;
   char buf[MAX_STRING_LENGTH];
   
-#ifdef LEAK_CHECK
-  corpse = (struct obj_data *)calloc(1, sizeof(struct obj_data));
-#else
-  corpse = (struct obj_data *)dc_alloc(1, sizeof(struct obj_data));
-#endif
+  corpse = new obj_data;
   clear_object(corpse);
   
   corpse->item_number = NOWHERE;
@@ -4333,11 +4290,7 @@ void make_bowels(CHAR_DATA * ch)
   struct obj_data *corpse;
   char buf[MAX_STRING_LENGTH];
   
-#ifdef LEAK_CHECK
-  corpse = (struct obj_data *)calloc(1, sizeof(struct obj_data));
-#else
-  corpse = (struct obj_data *)dc_alloc(1, sizeof(struct obj_data));
-#endif
+  corpse = new obj_data;
   clear_object(corpse);
   
   corpse->item_number = NOWHERE;
@@ -4379,12 +4332,8 @@ void make_blood(CHAR_DATA * ch)
 {
   struct obj_data *corpse;
   char buf[MAX_STRING_LENGTH];
-  
-#ifdef LEAK_CHECK
-  corpse = (struct obj_data *)calloc(1, sizeof(struct obj_data));
-#else
-  corpse = (struct obj_data *)dc_alloc(1, sizeof(struct obj_data));
-#endif
+
+  corpse = new obj_data;  
   clear_object(corpse);
   
   corpse->item_number = NOWHERE;
@@ -4431,12 +4380,8 @@ void make_heart(CHAR_DATA * ch, CHAR_DATA * vict)
 
   if (!hands_are_free(ch, 1))
     return;
-#ifdef LEAK_CHECK
-  corpse = (struct obj_data *)calloc(1, sizeof(struct obj_data));
-#else
-  corpse = (struct obj_data *)dc_alloc(1, sizeof(struct obj_data));
-#endif
-  
+
+  corpse = new obj_data;
   clear_object(corpse);
   
   corpse->item_number = NOWHERE;
@@ -5762,7 +5707,7 @@ void do_pkill(CHAR_DATA *ch, CHAR_DATA *victim, int type, bool vict_is_attacker)
   if(type == KILL_POISON && affected_by_spell(victim, SPELL_POISON)->modifier > 0) {
 		auto &character_list = DC::instance().character_list;
 		for (auto& findchar : character_list) {
-      if ((int)findchar == affected_by_spell(victim, SPELL_POISON)->modifier)
+      if (findchar->getUUID() == affected_by_spell(victim, SPELL_POISON)->caster)
         ch = findchar;
 		}
   }
