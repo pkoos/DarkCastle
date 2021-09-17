@@ -1,8 +1,11 @@
+#include <cassert>
 #include <iostream>
 using namespace std;
 
 #include "character.h"
+#include "utility.h"
 #include "tests.h"
+
 #define ASSERT_OFFSET(var) assert((size_t)offsetof(char_file_u, var) == (size_t)offsetof(char_file_u4, var));
 
 bool test_char_file_u()
@@ -130,15 +133,59 @@ bool test_char_file_u()
     ASSERT_OFFSET(extra_ints[2])
     ASSERT_OFFSET(extra_ints[3])
 
-    cerr << offsetof(char_file_u, extra_ints[3]) << endl;
-    cerr << offsetof(char_file_u4, extra_ints[3]) << endl;
     assert(140 == sizeof(char_file_u4));
+
+    return true;
 }
 
 bool test_code(void)
 {
-    test_char_file_u();
-    
+    uint64_t failures = 0;
 
-    return true;
+    cerr << "Testing test_char_file_u()" << endl;
+    if (test_char_file_u() == false)
+    {
+        failures++;
+    }
+    
+    cerr << "Testing saving char_data" << endl;
+    char_data *ch = new char_data;
+    if (ch != nullptr)
+    {
+        ch->pcdata = new pc_data;
+        if (ch->pcdata != nullptr)
+        {
+            ch->name = str_dup("Testuser");
+            ch->level = 1;
+            SET_BIT(ch->pcdata->toggles, PLR_BRIEF);
+
+            do_save(ch, nullptr, 10);
+            cerr << "name: " << ch->getName().toStdString() << endl;
+        }
+        delete ch;
+        ch = nullptr;
+    } else {
+        failures++;
+    }
+
+    cerr << "Testing loading char_data" << endl;
+    descriptor_data d;
+    memset((char *) &d, 0, sizeof(struct descriptor_data));
+    if (load_char_obj(&d, "Testuser")) {
+        ch = d.character;
+        cerr << "name: " << ch->getName().toStdString() << endl;
+        cerr << "level: " << (int)ch->level << endl;
+        cerr << "IS_PC == " << IS_PC(ch) << endl;
+        cerr << "PLR_BRIEF == " << IS_SET(ch->pcdata->toggles, PLR_BRIEF) << endl;
+        cerr << "PLR_COMPACT == " << IS_SET(ch->pcdata->toggles, PLR_COMPACT) << endl;
+        cerr << "PLR_BEEP == " << IS_SET(ch->pcdata->toggles, PLR_BEEP) << endl;
+        delete ch;
+        ch = nullptr;
+    }
+    else 
+    {
+        cerr << "Unable to load! (Character might not exist...)" << endl;
+    }
+
+    return (failures == 0);
 }
