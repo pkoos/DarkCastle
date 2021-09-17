@@ -27,6 +27,7 @@
 #include "race.h"
 #include "const.h"
 #include "inventory.h"
+#include "guild.h"
 
 #include <vector>
 #include <string>
@@ -115,26 +116,14 @@ void load_emoting_objects()
     short offset;
 
     fl = dc_fopen(EMOTING_FILE, "r");
-#ifdef LEAK_CHECK
-    obj_emote_head.next = (struct obj_emote_index *)
-                          calloc(1, sizeof(struct obj_emote_index));
-#else
-    obj_emote_head.next = (struct obj_emote_index *)
-                          dc_alloc(1, sizeof(struct obj_emote_index));
-#endif
+    obj_emote_head.next = new obj_emote_index;
     index_cursor = obj_emote_head.next;
     index_cursor->next = NULL;
     index_cursor->data = NULL;
     index_cursor->room_number = -1;
     index_cursor->emote_index_length = -1;
     index_cursor->frequency = 0;
-#ifdef LEAK_CHECK
-    data_cursor =(struct obj_emote_data *)
-                 calloc(1, sizeof(struct obj_emote_index));
-#else
-    data_cursor =(struct obj_emote_data *)
-                 dc_alloc(1, sizeof(struct obj_emote_index));
-#endif
+    data_cursor = new obj_emote_data;
     index_cursor->data = data_cursor;
     data_cursor->next = NULL;
     while(!done2) {
@@ -151,13 +140,7 @@ void load_emoting_objects()
             if((offset = 1) && ((fromfile = fgetc(fl)) == 'S') && ((offset = 2) && (fromfile = fgetc(fl)) == '\n')) {
                 done = true;
             } else {
-#ifdef LEAK_CHECK
-                data_cursor->next = (struct obj_emote_data *)
-                                    calloc(1, sizeof(struct obj_emote_data));
-#else
-                data_cursor->next = (struct obj_emote_data *)
-                                    dc_alloc(1, sizeof(struct obj_emote_data));
-#endif
+                data_cursor->next = new obj_emote_data;
                 data_cursor = data_cursor->next;
                 data_cursor->next = NULL;
 				// Azrack -- fseek had a -1 * offset * sizeof(char) which is going to send us to EOF immmediately
@@ -169,22 +152,10 @@ void load_emoting_objects()
             done2 = true;
         } else {
             fseek(fl, (1 * sizeof(char)), SEEK_CUR);
-#ifdef LEAK_CHECK
-            index_cursor->next = (struct obj_emote_index *)
-                                 calloc(1, sizeof(struct obj_emote_index));
-#else
-            index_cursor->next = (struct obj_emote_index *)
-                                 dc_alloc(1, sizeof(struct obj_emote_index));
-#endif
+            index_cursor->next = new obj_emote_index;
             index_cursor = index_cursor->next;
             index_cursor->next = NULL;
-#ifdef LEAK_CHECK
-            index_cursor->data = (struct obj_emote_data *)
-                                 calloc(1, sizeof(struct obj_emote_data));
-#else
-            index_cursor->data = (struct obj_emote_data *)
-                                 dc_alloc(1, sizeof(struct obj_emote_data));
-#endif
+            index_cursor->data = new obj_emote_data;
             index_cursor->room_number = -1;
             index_cursor->emote_index_length = -1;
             index_cursor->frequency = -1;
@@ -2334,7 +2305,7 @@ int szrildor_pass(struct char_data *ch, struct obj_data *obj, int cmd, char *arg
               do_look(v, "", CMD_LOOK);
 
               struct mprog_throw_type *throwitem = NULL;
-              throwitem = (struct mprog_throw_type *)dc_alloc(1, sizeof(struct mprog_throw_type));
+              throwitem = new mprog_throw_type;
               throwitem->target_mob_num = 30033;
               strcpy(throwitem->target_mob_name, "");
               throwitem->data_num = 99;
@@ -4139,7 +4110,6 @@ int spellcraft_glyphs(struct char_data*ch, struct obj_data *obj, int cmd, char*a
 {
    char target[MAX_STRING_LENGTH],arg[MAX_STRING_LENGTH];
    struct obj_data * sunglyph, *  bookglyph, * heartglyph;
-   extern int learn_skill(char_data *, int, int, int);
 
    if(cmd != CMD_PUT) return eFAILURE; //put
    
