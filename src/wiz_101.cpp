@@ -348,13 +348,13 @@ int do_poof(struct char_data *ch, char *arg, int cmd)
    if (inout[0] == 'i')
    {
       if(ch->pcdata->poofin)
-        dc_free(ch->pcdata->poofin);
+        delete ch->pcdata->poofin;
       ch->pcdata->poofin = str_dup(buf);
    }
    else 
    {
       if(ch->pcdata->poofout)
-        dc_free(ch->pcdata->poofout);
+        delete ch->pcdata->poofout;
       ch->pcdata->poofout = str_dup(buf);
    }
 
