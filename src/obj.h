@@ -16,6 +16,7 @@
 #ifndef OBJ_H_
 #define OBJ_H_
 
+#include <QVariant>
 #include "structs.h" // ubyte
 #include "character.h"
 
@@ -196,6 +197,7 @@ struct extra_descr_data
 
 struct obj_flag_data
 {
+    QVariantMap values;
     int32 value[4];       /* Values of the item (see list)    */
     ubyte type_flag;     /* Type of item                     */
     uint32 wear_flags;     /* Where you can wear it            */
