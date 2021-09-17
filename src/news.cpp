@@ -40,12 +40,12 @@ extern "C"
 #include "returnvals.h"
 #include "news.h"
 
-struct news_data *thenews = NULL;
+struct news_data *thenews = nullptr;
 void addnews(struct news_data *newnews)
 {
   if (!thenews) thenews = newnews;
   else {
-   struct news_data *tmpnews,*tmpnews2 = NULL;
+   news_data *tmpnews = nullptr, *tmpnews2 = nullptr;
    for (tmpnews = thenews;tmpnews; tmpnews = tmpnews->next)
    {
      if (tmpnews->time < newnews->time)
@@ -102,14 +102,7 @@ void loadnews()
   int i;
   while ((i = fread_int(fl, 0, LONG_MAX))!= 0)
   {
-    struct news_data *nnews;
-#ifdef LEAK_CHECK
-    nnews = (struct news_data *)
-                        calloc(1, sizeof(struct news_data));
-#else
-    nnews = (struct news_data *)
-                        dc_alloc(1, sizeof(struct news_data));
-#endif
+    news_data *nnews = new news_data;
     nnews->time = i;
     nnews->addedby = fread_string(fl,0);
     nnews->news = fread_string(fl,0);
@@ -121,7 +114,7 @@ void loadnews()
 	}
 	buf[v] = '\0';
 	nnews->news = str_dup(buf);
-    addnews(nnews);
+  addnews(nnews);
     
   }
   dc_fclose(fl);
@@ -236,20 +229,15 @@ int do_addnews(struct char_data *ch, char *argument, int cmd)
     if (nnews->time == thetime)
      break;
   }
-  if (!nnews) {
-#ifdef LEAK_CHECK
-  nnews = (struct news_data *)
-                        calloc(1, sizeof(struct news_data));
-#else
-  nnews = (struct news_data *)
-                        dc_alloc(1, sizeof(struct news_data));
-#endif
-  nnews->addedby = str_dup(GET_NAME(ch));
-  nnews->time = thetime;
-  addnews(nnews);
-  nnews->news = NULL;
+  if (!nnews)
+  {
+    nnews = new news_data;
+    nnews->addedby = str_dup(GET_NAME(ch));
+    nnews->time = thetime;
+    addnews(nnews);
+    nnews->news = NULL;
   }
-  send_to_char("        Enter news item.  (/s saves /h for help)\r\n",ch);
+  send_to_char("        Enter news item.  (/s saves /h for help)\r\n", ch);
   if (nnews->news)
   send_to_char(nnews->news, ch);
 //  nnews->news = str_dup("Temporary data.\r\n");
@@ -260,3 +248,10 @@ int do_addnews(struct char_data *ch, char *argument, int cmd)
   return eSUCCESS;
 }
 
+news_data::news_data()
+{
+  next = nullptr;
+  time = time_t();
+  news = nullptr;
+  addedby = nullptr;
+}
