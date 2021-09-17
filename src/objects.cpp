@@ -45,13 +45,7 @@ struct obj_data *get_object_in_equip_vis(struct char_data *ch,
 void add_obj_affect(obj_data * obj, int loc, int mod)
 {
   obj->num_affects++;
-#ifdef LEAK_CHECK
-  obj->affected = (obj_affected_type *) realloc(obj->affected,
-                               (sizeof(obj_affected_type) * obj->num_affects));
-#else
-  obj->affected = (obj_affected_type *) dc_realloc(obj->affected,
-                               (sizeof(obj_affected_type) * obj->num_affects));
-#endif
+  obj->affected = new obj_affected_type[obj->num_affects];
   obj->affected[obj->num_affects - 1].location = loc;
   obj->affected[obj->num_affects - 1].modifier = mod;
 }

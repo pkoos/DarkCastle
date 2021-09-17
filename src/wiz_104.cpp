@@ -1912,11 +1912,7 @@ int do_opedit(char_data *ch, char *argument, int cmd)
 		     "This creates a new object proc.\r\n",ch);
 	return eFAILURE;
      }
-#ifdef LEAK_CHECK
-        prog = (MPROG_DATA *) calloc(1, sizeof(MPROG_DATA));
-#else
-        prog = (MPROG_DATA *) dc_alloc(1, sizeof(MPROG_DATA));
-#endif
+        prog = new mob_prog_data;
         prog->type = ALL_GREET_PROG;
         prog->arglist = strdup("80");
         prog->comlist = strdup("say This is my new obj prog!\n\r");

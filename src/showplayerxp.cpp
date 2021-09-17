@@ -259,14 +259,10 @@ bool my_load_char_obj(struct descriptor_data *d, char *name)
   if (!name || !strcmp(name, ""))
     return FALSE;
 
-#ifdef LEAK_CHECK
-  ch = (CHAR_DATA *)calloc(1, sizeof(CHAR_DATA));
-#else
-  ch = (CHAR_DATA *)dc_alloc(1, sizeof(CHAR_DATA));
-#endif
+  ch = new char_data;
 
   if (d->character)
-    free_char(d->character);
+    delete d->character;
 
   d->character = ch;
   clear_char(ch);
@@ -359,6 +355,9 @@ bool test_rolls(uint8_t total)
 
 int main(int argc, char **argv)
 {
+  cerr << sizeof(uchar) << endl;
+  exit(0);
+  
   string orig_cwd;
   if (argc < 2)
     return 1;

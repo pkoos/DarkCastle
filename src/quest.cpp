@@ -64,29 +64,26 @@ int load_quests(void)
       return eFAILURE;
    }
 
-   while(fgetc(fl) != '$') {
+   while (fgetc(fl) != '$')
+   {
 
-#ifdef LEAK_CHECK
-  quest = (struct quest_info *)calloc(1, sizeof(struct quest_info));
-#else
-  quest = (struct quest_info *)dc_alloc(1, sizeof(struct quest_info));
-#endif
+      quest = new quest_info;
 
       quest->number = fread_int(fl, 0, INT_MAX);
-      quest->name   = fread_string(fl, 1);
-      quest->hint1  = fread_string(fl, 1);
-      quest->hint2  = fread_string(fl, 1);
-      quest->hint3  = fread_string(fl, 1);
+      quest->name = fread_string(fl, 1);
+      quest->hint1 = fread_string(fl, 1);
+      quest->hint2 = fread_string(fl, 1);
+      quest->hint3 = fread_string(fl, 1);
       quest->objshort = fread_string(fl, 1);
       quest->objlong = fread_string(fl, 1);
       quest->objkey = fread_string(fl, 1);
-      quest->level  = fread_int(fl, 0, INT_MAX);
+      quest->level = fread_int(fl, 0, INT_MAX);
       quest->objnum = fread_int(fl, 0, INT_MAX);
       quest->mobnum = fread_int(fl, 0, INT_MAX);
-      quest->timer  = fread_int(fl, 0, INT_MAX);
+      quest->timer = fread_int(fl, 0, INT_MAX);
       quest->reward = fread_int(fl, 0, INT_MAX);
-      quest->cost   = fread_int(fl, 0, INT_MAX);
-      quest->brownie= fread_int(fl, 0, INT_MAX);
+      quest->cost = fread_int(fl, 0, INT_MAX);
+      quest->brownie = fread_int(fl, 0, INT_MAX);
       quest->active = FALSE;
 
       quest_list.push_back(quest);
@@ -170,11 +167,7 @@ int do_add_quest(CHAR_DATA *ch, char *name)
 {
    struct quest_info * quest; //new quest
 
-#ifdef LEAK_CHECK
-  quest = (struct quest_info *)calloc(1, sizeof(struct quest_info));
-#else
-  quest = (struct quest_info *)dc_alloc(1, sizeof(struct quest_info));
-#endif
+  quest = new quest_info;
 
    quest->name = str_hsh(name);
    quest->hint1 = str_hsh(" ");
