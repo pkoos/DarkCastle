@@ -47,7 +47,6 @@ void make_leg(CHAR_DATA *ch);
 void make_bowels(CHAR_DATA *ch);
 void make_blood(CHAR_DATA *ch);
 void make_scraps(CHAR_DATA *ch, struct obj_data *obj);
-void remove_memory(CHAR_DATA *ch, char type);
 void room_mobs_only_hate(char_data *ch);
 void add_memory(CHAR_DATA *ch, char *victim, char type);
 void stop_follower(CHAR_DATA *ch, int cmd);
