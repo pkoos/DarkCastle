@@ -81,11 +81,7 @@ void string_hash_add(struct descriptor_data *d, char *str) {
 			*(str + d->max_str) = '\0';
 			terminator = 1;
 		}
-#ifdef LEAK_CHECK
-		(*d->hashstr) = (char *)calloc(strlen(str) + 3, sizeof(char));
-#else
-		(*d->hashstr) = (char *) dc_alloc(strlen(str) + 3, sizeof(char));
-#endif
+		(*d->hashstr) = new char[(strlen(str) + 3)*sizeof(char)];
 		strcpy(*d->hashstr, str);
 	}
 
@@ -283,12 +279,7 @@ int do_string(CHAR_DATA *ch, char *arg, int cmd) {
 			/* try to locate extra description */
 			for (ed = obj->ex_description;; ed = ed->next)
 				if (!ed) { /* the field was not found. create a new_new one. */
-#ifdef LEAK_CHECK
-					ed = (struct extra_descr_data *)
-					calloc(1, sizeof(struct extra_descr_data));
-#else
-					ed = (struct extra_descr_data *) dc_alloc(1, sizeof(struct extra_descr_data));
-#endif
+					ed = new extra_descr_data;
 					ed->next = obj->ex_description;
 					obj->ex_description = ed;
 					ed->keyword = str_hsh(string);
@@ -360,21 +351,16 @@ int do_string(CHAR_DATA *ch, char *arg, int cmd) {
 	}
 
 	/* there was no string. enter string mode */
-	else {
+	else
+	{
 		send_to_char("Enter string. Terminate with '~' at the beginning "
-				"of a line.\n\r", ch);
+					 "of a line.\n\r",
+					 ch);
 		if (type == TP_MOB && !IS_NPC(mob))
-#ifdef LEAK_CHECK
-			(*ch->desc->strnew) = (char *)calloc(length[field - 1], sizeof(char));
-#else
-			(*ch->desc->strnew) = (char *) dc_alloc(length[field - 1], sizeof(char));
-#endif
-		else
-#ifdef LEAK_CHECK
-			(*ch->desc->hashstr) = (char *)calloc(length[field - 1], sizeof(char));
-#else
-			(*ch->desc->hashstr) = (char *) dc_alloc(length[field - 1], sizeof(char));
-#endif
+		{
+			(*ch->desc->strnew) = new char[length[field - 1]*sizeof(char)];
+		}
+		(*ch->desc->hashstr) = new char[length[field - 1]*sizeof(char)];
 		ch->desc->max_str = length[field - 1];
 		ch->desc->connected = CON_EDITING;
 	}
@@ -437,12 +423,7 @@ struct help_index_element *build_help_index(FILE *fl, int *num) {
 	char buf[81], tmp[81], *scan;
 	long pos;
 
-#ifdef LEAK_CHECK
-	list = (struct help_index_element *)
-	calloc(MAX_HELP, sizeof(struct help_index_element));
-#else
-	list = (struct help_index_element *) dc_alloc(MAX_HELP, sizeof(struct help_index_element));
-#endif
+	list = new help_index_element[MAX_HELP];
 
 	for (;;) {
 		pos = ftell(fl);
@@ -681,7 +662,7 @@ void show_string(struct descriptor_data *d, char *input) {
 	}
 	/* Or if we have more to show.... */
 	else {
-		strncpy(buffer, d->showstr_vector[d->showstr_page], diff = ((int) d->showstr_vector[d->showstr_page + 1]) - ((int) d->showstr_vector[d->showstr_page]));
+		strncpy(buffer, d->showstr_vector[d->showstr_page], diff = (d->showstr_vector[d->showstr_page + 1]) - (d->showstr_vector[d->showstr_page]));
 		buffer[diff] = '\0';
 		send_to_char(buffer, d->character);
 		d->showstr_page++;
