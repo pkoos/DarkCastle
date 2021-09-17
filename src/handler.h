@@ -63,7 +63,7 @@ int obj_from_obj(struct obj_data *obj);
 int equip_char(CHAR_DATA *ch, struct obj_data *obj, int pos, int flag =0);
 struct obj_data *unequip_char(CHAR_DATA *ch, int pos, int flag = 0);
 
-struct obj_data *get_obj_in_list(char *name, struct obj_data *list);
+struct obj_data *get_obj_in_list(const char *name, struct obj_data *list);
 struct obj_data *get_obj_in_list_num(int num, struct obj_data *list);
 struct obj_data *get_obj(char *name);
 struct obj_data *get_obj(int vnum);
@@ -140,6 +140,13 @@ void die_follower(CHAR_DATA *ch);
 void remove_from_bard_list(char_data * ch);
 void stop_guarding_me(char_data * victim);
 void stop_guarding(char_data * guard);
+
+void add_follower(CHAR_DATA *ch, CHAR_DATA *leader, int cmd);
+void stop_follower(CHAR_DATA *ch, int cmd);
+
+void add_memory(CHAR_DATA *ch, char *victim, char type);
+void remove_memory(CHAR_DATA *ch, char type, CHAR_DATA *vict);
+void remove_memory(CHAR_DATA *ch, char type);
 
 #endif
 
