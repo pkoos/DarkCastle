@@ -16,6 +16,7 @@
 #include "fileinfo.h"
 #include "utility.h"
 #include "DC.h"
+#include "tests.h"
 
 using namespace std;
 
@@ -80,7 +81,10 @@ int main(int argc, char *const argv[])
     exit(EXIT_FAILURE);
   }
 
-  DCVote = new CVoteData();
+  if (dc.cf.test_code)
+  {
+    test_code();
+  }
 
   if (dc.cf.check_syntax)
   {
@@ -88,12 +92,13 @@ int main(int argc, char *const argv[])
     boot_world();
     log("Done.", 0, LOG_MISC);
     exit(EXIT_SUCCESS);
-  } else
-  {
-    dc.init_game();
   }
-
-  delete DCVote;
+  else
+  {
+    DCVote = new CVoteData();
+    dc.init_game();
+    delete DCVote;
+  }
 
   return 0;
 }
@@ -126,7 +131,7 @@ DC::config parse_arguments(int argc, char *const argv[])
   uint32_t port;
   DC::config cf;
 
-  while ((opt = getopt(argc, argv, "vp:Pmbd:shwcn?")) != -1)
+  while ((opt = getopt(argc, argv, "vp:Pmbd:sthwcn?")) != -1)
   {
     switch (opt) {
     case 'v':
@@ -163,6 +168,9 @@ DC::config parse_arguments(int argc, char *const argv[])
       break;
     case 's':
       cf.check_syntax = true;
+      break;
+    case 't':
+      cf.test_code = true;
       break;
     case 'w':
       cf.test_world = 1;
