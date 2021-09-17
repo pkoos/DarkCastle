@@ -5,7 +5,6 @@
 | Description: This file contains the header information for the character
 |   class implementation.
 */
-
 #define  COMPILE_WITH_CHANGES 1
 
 #include "affect.h"  /* MAX_AFFECTS, etc.. */
@@ -33,6 +32,7 @@ extern "C" {
 #include <string>
 #include <algorithm>
 #include <QString>
+#include <QUuid>
 
 #define ASIZE 32
 #define MAX_GOLEMS           2 // amount of golems above +1
@@ -140,16 +140,15 @@ struct  mob_prog_data
 #define MPROG_MAX_TYPE_VALUE (16384 << 6)
 
 // * ------- End MOBProg stuff ----------- *
-
-
 struct char_skill_data
 {
+    char_skill_data();
     int16  skillnum;          // ID # of skill.
     int16  learned;           // % chance for success must be > 0
     int32  unused[5];         // for future use
-
-    char_skill_data * next;   // Next skill in ch's skill list    
 };
+
+typedef map<int16, char_skill_data> ch_skills_t;
 
 struct class_skill_defines
 {
@@ -170,8 +169,10 @@ struct affected_type
     int32  modifier;       /* This is added to apropriate ability     */
     int32  location;       /* Tells which ability to change(APPLY_XXX)*/
     int32 bitvector;      /* Tells which bits to set (AFF_XXX)       */
-    std::string caster;
     struct affected_type *next;
+    QString casterName;
+    QUuid caster;
+    QUuid victim;
 };
 
 
@@ -185,6 +186,7 @@ struct follow_type
 // first, or you will probably end up corrupting all the pfiles
 struct pc_data
 {
+    pc_data(void);
     char pwd[PASSWORD_LEN+1];
     char *ignoring;                 /* List of ignored names */
 
@@ -291,7 +293,8 @@ struct mob_data
 		      // For !magic,!track changing flags.
     struct threat_struct *threat;
     struct reset_com *reset;
-	mob_flag_data mob_flags;            /* Mobile information               */
+	mob_flag_data mob_flags;            /* Mobile information               */    
+    obj_data *obj;
     bool paused;
 };
 
@@ -299,8 +302,14 @@ struct mob_data
 // This contains all memory items for a player/mob
 // All non-specific data is held in this structure
 // PC/MOB specific data are held in the appropriate pointed-to structs
-struct char_data
+class char_data
 {
+    private:
+    QUuid uuid;
+
+    public:
+    char_data();
+    ~char_data();
     struct mob_data * mobdata;
     struct pc_data * pcdata;
     struct obj_data * objdata;
@@ -390,7 +399,8 @@ struct char_data
 
     struct obj_data *equipment[MAX_WEAR]; // Equipment List
 
-    struct char_skill_data * skills;   // Skills List
+    map<int16, char_skill_data> skills;   // Skills List
+    queue<int16> skillsSaveLoadOrder;
     struct affected_type *affected;    // Affected by list
     struct obj_data *carrying;         // Inventory List
 
@@ -475,33 +485,33 @@ public:
     QString getCondition();
     QString getConditionColor();
     void show(QString messg);
+    const QUuid & getUUID();
+    bool swapSkills(int16 old_skill, int16 new_skill);
+    bool removeSkill(int16 skill);
 };
 
-// This structure is written to the disk.  DO NOT MODIFY THIS STRUCTURE
-// There is a method in save.C for adding additional items to the pfile
-// Check there if you need to add something
-// This structure contains everything that would be serialized for both
-// a 'saved' mob, and for a player
-// Note, any "strings" are done afterwards in the functions.  Since these
-// are variable length, we can't do them with a single write
-struct char_file_u
-{
-    sbyte sex;         /* Sex */
-    sbyte c_class;     /* Class */
-    sbyte race;        /* Race */
-    sbyte level;       /* Level */
-   
+// This structure was created as a replacement for char_file_u so that it
+// would be portable between 32-bit and 64-bit code unlike char_file_u.
+struct char_file_u4
+{    
+    char_file_u4();
+    sbyte sex;     /* Sex */
+    sbyte c_class; /* Class */
+    sbyte race;    /* Race */
+    sbyte level;   /* Level */
+
     sbyte raw_str;
     sbyte raw_intel;
     sbyte raw_wis;
     sbyte raw_dex;
+
     sbyte raw_con;
-    sbyte conditions[3]; 
+    sbyte conditions[3];
 
     ubyte weight;
     ubyte height;
-
     int16 hometown;
+
     uint32 gold;
     uint32 plat;
     int64 exp;
@@ -509,8 +519,8 @@ struct char_file_u
     uint32 resist;
     uint32 suscept;
 
-    int32 mana;        // current
-    int32 raw_mana;    // max without eq/stat bonuses
+    int32 mana;     // current
+    int32 raw_mana; // max without eq/stat bonuses
     int32 hit;
     int32 raw_hit;
     int32 move;
@@ -519,24 +529,30 @@ struct char_file_u
     int32 raw_ki;
 
     int16 alignment;
-   uint32 hpmetas; // Used by familiars too... why not.
-   uint32 manametas;
-   uint32 movemetas;
+    int16 unused1;
 
-    int16 armor;       // have to save these since mobs have different bases
+    uint32 hpmetas; // Used by familiars too... why not.
+    uint32 manametas;
+    uint32 movemetas;
+
+    int16 armor; // have to save these since mobs have different bases
     int16 hitroll;
+
     int16 damroll;
+    int16 unused2;
+
     int32 afected_by;
     int32 afected_by2;
-    uint32 misc;          // channel flags
+    uint32 misc; // channel flags
 
-    int16 clan; 
-    int32 load_room;                  // Which room to place char in
+    int16 clan;
+    int16 unused3;
+    int32 load_room; // Which room to place char in
 
     uint32 acmetas;
     int32 agemetas;
-    int32 extra_ints[3];             // available just in case
-};
+    int32 extra_ints[3]; // available just in case
+} __attribute__((packed));
 
 struct profession {
 	std::string name;
@@ -550,5 +566,6 @@ void clear_hunt(void *arg1, void *arg2, void *arg3);
 void clear_hunt(char *arg1, CHAR_DATA *arg2, void *arg3);
 void prepare_character_for_sixty(CHAR_DATA *ch);
 bool isPaused(char_data *mob);
+char_data *findCharacter(QUuid uuid);
 
 #endif
