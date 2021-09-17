@@ -29,6 +29,7 @@ extern "C" {
 
 #include <string>
 #include <vector>
+#include <QString>
 
 #include "structs.h"
 #include "weather.h"
@@ -108,21 +109,22 @@ bool is_hiding(CHAR_DATA *ch, CHAR_DATA *vict);
 
 #define CAP(st)  (*(st) = UPPER(*(st)), st)
 
-#ifdef LEAK_CHECK
-#define CREATE(result, type, number)  do {\
-    if (!((result) = (type *) calloc ((number), sizeof(type))))\
-	{ perror("calloc failure in CREATE: "); abort(); } } while(0)
-#else
-#define CREATE(result, type, number)  do {\
-    if (!((result) = (type *) dc_alloc ((number), sizeof(type))))\
-	{ perror("calloc failure in CREATE: "); abort(); } } while(0)
-#endif
+#define CREATE(result, type, number) result=new type[number];
+#define RECREATE(result,type,number) \
+         if (result != nullptr)\
+         {\
+            type *old = result;\
+            result = new type[number];\
+            strcpy(result, old);\           
+            delete[] old;\
+         } else {\
+            result = new type[number];\
+         }
 
-#define RECREATE(result,type,number) do {\
-  if (!((result) = (type *) dc_realloc ((result), sizeof(type) * (number))))\
-                { perror("realloc failure in RECREATE"); abort(); } } while(0)
+#define FREE(p) delete[] p
 
-#define FREE(p) do { if((p) != NULL) { dc_free((p)); (p) = 0; } } while (0) 
+
+
 
 #define ASIZE 32 //don't change unless you want to be screwed
 #define SETBIT(var,bit) ((var)[(bit)/ASIZE] |= (1 << (((bit)-(((bit)/ASIZE)*ASIZE)-1))))
@@ -156,7 +158,7 @@ bool IS_DARK( int room );
 //#define ANA(obj) (index("aeiouyAEIOUY", *(obj)->name) ? "An" : "A")
 //#define SANA(obj) (index("aeiouyAEIOUY", *(obj)->name) ? "an" : "a")
 
-#define IS_PC(ch)   (!IS_NPC(ch))
+#define IS_PC(ch)   (!IS_NPC(ch) && ch->pcdata)
 #define IS_NPC(ch)  (IS_SET((ch)->misc, MISC_IS_MOB))
 #define IS_MOB(ch)  (IS_NPC(ch))
 #define IS_OBJ(ch)  (IS_SET((ch)->misc, MISC_IS_OBJ))
@@ -380,7 +382,9 @@ char *  str_nospace     (const char *stri);
 char *	str_dup		(const char *str);
 char *	str_dup0	(const char *str);
 void    log   (const char *str, int god_level, long type);
+void    log   (const string str, int god_level, long type);
 void    log		(const char *str, int god_level, long type, char_data *vict);
+void    log		(const string str, int god_level, long type, char_data *vict);
 void    logf            (int level, long type, const char *arg, ...);
 int     send_to_gods    (const char * str, int god_level, long type);
 void	sprintbit	(uint value[], const char *names[], char *result);
@@ -442,7 +446,7 @@ void night_watchman( void );
 int special(CHAR_DATA *ch, int cmd, char *arg);
 int process_output(struct descriptor_data *t);
 int file_to_string(const char *name, char *buf);
-bool load_char_obj( struct descriptor_data *d, char *name );
+bool load_char_obj( struct descriptor_data *d, const char *name );
 void save_char_obj( CHAR_DATA *ch );
 
 #ifdef USE_SQL
@@ -450,8 +454,9 @@ void save_char_obj_db(CHAR_DATA *ch);
 #endif
 
 void unique_scan(struct char_data *victim);
-void char_to_store(CHAR_DATA *ch, struct char_file_u *st, struct time_data & tmpage);
+void char_to_store(CHAR_DATA *ch, struct char_file_u4 *st, struct time_data & tmpage);
 bool obj_to_store( struct obj_data *obj, CHAR_DATA *ch, FILE *fpsave, int wear_pos );
+bool obj_to_store( struct obj_data *obj, CHAR_DATA *ch, QDataStream &out, int wear_pos );
 void check_idling(CHAR_DATA *ch);
 void stop_follower(CHAR_DATA *ch, int cmd);
 bool CAN_SEE( CHAR_DATA *sub, CHAR_DATA *obj, bool noprog = FALSE );
@@ -471,8 +476,8 @@ void send_to_char(const char *messg, CHAR_DATA *ch);
 void send_to_char_nosp(const char *messg, CHAR_DATA *ch);
 void send_to_room(const char *messg, int room, bool awakeonly = FALSE, CHAR_DATA *nta = NULL);
 void record_track_data(CHAR_DATA *ch, int cmd); 
-int write_to_descriptor(int desc, char *txt);
-int write_to_descriptor_fd(int desc, char *txt);
+int write_to_descriptor(int desc, QString txt);
+int write_to_descriptor_fd(int desc, QString txt);
 void write_to_q(char *txt, struct txt_q *queue);
 int use_mana( CHAR_DATA *ch, int sn );
 void automail(char *name);
@@ -607,5 +612,8 @@ bool file_exists(string filename);
 bool char_file_exists(string name);
 void show_obj_class_size_mini(obj_data * obj, char_data * ch);
 const char *item_condition(struct obj_data *obj);
+QString blackjack_prompt(CHAR_DATA *ch, bool ascii);
+void blackjack_prompt_old(CHAR_DATA *ch, char *prompt, bool ascii);
+int do_save(struct char_data *ch, char *argument, int cmd);
 
 #endif /* UTILITY_H_ */

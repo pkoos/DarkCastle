@@ -137,42 +137,17 @@ char *str_dup0(const char *str)
   return str_dup(str);
 }
 
-// duplicate a string with it's own memory
 char *str_dup( const char *str )
 {
-    char *str_new = 0;
+  if (str == nullptr)
+  {
+    return nullptr;
+  }
 
-#ifdef LEAK_CHECK
-    str_new = (char *)calloc(strlen(str) + 1, sizeof(char));
-#else
-    str_new = (char *)dc_alloc(strlen(str) + 1, sizeof(char));
-#endif
-
-    if(!str_new)
-    {
-      fprintf(stderr, "NO MEMORY DUPLICATING STRING!");
-      abort();
-    }
-    strcpy( str_new, str );
-    return str_new;
+  char *str_new = new char[strlen(str) + 1];
+  strcpy(str_new, str);
+  return str_new;
 }
-
-#ifdef WIN32
-char *index(char *buf, char op)
-{
-    int i = 0;
-    
-    while(buf[i] != 0)
-    {
-        if(buf[i] == op)
-        {
-            return(buf + i);
-        }
-        i++;
-    }
-    return(NULL);
-}
-#endif
 
 // generate a (relatively) random number.
 int number_old( int from, int to )
@@ -276,9 +251,19 @@ FILE * clan_log   = 0;
 FILE * objects_log = 0;
 FILE * quest_log = 0;
 
+void log(const string str, int god_level, long type)
+{
+  log(str.c_str(), god_level, type, nullptr);
+}
+
 void log(const char *str, int god_level, long type)
 {
   log(str, god_level, type, nullptr);
+}
+
+void log(const string str, int god_level, long type, char_data *vict)
+{
+  log(str, god_level, type, vict);
 }
 
 // writes a string to the log 
@@ -1449,12 +1434,9 @@ mob_index[fol->follower->mobdata->nr].virt == 8)
 
   if (!IS_MOB(ch) && ch->desc && ch->desc->host) {
     if(ch->pcdata->last_site)
-      dc_free(ch->pcdata->last_site);
-#ifdef LEAK_CHECK
-    ch->pcdata->last_site = (char *)calloc(strlen(ch->desc->host) + 1, sizeof(char));
-#else
-    ch->pcdata->last_site = (char *)dc_alloc(strlen(ch->desc->host) + 1, sizeof(char));
-#endif
+      delete[] ch->pcdata->last_site;
+
+    ch->pcdata->last_site = new char[strlen(ch->desc->host) + 1];
     strcpy (ch->pcdata->last_site, ch->desc->host);
     ch->pcdata->time.logon = time(0);
   }
