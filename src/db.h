@@ -132,7 +132,6 @@ void init_char(CHAR_DATA *ch);
 void clear_char(CHAR_DATA *ch);
 void clear_object(struct obj_data *obj);
 void reset_char(CHAR_DATA *ch);
-void free_char(CHAR_DATA *ch);
 int  real_room(int virt);
 char *fread_string(FILE *fl, int hasher);
 char *fread_string(ifstream &in, int hasher);
@@ -182,6 +181,7 @@ struct pulse_data { /* list for keeping tract of 'pulsing' chars */
 /* structure for the reset commands */
 struct reset_com
 {
+    reset_com();
     char command;   /* current command                      */ 
     int if_flag;    // 0=always 1=if prev exe'd  2=if prev DIDN'T exe   3=ONLY on reboot
     int arg1;
@@ -212,6 +212,7 @@ struct reset_com
 /* zone definition structure. for the 'zone-table'   */
 struct zone_data
 {
+    zone_data();
     char *name;             /* name of this zone                  */
     int lifespan;           /* how long between resets (minutes)  */
     int age;                /* current age of ths zone (minutes) */
@@ -226,7 +227,7 @@ struct zone_data
     
     int reset_mode;         /* conditions for reset (see below)   */
 
-    struct reset_com *cmd;  /* command table for reset             */
+    vector<reset_com> cmd;  /* command table for reset             */
     int reset_total;        /* total number item in currently allocated
                              * reset_com array.  This is used in the 
                              * do_zedit command so we don't have to realloc
