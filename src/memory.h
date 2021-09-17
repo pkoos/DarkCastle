@@ -9,8 +9,6 @@
 */
 #include <stdlib.h>
 
-void *dc_alloc(size_t nmemb, size_t size);
-void *dc_realloc(void * oldptr, size_t size);
 void *dc_free(void * ptr);
 
 
