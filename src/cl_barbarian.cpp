@@ -245,7 +245,7 @@ int do_brace(struct char_data *ch, char *argument, int cmd)
   
   if (!*type) 
   {
-    if(ch->brace_at != NULL)
+    if(ch->brace_at != nullptr)
     {
       if(cmd == 0)
       {
@@ -257,7 +257,7 @@ int do_brace(struct char_data *ch, char *argument, int cmd)
         act("$n stops holding the $F shut.", ch, 0, ch->brace_at->keyword, TO_ROOM, 0);
       }
       ch->brace_at->bracee = NULL;
-      ch->brace_at = NULL;
+      ch->brace_at = nullptr;
       if(ch->brace_exit != NULL) //incase it's a weird exit area
         ch->brace_exit->bracee = NULL;
       ch->brace_exit = NULL;
@@ -882,12 +882,7 @@ int do_bullrush(struct char_data *ch, char *argument, int cmd)
   extern void addtimer(struct timer_data *add);
 
  // Reset bullrush AFF in 5 seconds
-  struct timer_data *timer;
- #ifdef LEAK_CHECK
-  timer = (struct timer_data *)calloc(1, sizeof(struct timer_data));
- #else
-  timer = (struct timer_data *)dc_alloc(1, sizeof(struct timer_data));
- #endif
+  timer_data *timer = new timer_data;
   timer->arg1 = (void*)ch;
   timer->function = rush_reset;
   timer->timeleft = 5;
