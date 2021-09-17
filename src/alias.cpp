@@ -69,13 +69,8 @@ int do_alias(struct char_data *ch, char *arg, int cmd)
     if (found == 1)  {    /*  = sign found.. assign an alias  */
       y = (strlen(arg) - z);
 
-#ifdef LEAK_CHECK
-      buf  = (char*) calloc(z+1, sizeof(char));
-      buf1 = (char*) calloc(y+2, sizeof(char));
-#else	    
-      buf  = (char*) dc_alloc(z+1, sizeof(char));
-      buf1 = (char*) dc_alloc(y+2, sizeof(char));
-#endif	    
+      buf  = new char[z+1];
+      buf1 = new char[y+2];
 
       tmp[1] = '\0';
 	    
@@ -145,11 +140,7 @@ int do_alias(struct char_data *ch, char *arg, int cmd)
         return eSUCCESS;
       }
 
-#ifdef LEAK_CHECK
-      curr = (char_player_alias *)calloc(1, sizeof(struct char_player_alias));
-#else
-      curr = (char_player_alias *)dc_alloc(1, sizeof(struct char_player_alias));
-#endif
+      curr = new char_player_alias;
       curr->keyword = str_dup(buf);
       curr->command = str_dup(buf1);
       send_to_char ("New Alias Defined.\n\r", ch);
@@ -165,11 +156,7 @@ int do_alias(struct char_data *ch, char *arg, int cmd)
 
       // need the +1 here.  Otherwise, we end up overrunning our buffer with
       // the \0 character at the end from one_argument
-#ifdef LEAK_CHECK
-      buf = (char*) calloc(x+1, sizeof(char));
-#else
-      buf = (char*) dc_alloc(x+1, sizeof(char));
-#endif	    
+      buf = new char[x+1];
       one_argument(arg, buf);
 	    
       if(!str_cmp(buf, "deleteall"))
