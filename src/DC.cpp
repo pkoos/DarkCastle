@@ -10,8 +10,6 @@
 #include "room.h" // NOWHERE
 #include "db.h"
 
-string DC::version = VERSION;
-
 DC::DC() {
 
 }
@@ -28,7 +26,8 @@ void DC::removeDead(void) {
 		ch = death_list.front();
 		character_list.erase(ch);
 		shooting_list.erase(ch);
-		free_char(ch);
+		delete ch;
+		ch = nullptr;
 		death_list.pop();
 	}
 
@@ -63,10 +62,10 @@ void DC::handleShooting(void) {
 
 string DC::getVersion(void)
 {
-  return version;
+  return VERSION;
 }
 
 string DC::getBuildTime(void)
 {
-  return string(BUILD_TIME);
+  return BUILD_TIME;
 }
