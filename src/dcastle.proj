@@ -1,31 +1,22 @@
-SOURCES += $$files(a*.cpp, true)
-SOURCES += $$files(b*.cpp, true)
-SOURCES += $$files(c*.cpp, true)
-SOURCES += $$files([e-l]*.cpp, true)
-SOURCES += $$files([n-r]*.cpp, true)
-SOURCES += $$files([t-z]*.cpp, true)
-SOURCES += $$files(mo*.cpp, true)
-SOURCES += magic.cpp
-SOURCES += memory.cpp
-SOURCES += meta.cpp
-SOURCES += meta.cpp
-SOURCES += MobActivity.cpp
-SOURCES += Leaderboard.cpp
-SOURCES += Timer.cpp
-SOURCES += db.cpp
-SOURCES += save.cpp
-SOURCES += shop.cpp
-SOURCES += sing.cpp
-SOURCES += social.cpp
-SOURCES += spec.cpp
-SOURCES += spells.cpp
-SOURCES += stat.cpp
-SOURCES += CommandStack.cpp
+QT -= gui
+CONFIG += c++latest warn_off console debug
+#CONFIG -= app_bundle qt
+QMAKE_CXXFLAGS += -ggdb3 -Wno-write-strings -fdiagnostics-color=always
+QMAKE_LFLAGS += -ggdb3 -Wall
+
+SOURCES += $$files(*.cpp, true)
+SOURCES -= xmlrpc.cpp
+SOURCES -= showplayerxp.cpp
+
 HEADERS += $$files(*.h, true)
 
-TEMPLATE = lib
-CONFIG += c++latest debug autogen_precompile_source precompile_header warn_off stl thread create_libtool create_pc console
-QMAKE_CXXFLAGS += -ggdb3 -Wall -m32 -Wno-write-strings -fdiagnostics-color=always
+VERSION = $$system(git describe --tags --always --abbrev=8)
+BUILDTIME = $$system(date +\"%Y-%m-%d %H:%M:%S\")
+DEFINES += VERSION=\"\\\"$${VERSION}\\\"\"
+DEFINES += 'BUILD_TIME=\"\\\"$${BUILDTIME}\\\"\"'
 
-unix:INCLUDEPATH += /usr/include/
-unix:INCLUDEPATH += /usr/include/pgsql/
+#unix:INCLUDEPATH += /usr/include/qt6
+#unix:INCLUDEPATH += /usr/include/qt6/QtCore
+unix:INCLUDEPATH += /usr/include/pgsql
+
+QMAKE_LFLAGS += -lcrypt -lfmt
