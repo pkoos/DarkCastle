@@ -82,19 +82,8 @@ int do_spec(CHAR_DATA *ch, char *argument, int cmd)
          return eFAILURE;
        }
        for (int i = 0; i < 10; i++)
-       { // Free up skills tied to the specilization.
-         struct char_skill_data * curr = ch->skills, *prev = NULL, *cnext;
-         while(curr)
-	 {
-           cnext = curr->next;
-           if(curr->skillnum == spec_list[ch->spec].skills[i])
-           {
-	     if (prev) prev->next = curr->next;
-	     else ch->skills = curr->next;
-             dc_free(curr);
-	   } else prev = curr;
-	   curr = cnext;
-	 }
+       {
+         ch->removeSkill(spec_list[ch->spec].skills[i]);
        }
        ch->spec = 0;
        GET_PLATINUM(ch) -= 10000;
