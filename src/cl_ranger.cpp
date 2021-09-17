@@ -125,11 +125,6 @@ int do_tame(CHAR_DATA *ch, char *arg, int cmd)
   CHAR_DATA *victim;
   char buf[MAX_INPUT_LENGTH];
 
-  void add_follower(CHAR_DATA *ch, CHAR_DATA *leader, int cmd);
-  void stop_follower(CHAR_DATA *ch, int cmd);
-  void remove_memory(CHAR_DATA *ch, char type, CHAR_DATA *vict);
-
-
   while(*arg == ' ')
     arg++;
 
@@ -573,8 +568,8 @@ int do_ambush(CHAR_DATA *ch, char *arg, int cmd)
   if(!str_cmp(arg, ch->ambush)) {
     sprintf(buf, "You will no longer ambush %s on sight.\n\r", arg);
     send_to_char(buf, ch);
-    dc_free(ch->ambush);
-    ch->ambush = NULL;
+    delete ch->ambush;
+    ch->ambush = nullptr;
     return eSUCCESS;
   }
 
@@ -586,7 +581,7 @@ int do_ambush(CHAR_DATA *ch, char *arg, int cmd)
           GET_NAME(ch), arg);
 
   send_to_char(buf, ch);
-  dc_free(ch->ambush);
+  delete ch->ambush;
   ch->ambush = str_dup(arg);
   return eSUCCESS;
 }
@@ -895,8 +890,6 @@ return 0;
 struct obj_data * find_arrow(struct obj_data *quiver)
 {
   struct obj_data *target;
-
-  struct obj_data *get_obj_in_list(char *, struct obj_data *);
 
   target = get_obj_in_list("arrow", quiver->contains);
   
