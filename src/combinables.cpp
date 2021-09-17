@@ -22,6 +22,7 @@
 #include "returnvals.h"
 #include "combinables.h"
 #include "const.h"
+#include "guild.h"
 
 #include <vector>
 #include <algorithm>
@@ -328,8 +329,6 @@ int determine_trade_skill_chance(int learned, int trivial)
 
 void determine_trade_skill_increase(char_data * ch, int skillnum, int learned, int trivial)
 {
-   int learn_skill(char_data * ch, int skill, int amount, int maximum);
-
    // can't learn past item's trivial value
    if(learned >= trivial) {
       send_to_char("You have learned all you can from making this item.\r\n", ch);
