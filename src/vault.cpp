@@ -836,7 +836,7 @@ void add_vault_access(CHAR_DATA *ch, char *name, struct vault_data *vault) {
   if (has_vault_access(name, vault)) {
     send_to_char("That person already has access to your vault.\r\n", ch);
     if (d.character) 
-      free_char(d.character);
+      delete d.character;
     return;   
   }
  
@@ -848,7 +848,7 @@ void add_vault_access(CHAR_DATA *ch, char *name, struct vault_data *vault) {
 
   save_char_obj(ch);
   if (d.character) 
-    free_char(d.character);
+    delete d.character;
 }
 
 void remove_vault_access(CHAR_DATA *ch, char *name, struct vault_data *vault) {
@@ -1732,7 +1732,7 @@ void add_new_vault(char *name, int indexonly) {
 
   // files all done, now add it in game
   total_vaults++;
-  RECREATE(vault_table, struct vault_data, total_vaults);
+  vault_table = new vault_data[total_vaults];
   CREATE(vault, struct vault_data, 1);
 
   vault->owner 	= str_dup(name);
