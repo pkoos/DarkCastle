@@ -25,7 +25,7 @@ extern "C"
 extern CWorld world;
  
 // storage of socials
-struct social_messg * soc_mess_list;  // head of social array
+vector<social_messg> soc_mess_list;  // head of social array
 long int num_socials;                 // number of actual socials (50 = 0-49)
 long int social_array_size;           // size of actual array (since we allocate in chunks)
 
@@ -142,6 +142,11 @@ char *fread_social_string(FILE *fl)
 // return FALSE on 'EOF'
 int read_social_from_file(long int num_social, FILE * fl)
 {
+  if (num_social >= soc_mess_list.size())
+  {
+    soc_mess_list.resize(num_social*2);
+  }
+
   char tmp[MAX_INPUT_LENGTH];
   int hide, min_pos;
 
@@ -213,14 +218,7 @@ void boot_social_messages(void)
 
   // initialize our array
   num_socials = 0;
-  social_array_size = 450; // Guess on number of socials.  Closer this is to actual without
-                           // going over saves on memory and boot up speed since we won't
-                           // have to realloc as often.
-#ifdef LEAK_CHECK
-  soc_mess_list = (struct social_messg *) calloc(social_array_size, sizeof(struct social_messg));
-#else
-  soc_mess_list = (struct social_messg *) dc_alloc(social_array_size, sizeof(struct social_messg));
-#endif
+  soc_mess_list = vector<social_messg>(450);
 
   if(!(fl = dc_fopen(SOCIAL_FILE, "r"))) {
     perror("Can't open social file in boot_social_messages");
@@ -229,27 +227,13 @@ void boot_social_messages(void)
 
   for(;;) 
   {
-    // do we have room?
-    if(num_socials >= social_array_size) {
-      social_array_size += 10;
-      // realloc the list to have enough memory for the new array size
-#ifdef LEAK_CHECK
-      soc_mess_list = (struct social_messg *) realloc(soc_mess_list, 
-                                  (sizeof(struct social_messg)*social_array_size));
-#else
-      soc_mess_list = (struct social_messg *) dc_realloc(soc_mess_list, 
-                                  (sizeof(struct social_messg)*social_array_size));
-#endif
-      // clear the memory we just alloc'd
-      memset( (soc_mess_list + num_socials), 0, (sizeof(struct social_messg)*10) );
-    }
     if(!read_social_from_file(num_socials, fl))
       break;
     num_socials++;
   }
 
   // sort it!
-  qsort(soc_mess_list, num_socials, sizeof(social_messg), compare_social_sort);
+  //qsort(soc_mess_list, num_socials, sizeof(social_messg), compare_social_sort);
 
   dc_fclose(fl);
 }
@@ -295,8 +279,6 @@ void clean_socials_from_memory()
      if(soc_mess_list[i].others_auto)
         dc_free(soc_mess_list[i].others_auto);
    }
-
-   dc_free(soc_mess_list);
 }
 
 int do_social(struct char_data *ch, char *argument, int cmd)
