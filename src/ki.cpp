@@ -36,9 +36,6 @@ extern CWorld world;
  
 extern int hit_gain(CHAR_DATA *, int);
 
-void remove_memory(CHAR_DATA *ch, char type);
-void add_memory(CHAR_DATA *ch, char *victim, char type);
-
 struct ki_info_type ki_info [ ] = {
 { /* 0 */
 	3*PULSE_TIMER, POSITION_FIGHTING, 12,
@@ -761,7 +758,7 @@ int ki_disrupt( ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *victim)
    affected_type *af = affected_by_spell(victim, KI_DISRUPT + KI_OFFSET);
    if (af) {
      // We've KI_DISRUPTED the victim and failed before so we get a bonus
-     if (af->caster == string(GET_NAME(ch))) {
+     if (af->casterName == ch->getName()) {
        savebonus -= af->modifier;
      } else {
        // Some other caster's KI_DISRUPT was on the victim, removing it
@@ -786,7 +783,7 @@ int ki_disrupt( ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *victim)
        newaf.modifier  = 1+(learned/20);
        newaf.location  = APPLY_NONE;
        newaf.bitvector = -1;
-       newaf.caster = string(GET_NAME(ch));
+       newaf.casterName = ch->getName();
 
        affect_to_char(victim, &newaf);
      }
