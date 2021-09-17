@@ -677,11 +677,17 @@ void new_string_add(struct descriptor_data *d, char *str) {
 			if (!action)
 				SEND_TO_Q("String too long, limit reached on message.  Last line ignored.\r\n", d);
 		} else {
-			if (!(*d->strnew = (char *) dc_realloc(*d->strnew, strlen(*d->strnew) + strlen(str) + 5))) {
-				perror("string_add");
-				abort();
-			}
-			strcat(*d->strnew, str);
+         if (*d->strnew)
+         {
+            char *oldStr = *d->strnew;
+            *d->strnew = new char[strlen(*d->strnew) + strlen(str) + 5];
+            strcpy(*d->strnew, oldStr);
+            strcat(*d->strnew, str);
+            delete[] oldStr;
+         } else {
+            *d->strnew = new char[strlen(str) + 5];
+            strcat(*d->strnew, str);
+         }
 		}
 	}
 
