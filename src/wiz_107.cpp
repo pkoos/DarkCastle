@@ -12,6 +12,7 @@
 #include "handler.h"
 #include "returnvals.h"
 #include "spells.h"
+#include "comm.h"
 
 int do_archive(struct char_data *ch, char *argument, int cmd)
 {
@@ -60,10 +61,6 @@ int do_pview(struct char_data *ch, char *argument, int cmd)
 {
   char name[200];
   struct char_data *victim;
-  char * tprompt = NULL;
-
-  void make_prompt(struct descriptor_data *point, char *prompt);
-
 
   argument = one_argument(argument, name);
 
@@ -77,15 +74,11 @@ int do_pview(struct char_data *ch, char *argument, int cmd)
     return eFAILURE;
   }
 
-  tprompt = new char[LARGE_BUFSIZE + GARBAGE_SPACE + MAX_STRING_LENGTH];
-  memset(tprompt, 0, LARGE_BUFSIZE + GARBAGE_SPACE + MAX_STRING_LENGTH);
-
-  make_prompt(victim->desc, tprompt);
+  QString prompt = make_prompt(victim->desc);
   send_to_char("Target's prompt is:\r\n", ch);
-  send_to_char(tprompt, ch);
+  send_to_char(prompt.toStdString(), ch);
   send_to_char("\r\n\r\n", ch);
 
-  delete [] tprompt;     
   return eSUCCESS;
 }
 
