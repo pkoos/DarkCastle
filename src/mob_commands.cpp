@@ -58,7 +58,7 @@ using namespace std;
 #include "arena.h"
 #include "race.h"
 #include "const.h"
-
+#include "guild.h"
 
 // external vars
 
@@ -1079,7 +1079,7 @@ int do_mpthrow( CHAR_DATA *ch, char *argument, int cmd )
      opt = 0;
 
   // create struct
-  throwitem = (struct mprog_throw_type *)dc_alloc(1, sizeof(struct mprog_throw_type));
+  throwitem = new mprog_throw_type;
   throwitem->target_mob_num = mob_num;
   strcpy(throwitem->target_mob_name, first);
   throwitem->data_num = catch_num;
@@ -1108,7 +1108,6 @@ int do_mpteachskill( CHAR_DATA *ch, char *argument, int cmd )
     char arg[ MAX_INPUT_LENGTH ];
     char skill[ MAX_INPUT_LENGTH ];
 
-    int learn_skill(char_data * ch, int skill, int amount, int maximum);
     class_skill_defines * get_skill_list(char_data * ch);
     int search_skills(char * arg, class_skill_defines * list_skills);
     int search_skills2(int arg, class_skill_defines * list_skills);
@@ -1263,14 +1262,7 @@ int do_mpsettemp(CHAR_DATA *ch, char *argument, int cmd)
       dc_free(eh->data);
       eh->data = str_dup(arg2);
     } else {
-#ifdef LEAK_CHECK
-          eh = (struct tempvariable *)
-                        calloc(1, sizeof(struct tempvariable));
-#else
-       eh = (struct tempvariable *)
-                        dc_alloc(1, sizeof(struct tempvariable));
-#endif
-
+       eh = new tempvariable;
        eh->data = str_dup(arg2);
        eh->name = str_dup(temp);
        eh->next = victim->tempVariable;
@@ -1343,11 +1335,7 @@ void add_dmg(CHAR_DATA *ch, int dmg)
   }
 
 
-#ifdef LEAK_CHECK
-  c = (struct damage_list *)calloc(1, sizeof(struct damage_list));
-#else
-  c = (struct damage_list *)dc_alloc(1, sizeof(struct damage_list));
-#endif
+  c = new damage_list;
   if (IS_NPC(ch))
     strcpy(c->name, GET_SHORT(ch));
   else
@@ -1616,8 +1604,7 @@ MPROG_CATCH_MAX)) {
   }
 
   // create struct
-  throwitem = (struct mprog_throw_type *)dc_alloc(1, sizeof(struct
-mprog_throw_type));
+  throwitem = new mprog_throw_type;
   throwitem->target_mob_num = mob_num;
   strcpy(throwitem->target_mob_name, first);
   throwitem->data_num = catch_num;
@@ -1749,7 +1736,7 @@ int do_mppause( CHAR_DATA *ch, char *argument, int cmd )
       prog_error(ch, "mpppause all - Invalid delay.");
       return eFAILURE;
     }
-    throwitem = (struct mprog_throw_type *)dc_alloc(1, sizeof(struct mprog_throw_type));
+    throwitem = new mprog_throw_type;
 
     if (ch && ch->mobdata)
     {      
@@ -1763,7 +1750,7 @@ int do_mppause( CHAR_DATA *ch, char *argument, int cmd )
       prog_error(ch, "mppause - Invalid delay.");
       return eFAILURE;
     }
-    throwitem = (struct mprog_throw_type *)dc_alloc(1, sizeof(struct mprog_throw_type));
+    throwitem = new mprog_throw_type;
     throwitem->data_num = -999;
   }
 
