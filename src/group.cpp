@@ -681,8 +681,8 @@ int do_autojoin(CHAR_DATA *ch, char *argument, int cmd)
 
   if (ch->pcdata->joining) { 
     strcpy(tmp, ch->pcdata->joining);
-    dc_free(ch->pcdata->joining);
-    ch->pcdata->joining = 0;
+    delete ch->pcdata->joining;
+    ch->pcdata->joining = nullptr;
   }
   
   while (1) {
