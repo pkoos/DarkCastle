@@ -59,6 +59,7 @@ public:
     bool test_mobs = false;
     bool test_objs = false;
     bool test_world = false;
+    bool test_code = false;
     bool bport = false;
     bool check_syntax = false;
     bool stderr_timestamp = true;
