@@ -54,7 +54,7 @@ void rebuild_rnum_references(int startAt, int type)
     int zone, comm;
 
     for (zone = 0; zone <= top_of_zone_table; zone++) {
-      for (comm = 0; zone_table[zone].cmd && zone_table[zone].cmd[comm].command != 'S'; comm++)
+      for (comm = 0; zone_table[zone].cmd.size() && zone_table[zone].cmd[comm].command != 'S'; comm++)
 	{
 	  switch(zone_table[zone].cmd[comm].command)
 	    {
@@ -100,7 +100,7 @@ int do_check(struct char_data *ch, char *arg, int cmd) {
   struct char_data *vict;
   int connected = 1;
   char buf[120];
-  char tmp_buf[160];
+  char tmp_buf[MAX_STRING_LENGTH];
   char *c;
 
   while(isspace(*arg))
@@ -201,7 +201,7 @@ int do_check(struct char_data *ch, char *arg, int cmd) {
       send_to_char("(Linkdead)\n\r", ch); 
   else { 
     send_to_char("(Not on game)\n\r", ch);
-    free_char(vict); 
+    delete vict; 
   }
   return eSUCCESS;
 }
@@ -364,7 +364,7 @@ int do_stat(struct char_data *ch, char *arg, int cmd)
     char_to_room(vict, ch->in_room);
     mob_stat(ch, vict);
     char_from_room(vict);
-    free_char(vict);
+    delete vict;
     return eSUCCESS;;
   }
 
@@ -760,9 +760,8 @@ int do_zedit(struct char_data *ch, char *argument, int cmd)
       // if the zone memory is full, allocate another 10 commands worth       
       if(last_cmd >= (zone_table[zone].reset_total-2))
       {
-        zone_table[zone].cmd = (struct reset_com *)
-            realloc(zone_table[zone].cmd, (zone_table[zone].reset_total + 10) * sizeof(struct reset_com));
         zone_table[zone].reset_total += 10;
+        zone_table[zone].cmd.resize(zone_table[zone].reset_total);
       }
       
       if(i)
@@ -771,7 +770,7 @@ int do_zedit(struct char_data *ch, char *argument, int cmd)
         for(j = last_cmd; j != (i-2) ; j--)
           zone_table[zone].cmd[j+1] = zone_table[zone].cmd[j];
         // set up the 'J'
-	zone_table[zone].cmd[i-1].active = 1;
+	      zone_table[zone].cmd[i-1].active = 1;
         zone_table[zone].cmd[i-1].command = 'J';
         zone_table[zone].cmd[i-1].if_flag = 0;
         zone_table[zone].cmd[i-1].arg1 = 0;   
@@ -1072,9 +1071,8 @@ int do_zedit(struct char_data *ch, char *argument, int cmd)
       // if the zone memory is full, allocate another 10 commands worth
       if(last_cmd >= (zone_table[zone].reset_total-2))
       {
-        zone_table[zone].cmd = (struct reset_com *)
-            realloc(zone_table[zone].cmd, (zone_table[zone].reset_total + 10) * sizeof(struct reset_com));
         zone_table[zone].reset_total += 10;
+        zone_table[zone].cmd.resize(zone_table[zone].reset_total);        
       }
 
       struct reset_com tmp = zone_table[zone].cmd[from];
@@ -1237,22 +1235,15 @@ int do_sedit(struct char_data *ch, char *argument, int cmd)
         send_to_char(buf, ch);
         return eFAILURE;
       }
-      lastskill = NULL;
-      for(skill = vict->skills; skill; lastskill = skill, skill = skill->next) {
-        if(skill->skillnum == skillnum)
-          break;
-      }
 
-      if(skill) {
-        if(lastskill) 
-          lastskill->next = skill->next;
-        else vict->skills = skill->next;
-
+      auto i = ch->skills.find(skillnum);
+      if (i != ch->skills.end())
+      {
         sprintf(buf, "Skill '%s'(%d) removed from %s by %s.", text, 
-                     skill->learned, GET_NAME(vict), GET_NAME(ch));
+                     i->second.learned, GET_NAME(vict), GET_NAME(ch));
         log(buf, GET_LEVEL(ch), LOG_GOD);
         sprintf(buf, "Skill '%s'(%d) removed from %s.\r\n", text, 
-                     skill->learned, GET_NAME(vict));
+                     i->second.learned, GET_NAME(vict));
         send_to_char(buf, ch);
       }
       else {
@@ -1304,21 +1295,37 @@ int do_sedit(struct char_data *ch, char *argument, int cmd)
                    "  Skill          Learned\r\n"
                    "$3---------------------------------$R\r\n", GET_NAME(vict));
       send_to_char(buf, ch);
-      for(skill = vict->skills; skill; skill = skill->next)
-      {
-        const char * skillname = get_skill_name(skill->skillnum);
 
-        if(skillname) {
-          sprintf(buf, "  %-15s%d\r\n", skillname, skill->learned);
-        } else {
-          sprintf(buf, "  unknown (%d)  %d\r\n", skill->skillnum, skill->learned);
+      bool found = false;
+      queue<int16> copy = ch->skillsSaveLoadOrder;
+      while (copy.size() > 0)
+      {
+        int16 skillnum = copy.front();
+        auto i = ch->skills.find(skillnum);
+        if (i != ch->skills.end())
+        {
+          char_skill_data skill = i->second;
+          const char *skillname = get_skill_name(skill.skillnum);
+          if (skillname)
+          {
+            sprintf(buf, "  %-15s%d\r\n", skillname, skill.learned);
+          }
+          else
+          {
+            sprintf(buf, "  unknown (%d)  %d\r\n", skill.skillnum, skill.learned);
+          }
+
+          send_to_char(buf, ch);
+          found=true;
+          copy.pop();
         }
 
-        send_to_char(buf, ch);
-        i = 1;
+        if(found == false)
+        {
+          send_to_char("  (none)\r\n", ch);
+        }
       }
-      if(!i)
-        send_to_char("  (none)\r\n", ch);
+
       return eSUCCESS;
       break;
     }
@@ -2364,11 +2371,7 @@ int do_procedit(struct char_data *ch, char *argument, int cmd)
           "This creates a new mob prog and tacks it on the end.\r\n", ch);
       return eFAILURE;
     }
-#ifdef LEAK_CHECK
-    prog = (MPROG_DATA *) calloc(1, sizeof(MPROG_DATA));
-#else
-    prog = (MPROG_DATA*) dc_alloc(1, sizeof(MPROG_DATA));
-#endif
+    prog = new mob_prog_data;
     prog->type = GREET_PROG;
     prog->arglist = strdup("80");
     prog->comlist = strdup("say This is my new mob prog!\n\r");
@@ -2423,9 +2426,12 @@ int do_procedit(struct char_data *ch, char *argument, int cmd)
       mob_index[mob_num].mobprogs = currprog->next;
 
     currprog->type = 0;
-    dc_free(currprog->arglist);
-    dc_free(currprog->comlist);
-    dc_free(currprog);
+    delete currprog->arglist;
+    currprog->arglist = nullptr;
+    delete currprog->comlist;
+    currprog->comlist = nullptr;
+    delete currprog;
+    currprog = nullptr;
 
     update_mobprog_bits(mob_num);
 
@@ -3943,11 +3949,7 @@ int do_redit(struct char_data *ch, char *argument, int cmd)
 	  pd = nd;
 	}
 	if (done) break;
-	#ifdef LEAK_CHECK
-		nd = (struct deny_data *)calloc(1, sizeof(struct deny_data));
-	#else
-		nd = (struct deny_data *)dc_alloc(1, sizeof(struct deny_data));
-	#endif
+  nd = new deny_data;
 	nd->next = world[ch->in_room].denied;
 	nd->vnum = stoi(remainder_args);
 	world[ch->in_room].denied = nd;
