@@ -100,11 +100,7 @@ void load_game_portals()
     while(fscanf(cur_file, "%*d\n") != EOF) num_lines++;
     fseek(cur_file, file_pos, 0);
     game_portals[i].num_rooms  = num_lines;
-#ifdef LEAK_CHECK
-    game_portals[i].from_rooms = (int *) calloc(game_portals[i].num_rooms, sizeof(int)); 
-#else
-    game_portals[i].from_rooms = (int *) dc_alloc(game_portals[i].num_rooms, sizeof(int)); 
-#endif
+    game_portals[i].from_rooms = new int[game_portals[i].num_rooms];
     for(j = 0; j < game_portals[i].num_rooms; j++)
     {
       fscanf(cur_file, "%d\n", ((game_portals[i]).from_rooms+j));
@@ -185,11 +181,7 @@ int make_arbitrary_portal(int from_room, int to_room, int duplicate, int timer)
   struct obj_data *from_portal;
   char log_buf[256];
 
-#ifdef LEAK_CHECK
-  from_portal = (struct obj_data *)calloc(1, sizeof(struct obj_data));
-#else
-  from_portal = (struct obj_data *)dc_alloc(1, sizeof(struct obj_data));
-#endif
+  from_portal = new obj_data;
   clear_object(from_portal);
 
   if(real_room(from_room) == (-1))
