@@ -948,7 +948,7 @@ void stop_guarding(char_data * guard)
 
 void start_guarding(char_data * guard, char_data * victim)
 {
-   follow_type * curr = (struct follow_type *) dc_alloc(1, sizeof(struct follow_type));
+   follow_type * curr = new follow_type;
 
    curr->follower = guard;
    curr->next = victim->guarded_by;
@@ -1341,7 +1341,8 @@ int do_smite(struct char_data *ch, char *argument, int cmd)
 
     af.type = SKILL_SMITE;
     af.location = 0;
-    af.modifier = (int)vict;
+    af.modifier = 0;
+    af.victim = vict->getUUID();
     af.duration = 1 + learned/16;
     af.bitvector = -1;
 
