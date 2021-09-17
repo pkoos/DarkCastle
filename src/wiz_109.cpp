@@ -667,7 +667,6 @@ int do_skilledit(struct char_data *ch, char *argument, int cmd)
   char type[MAX_INPUT_LENGTH];
   char value[MAX_INPUT_LENGTH];
   char buf[180];
-  struct char_skill_data * curr = NULL;
 
   if(!(*argument)) {
     send_to_char("Syntax:  skilledit <character> <action> <value>\n\r"
@@ -684,8 +683,7 @@ int do_skilledit(struct char_data *ch, char *argument, int cmd)
 
   if(isname(type, "list"))
   {
-    curr = victim->skills;
-    if(!curr) {
+    if(victim->skills.size() == 0) {
       sprintf(buf, "%s has no skills.\r\n", GET_NAME(victim));
       send_to_char(buf, ch);
       return eSUCCESS;
@@ -693,11 +691,16 @@ int do_skilledit(struct char_data *ch, char *argument, int cmd)
 
     sprintf(buf, "Skills for %s:\r\n", GET_NAME(victim));
     send_to_char(buf, ch);
-    while(curr) {
-      sprintf(buf, "  %d  -  %d  [%d] [%d] [%d] [%d] [%d]\r\n", curr->skillnum, curr->learned,
-                   curr->unused[0], curr->unused[1], curr->unused[2], curr->unused[3], curr->unused[4]);
+
+    queue<int16> copy = victim->skillsSaveLoadOrder;
+    while(copy.size() > 0)
+    {
+      int16 skillnum = copy.front();      
+      char_skill_data curr = victim->skills[skillnum];
+      sprintf(buf, "  %d  -  %d  [%d] [%d] [%d] [%d] [%d]\r\n", curr.skillnum, curr.learned,
+                   curr.unused[0], curr.unused[1], curr.unused[2], curr.unused[3], curr.unused[4]);
       send_to_char(buf, ch);
-      curr = curr->next;
+      copy.pop();
     }
   }
   else if(isname(type, "add"))
