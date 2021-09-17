@@ -615,7 +615,7 @@ int do_reload_help(struct char_data *ch, char *argument, int cmd)
     return eFAILURE;
   }
 
-  FREE(new_help_table);
+  delete[] new_help_table;
   new_top_of_helpt = 0;
   CREATE(new_help_table, struct help_index_element_new, help_rec_count);
   ret = load_new_help(new_help_fl,1,ch);
@@ -673,7 +673,6 @@ int do_hedit(struct char_data *ch, char *argument, int cmd)
        new_help.min_level = 75;
        new_help.entry = str_hsh("Blank help file!\r\n");
 
-       RECREATE(new_help_table, struct help_index_element_new, new_top_of_helpt + 1);
        new_help_table[new_top_of_helpt] = new_help;
        sprintf(buf, "Help entry #%d added with keyword '%s'.\r\n", new_top_of_helpt, buf2);
        send_to_char(buf, ch);
