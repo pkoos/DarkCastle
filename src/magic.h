@@ -242,7 +242,7 @@ int spell_fly(ubyte level, CHAR_DATA * ch,
 int spell_know_alignment(ubyte level, CHAR_DATA * ch,
    CHAR_DATA * victim, struct obj_data * obj, int skill);
 int spell_dispel_magic(ubyte level, CHAR_DATA * ch,
-   CHAR_DATA * victim, struct obj_data * obj, int skill);
+   CHAR_DATA * victim, struct obj_data * obj, int skill, int targetSpell = 0);
 int spell_flamestrike(ubyte level, CHAR_DATA * ch,
    CHAR_DATA * victim, struct obj_data * obj, int skill);
 int spell_stone_skin(ubyte level, CHAR_DATA * ch,
@@ -527,6 +527,8 @@ int cast_create_golem(ubyte level, CHAR_DATA * ch, char *arg, int type,
 
 int spell_dispel_minor(ubyte level, CHAR_DATA * ch,
    CHAR_DATA * victim, struct obj_data * obj, int skill);
+int spell_dispel_minor_spell(ubyte level, CHAR_DATA * ch,
+   CHAR_DATA * victim, struct obj_data * obj, int skill, int targetSpell);
 int cast_dispel_minor(ubyte level, CHAR_DATA * ch, char *arg, int type,
    CHAR_DATA * tar_ch, struct obj_data * tar_obj, int skill);
 
