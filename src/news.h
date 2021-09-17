@@ -2,6 +2,7 @@
 
 struct news_data
 {
+   news_data();
    struct news_data *next;
    time_t time;
    char *news;
