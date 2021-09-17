@@ -33,7 +33,9 @@ struct songInfo
 {
 	int16 song_timer; /* status for songs being sung */
 	int16 song_number; /* number of song being sung */
-	char * song_data; 
+	char * song_data;
+	int song_value;
+
 };
 
 /************************************************************************
