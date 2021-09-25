@@ -4172,57 +4172,96 @@ struct obj_data *clone_object(int nr)
 
 void randomize_object_affects(obj_data *obj)
 {
-	if (obj == NULL) {
+	if (obj == NULL)
+	{
 		return;
 	}
 
 	// Don't alter godload
-	if (IS_SET(obj->obj_flags.extra_flags, ITEM_SPECIAL)) {
+	if (IS_SET(obj->obj_flags.extra_flags, ITEM_SPECIAL))
+	{
 		return;
 	}
 
-	for (int i = 0; i < obj->num_affects; i++) {
-		switch (obj->affected[i].location) {
+	for (int i = 0; i < obj->num_affects; i++)
+	{
+		switch (obj->affected[i].location)
+		{
 		case APPLY_STR:
-			case APPLY_DEX:
-			case APPLY_INT:
-			case APPLY_WIS:
-			case APPLY_CON:
-			if (number(1, 100) <= 33) {
+		case APPLY_DEX:
+		case APPLY_INT:
+		case APPLY_WIS:
+		case APPLY_CON:
+			if (number(0, 1) == 1)
+			{
 				obj->affected[i].modifier += number(-1, 1);
+				obj->affected[i].modifier = MAX(0, obj->affected[i].modifier);
 			}
 			break;
-		case APPLY_LIGHTNING_SHIELD:
-			case WEP_LIGHTNING_BOLT:
-			case WEP_FIREBALL:
-			case WEP_FLAMESTRIKE:
-			case WEP_DISPEL_EVIL:
-			case WEP_MAGIC_MISSILE:
-			case WEP_METEOR_SWARM:
-			case APPLY_HIT:
-			case APPLY_MOVE:
-			case APPLY_MANA:
-			case APPLY_KI:
-			case APPLY_HIT_N_DAM:
-			case APPLY_HITROLL:
-			case APPLY_DAMROLL:
-			case APPLY_SPELLDAMAGE:
-			case APPLY_MELEE_DAMAGE: // melee mitigation
+		// Spells found on weapons from weapon_spells()
+		case WEP_MAGIC_MISSILE:
+		case WEP_BLIND:
+		case WEP_EARTHQUAKE:
+		case WEP_CURSE:
+		case WEP_COLOUR_SPRAY:
+		case WEP_DISPEL_EVIL:
+		case WEP_ENERGY_DRAIN:
+		case WEP_FIREBALL:
+		case WEP_LIGHTNING_BOLT:
+		case WEP_HARM:
+		case WEP_POISON:
+		case WEP_SLEEP:
+		case WEP_FEAR:
+		case WEP_DISPEL_MAGIC:
+		case WEP_WEAKEN:
+		case WEP_CAUSE_LIGHT:
+		case WEP_CAUSE_CRITICAL:
+		case WEP_PARALYZE:
+		case WEP_ACID_BLAST:
+		case WEP_BEE_STING:
+		case WEP_CURE_LIGHT:
+		case WEP_FLAMESTRIKE:
+		case WEP_HEAL_SPRAY:
+		case WEP_DROWN:
+		case WEP_HOWL:
+		case WEP_SOULDRAIN:
+		case WEP_SPARKS:
+		case WEP_DISPEL_GOOD:
+		case WEP_TELEPORT:
+		case WEP_CHILL_TOUCH:
+		case WEP_POWER_HARM:
+		case WEP_VAMPIRIC_TOUCH:
+		case WEP_LIFE_LEECH:
+		case WEP_METEOR_SWARM:
+		case WEP_ENTANGLE:
+		case WEP_CREATE_FOOD:
+		case WEP_WILD_MAGIC:
+		case APPLY_LIGHTNING_SHIELD:		
+		case APPLY_HIT:
+		case APPLY_MOVE:
+		case APPLY_MANA:
+		case APPLY_KI:
+		case APPLY_HIT_N_DAM:
+		case APPLY_HITROLL:
+		case APPLY_DAMROLL:
+		case APPLY_SPELLDAMAGE:
+		case APPLY_MELEE_DAMAGE: // melee mitigation
 		case APPLY_SPELL_DAMAGE: // spell mitigation
-		case APPLY_SONG_DAMAGE:  // song mitigation
+		case APPLY_SONG_DAMAGE:	 // song mitigation
 		case APPLY_HP_REGEN:
-			case APPLY_MANA_REGEN:
-			case APPLY_MOVE_REGEN:
-			case APPLY_KI_REGEN:
-			case APPLY_SAVING_FIRE:
-			case APPLY_SAVING_COLD:
-			case APPLY_SAVING_ENERGY:
-			case APPLY_SAVING_ACID:
-			case APPLY_SAVING_MAGIC:
-			case APPLY_SAVING_POISON:
-			case APPLY_SAVES:
-			case APPLY_AC:
-			obj->affected[i].modifier = random_percent_change(-33, 33, obj->affected[i].modifier);
+		case APPLY_MANA_REGEN:
+		case APPLY_MOVE_REGEN:
+		case APPLY_KI_REGEN:
+		case APPLY_SAVING_FIRE:
+		case APPLY_SAVING_COLD:
+		case APPLY_SAVING_ENERGY:
+		case APPLY_SAVING_ACID:
+		case APPLY_SAVING_MAGIC:
+		case APPLY_SAVING_POISON:
+		case APPLY_SAVES:
+		case APPLY_AC:
+		case APPLY_REFLECT:
+			obj->affected[i].modifier = random_percent_change(33, obj->affected[i].modifier);
 			break;
 		}
 	}
@@ -4238,32 +4277,30 @@ void randomize_object(obj_data *obj)
 
 	switch (obj->obj_flags.type_flag) {
 	case ITEM_WEAPON:
-		//obj->obj_flags.weight = MAX(1,random_percent_change(-33, 33, obj->obj_flags.weight));
-		obj->obj_flags.cost = MAX(1, random_percent_change(-33, 33, obj->obj_flags.cost));
-		obj->obj_flags.value[1] = random_percent_change(-20, 20, obj->obj_flags.value[1]);
-		obj->obj_flags.value[2] = random_percent_change(-20, 20, obj->obj_flags.value[2]);
+		obj->obj_flags.cost = MAX(1, random_percent_change(33, obj->obj_flags.cost));
+		obj->obj_flags.value[1] = random_percent_change(20, obj->obj_flags.value[1]);
+		obj->obj_flags.value[2] = random_percent_change(20, obj->obj_flags.value[2]);
 		randomize_object_affects(obj);
 		break;
 	case ITEM_ARMOR:
-		//obj->obj_flags.weight = MAX(1,random_percent_change(-33, 33, obj->obj_flags.weight));
-		obj->obj_flags.cost = MAX(1, random_percent_change(-33, 33, obj->obj_flags.cost));
+		obj->obj_flags.cost = MAX(1, random_percent_change(33, obj->obj_flags.cost));
 		// AC-apply
-		obj->obj_flags.value[1] = random_percent_change(-25, 25, obj->obj_flags.value[1]);
+		obj->obj_flags.value[1] = random_percent_change(25, obj->obj_flags.value[1]);
 		randomize_object_affects(obj);
 		break;
 	case ITEM_WAND:
-		obj->obj_flags.cost = MAX(1, random_percent_change(-33, 33, obj->obj_flags.cost));
+		obj->obj_flags.cost = MAX(1, random_percent_change(33, obj->obj_flags.cost));
 		// total charges
-		obj->obj_flags.value[1] = random_percent_change(-10, 10, obj->obj_flags.value[2]);
+		obj->obj_flags.value[1] = random_percent_change(10, obj->obj_flags.value[2]);
 		// current charges
 		obj->obj_flags.value[2] = obj->obj_flags.value[1];
 		break;
 	case ITEM_INSTRUMENT:
-		obj->obj_flags.cost = MAX(1, random_percent_change(-33, 33, obj->obj_flags.cost));
+		obj->obj_flags.cost = MAX(1, random_percent_change(33, obj->obj_flags.cost));
 		// non-combat
-		obj->obj_flags.value[1] = random_percent_change(-33, 33, obj->obj_flags.value[1]);
+		obj->obj_flags.value[1] = random_percent_change(33, obj->obj_flags.value[1]);
 		// combat
-		obj->obj_flags.value[2] = random_percent_change(-33, 33, obj->obj_flags.value[2]);
+		obj->obj_flags.value[2] = random_percent_change(33, obj->obj_flags.value[2]);
 		randomize_object_affects(obj);
 		break;
 	}

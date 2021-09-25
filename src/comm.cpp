@@ -165,7 +165,6 @@ void food_update(void);		/* In limits.c */
 void mobile_activity(void);
 void object_activity(uint64_t pulse_type);
 void update_corpses_and_portals(void);
-void new_string_add(struct descriptor_data *d, char *str);
 void string_hash_add(struct descriptor_data *d, char *str);
 void perform_violence(void);
 void show_string(struct descriptor_data *d, char *input);
@@ -1070,6 +1069,12 @@ void echo_on(struct descriptor_data *d)
   SEND_TO_Q(on_string, d);
 }
 
+void telnet_ga(descriptor_data *d)
+{
+  char go_ahead[] = {(char)IAC, (char)GA, (char)0};
+  SEND_TO_Q(go_ahead, d);
+}
+
 int do_lastprompt(CHAR_DATA *ch, char *arg, int cmd) 
 {
   if (GET_LAST_PROMPT(ch))
@@ -1245,7 +1250,9 @@ QString make_prompt(struct descriptor_data *d)
     }
   }
 
-  return prompt;
+    char go_ahead[] = {(char)IAC, (char)GA, (char)0};
+    prompt += go_ahead;
+    return prompt;
 }
 
 CHAR_DATA* get_charmie(CHAR_DATA *ch)

@@ -40,6 +40,7 @@
 #include "structs.h"
 #include "guild.h"
 #include "const.h"
+#include "newedit.h"
 
 using namespace std;
 
@@ -2664,1300 +2665,1631 @@ int do_mscore(struct char_data *ch, char *argument, int cmd)
     return eSUCCESS;
 }
 
-int do_medit(struct char_data *ch, char *argument, int cmd) {
-	char buf[MAX_INPUT_LENGTH];
-	char buf2[MAX_INPUT_LENGTH];
-	char buf3[MAX_INPUT_LENGTH];
-	char buf4[MAX_INPUT_LENGTH];
-	int mob_num = -1;
-	int intval = 0;
-	int x, i;
+int do_medit(struct char_data *ch, char *argument, int cmd)
+{
+  char buf[MAX_INPUT_LENGTH];
+  char buf2[MAX_INPUT_LENGTH];
+  char buf3[MAX_INPUT_LENGTH];
+  char buf4[MAX_INPUT_LENGTH];
+  int mob_num = -1;
+  int intval = 0;
+  int x, i;
 
-	const char *fields[] = { "keywords", "shortdesc", "longdesc", "description",
-			"sex", "class", "race", "level", "alignment", "loadposition",
-			"defaultposition", "actflags", "affectflags", "numdamdice",
-			"sizedamdice", "damroll", "hitroll", "hphitpoints", "gold",
-			"experiencepoints", "immune", "suscept", "resist", "armorclass",
-			"stat", "strength", "dexterity", "intelligence", "wisdom",
-			"constitution", "new", "delete", "type", "v1", "v2", "v3", "v4",
-			"\n" };
+  const char *fields[] = {"keywords", "shortdesc", "longdesc", "description",
+                          "sex", "class", "race", "level", "alignment", "loadposition",
+                          "defaultposition", "actflags", "affectflags", "numdamdice",
+                          "sizedamdice", "damroll", "hitroll", "hphitpoints", "gold",
+                          "experiencepoints", "immune", "suscept", "resist", "armorclass",
+                          "stat", "strength", "dexterity", "intelligence", "wisdom",
+                          "constitution", "new", "delete", "type", "v1", "v2", "v3", "v4",
+                          "\n"};
 
-	if (IS_NPC(ch))
-		return eFAILURE;
+  if (IS_NPC(ch))
+    return eFAILURE;
 
-	half_chop(argument, buf, buf2);
-	half_chop(buf2, buf3, buf4);
+  half_chop(argument, buf, buf2);
+  half_chop(buf2, buf3, buf4);
 
-	// at this point, buf  = mob_num
-	//                buf3 = field
-	//                buf4 = args
+  // at this point, buf  = mob_num
+  //                buf3 = field
+  //                buf4 = args
 
-	// or
+  // or
 
-	// buf = field
-	// buf3 = args[0]
-	// buf4 = args[1-+]
+  // buf = field
+  // buf3 = args[0]
+  // buf4 = args[1-+]
 
-	if (!*buf) {
-		send_to_char("$3Syntax$R:  medit [mob_num] [field] [arg]\r\n"
-				"  Edit a mob_num with no field or arg to view the item.\r\n"
-				"  Edit a field with no args for help on that field.\r\n\r\n"
-				"The field must be one of the following:\n\r", ch);
-		display_string_list(fields, ch);
-		return eFAILURE;
-	}
+  if (!*buf)
+  {
+    send_to_char("$3Syntax$R:  medit [mob_num] [field] [arg]\r\n"
+                 "  Edit a mob_num with no field or arg to view the item.\r\n"
+                 "  Edit a field with no args for help on that field.\r\n\r\n"
+                 "The field must be one of the following:\n\r",
+                 ch);
+    display_string_list(fields, ch);
+    return eFAILURE;
+  }
 
-	int mobvnum = -1;
-	if (isdigit(*buf)) {
-		mob_num = atoi(buf); // there is no mob 0, so this is okay.  Bad 0's get caught in real_mobile
-		mobvnum = mob_num;
-		if (((mob_num = real_mobile(mob_num)) < 0)) {
-			send_to_char("Invalid mob number.\r\n", ch);
-			return eSUCCESS;
-		}
-	} else {
-		mob_num = ch->pcdata->last_mob_edit;
-		mobvnum = mob_index[mob_num].virt;
-		// put the buffs where they should be
-		if (*buf4)
-			sprintf(buf2, "%s %s", buf3, buf4);
-		else
-			strcpy(buf2, buf3);
+  int mobvnum = -1;
+  if (isdigit(*buf))
+  {
+    mob_num = atoi(buf); // there is no mob 0, so this is okay.  Bad 0's get caught in real_mobile
+    mobvnum = mob_num;
+    if (((mob_num = real_mobile(mob_num)) < 0))
+    {
+      send_to_char("Invalid mob number.\r\n", ch);
+      return eSUCCESS;
+    }
+  }
+  else
+  {
+    mob_num = ch->pcdata->last_mob_edit;
+    mobvnum = mob_index[mob_num].virt;
+    // put the buffs where they should be
+    if (*buf4)
+      sprintf(buf2, "%s %s", buf3, buf4);
+    else
+      strcpy(buf2, buf3);
 
-		strcpy(buf4, buf2);
-		strcpy(buf3, buf);
-	}
-	if (mob_num != ch->pcdata->last_mob_edit) {
-		sprintf(buf2, "$3Current mob set to$R: %d\n\r",
-				mob_index[mob_num].virt);
-		send_to_char(buf2, ch);
-		ch->pcdata->last_mob_edit = mob_num;
-	}
+    strcpy(buf4, buf2);
+    strcpy(buf3, buf);
+  }
+  if (mob_num != ch->pcdata->last_mob_edit)
+  {
+    sprintf(buf2, "$3Current mob set to$R: %d\n\r",
+            mob_index[mob_num].virt);
+    send_to_char(buf2, ch);
+    ch->pcdata->last_mob_edit = mob_num;
+  }
 
-	if (!*buf3) // no field.  Stat the item.
-	{
-		mob_stat(ch, (char_data *) mob_index[mob_num].item);
-		return eSUCCESS;
-	}
+  if (!*buf3) // no field.  Stat the item.
+  {
+    mob_stat(ch, (char_data *)mob_index[mob_num].item);
+    return eSUCCESS;
+  }
 
-	if (mobvnum == -1)
-		mobvnum = mob_index[mob_num].virt;
-	// MOVED
-	for (x = 0;; x++) {
-		if (fields[x][0] == '\n') {
-			send_to_char("Invalid field.\n\r", ch);
-			return eFAILURE;
-		}
-		if (is_abbrev(buf3, fields[x]))
-			break;
-	}
+  if (mobvnum == -1)
+    mobvnum = mob_index[mob_num].virt;
+  // MOVED
+  for (x = 0;; x++)
+  {
+    if (fields[x][0] == '\n')
+    {
+      send_to_char("Invalid field.\n\r", ch);
+      return eFAILURE;
+    }
+    if (is_abbrev(buf3, fields[x]))
+      break;
+  }
 
-	// a this point, mob_num is the index
+  // a this point, mob_num is the index
 
-	if (x != 30) // Checked in there.
-		if (!can_modify_mobile(ch, mobvnum)) {
-			send_to_char(
-					"You are unable to work creation outside of your range.\n\r",
-					ch);
-			return eFAILURE;
-		}
+  if (x != 30) // Checked in there.
+    if (!can_modify_mobile(ch, mobvnum))
+    {
+      send_to_char(
+          "You are unable to work creation outside of your range.\n\r",
+          ch);
+      return eFAILURE;
+    }
 
-	switch (x) {
+  switch (x)
+  {
 
-	/* edit keywords */
-	case 0: {
-		if (!*buf4) {
-			send_to_char(
-					"$3Syntax$R: medit [mob_num] keywords <new_keywords>\n\r",
-					ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->name = str_hsh(buf4);
-		sprintf(buf, "Mob keywords set to '%s'.\r\n", buf4);
-		send_to_char(buf, ch);
-	}
-		break;
+  /* edit keywords */
+  case 0:
+  {
+    if (!*buf4)
+    {
+      send_to_char(
+          "$3Syntax$R: medit [mob_num] keywords <new_keywords>\n\r",
+          ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->name = str_hsh(buf4);
+    sprintf(buf, "Mob keywords set to '%s'.\r\n", buf4);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit short desc */
-	case 1: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] shortdesc <desc>\n\r",
-					ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->short_desc = str_hsh(buf4);
-		sprintf(buf, "Mob shortdesc set to '%s'.\r\n", buf4);
-		send_to_char(buf, ch);
-	}
-		break;
+    /* edit short desc */
+  case 1:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] shortdesc <desc>\n\r",
+                   ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->short_desc = str_hsh(buf4);
+    sprintf(buf, "Mob shortdesc set to '%s'.\r\n", buf4);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		// edit long desc
-	case 2: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] longdesc <desc>\n\r", ch);
-			return eFAILURE;
-		}
-		strcat(buf4, "\r\n");
-		((char_data *) mob_index[mob_num].item)->long_desc = str_hsh(buf4);
-		sprintf(buf, "Mob longdesc set to '%s'.\r\n", buf4);
-		send_to_char(buf, ch);
-	}
-		break;
+    // edit long desc
+  case 2:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] longdesc <desc>\n\r", ch);
+      return eFAILURE;
+    }
+    strcat(buf4, "\r\n");
+    ((char_data *)mob_index[mob_num].item)->long_desc = str_hsh(buf4);
+    sprintf(buf, "Mob longdesc set to '%s'.\r\n", buf4);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit description */
-	case 3: {
-		if (!*buf4) {
-			send_to_char(
-					"$3Syntax$R: medit [mob_num] description <anything>\n\r"
-							"This will put you into the editor which will replace the\r\n"
-							"current description.\r\n", ch);
-			return eFAILURE;
-		}
-		send_to_char("Enter the mob's description below."
-				" Terminate with '/s' on a new line.\n\r\n\r", ch);
-// TODO - this causes a memory leak if you edit the desc twice (first one is hsh'd)
-//        ((char_data *)mob_index[mob_num].item)->description = NULL;
-		ch->desc->connected = CON_EDITING;
-		((char_data*) mob_index[mob_num].item)->description = str_dup("");
-		ch->desc->strnew =
-				&(((char_data *) mob_index[mob_num].item)->description);
-		ch->desc->max_str = MAX_MESSAGE_LENGTH;
-	}
-		break;
+    /* edit description */
+  case 3:
+  {
+    if (!*buf4)
+    {
+      send_to_char(
+          "$3Syntax$R: medit [mob_num] description <anything>\n\r"
+          "This will put you into the editor which will replace the\r\n"
+          "current description.\r\n",
+          ch);
+      return eFAILURE;
+    }
+    send_to_char("Enter the mob's description below."
+                 " Terminate with '/s' on a new line.\n\r\n\r",
+                 ch);
+    // TODO - this causes a memory leak if you edit the desc twice (first one is hsh'd)
+    //        ((char_data *)mob_index[mob_num].item)->description = NULL;
+    ch->desc->connected = CON_EDITING;
+    ((char_data *)mob_index[mob_num].item)->description = str_dup("");
+    ch->desc->strnew =
+        &(((char_data *)mob_index[mob_num].item)->description);
+    ch->desc->max_str = MAX_MESSAGE_LENGTH;
+  }
+  break;
 
-		/* edit sex */
-	case 4: {
-		if (!*buf4) {
-			send_to_char(
-					"$3Syntax$R: medit [mob_num] sex <male|female|neutral>\n\r",
-					ch);
-			return eFAILURE;
-		}
-		if (is_abbrev(buf4, "male")) {
-			((char_data *) mob_index[mob_num].item)->sex = SEX_MALE;
-			send_to_char("Mob sex set to male.\r\n", ch);
-		} else if (is_abbrev(buf4, "female")) {
-			((char_data *) mob_index[mob_num].item)->sex = SEX_FEMALE;
-			send_to_char("Mob sex set to female.\r\n", ch);
-		} else if (is_abbrev(buf4, "neutral")) {
-			((char_data *) mob_index[mob_num].item)->sex = SEX_NEUTRAL;
-			send_to_char("Mob sex set to neutral.\r\n", ch);
-		} else
-			send_to_char(
-					"Invalid sex.  Chose 'male', 'female', or 'neutral'.\r\n",
-					ch);
-	}
-		break;
+    /* edit sex */
+  case 4:
+  {
+    if (!*buf4)
+    {
+      send_to_char(
+          "$3Syntax$R: medit [mob_num] sex <male|female|neutral>\n\r",
+          ch);
+      return eFAILURE;
+    }
+    if (is_abbrev(buf4, "male"))
+    {
+      ((char_data *)mob_index[mob_num].item)->sex = SEX_MALE;
+      send_to_char("Mob sex set to male.\r\n", ch);
+    }
+    else if (is_abbrev(buf4, "female"))
+    {
+      ((char_data *)mob_index[mob_num].item)->sex = SEX_FEMALE;
+      send_to_char("Mob sex set to female.\r\n", ch);
+    }
+    else if (is_abbrev(buf4, "neutral"))
+    {
+      ((char_data *)mob_index[mob_num].item)->sex = SEX_NEUTRAL;
+      send_to_char("Mob sex set to neutral.\r\n", ch);
+    }
+    else
+      send_to_char(
+          "Invalid sex.  Chose 'male', 'female', or 'neutral'.\r\n",
+          ch);
+  }
+  break;
 
-		/* edit class */
-	case 5: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] class <class>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%s\n",
-					pc_clss_types[((char_data *) mob_index[mob_num].item)->c_class]);
-			send_to_char(buf, ch);
-			send_to_char("\r\n$3Valid types$R:\r\n", ch);
-			for (i = 0; *pc_clss_types[i] != '\n'; i++) {
-				sprintf(buf, "  %d) %s\n\r", i, pc_clss_types[i]);
-				send_to_char(buf, ch);
-			}
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, 0, CLASS_MAX)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->c_class = intval;
-		sprintf(buf, "Mob class set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
+    /* edit class */
+  case 5:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] class <class>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%s\n",
+              pc_clss_types[((char_data *)mob_index[mob_num].item)->c_class]);
+      send_to_char(buf, ch);
+      send_to_char("\r\n$3Valid types$R:\r\n", ch);
+      for (i = 0; *pc_clss_types[i] != '\n'; i++)
+      {
+        sprintf(buf, "  %d) %s\n\r", i, pc_clss_types[i]);
+        send_to_char(buf, ch);
+      }
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, 0, CLASS_MAX))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->c_class = intval;
+    sprintf(buf, "Mob class set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit race */
-	case 6: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] race <racetype>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%s\n\r\n\r"
-					"Available types:\r\n",
-					race_info[((char_data *) mob_index[mob_num].item)->race].singular_name);
-			send_to_char(buf, ch);
-			for (i = 0; i <= MAX_RACE; i++)
-				csendf(ch, "  %s\r\n", race_info[i].singular_name);
-			send_to_char("\r\n", ch);
-			return eFAILURE;
-		}
-		int race_set = 0;
-		for (i = 0; i <= MAX_RACE; i++) {
-			if (is_abbrev(buf4, race_info[i].singular_name)) {
-				csendf(ch, "Mob race set to %s.\r\n",
-						race_info[i].singular_name);
-				((char_data *) mob_index[mob_num].item)->race = i;
-				race_set = 1;
+    /* edit race */
+  case 6:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] race <racetype>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%s\n\r\n\r"
+                   "Available types:\r\n",
+              race_info[((char_data *)mob_index[mob_num].item)->race].singular_name);
+      send_to_char(buf, ch);
+      for (i = 0; i <= MAX_RACE; i++)
+        csendf(ch, "  %s\r\n", race_info[i].singular_name);
+      send_to_char("\r\n", ch);
+      return eFAILURE;
+    }
+    int race_set = 0;
+    for (i = 0; i <= MAX_RACE; i++)
+    {
+      if (is_abbrev(buf4, race_info[i].singular_name))
+      {
+        csendf(ch, "Mob race set to %s.\r\n",
+               race_info[i].singular_name);
+        ((char_data *)mob_index[mob_num].item)->race = i;
+        race_set = 1;
 
-				((char_data *) mob_index[mob_num].item)->raw_str =
-						((char_data *) mob_index[mob_num].item)->str =
-								BASE_STAT
-										+ mob_race_mod[GET_RACE(
-												((char_data * )mob_index[mob_num].item))][0];
-				((char_data *) mob_index[mob_num].item)->raw_dex =
-						((char_data *) mob_index[mob_num].item)->dex =
-								BASE_STAT
-										+ mob_race_mod[GET_RACE(
-												((char_data * )mob_index[mob_num].item))][1];
-				((char_data *) mob_index[mob_num].item)->raw_con =
-						((char_data *) mob_index[mob_num].item)->con =
-								BASE_STAT
-										+ mob_race_mod[GET_RACE(
-												((char_data * )mob_index[mob_num].item))][2];
-				((char_data *) mob_index[mob_num].item)->raw_intel =
-						((char_data *) mob_index[mob_num].item)->intel =
-								BASE_STAT
-										+ mob_race_mod[GET_RACE(
-												((char_data * )mob_index[mob_num].item))][3];
-				((char_data *) mob_index[mob_num].item)->raw_wis =
-						((char_data *) mob_index[mob_num].item)->wis =
-								BASE_STAT
-										+ mob_race_mod[GET_RACE(
-												((char_data * )mob_index[mob_num].item))][4];
+        ((char_data *)mob_index[mob_num].item)->raw_str =
+            ((char_data *)mob_index[mob_num].item)->str =
+                BASE_STAT + mob_race_mod[GET_RACE(
+                                ((char_data *)mob_index[mob_num].item))][0];
+        ((char_data *)mob_index[mob_num].item)->raw_dex =
+            ((char_data *)mob_index[mob_num].item)->dex =
+                BASE_STAT + mob_race_mod[GET_RACE(
+                                ((char_data *)mob_index[mob_num].item))][1];
+        ((char_data *)mob_index[mob_num].item)->raw_con =
+            ((char_data *)mob_index[mob_num].item)->con =
+                BASE_STAT + mob_race_mod[GET_RACE(
+                                ((char_data *)mob_index[mob_num].item))][2];
+        ((char_data *)mob_index[mob_num].item)->raw_intel =
+            ((char_data *)mob_index[mob_num].item)->intel =
+                BASE_STAT + mob_race_mod[GET_RACE(
+                                ((char_data *)mob_index[mob_num].item))][3];
+        ((char_data *)mob_index[mob_num].item)->raw_wis =
+            ((char_data *)mob_index[mob_num].item)->wis =
+                BASE_STAT + mob_race_mod[GET_RACE(
+                                ((char_data *)mob_index[mob_num].item))][4];
+      }
+    }
+    if (!race_set)
+    {
+      csendf(ch, "Could not find race '%s'.\r\n", buf4);
+      return eFAILURE;
+    }
+  }
+  break;
 
-			}
-		}
-		if (!race_set) {
-			csendf(ch, "Could not find race '%s'.\r\n", buf4);
-			return eFAILURE;
-		}
-	}
-		break;
+    /* edit level */
+  case 7:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] level <levelnum>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%d\n",
+              ((char_data *)mob_index[mob_num].item)->level);
+      send_to_char(buf, ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, 0, 110))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->level = intval;
+    sprintf(buf, "Mob level set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit level */
-	case 7: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] level <levelnum>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%d\n",
-					((char_data *) mob_index[mob_num].item)->level);
-			send_to_char(buf, ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, 0, 110)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->level = intval;
-		sprintf(buf, "Mob level set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
+    /* edit alignment */
+  case 8:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] alignment <alignnum>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%d\n",
+              ((char_data *)mob_index[mob_num].item)->alignment);
+      send_to_char(buf, ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, -1000, 1000))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->alignment = intval;
+    sprintf(buf, "Mob alignment set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit alignment */
-	case 8: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] alignment <alignnum>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%d\n",
-					((char_data *) mob_index[mob_num].item)->alignment);
-			send_to_char(buf, ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, -1000, 1000)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->alignment = intval;
-		sprintf(buf, "Mob alignment set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
+    /* edit load position */
+  case 9:
+  {
+    if (!*buf4)
+    {
+      send_to_char(
+          "$3Syntax$R: medit [mob_num] loadposition <position>\n\r"
+          "$3Current$R: ",
+          ch);
+      sprintf(buf, "%s\n",
+              position_types[((char_data *)mob_index[mob_num].item)->position]);
+      send_to_char(buf, ch);
+      send_to_char("$3Valid positions$R:\r\n"
+                   "  1 = Standing\r\n"
+                   "  2 = Sitting\r\n"
+                   "  3 = Resting\r\n"
+                   "  4 = Sleeping\r\n",
+                   ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, 1, 4))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    switch (intval)
+    {
+    case 1:
+      intval = POSITION_STANDING;
+      break;
+    case 2:
+      intval = POSITION_SITTING;
+      break;
+    case 3:
+      intval = POSITION_RESTING;
+      break;
+    case 4:
+      intval = POSITION_SLEEPING;
+      break;
+    }
+    ((char_data *)mob_index[mob_num].item)->position = intval;
+    sprintf(buf, "Mob default position set to %s.\r\n",
+            position_types[intval]);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit load position */
-	case 9: {
-		if (!*buf4) {
-			send_to_char(
-					"$3Syntax$R: medit [mob_num] loadposition <position>\n\r"
-							"$3Current$R: ", ch);
-			sprintf(buf, "%s\n",
-					position_types[((char_data *) mob_index[mob_num].item)->position]);
-			send_to_char(buf, ch);
-			send_to_char("$3Valid positions$R:\r\n"
-					"  1 = Standing\r\n"
-					"  2 = Sitting\r\n"
-					"  3 = Resting\r\n"
-					"  4 = Sleeping\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, 1, 4)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		switch (intval) {
-		case 1:
-			intval = POSITION_STANDING;
-			break;
-		case 2:
-			intval = POSITION_SITTING;
-			break;
-		case 3:
-			intval = POSITION_RESTING;
-			break;
-		case 4:
-			intval = POSITION_SLEEPING;
-			break;
-		}
-		((char_data *) mob_index[mob_num].item)->position = intval;
-		sprintf(buf, "Mob default position set to %s.\r\n",
-				position_types[intval]);
-		send_to_char(buf, ch);
-	}
-		break;
+    /* edit default position */
+  case 10:
+  {
+    if (!*buf4)
+    {
+      send_to_char(
+          "$3Syntax$R: medit [mob_num] defaultposition <position>\n\r"
+          "$3Current$R: ",
+          ch);
+      sprintf(buf, "%s\n",
+              position_types[((char_data *)mob_index[mob_num].item)->mobdata->default_pos]);
+      send_to_char(buf, ch);
+      send_to_char("$3Valid positions$R:\r\n"
+                   "  1 = Standing\r\n"
+                   "  2 = Sitting\r\n"
+                   "  3 = Resting\r\n"
+                   "  4 = Sleeping\r\n",
+                   ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, 1, 4))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    switch (intval)
+    {
+    case 1:
+      intval = POSITION_STANDING;
+      break;
+    case 2:
+      intval = POSITION_SITTING;
+      break;
+    case 3:
+      intval = POSITION_RESTING;
+      break;
+    case 4:
+      intval = POSITION_SLEEPING;
+      break;
+    }
+    ((char_data *)mob_index[mob_num].item)->mobdata->default_pos = intval;
+    sprintf(buf, "Mob default position set to %s.\r\n",
+            position_types[intval]);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit default position */
-	case 10: {
-		if (!*buf4) {
-			send_to_char(
-					"$3Syntax$R: medit [mob_num] defaultposition <position>\n\r"
-							"$3Current$R: ", ch);
-			sprintf(buf, "%s\n",
-					position_types[((char_data *) mob_index[mob_num].item)->mobdata->default_pos]);
-			send_to_char(buf, ch);
-			send_to_char("$3Valid positions$R:\r\n"
-					"  1 = Standing\r\n"
-					"  2 = Sitting\r\n"
-					"  3 = Resting\r\n"
-					"  4 = Sleeping\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, 1, 4)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		switch (intval) {
-		case 1:
-			intval = POSITION_STANDING;
-			break;
-		case 2:
-			intval = POSITION_SITTING;
-			break;
-		case 3:
-			intval = POSITION_RESTING;
-			break;
-		case 4:
-			intval = POSITION_SLEEPING;
-			break;
-		}
-		((char_data *) mob_index[mob_num].item)->mobdata->default_pos = intval;
-		sprintf(buf, "Mob default position set to %s.\r\n",
-				position_types[intval]);
-		send_to_char(buf, ch);
-	}
-		break;
+    /* edit actflags */
+  case 11:
+  {
+    if (!*buf4)
+    {
+      send_to_char(
+          "$3Syntax$R: medit [mob_num] actflags <location[s]>\n\r"
+          "$3Current$R: ",
+          ch);
+      sprintbit(
+          ((char_data *)mob_index[mob_num].item)->mobdata->actflags,
+          action_bits, buf);
+      send_to_char(buf, ch);
+      send_to_char("\r\n$3Valid types$R:\r\n", ch);
+      for (i = 0; *action_bits[i] != '\n'; i++)
+      {
+        sprintf(buf, "  %s\n\r", action_bits[i]);
+        send_to_char(buf, ch);
+      }
+      return eFAILURE;
+    }
+    parse_bitstrings_into_int(action_bits, buf4, ch,
+                              ((char_data *)mob_index[mob_num].item)->mobdata->actflags);
+  }
+  break;
 
-		/* edit actflags */
-	case 11: {
-		if (!*buf4) {
-			send_to_char(
-					"$3Syntax$R: medit [mob_num] actflags <location[s]>\n\r"
-							"$3Current$R: ", ch);
-			sprintbit(
-					((char_data *) mob_index[mob_num].item)->mobdata->actflags,
-					action_bits, buf);
-			send_to_char(buf, ch);
-			send_to_char("\r\n$3Valid types$R:\r\n", ch);
-			for (i = 0; *action_bits[i] != '\n'; i++) {
-				sprintf(buf, "  %s\n\r", action_bits[i]);
-				send_to_char(buf, ch);
-			}
-			return eFAILURE;
-		}
-		parse_bitstrings_into_int(action_bits, buf4, ch,
-				((char_data *) mob_index[mob_num].item)->mobdata->actflags);
-	}
-		break;
+    /* edit affectflags */
+  case 12:
+  {
+    if (!*buf4)
+    {
+      send_to_char(
+          "$3Syntax$R: medit [mob_num] affectflags <location[s]>\n\r"
+          "$3Current$R: ",
+          ch);
+      sprintbit(((char_data *)mob_index[mob_num].item)->affected_by[0],
+                affected_bits, buf);
+      send_to_char(buf, ch);
+      send_to_char("\r\n$3Valid types$R:\r\n", ch);
+      for (i = 0; *affected_bits[i] != '\n'; i++)
+      {
+        sprintf(buf, "  %s\n\r", affected_bits[i]);
+        send_to_char(buf, ch);
+      }
+      return eFAILURE;
+    }
+    parse_bitstrings_into_int(affected_bits, buf4, ch,
+                              &(((char_data *)mob_index[mob_num].item)->affected_by[0]));
+    //                             &((((char_data *)mob_index[mob_num].item)->affected_by[0])));
+  }
+  break;
 
-		/* edit affectflags */
-	case 12: {
-		if (!*buf4) {
-			send_to_char(
-					"$3Syntax$R: medit [mob_num] affectflags <location[s]>\n\r"
-							"$3Current$R: ", ch);
-			sprintbit(((char_data *) mob_index[mob_num].item)->affected_by[0],
-					affected_bits, buf);
-			send_to_char(buf, ch);
-			send_to_char("\r\n$3Valid types$R:\r\n", ch);
-			for (i = 0; *affected_bits[i] != '\n'; i++) {
-				sprintf(buf, "  %s\n\r", affected_bits[i]);
-				send_to_char(buf, ch);
-			}
-			return eFAILURE;
-		}
-		parse_bitstrings_into_int(affected_bits, buf4, ch,
-				&(((char_data *) mob_index[mob_num].item)->affected_by[0]));
-//                             &((((char_data *)mob_index[mob_num].item)->affected_by[0])));
-	}
-		break;
+    /* edit numdamdice */
+  case 13:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] numdamdice <amount>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%d\n",
+              ((char_data *)mob_index[mob_num].item)->mobdata->damnodice);
+      send_to_char(buf, ch);
+      send_to_char("$3Valid Range$R: 1 to 400\r\n", ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, 1, 400))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->mobdata->damnodice = intval;
+    sprintf(buf, "Mob number dice for damage set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit numdamdice */
-	case 13: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] numdamdice <amount>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%d\n",
-					((char_data *) mob_index[mob_num].item)->mobdata->damnodice);
-			send_to_char(buf, ch);
-			send_to_char("$3Valid Range$R: 1 to 400\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, 1, 400)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->mobdata->damnodice = intval;
-		sprintf(buf, "Mob number dice for damage set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
+    /* edit sizedamdice */
+  case 14:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] sizedamdice <amount>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%d\n",
+              ((char_data *)mob_index[mob_num].item)->mobdata->damsizedice);
+      send_to_char(buf, ch);
+      send_to_char("$3Valid Range$R: 1 to 400\r\n", ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, 1, 400))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->mobdata->damsizedice = intval;
+    sprintf(buf, "Mob size dice for damage set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit sizedamdice */
-	case 14: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] sizedamdice <amount>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%d\n",
-					((char_data *) mob_index[mob_num].item)->mobdata->damsizedice);
-			send_to_char(buf, ch);
-			send_to_char("$3Valid Range$R: 1 to 400\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, 1, 400)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->mobdata->damsizedice = intval;
-		sprintf(buf, "Mob size dice for damage set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
+    /* edit damroll */
+  case 15:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] damroll <damrollnum>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%d\n",
+              ((char_data *)mob_index[mob_num].item)->damroll);
+      send_to_char(buf, ch);
+      send_to_char("$3Valid Range$R: -50 to 400\r\n", ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, -50, 400))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->damroll = intval;
+    sprintf(buf, "Mob damroll set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit damroll */
-	case 15: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] damroll <damrollnum>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%d\n",
-					((char_data *) mob_index[mob_num].item)->damroll);
-			send_to_char(buf, ch);
-			send_to_char("$3Valid Range$R: -50 to 400\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, -50, 400)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->damroll = intval;
-		sprintf(buf, "Mob damroll set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
+    /* edit hitroll */
+  case 16:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] hitroll <levelnum>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%d\n",
+              ((char_data *)mob_index[mob_num].item)->hitroll);
+      send_to_char(buf, ch);
+      send_to_char("$3Valid Range$R: -50 to 100\r\n", ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, -50, 300))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->hitroll = intval;
+    sprintf(buf, "Mob hitroll set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit hitroll */
-	case 16: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] hitroll <levelnum>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%d\n",
-					((char_data *) mob_index[mob_num].item)->hitroll);
-			send_to_char(buf, ch);
-			send_to_char("$3Valid Range$R: -50 to 100\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, -50, 300)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->hitroll = intval;
-		sprintf(buf, "Mob hitroll set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
+    /* edit hphitpoints */
+  case 17:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] hphitpoints <hp>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%d\n",
+              ((char_data *)mob_index[mob_num].item)->raw_hit);
+      send_to_char(buf, ch);
+      send_to_char("$3Valid Range$R: 1 to 64000\r\n", ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, 1, 64000))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->raw_hit = intval;
+    ((char_data *)mob_index[mob_num].item)->max_hit = intval;
+    sprintf(buf, "Mob hitpoints set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit hphitpoints */
-	case 17: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] hphitpoints <hp>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%d\n",
-					((char_data *) mob_index[mob_num].item)->raw_hit);
-			send_to_char(buf, ch);
-			send_to_char("$3Valid Range$R: 1 to 64000\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, 1, 64000)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->raw_hit = intval;
-		((char_data *) mob_index[mob_num].item)->max_hit = intval;
-		sprintf(buf, "Mob hitpoints set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
+    /* edit gold */
+  case 18:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] gold <goldamount>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%lld\n",
+              ((char_data *)mob_index[mob_num].item)->gold);
+      send_to_char(buf, ch);
+      send_to_char("$3Valid Range$R: 0 to 10000000\r\n", ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, 0, 10000000))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    if (intval > 250000 && GET_LEVEL(ch) <= DEITY)
+    {
+      send_to_char(
+          "104-'s can only set a mob to 250k gold.  If you need more ask someone.\r\n",
+          ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->gold = intval;
+    sprintf(buf, "Mob gold set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit gold */
-	case 18: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] gold <goldamount>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%lld\n",
-					((char_data *) mob_index[mob_num].item)->gold);
-			send_to_char(buf, ch);
-			send_to_char("$3Valid Range$R: 0 to 10000000\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, 0, 10000000)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		if (intval > 250000 && GET_LEVEL(ch) <= DEITY) {
-			send_to_char(
-					"104-'s can only set a mob to 250k gold.  If you need more ask someone.\r\n",
-					ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->gold = intval;
-		sprintf(buf, "Mob gold set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
+    /* edit experiencepoints */
+  case 19:
+  {
+    if (!*buf4)
+    {
+      send_to_char(
+          "$3Syntax$R: medit [mob_num] experiencepoints <xpamount>\n\r"
+          "$3Current$R: ",
+          ch);
+      sprintf(buf, "%d\n",
+              (int)((char_data *)mob_index[mob_num].item)->exp);
+      send_to_char(buf, ch);
+      send_to_char("$3Valid Range$R: 0 to 20000000\r\n", ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, 0, 20000000))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->exp = intval;
+    sprintf(buf, "Mob experience set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit experiencepoints */
-	case 19: {
-		if (!*buf4) {
-			send_to_char(
-					"$3Syntax$R: medit [mob_num] experiencepoints <xpamount>\n\r"
-							"$3Current$R: ", ch);
-			sprintf(buf, "%d\n",
-					(int) ((char_data *) mob_index[mob_num].item)->exp);
-			send_to_char(buf, ch);
-			send_to_char("$3Valid Range$R: 0 to 20000000\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, 0, 20000000)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->exp = intval;
-		sprintf(buf, "Mob experience set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
+    /* edit immune */
+  case 20:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] immune <location[s]>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintbit(((char_data *)mob_index[mob_num].item)->immune, isr_bits,
+                buf);
+      send_to_char(buf, ch);
+      send_to_char("\r\n$3Valid types$R:\r\n", ch);
+      for (i = 0; *isr_bits[i] != '\n'; i++)
+      {
+        sprintf(buf, "  %s\n\r", isr_bits[i]);
+        send_to_char(buf, ch);
+      }
+      return eFAILURE;
+    }
+    parse_bitstrings_into_int(isr_bits, buf4, ch,
+                              ((char_data *)mob_index[mob_num].item)->immune);
+  }
+  break;
 
-		/* edit immune */
-	case 20: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] immune <location[s]>\n\r"
-					"$3Current$R: ", ch);
-			sprintbit(((char_data *) mob_index[mob_num].item)->immune, isr_bits,
-					buf);
-			send_to_char(buf, ch);
-			send_to_char("\r\n$3Valid types$R:\r\n", ch);
-			for (i = 0; *isr_bits[i] != '\n'; i++) {
-				sprintf(buf, "  %s\n\r", isr_bits[i]);
-				send_to_char(buf, ch);
-			}
-			return eFAILURE;
-		}
-		parse_bitstrings_into_int(isr_bits, buf4, ch,
-				((char_data *) mob_index[mob_num].item)->immune);
-	}
-		break;
+    /* edit suscept */
+  case 21:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] suscept <location[s]>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintbit(((char_data *)mob_index[mob_num].item)->suscept,
+                isr_bits, buf);
+      send_to_char(buf, ch);
+      send_to_char("\r\n$3Valid types$R:\r\n", ch);
+      for (i = 0; *isr_bits[i] != '\n'; i++)
+      {
+        sprintf(buf, "  %s\n\r", isr_bits[i]);
+        send_to_char(buf, ch);
+      }
+      return eFAILURE;
+    }
+    parse_bitstrings_into_int(isr_bits, buf4, ch,
+                              ((char_data *)mob_index[mob_num].item)->suscept);
+  }
+  break;
 
-		/* edit suscept */
-	case 21: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] suscept <location[s]>\n\r"
-					"$3Current$R: ", ch);
-			sprintbit(((char_data *) mob_index[mob_num].item)->suscept,
-					isr_bits, buf);
-			send_to_char(buf, ch);
-			send_to_char("\r\n$3Valid types$R:\r\n", ch);
-			for (i = 0; *isr_bits[i] != '\n'; i++) {
-				sprintf(buf, "  %s\n\r", isr_bits[i]);
-				send_to_char(buf, ch);
-			}
-			return eFAILURE;
-		}
-		parse_bitstrings_into_int(isr_bits, buf4, ch,
-				((char_data *) mob_index[mob_num].item)->suscept);
-	}
-		break;
+    /* edit resist */
+  case 22:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] resist <location[s]>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintbit(((char_data *)mob_index[mob_num].item)->resist, isr_bits,
+                buf);
+      send_to_char(buf, ch);
+      send_to_char("\r\n$3Valid types$R:\r\n", ch);
+      for (i = 0; *isr_bits[i] != '\n'; i++)
+      {
+        sprintf(buf, "  %s\n\r", isr_bits[i]);
+        send_to_char(buf, ch);
+      }
+      return eFAILURE;
+    }
+    parse_bitstrings_into_int(isr_bits, buf4, ch,
+                              ((char_data *)mob_index[mob_num].item)->resist);
+  }
+  break;
 
-		/* edit resist */
-	case 22: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] resist <location[s]>\n\r"
-					"$3Current$R: ", ch);
-			sprintbit(((char_data *) mob_index[mob_num].item)->resist, isr_bits,
-					buf);
-			send_to_char(buf, ch);
-			send_to_char("\r\n$3Valid types$R:\r\n", ch);
-			for (i = 0; *isr_bits[i] != '\n'; i++) {
-				sprintf(buf, "  %s\n\r", isr_bits[i]);
-				send_to_char(buf, ch);
-			}
-			return eFAILURE;
-		}
-		parse_bitstrings_into_int(isr_bits, buf4, ch,
-				((char_data *) mob_index[mob_num].item)->resist);
-	}
-		break;
+    // armorclass
+  case 23:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] armorclass <ac>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%d\n",
+              ((char_data *)mob_index[mob_num].item)->armor);
+      send_to_char(buf, ch);
+      send_to_char("$3Valid Range$R: 100 to $B-$R2000\r\n", ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, -2000, 100))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->armor = intval;
+    sprintf(buf, "Mob armorclass(ac) set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		// armorclass
-	case 23: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] armorclass <ac>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%d\n",
-					((char_data *) mob_index[mob_num].item)->armor);
-			send_to_char(buf, ch);
-			send_to_char("$3Valid Range$R: 100 to $B-$R2000\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, -2000, 100)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->armor = intval;
-		sprintf(buf, "Mob armorclass(ac) set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
+    // stat
+  case 24:
+  {
+    mob_stat(ch, (char_data *)mob_index[mob_num].item);
+    break;
+  }
+    // strength
+  case 25:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] strength <str>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%d\n",
+              ((char_data *)mob_index[mob_num].item)->raw_str);
+      send_to_char(buf, ch);
+      send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, 1, 28))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->raw_str = intval;
+    sprintf(buf, "Mob raw strength set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
+    // dexterity
+  case 26:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] dexterity <dex>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%d\n",
+              ((char_data *)mob_index[mob_num].item)->raw_dex);
+      send_to_char(buf, ch);
+      send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, 1, 28))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->raw_dex = intval;
+    sprintf(buf, "Mob raw dexterity set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
+    // intelligence
+  case 27:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] intelligence <int>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%d\n",
+              ((char_data *)mob_index[mob_num].item)->raw_intel);
+      send_to_char(buf, ch);
+      send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, 1, 28))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->raw_intel = intval;
+    sprintf(buf, "Mob raw intelligence set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
+    // wisdom
+  case 28:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] wisdom <wis>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%d\n",
+              ((char_data *)mob_index[mob_num].item)->raw_wis);
+      send_to_char(buf, ch);
+      send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, 1, 28))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->raw_wis = intval;
+    sprintf(buf, "Mob raw wisdom set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
+    // constitution
+  case 29:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_num] constitution <con>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%d\n",
+              ((char_data *)mob_index[mob_num].item)->raw_con);
+      send_to_char(buf, ch);
+      send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, 1, 28))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->raw_con = intval;
+    sprintf(buf, "Mob raw constituion set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
+    // New
+  case 30:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit new [number]\r\n", ch);
+      return eFAILURE;
+    }
+    if (!check_range_valid_and_convert(intval, buf4, 0, 35000))
+    {
+      send_to_char("Please specifiy a valid number.\r\n", ch);
+      return eFAILURE;
+    }
+    if (!can_modify_mobile(ch, intval))
+    {
+      send_to_char("You cannot create mobiles in that range.\r\n", ch);
+      return eFAILURE;
+    }
+    x = create_blank_mobile(intval);
+    if (x < 0)
+    {
+      csendf(ch,
+             "Could not create mobile '%d'.  Max index hit or mob already exists.\r\n",
+             intval);
+      return eFAILURE;
+    }
+    csendf(ch, "Mobile '%d' created successfully.\r\n", intval);
+  }
+  break;
+  case 31:
+  {
+    if (!*buf4 || strncmp(buf4, "yesiwanttodeletethismob", 23))
+    {
+      send_to_char(
+          "$3Syntax$R: medit [mob_number] delete yesiwanttodeletethismob\n\r",
+          ch);
+      return eFAILURE;
+    }
+    auto &character_list = DC::instance().character_list;
+    for (auto &v : character_list)
+    {
+      if (IS_NPC(v) && v->mobdata->nr == mob_num)
+        extract_char(v, TRUE);
+    }
+    delete_mob_from_index(mob_num);
+    send_to_char("Mobile deleted.\r\n", ch);
+  }
+  break;
+  case 32:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_vnum] type <type id>\n\r"
+                   "$3Current$R: ",
+                   ch);
+      sprintf(buf, "%s\n",
+              mob_types[((char_data *)mob_index[mob_num].item)->mobdata->mob_flags.type]);
+      send_to_char(buf, ch);
+      send_to_char("\r\n$3Valid types$R:\r\n", ch);
+      for (i = 0; *mob_types[i] != '\n'; i++)
+      {
+        sprintf(buf, "  %d) %s\n\r", i, mob_types[i]);
+        send_to_char(buf, ch);
+      }
+      return eFAILURE;
+    }
 
-		// stat
-	case 24: {
-		mob_stat(ch, (char_data *) mob_index[mob_num].item);
-		break;
-	}
-		// strength
-	case 25: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] strength <str>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%d\n",
-					((char_data *) mob_index[mob_num].item)->raw_str);
-			send_to_char(buf, ch);
-			send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, 1, 28)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->raw_str = intval;
-		sprintf(buf, "Mob raw strength set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
-		// dexterity
-	case 26: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] dexterity <dex>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%d\n",
-					((char_data *) mob_index[mob_num].item)->raw_dex);
-			send_to_char(buf, ch);
-			send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, 1, 28)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->raw_dex = intval;
-		sprintf(buf, "Mob raw dexterity set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
-		// intelligence
-	case 27: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] intelligence <int>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%d\n",
-					((char_data *) mob_index[mob_num].item)->raw_intel);
-			send_to_char(buf, ch);
-			send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, 1, 28)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->raw_intel = intval;
-		sprintf(buf, "Mob raw intelligence set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
-		// wisdom
-	case 28: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] wisdom <wis>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%d\n",
-					((char_data *) mob_index[mob_num].item)->raw_wis);
-			send_to_char(buf, ch);
-			send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, 1, 28)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->raw_wis = intval;
-		sprintf(buf, "Mob raw wisdom set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
-		// constitution
-	case 29: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_num] constitution <con>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%d\n",
-					((char_data *) mob_index[mob_num].item)->raw_con);
-			send_to_char(buf, ch);
-			send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, 1, 28)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->raw_con = intval;
-		sprintf(buf, "Mob raw constituion set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
-		// New
-	case 30: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit new [number]\r\n", ch);
-			return eFAILURE;
-		}
-		if (!check_range_valid_and_convert(intval, buf4, 0, 35000)) {
-			send_to_char("Please specifiy a valid number.\r\n", ch);
-			return eFAILURE;
-		}
-		if (!can_modify_mobile(ch, intval)) {
-			send_to_char("You cannot create mobiles in that range.\r\n", ch);
-			return eFAILURE;
-		}
-		x = create_blank_mobile(intval);
-		if (x < 0) {
-			csendf(ch,
-					"Could not create mobile '%d'.  Max index hit or mob already exists.\r\n",
-					intval);
-			return eFAILURE;
-		}
-		csendf(ch, "Mobile '%d' created successfully.\r\n", intval);
-	}
-		break;
-	case 31: {
-		if (!*buf4 || strncmp(buf4, "yesiwanttodeletethismob", 23)) {
-			send_to_char(
-					"$3Syntax$R: medit [mob_number] delete yesiwanttodeletethismob\n\r",
-					ch);
-			return eFAILURE;
-		}
-		auto &character_list = DC::instance().character_list;
-		for (auto& v : character_list) {
-			if (IS_NPC(v) && v->mobdata->nr == mob_num)
-				extract_char(v, TRUE);
-		}
-		delete_mob_from_index(mob_num);
-		send_to_char("Mobile deleted.\r\n", ch);
-	}
-		break;
-	case 32: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_vnum] type <type id>\n\r"
-					"$3Current$R: ", ch);
-			sprintf(buf, "%s\n",
-					mob_types[((char_data *) mob_index[mob_num].item)->mobdata->mob_flags.type]);
-			send_to_char(buf, ch);
-			send_to_char("\r\n$3Valid types$R:\r\n", ch);
-			for (i = 0; *mob_types[i] != '\n'; i++) {
-				sprintf(buf, "  %d) %s\n\r", i, mob_types[i]);
-				send_to_char(buf, ch);
-			}
-			return eFAILURE;
-		}
+    if (!check_range_valid_and_convert(intval, buf4, MOB_TYPE_FIRST,
+                                       MOB_TYPE_LAST))
+    {
+      send_to_char("Value out of valid range.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->mobdata->mob_flags.type =
+        (mob_type_t)intval;
+    sprintf(buf, "Mob type set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
+    /* edit 1value */
+  case 33:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_vnum] 1value <num>\n\r", ch);
+      return eFAILURE;
+    }
+    if (!check_valid_and_convert(intval, buf4))
+    {
+      send_to_char("Please specify a valid number.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->mobdata->mob_flags.value[0] = intval;
+    sprintf(buf, "Mob value 1 set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		if (!check_range_valid_and_convert(intval, buf4, MOB_TYPE_FIRST,
-				MOB_TYPE_LAST)) {
-			send_to_char("Value out of valid range.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->mobdata->mob_flags.type =
-				(mob_type_t) intval;
-		sprintf(buf, "Mob type set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
-		/* edit 1value */
-	case 33: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_vnum] 1value <num>\n\r", ch);
-			return eFAILURE;
-		}
-		if (!check_valid_and_convert(intval, buf4)) {
-			send_to_char("Please specify a valid number.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->mobdata->mob_flags.value[0] = intval;
-		sprintf(buf, "Mob value 1 set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
+    /* edit 2value */
+  case 34:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_vnum] 2value <num>\n\r", ch);
+      return eFAILURE;
+    }
+    if (!check_valid_and_convert(intval, buf4))
+    {
+      send_to_char("Please specify a valid number.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->mobdata->mob_flags.value[1] = intval;
+    sprintf(buf, "Mob value 2 set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit 2value */
-	case 34: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_vnum] 2value <num>\n\r", ch);
-			return eFAILURE;
-		}
-		if (!check_valid_and_convert(intval, buf4)) {
-			send_to_char("Please specify a valid number.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->mobdata->mob_flags.value[1] = intval;
-		sprintf(buf, "Mob value 2 set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
+    /* edit 3value */
+  case 35:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_vnum] 3value <num>\n\r", ch);
+      return eFAILURE;
+    }
+    if (!check_valid_and_convert(intval, buf4))
+    {
+      send_to_char("Please specify a valid number.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->mobdata->mob_flags.value[2] = intval;
+    sprintf(buf, "Mob value 3 set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
 
-		/* edit 3value */
-	case 35: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_vnum] 3value <num>\n\r", ch);
-			return eFAILURE;
-		}
-		if (!check_valid_and_convert(intval, buf4)) {
-			send_to_char("Please specify a valid number.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->mobdata->mob_flags.value[2] = intval;
-		sprintf(buf, "Mob value 3 set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
-
-		/* edit 4value */
-	case 36: {
-		if (!*buf4) {
-			send_to_char("$3Syntax$R: medit [mob_vnum] 4value <num>\n\r", ch);
-			return eFAILURE;
-		}
-		if (!check_valid_and_convert(intval, buf4)) {
-			send_to_char("Please specify a valid number.\r\n", ch);
-			return eFAILURE;
-		}
-		((char_data *) mob_index[mob_num].item)->mobdata->mob_flags.value[3] = intval;
-		sprintf(buf, "Mob value 4 set to %d.\r\n", intval);
-		send_to_char(buf, ch);
-	}
-		break;
-
-	}
-	set_zone_modified_mob(mob_num);
-	return eSUCCESS;
+    /* edit 4value */
+  case 36:
+  {
+    if (!*buf4)
+    {
+      send_to_char("$3Syntax$R: medit [mob_vnum] 4value <num>\n\r", ch);
+      return eFAILURE;
+    }
+    if (!check_valid_and_convert(intval, buf4))
+    {
+      send_to_char("Please specify a valid number.\r\n", ch);
+      return eFAILURE;
+    }
+    ((char_data *)mob_index[mob_num].item)->mobdata->mob_flags.value[3] = intval;
+    sprintf(buf, "Mob value 4 set to %d.\r\n", intval);
+    send_to_char(buf, ch);
+  }
+  break;
+  }
+  set_zone_modified_mob(mob_num);
+  return eSUCCESS;
 }
 
 int do_redit(struct char_data *ch, char *argument, int cmd)
 {
-    string buf, remainder_args;
-    int x, a, b, c, d = 0;
-    struct extra_descr_data *extra;
-    struct extra_descr_data *ext;
+  string buf, remainder_args;
+  int x, a, b, c, d = 0;
+  struct extra_descr_data *extra;
+  struct extra_descr_data *ext;
 
-    const char *return_directions[] =
+  const char *return_directions[] =
+      {
+          "south",
+          "west",
+          "north",
+          "east",
+          "down",
+          "up",
+          ""};
+
+  int reverse_number[] =
+      {
+          2, 3, 0, 1, 5, 4};
+  char *fields[] =
+      {
+          "name",
+          "description",
+          "exit",
+          "extra",
+          "exdesc",
+          "rflag",
+          "sector",
+          "denymob",
+          ""};
+
+  if (IS_NPC(ch))
+    return eFAILURE;
+
+  string arg1;
+  tie(arg1, remainder_args) = half_chop(string(argument));
+  if (arg1.empty())
+  {
+    send_to_char("The field must be one of the following:\n\r", ch);
+    for (x = 0;; x++)
     {
-      "south",
-      "west",
-      "north",
-      "east",
-      "down",
-      "up",
-      ""
-    }; 
-
-    int reverse_number[] =
-    {
-      2, 3, 0, 1, 5, 4
-    };
-    char *fields[] = 
-    {
-      "name",
-      "description",
-      "exit",
-      "extra",
-      "exdesc",
-      "rflag",
-      "sector",
-      "denymob",
-      ""
-    };
-   
-
-    if(IS_NPC(ch))
-      return eFAILURE;
-
-    string arg1;
-    tie (arg1, remainder_args) = half_chop(string(argument));
-    if(arg1.empty()) {
-      send_to_char("The field must be one of the following:\n\r", ch);
-      for(x = 0 ;; x++) {
-        if(fields[x][0] == '\0')
-          return eFAILURE;
-        csendf(ch, "  %s\n\r", fields[x]);
-      }
+      if (fields[x][0] == '\0')
+        return eFAILURE;
+      csendf(ch, "  %s\n\r", fields[x]);
     }
+  }
 
-  if(!can_modify_room(ch, ch->in_room)) {
+  if (!can_modify_room(ch, ch->in_room))
+  {
     send_to_char("You are unable to work creation outside of your range.\n\r", ch);
     return eFAILURE;
   }
 
-    for(x = 0 ;; x++)
+  for (x = 0;; x++)
+  {
+    if (fields[x][0] == '\0')
     {
-      if(fields[x][0] == '\0')
+      send_to_char("The field must be one of the following:\n\r", ch);
+      for (x = 0;; x++)
       {
-        send_to_char("The field must be one of the following:\n\r", ch);
-        for(x = 0 ;; x++)
+        if (fields[x][0] == '\0')
+          return eFAILURE;
+        csendf(ch, "%s\n\r", fields[x]);
+      }
+    }
+    if (is_abbrev(arg1, fields[x]))
+      break;
+  }
+
+  switch (x)
+  {
+
+    /* redit name */
+  case 0:
+  {
+    if (remainder_args.empty())
+    {
+      send_to_char("$3Syntax$R: redit name <Room Name>\n\r", ch);
+      return eFAILURE;
+    }
+    dc_free(world[ch->in_room].name);
+    world[ch->in_room].name = str_dup(remainder_args.c_str());
+    send_to_char("Ok.\n\r", ch);
+  }
+  break;
+
+    /* redit description */
+  case 1:
+  {
+    if (!remainder_args.empty())
+    {
+      string description = remainder_args + "\n\r";
+      dc_free(world[ch->in_room].description);
+      world[ch->in_room].description = str_dup(description.c_str());
+      send_to_char("Ok.\n\r", ch);
+      return eFAILURE;
+    }
+    send_to_char("        Write your room's description.  (/s saves /h for help)\r\n", ch);
+    ch->desc->connected = CON_EDITING;
+    ch->desc->strnew = &(world[ch->in_room].description);
+    ch->desc->max_str = MAX_MESSAGE_LENGTH;
+  }
+  break;
+
+    // redit exit
+  case 2:
+  {
+    if (remainder_args.empty())
+    {
+      csendf(ch, "$3Syntax$R: <> is required. [] is optional.\r\n"
+                 "redit exit <direction> <room vnum> [flagnumber] [keynumber] [keywords]\r\n"
+                 "redit exit delete <direction>\r\n"
+                 "\r\n"
+                 "Directions: north, n, south, s, east, e, west, w, up, u, down or d.\r\n"
+                 "Exit flags: (Add the numbers together for multiple flags)\r\n"
+                 "IS_DOOR    1\r\n"
+                 "CLOSED     2\r\n"
+                 "LOCKED     4\r\n"
+                 "HIDDEN     8\r\n"
+                 "IMM_ONLY  16\r\n"
+                 "PICKPROOF 32\r\n"
+                 "\r\n"
+                 "$3Examples$R:\r\n"
+                 "redit exit n 1200                    - North exit to room 1200.\r\n"
+                 "redit exit n 1200 1 -1 door wooden   - North door exit with keywords 'door' or 'wooden' to room 1200.\r\n"
+                 "redit exit n 1200 9 345 grate rusty  - North hidden door exit with keywords 'grate' or 'rusty' to room 1200 that requires key vnum 345.\r\n");
+      return eFAILURE;
+    }
+
+    string arg2;
+    tie(arg2, remainder_args) = half_chop(remainder_args);
+    if (arg2 == "delete")
+    {
+      string direction;
+      tie(direction, remainder_args) = half_chop(remainder_args);
+      for (x = 0; x <= 6; x++)
+      {
+        if (is_abbrev(direction, dirs[x]))
         {
-          if(fields[x][0] == '\0')
-             return eFAILURE;
-          csendf(ch, "%s\n\r", fields[x]);
+          if (world[ch->in_room].dir_option[x] == nullptr)
+          {
+            csendf(ch, "There is no %s exit.\r\n", dirs[x]);
+            return eFAILURE;
+          }
+
+          int16 destination_room = world[ch->in_room].dir_option[x]->to_room;
+          csendf(ch, "Deleting %s exit from room %d to %d.\r\n", dirs[x], ch->in_room, destination_room);
+          free(world[ch->in_room].dir_option[x]);
+          world[ch->in_room].dir_option[x] = nullptr;
+
+          if (IS_PC(ch) && !IS_SET(ch->pcdata->toggles, PLR_ONEWAY))
+          {
+            // if the destination room has a reverse exit
+            if (world[destination_room].dir_option[reverse_number[x]])
+            {
+              // and that reverse exit points to us then we can delete it too
+              if (world[destination_room].dir_option[reverse_number[x]]->to_room == ch->in_room)
+              {
+                csendf(ch, "Deleting %s exit from room %d to %d.\r\n", dirs[reverse_number[x]], destination_room, ch->in_room);
+                free(world[destination_room].dir_option[reverse_number[x]]);
+                world[destination_room].dir_option[reverse_number[x]] = nullptr;
+                return eSUCCESS;
+              }
+              else
+              {
+                csendf(ch, "Reverse %s exit in room %d does not point to room %d.\r\n",
+                       dirs[reverse_number[x]],
+                       destination_room,
+                       ch->in_room);
+                return eSUCCESS;
+              }
+            }
+            else
+            {
+              csendf(ch, "Reverse %s exit in room %d does not exist.\r\n",
+                     dirs[reverse_number[x]],
+                     destination_room);
+              return eSUCCESS;
+            }
+          } // end of check if PLR_ONEWAY is toggled
+          return eSUCCESS;
+        } // end of is_abbred for dirs
+      }   // end of for loop through directions
+
+      csendf(ch, "Missing direction you want to delete.\r\n");
+      return eFAILURE;
+    } // end of delete
+
+    for (x = 0; x <= 6; x++)
+    {
+      if (x == 6)
+      {
+        send_to_char("No such direction.\n\r", ch);
+        return eFAILURE;
+      }
+      if (is_abbrev(arg2, dirs[x]))
+        break;
+    }
+    if (remainder_args.empty())
+    {
+      csendf(ch, "Missing vnum of room you want to have %s exit connect to.\r\n", dirs[x]);
+      return eFAILURE;
+    }
+
+    string arg3;
+    tie(arg3, remainder_args) = half_chop(remainder_args);
+    d = stoi(arg3);
+    c = real_room(d);
+
+    if (!remainder_args.empty())
+    {
+      string arg4;
+      tie(arg4, remainder_args) = half_chop(remainder_args);
+      a = stoi(arg4);
+      if (remainder_args.empty())
+      {
+        return eFAILURE;
+      }
+
+      string arg5;
+      tie(arg5, remainder_args) = half_chop(remainder_args);
+      b = stoi(arg5);
+      if (b == 0)
+      {
+        send_to_char("No key 0's allowed.  Changing to -1.\r\n", ch);
+        b = -1;
+      }
+    }
+    else
+    {
+      a = 0;
+      b = -1;
+    }
+
+    if (c == (-1) && can_modify_room(ch, d))
+    {
+      if (create_one_room(ch, d))
+      {
+        c = real_room(d);
+        csendf(ch, "Creating room %d.\n\r", d);
+      }
+    }
+
+    if (c == (-1))
+    {
+      csendf(ch, "Error creating exit to room %d.\r\n", d);
+      return eFAILURE;
+    }
+
+    if (world[ch->in_room].dir_option[x])
+      send_to_char("Modifying exit.\n\r", ch);
+    else
+    {
+      send_to_char("Creating new exit.\n\r", ch);
+      CREATE(world[ch->in_room].dir_option[x], struct room_direction_data, 1);
+      world[ch->in_room].dir_option[x]->general_description = 0;
+      world[ch->in_room].dir_option[x]->keyword = 0;
+    }
+
+    world[ch->in_room].dir_option[x]->exit_info = a;
+    world[ch->in_room].dir_option[x]->key = b;
+    world[ch->in_room].dir_option[x]->to_room = c;
+    if (!remainder_args.empty())
+    {
+      if (world[ch->in_room].dir_option[x]->keyword)
+        dc_free(world[ch->in_room].dir_option[x]->keyword);
+      world[ch->in_room].dir_option[x]->keyword = str_dup(remainder_args.c_str());
+    }
+
+    send_to_char("Ok.\n\r", ch);
+
+    if (!IS_MOB(ch) && !IS_SET(ch->pcdata->toggles, PLR_ONEWAY))
+    {
+      send_to_char("Attempting to create a return exit from "
+                   "that room...\n\r",
+                   ch);
+      if (world[c].dir_option[reverse_number[x]])
+      {
+        send_to_char("COULD NOT CREATE EXIT...One already exists.\n\r", ch);
+      }
+      else
+      {
+        buf = fmt::format("{} redit exit {} {} {} {} {}", d,
+                          return_directions[x], world[ch->in_room].number,
+                          a, b, (remainder_args != "" ? remainder_args.c_str() : ""));
+        SET_BIT(ch->pcdata->toggles, PLR_ONEWAY);
+        char *tmp = strdup(buf.c_str());
+        do_at(ch, tmp, 9);
+        free(tmp);
+        REMOVE_BIT(ch->pcdata->toggles, PLR_ONEWAY);
+      }
+    }
+  }
+  break;
+
+    /* redit extra */
+  case 3:
+  {
+    if (remainder_args.empty())
+    {
+      csendf(ch, "$3Syntax$R: <> is required. [] is optional.\r\n"
+                 "redit extra                   - show this syntax and current keywords.\r\n"
+                 "redit extra <keywords ...>    - add or edit keywords.\r\n"
+                 "redit extra delete <keyword>  - delete extra descriptions linked to keyword.\r\n\r\n");
+      bool found = false;
+      for (extra = world[ch->in_room].ex_description; extra != nullptr; extra = extra->next)
+      {
+        if (extra->keyword != nullptr)
+        {
+          if (found == false)
+          {
+            found = true;
+            csendf(ch, "Extra description keywords:\r\n");
+          }
+          csendf(ch, "%s\r\n", extra->keyword);
         }
       }
-      if(is_abbrev(arg1, fields[x]))
+      if (found == false)
+      {
+        csendf(ch, "No extra description keywords found.\r\n");
+      }
+
+      return eSUCCESS;
+    }
+
+    string arg2;
+    tie(arg2, remainder_args) = half_chop(remainder_args);
+
+    if (arg2 == "delete")
+    {
+      string arg3;
+      tie(arg3, remainder_args) = half_chop(remainder_args);
+
+      bool deleted = false;
+      extra_descr_data *prev = nullptr;
+      for (extra = world[ch->in_room].ex_description; extra != nullptr; prev = extra, extra = extra->next)
+      {
+        if (arg3 == string(extra->keyword))
+        {
+          if (prev == nullptr)
+          {
+            world[ch->in_room].ex_description = extra->next;
+          }
+          else
+          {
+            prev->next = extra->next;
+          }
+          csendf(ch, "Extra description with keyword '%s' deleted.\r\n", extra->keyword);
+          FREE(extra);
+          deleted = true;
+          // break out of for loop
+          break;
+        }
+      }
+      if (deleted == false)
+      {
+        csendf(ch, "Extra description with keyword '%s' not found.\r\n", arg3.c_str());
+      }
+      // break out of switch case
+      break;
+    }
+
+    for (extra = world[ch->in_room].ex_description;; extra = extra->next)
+    {
+      if (!extra)
+      {
+        // No matching extra description found so make a new one
+        csendf(ch, "Creating new extra description for keyword '%s'.\r\n", arg2.c_str());
+        CREATE(extra, struct extra_descr_data, 1);
+        extra->next = nullptr;
+
+        if (!(world[ch->in_room].ex_description))
+        {
+          // The room has no pre-existing extra descriptions so this will be its first
+          world[ch->in_room].ex_description = extra;
+        }
+        else
+        {
+          // The room has pre-existing extra descriptions so we will find the end of
+          // this linked list and append our new extra description to it
+          for (ext = world[ch->in_room].ex_description;; ext = ext->next)
+          {
+            if (ext->next == nullptr)
+            {
+              ext->next = extra;
+              break;
+            }
+          }
+        }
+
+        break;
+      }
+      else if (arg2 == string(extra->keyword))
+      {
+        // A pre-existing extra description was found
+        csendf(ch, "Modifying extra description for keyword '%s'.\r\n", arg2.c_str());
+        break;
+      }
+    }
+
+    FREE(extra->keyword);
+    extra->keyword = str_dup(arg2.c_str());
+    send_to_char("Write your extra description. (/s saves /h for help)\r\n", ch);
+    ch->desc->strnew = &extra->description;
+    ch->desc->max_str = MAX_MESSAGE_LENGTH;
+    ch->desc->connected = CON_EDITING;
+    if (ch->desc->strnew != nullptr && *ch->desc->strnew != nullptr && **ch->desc->strnew != '\0')
+    {
+      // There's already an existing extra description so let's show it
+      parse_action(PARSE_LIST_NUM, "", ch->desc);
+    }
+  }
+  break;
+
+    /* redit exdesc */
+  case 4:
+  {
+    if (remainder_args.empty())
+    {
+      send_to_char("$3Syntax$R: redit exdesc <direction>\n\r", ch);
+      return eFAILURE;
+    }
+
+    string arg3;
+    tie(arg3, remainder_args) = half_chop(remainder_args);
+    for (x = 0; x <= 6; x++)
+    {
+      if (x == 6)
+      {
+        send_to_char("No such direction.\n\r", ch);
+        return eFAILURE;
+      }
+      if (is_abbrev(arg3, dirs[x]))
         break;
     }
 
-    switch(x) {
+    if (!(world[ch->in_room].dir_option[x]))
+    {
+      send_to_char("That exit does not exist...create it first.\n\r", ch);
+      return eFAILURE;
+    }
 
-     /* redit name */
-      case 0 : {
-        if(remainder_args.empty()) {
-          send_to_char("$3Syntax$R: redit name <Room Name>\n\r", ch);
-          return eFAILURE;
-        }
-        dc_free(world[ch->in_room].name);
-        world[ch->in_room].name = str_dup(remainder_args.c_str());
-        send_to_char("Ok.\n\r", ch);
-      } break;
-
-     /* redit description */
-      case 1 : {
-        if(!remainder_args.empty()) {
-          string description = remainder_args + "\n\r";
-          dc_free(world[ch->in_room].description);
-          world[ch->in_room].description = str_dup(description.c_str());
-          send_to_char("Ok.\n\r", ch);
-          return eFAILURE;
-        }
-	      send_to_char("        Write your room's description.  (/s saves /h for help)\r\n",ch);
-        ch->desc->connected = CON_EDITING;
-        ch->desc->strnew = &(world[ch->in_room].description);
-        ch->desc->max_str = MAX_MESSAGE_LENGTH;
-      } break;
-
-     // redit exit
-      case 2 : {
-        if(remainder_args.empty()) {
-          send_to_char("$3Syntax$R: redit exit <direction> <destination> "
-                       "[flags keynumber keywords]\n\r", ch);
-          send_to_char("NOTE: [flags keynumber keywords] are "
-                       "optional for door creation.\n\r", ch);
-          send_to_char("$3Examples$R:\n\r", ch);
-          send_to_char("redit exit north 1200   Puts an exit going north "
-                       "to room 1200 (no door.)\n\r", ch);
-          send_to_char("redit exit north 1200 1 -1 door wooden    Same "
-                       "exit except it has a door with no key.\n\r", ch);
-          send_to_char("redit exit north 1200 9 345 grate rusty    Same "
-                       "exit except it has a hidden grate with key 345.\n\r\n\r", ch);
-          send_to_char("Flags at your disposal:\n\r"
-                       "IS_DOOR    1\n\r"
-                       "CLOSED     2\n\r"
-                       "LOCKED     4\n\r"
-                       "HIDDEN     8\n\r"
-                       "IMM_ONLY  16\n\r"
-                       "PICKPROOF 32\n\r", ch);
-          return eFAILURE;
-        }
-
-        string arg2;
-        tie (arg2, remainder_args) = half_chop(remainder_args);
-        for(x = 0; x <=6; x++) {
-          if(x == 6) {
-            send_to_char("No such direction.\n\r", ch);
-            return eFAILURE;
-          }
-          if(is_abbrev(arg2, dirs[x]))
-            break;
-        }
-        if(remainder_args.empty())
-        {
-          return eFAILURE;
-        }
-
-        string arg3;
-        tie (arg3, remainder_args) = half_chop(remainder_args);
-        d = stoi(arg3);
-        c = real_room(d); 
-
-        if(!remainder_args.empty()) {
-          string arg4;
-          tie (arg4, remainder_args) = half_chop(remainder_args);
-          a = stoi(arg4);
-          if(remainder_args.empty())
-          {
-            return eFAILURE;
-          }
-
-          string arg5;
-          tie (arg5, remainder_args) = half_chop(remainder_args);
-          b = stoi(arg5);
-          if(b == 0)
-          {
-            send_to_char("No key 0's allowed.  Changing to -1.\r\n", ch);
-            b = -1;
-          }
-        } else {
-           a = 0;
-           b = -1;
-         }
-
-        if(c == (-1) && can_modify_room(ch, d)) {
-          if(create_one_room(ch, d)) {
-            c = real_room(d);
-            csendf(ch, "Creating room %d.\n\r", d); 
-          }
-        } 
-        
-        if (c == (-1)) {
-          csendf(ch, "Error creating exit to room %d.\r\n", d);
-          return eFAILURE;
-        }
-
-        if(world[ch->in_room].dir_option[x])
-          send_to_char("Modifying exit.\n\r", ch);
-        else {
-          send_to_char("Creating new exit.\n\r", ch);
-          CREATE(world[ch->in_room].dir_option[x], struct room_direction_data, 1);
-          world[ch->in_room].dir_option[x]->general_description = 0;
-          world[ch->in_room].dir_option[x]->keyword = 0;
-        }
-
-        world[ch->in_room].dir_option[x]->exit_info = a;
-        world[ch->in_room].dir_option[x]->key = b;
-        world[ch->in_room].dir_option[x]->to_room = c;
-        if(!remainder_args.empty()) {
-          if(world[ch->in_room].dir_option[x]->keyword)
-            dc_free(world[ch->in_room].dir_option[x]->keyword);
-          world[ch->in_room].dir_option[x]->keyword = str_dup(remainder_args.c_str());
-        }
-
-        send_to_char("Ok.\n\r", ch);
-
-        if(!IS_MOB(ch) && !IS_SET(ch->pcdata->toggles, PLR_ONEWAY)) {
-          send_to_char("Attempting to create a return exit from "
-                       "that room...\n\r", ch);
-          if(world[c].dir_option[reverse_number[x]]) {
-            send_to_char("COULD NOT CREATE EXIT...One already exists.\n\r", ch);
-          }
-          else {
-            buf = fmt::format("{} redit exit {} {} {} {} {}", d,
-                  return_directions[x], world[ch->in_room].number,
-                  a, b, (remainder_args != "" ? remainder_args.c_str() : ""));
-            SET_BIT(ch->pcdata->toggles, PLR_ONEWAY);
-            char *tmp = strdup(buf.c_str());
-            do_at(ch, tmp, 9);
-            free(tmp);
-            REMOVE_BIT(ch->pcdata->toggles, PLR_ONEWAY);
-          }
-        }
-      } break;
-
-     /* redit extra */
-      case 3 : {
-        if(remainder_args.empty()) {
-          send_to_char("$3Syntax$R: redit extra <keywords>\n\r"
-                       "Use it once to create the desc with a new keyword(s).\r\n"
-                       "Use it a second time with one of those keys to edit the description for it.\r\n"
-                       , ch);
-          return eFAILURE;
-        }
-
-        string arg2;
-        tie (arg2, remainder_args) = half_chop(remainder_args);
-
-        for(extra = world[ch->in_room].ex_description ;; extra = extra->next) 
-        {
-          if(!extra) 
-          { // make a new one
-            send_to_char("Creating new extra description.\n\r", ch);
-            CREATE(extra, struct extra_descr_data, 1);
-            if(!(world[ch->in_room].ex_description))
-              world[ch->in_room].ex_description = extra;
-            else
-              for(ext = world[ch->in_room].ex_description ;; ext = ext->next) {
-                if(ext->next == NULL) {
-                  ext->next = extra;
-                  break;
-                }
-              }
-            extra->next = NULL;
-            break;
-          }
-          /* modifying old extra description */
-          else if(isname(buf, extra->keyword)) {
-            send_to_char("Modifying extra description.\n\r", ch);
-            break;
-          }
-        }
-
-        FREE(extra->keyword);
-        extra->keyword = str_dup(arg2.c_str());
-        send_to_char("        Write your extra description.  (/s saves /h for help)\r\n",ch);
-
-//        send_to_char("Enter your extra description below. Terminate with 
-//"
-  //                   "'~' on a new line.\n\r\n\r", ch);
-//        FREE(extra->description);
-  //      extra->description = 0;
-        ch->desc->strnew = &extra->description;
-        ch->desc->max_str = MAX_MESSAGE_LENGTH;
-        ch->desc->connected = CON_EDITING;
-      } break;
-
-     /* redit exdesc */
-      case 4 : {
-        if(remainder_args.empty()) {
-          send_to_char("$3Syntax$R: redit exdesc <direction>\n\r", ch);
-          return eFAILURE;
-        }
-
-        string arg3;
-        tie (arg3, remainder_args) = half_chop(remainder_args);
-        for(x = 0; x <=6; x++) {
-          if(x == 6) {
-            send_to_char("No such direction.\n\r", ch);
-            return eFAILURE;
-          }
-          if(is_abbrev(arg3, dirs[x]))
-            break;
-        }
-
-        if(!(world[ch->in_room].dir_option[x])) {
-          send_to_char("That exit does not exist...create it first.\n\r", ch);
-          return eFAILURE;
-        }
-
-        send_to_char("Enter the exit's description below. Terminate with "
-                     "'~' on a new line.\n\r\n\r", ch);
-/*        if(world[ch->in_room].dir_option[x]->general_description) {
+    send_to_char("Enter the exit's description below. Terminate with "
+                 "'~' on a new line.\n\r\n\r",
+                 ch);
+    /*        if(world[ch->in_room].dir_option[x]->general_description) {
           dc_free(world[ch->in_room].dir_option[x]->general_description);
           world[ch->in_room].dir_option[x]->general_description = 0;
         }
-   */     ch->desc->strnew = &world[ch->in_room].dir_option[x]->general_description;
-        ch->desc->max_str = MAX_MESSAGE_LENGTH;
-        ch->desc->connected = CON_EDITING;
-      } break;
+   */
+    ch->desc->strnew = &world[ch->in_room].dir_option[x]->general_description;
+    ch->desc->max_str = MAX_MESSAGE_LENGTH;
+    ch->desc->connected = CON_EDITING;
+  }
+  break;
 
-      // rflag
-      case 5 : {
-        a = FALSE;
-        if(remainder_args.empty()) {
-          send_to_char("$3Syntax$R: redit rflag <flags>\n\r", ch);
-          send_to_char("$3Available room flags$R:\n\r", ch);
-          for(x = 0 ;; x++) {
-            if(!strcmp(room_bits[x], "\n"))
-              break;
-	    if (!strcmp(room_bits[x], "unused"))
-		continue;
-            if((x+1)%4 == 0) {
-              csendf(ch, "%-18s\n\r", room_bits[x]);
-            } else {
-              csendf(ch, "%-18s", room_bits[x]);
-            }
-          }
-          send_to_char("\r\n\r\n", ch);
-          return eFAILURE;
+  // rflag
+  case 5:
+  {
+    a = FALSE;
+    if (remainder_args.empty())
+    {
+      send_to_char("$3Syntax$R: redit rflag <flags>\n\r", ch);
+      send_to_char("$3Available room flags$R:\n\r", ch);
+      for (x = 0;; x++)
+      {
+        if (!strcmp(room_bits[x], "\n"))
+          break;
+        if (!strcmp(room_bits[x], "unused"))
+          continue;
+        if ((x + 1) % 4 == 0)
+        {
+          csendf(ch, "%-18s\n\r", room_bits[x]);
         }
-        parse_bitstrings_into_int(room_bits, remainder_args.c_str(), ch, (world[ch->in_room].room_flags));
-      } break;
-
-      // sector
-      case 6: {
-        if(remainder_args.empty()) {
-          send_to_char("$3Syntax$R: redit sector <sector>\r\n", ch);
-          send_to_char("$3Available sector types$R:\n\r", ch);
-          for(x = 0 ;; x++) {
-            if(!strcmp(sector_types[x], "\n"))
-              break;
-            if((x+1)%4 == 0) {
-              csendf(ch, "%-18s\n\r", sector_types[x]);
-            } else {
-              csendf(ch, "%-18s", sector_types[x]); 
-            }
-          }
-          send_to_char("\r\n\r\n", ch);
-          return eFAILURE;
+        else
+        {
+          csendf(ch, "%-18s", room_bits[x]);
         }
-        for(x = 0 ;; x++) {
-          if(!strcmp(sector_types[x], "\n")) {
-            send_to_char("No such sector type.\n\r", ch);
-            return eFAILURE;
-          }
-          else if(is_abbrev(remainder_args, sector_types[x])) {
-            world[ch->in_room].sector_type = x;
-            csendf(ch, "Sector type set to %s.\n\r", sector_types[x]);
-            break;
-          }
-        }
-      } break;
-       case 7: // denymob
-	if (remainder_args.empty() || !is_number(remainder_args.c_str()))
-	{
-	  send_to_char("Syntax: redit denymob <vnum>\r\nDoing this on an already denied mob will allow it once more.\r\n",ch);
-	  return eFAILURE;
-	}
-	bool done = FALSE;
-	int mob = stoi(remainder_args);
-	struct deny_data *nd,*pd = NULL;
-	for (nd = world[ch->in_room].denied;nd;nd = nd->next)
-	{
-	  if (nd->vnum == mob){
-		if (pd) pd->next = nd->next;
-		else world[ch->in_room].denied = nd->next;
-		dc_free(nd);
-		csendf(ch, "Mobile %d ALLOWED entrance.\r\n", mob);
-		done = TRUE;
-		break;
-	  }
-	  pd = nd;
-	}
-	if (done) break;
-  nd = new deny_data;
-	nd->next = world[ch->in_room].denied;
-	nd->vnum = stoi(remainder_args);
-	world[ch->in_room].denied = nd;
-	csendf(ch, "Mobile %d DENIED entrance.\r\n",mob);
-	break;
+      }
+      send_to_char("\r\n\r\n", ch);
+      return eFAILURE;
     }
-    set_zone_modified_world(ch->in_room);
-    return eSUCCESS;
+    parse_bitstrings_into_int(room_bits, remainder_args.c_str(), ch, (world[ch->in_room].room_flags));
+  }
+  break;
+
+  // sector
+  case 6:
+  {
+    if (remainder_args.empty())
+    {
+      send_to_char("$3Syntax$R: redit sector <sector>\r\n", ch);
+      send_to_char("$3Available sector types$R:\n\r", ch);
+      for (x = 0;; x++)
+      {
+        if (!strcmp(sector_types[x], "\n"))
+          break;
+        if ((x + 1) % 4 == 0)
+        {
+          csendf(ch, "%-18s\n\r", sector_types[x]);
+        }
+        else
+        {
+          csendf(ch, "%-18s", sector_types[x]);
+        }
+      }
+      break;
+    case 7: // denymob
+      if (remainder_args.empty() || !is_number(remainder_args.c_str()))
+      {
+        send_to_char("Syntax: redit denymob <vnum>\r\nDoing this on an already denied mob will allow it once more.\r\n", ch);
+        return eFAILURE;
+      }
+      bool done = FALSE;
+      int mob = stoi(remainder_args);
+      struct deny_data *nd, *pd = NULL;
+      for (nd = world[ch->in_room].denied; nd; nd = nd->next)
+      {
+        if (nd->vnum == mob)
+        {
+          if (pd)
+            pd->next = nd->next;
+          else
+            world[ch->in_room].denied = nd->next;
+          dc_free(nd);
+          csendf(ch, "Mobile %d ALLOWED entrance.\r\n", mob);
+          done = TRUE;
+          break;
+        }
+        pd = nd;
+      }
+      if (done)
+        break;
+      nd = new deny_data;
+      nd->next = world[ch->in_room].denied;
+      nd->vnum = stoi(remainder_args);
+      world[ch->in_room].denied = nd;
+      csendf(ch, "Mobile %d DENIED entrance.\r\n", mob);
+      break;
+    }
+    send_to_char("\r\n\r\n", ch);
+    return eFAILURE;
+  }
+    for (x = 0;; x++)
+    {
+      if (!strcmp(sector_types[x], "\n"))
+      {
+        send_to_char("No such sector type.\n\r", ch);
+        return eFAILURE;
+      }
+      else if (is_abbrev(remainder_args, sector_types[x]))
+      {
+        world[ch->in_room].sector_type = x;
+        csendf(ch, "Sector type set to %s.\n\r", sector_types[x]);
+        break;
+      }
+    }
+  
+  break;
+}
+set_zone_modified_world(ch->in_room);
+return eSUCCESS;
 }
 
 int do_rdelete(struct char_data *ch, char *arg, int cmd)
@@ -3968,55 +4300,69 @@ int do_rdelete(struct char_data *ch, char *arg, int cmd)
 
   half_chop(arg, buf, buf2);
 
-  if(!*buf) {
+  if (!*buf)
+  {
     send_to_char("$3Syntax$R:\n\rrdelete exit   <direction>\n\rrdelete "
-                 "exdesc <direction>\n\rrdelete extra  <keyword>\n\r", ch);
-    return eFAILURE; 
+                 "exdesc <direction>\n\rrdelete extra  <keyword>\n\r",
+                 ch);
+    return eFAILURE;
   }
 
-  if(!can_modify_room(ch, ch->in_room)) {
+  if (!can_modify_room(ch, ch->in_room))
+  {
     send_to_char("You cannot destroy things here, it is not your domain.\n\r", ch);
     return eFAILURE;
   }
 
-  if(is_abbrev(buf, "exit")) {
-    for(x = 0; x <= 6; x++) {
-      if(x == 6) {
+  if (is_abbrev(buf, "exit"))
+  {
+    for (x = 0; x <= 6; x++)
+    {
+      if (x == 6)
+      {
         send_to_char("No such direction.\n\r", ch);
         return eFAILURE;
       }
-      if(is_abbrev(buf2, dirs[x]))
+      if (is_abbrev(buf2, dirs[x]))
         break;
     }
 
-    if(!(world[ch->in_room].dir_option[x])) {
+    if (!(world[ch->in_room].dir_option[x]))
+    {
       send_to_char("There is nothing there to remove.\n\r", ch);
       return eFAILURE;
     }
     dc_free(world[ch->in_room].dir_option[x]);
-    world[ch->in_room].dir_option[x] = 0; 
+    world[ch->in_room].dir_option[x] = 0;
     csendf(ch, "You stretch forth your hands and remove "
-            "the %s exit.\n\r", dirs[x]);
+               "the %s exit.\n\r",
+           dirs[x]);
   }
 
-  else if(is_abbrev(buf, "extra")) {
-    for(i = world[ch->in_room].ex_description ;; i = i->next) {
-      if(i == NULL) {
+  else if (is_abbrev(buf, "extra"))
+  {
+    for (i = world[ch->in_room].ex_description;; i = i->next)
+    {
+      if (i == NULL)
+      {
         send_to_char("There is nothing there to remove.\n\r", ch);
         return eFAILURE;
       }
-      if(isname(buf2, i->keyword))
+      if (isname(buf2, i->keyword))
         break;
     }
 
-    if(world[ch->in_room].ex_description == i) {
+    if (world[ch->in_room].ex_description == i)
+    {
       world[ch->in_room].ex_description = i->next;
       dc_free(i);
       send_to_char("You remove the extra description.\n\r", ch);
     }
-    else {
-      for(extra = world[ch->in_room].ex_description ;; extra = extra->next)
-        if(extra->next == i) {
+    else
+    {
+      for (extra = world[ch->in_room].ex_description;; extra = extra->next)
+        if (extra->next == i)
+        {
           extra->next = i->next;
           dc_free(i);
           send_to_char("You remove the extra description.\n\r", ch);
@@ -4024,42 +4370,50 @@ int do_rdelete(struct char_data *ch, char *arg, int cmd)
         }
     }
   }
- 
-  else if(is_abbrev(buf, "exdesc")) {
-        if(!*buf2) {
-          send_to_char("Syntax:\n\rrdelete exdesc <direction>\n\r", ch);
-          return eFAILURE;
-        }
-        one_argument(buf2, buf);
-        for(x = 0; x <=6; x++) {
-          if(x == 6) {
-            send_to_char("No such direction.\n\r", ch);
-            return eFAILURE;
-          }
-          if(is_abbrev(buf, dirs[x]))
-            break;
-        }
 
-        if(!(world[ch->in_room].dir_option[x])) {
-          send_to_char("That exit does not exist...create it first.\n\r", ch);
-          return eFAILURE;
-        }
+  else if (is_abbrev(buf, "exdesc"))
+  {
+    if (!*buf2)
+    {
+      send_to_char("Syntax:\n\rrdelete exdesc <direction>\n\r", ch);
+      return eFAILURE;
+    }
+    one_argument(buf2, buf);
+    for (x = 0; x <= 6; x++)
+    {
+      if (x == 6)
+      {
+        send_to_char("No such direction.\n\r", ch);
+        return eFAILURE;
+      }
+      if (is_abbrev(buf, dirs[x]))
+        break;
+    }
 
-        if(!(world[ch->in_room].dir_option[x]->general_description)) {
-          send_to_char("There's no description there to delete.\n\r", ch);
-          return eFAILURE;
-        }
+    if (!(world[ch->in_room].dir_option[x]))
+    {
+      send_to_char("That exit does not exist...create it first.\n\r", ch);
+      return eFAILURE;
+    }
 
-        else {
-          dc_free(world[ch->in_room].dir_option[x]->general_description);
-          world[ch->in_room].dir_option[x]->general_description = 0;
-          send_to_char("Ok.\n\r", ch);
-        }
+    if (!(world[ch->in_room].dir_option[x]->general_description))
+    {
+      send_to_char("There's no description there to delete.\n\r", ch);
+      return eFAILURE;
+    }
+
+    else
+    {
+      dc_free(world[ch->in_room].dir_option[x]->general_description);
+      world[ch->in_room].dir_option[x]->general_description = 0;
+      send_to_char("Ok.\n\r", ch);
+    }
   }
 
   else
     send_to_char("Syntax:\n\rrdelete exit   <direction>\n\rrdelete "
-                 "exdesc <direction>\n\rrdelete extra  <keyword>\n\r", ch);
+                 "exdesc <direction>\n\rrdelete extra  <keyword>\n\r",
+                 ch);
 
   set_zone_modified_world(ch->in_room);
   return eSUCCESS;

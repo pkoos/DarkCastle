@@ -374,7 +374,6 @@ int     move_char       (CHAR_DATA *ch, int dest);
 int     move_char       (CHAR_DATA *ch, int dest, bool stop_all_fighting);
 int	number		(int from, int to);
 int 	dice		(int number, int size);
-int random_percent_change(int from, int to, int value);
 int	str_cmp		(const char *arg1, const char *arg2);
 int	str_nosp_cmp	(const char *arg1, const char *arg2);
 int     str_n_nosp_cmp  (const char *arg1, const char *arg2, int size);
@@ -615,5 +614,7 @@ const char *item_condition(struct obj_data *obj);
 QString blackjack_prompt(CHAR_DATA *ch, bool ascii);
 void blackjack_prompt_old(CHAR_DATA *ch, char *prompt, bool ascii);
 int do_save(struct char_data *ch, char *argument, int cmd);
+int random_percent_change(uint percentage, int value);
+int random_percent_change(int from, int to, int value);
 
 #endif /* UTILITY_H_ */
