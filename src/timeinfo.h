@@ -5,10 +5,8 @@
 | timeinfo.h
 | Description:  Declares the information for handling time in the game.
 */
-extern "C"
-{
-  #include <time.h>
-}
+#include <time.h>
+#include <stdint.h>
 extern struct timer_data *timer_list;
 
 #define SECS_PER_REAL_MIN    60
@@ -35,9 +33,9 @@ struct time_info_data
 /* These data contain information about a players time data */
 struct time_data
 {
-  time_t birth;    /* This represents the characters age                */
-  time_t logon;    /* Time of the last logon (used to calculate played) */
-  long played;      /* This is the total accumulated time played in secs */
+  int32_t birth;    /* This represents the characters age                */
+  int32_t logon;    /* Time of the last logon (used to calculate played) */
+  int32_t played;   /* This is the total accumulated time played in secs */
 };
 
 typedef void TIMER_FUNC (void *arg1, void *arg2, void *arg3);
