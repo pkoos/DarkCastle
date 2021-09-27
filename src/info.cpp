@@ -824,39 +824,21 @@ void try_to_peek_into_container(struct char_data *vict, struct char_data *ch,
       send_to_char("You don't see anything inside it.\r\n", ch);
 }
 
-int do_identify(char_data *ch, char *argument, int cmd)
+bool identify(char_data *ch, obj_data *obj)
 {
+   if (ch == nullptr || obj == nullptr)
+   {
+      return false;
+   }
+
    char buf[MAX_STRING_LENGTH] = { 0 }, buf2[256] = { 0 };
    int i = 0, value = 0, bits = 0;
    bool found = false;
 
-
-   string arg1, remainder_args;
-   tie (arg1, remainder_args) = half_chop(argument);
-
-   if (arg1.empty())
-   {
-      csendf(ch, "What object do you want to identify?\n\r");
-      return eFAILURE;
-   }
-
-   obj_data *obj = get_obj_in_list_vis(ch, arg1.c_str(), ch->carrying);
-
-   if (obj == nullptr && ch->in_room > 0)
-   {
-      obj = get_obj_in_list_vis(ch, arg1.c_str(), world[ch->in_room].contents);
-   }
-
-   if (obj == nullptr)
-   {
-      csendf(ch, "You could not find %s in your inventory or this room.\n\r", arg1.c_str());
-      return eFAILURE;
-   }
-
    if (IS_SET(obj->obj_flags.extra_flags, ITEM_DARK) && GET_LEVEL(ch) < IMMORTAL)
    {
       send_to_char("A magical aura around the item attempts to conceal its secrets.\r\n", ch);
-      return eFAILURE;
+      return false;
    }
 
    sprintf(buf, "$3Object '$R%s$3', Item type:$R ", obj->name);
@@ -1082,6 +1064,38 @@ int do_identify(char_data *ch, char *argument, int cmd)
 
          csendf(ch, "%s\r\n", buf);
       }
+   }
+
+   return true;
+}
+
+int do_identify(char_data *ch, char *argument, int cmd)
+{
+   string arg1, remainder_args;
+   tie (arg1, remainder_args) = half_chop(argument);
+
+   if (arg1.empty())
+   {
+      csendf(ch, "What object do you want to identify?\n\r");
+      return eFAILURE;
+   }
+
+   obj_data *obj = get_obj_in_list_vis(ch, arg1.c_str(), ch->carrying);
+
+   if (obj == nullptr && ch->in_room > 0)
+   {
+      obj = get_obj_in_list_vis(ch, arg1.c_str(), world[ch->in_room].contents);
+   }
+
+   if (obj == nullptr)
+   {
+      csendf(ch, "You could not find %s in your inventory or this room.\n\r", arg1.c_str());
+      return eFAILURE;
+   }
+
+   if (identify(ch, obj) == false)
+   {
+      return eFAILURE;
    }
 
    return eSUCCESS;

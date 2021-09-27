@@ -616,5 +616,6 @@ void blackjack_prompt_old(CHAR_DATA *ch, char *prompt, bool ascii);
 int do_save(struct char_data *ch, char *argument, int cmd);
 int random_percent_change(uint percentage, int value);
 int random_percent_change(int from, int to, int value);
+bool identify(char_data *ch, obj_data *obj);
 
 #endif /* UTILITY_H_ */
