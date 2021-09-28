@@ -20,7 +20,7 @@ descriptor_data::descriptor_data()
     max_str = 0;                             /*	-			*/
     memset(buf, 0, 10 * MAX_INPUT_LENGTH);   /* buffer for raw input	*/
     memset(last_input, 0, MAX_INPUT_LENGTH); /* the last input	*/
-    output = QString();                      /* queue of strings to send	*/
+    output = QByteArray();                      /* queue of strings to send	*/
     memset(inbuf, 0, MAX_RAW_INPUT_LENGTH);
     input = TXT_Q();     /* queue of unprocessed input	*/
     character = nullptr; /* linked to char		*/

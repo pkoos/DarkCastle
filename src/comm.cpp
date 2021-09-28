@@ -1072,7 +1072,10 @@ void echo_on(struct descriptor_data *d)
 void telnet_ga(descriptor_data *d)
 {
   char go_ahead[] = {(char)IAC, (char)GA, (char)0};
-  SEND_TO_Q(go_ahead, d);
+  if (d != nullptr)
+  {
+    d->output += QByteArray(go_ahead);
+  }
 }
 
 int do_lastprompt(CHAR_DATA *ch, char *arg, int cmd) 
@@ -1250,9 +1253,7 @@ QString make_prompt(struct descriptor_data *d)
     }
   }
 
-    char go_ahead[] = {(char)IAC, (char)GA, (char)0};
-    prompt += go_ahead;
-    return prompt;
+  return prompt;
 }
 
 CHAR_DATA* get_charmie(CHAR_DATA *ch)
@@ -1800,7 +1801,6 @@ QString handle_ansi(QString buffer, char_data *ch)
 
 */
 
-
 /* Add a new string to a player's output queue */
 void write_to_output(QString buffer, descriptor_data *t)
 {
@@ -1817,7 +1817,7 @@ void write_to_output(QString buffer, descriptor_data *t)
     buffer = scramble_text(buffer);
   }
 
-  t->output += buffer;
+  t->output += buffer.toUtf8();
 }
 
 
@@ -1909,10 +1909,12 @@ int process_output(struct descriptor_data *t)
   static int result;
   if (t->character && t->connected == CON_PLAYING)
   {
-    t->output += blackjack_prompt(t->character, t->character->pcdata && !IS_SET(t->character->pcdata->toggles, PLR_ASCII));
+    t->output += blackjack_prompt(t->character, t->character->pcdata && !IS_SET(t->character->pcdata->toggles, PLR_ASCII)).toUtf8();
   }
   
-  t->output += make_prompt(t);
+  t->output += make_prompt(t).toUtf8();
+  telnet_ga(t);
+  
 
   /*
    * now, send the output.  If this is an 'interruption', use the prepended
@@ -1937,7 +1939,7 @@ int process_output(struct descriptor_data *t)
   return result;
 }
 
-int write_to_descriptor(socket_t desc, QString txt)
+int write_to_descriptor(socket_t desc, QByteArray txt)
 {
   int total, bytes_written;
 
@@ -2158,7 +2160,7 @@ END OLD HERE */
       char buffer[MAX_INPUT_LENGTH + 64];
 
       sprintf(buffer, "Line too long.  Truncated to:\r\n%s (%d)\r\n", tmp, strlen(tmp));
-      if (write_to_descriptor(t->descriptor, QString(buffer)) < 0)
+      if (write_to_descriptor(t->descriptor, QString(buffer).toUtf8()) < 0)
         return -1;
     }
     if (t->snoop_by)

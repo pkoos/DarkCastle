@@ -70,7 +70,7 @@ struct descriptor_data {
   int max_str; /*	-			*/
   char buf[10 * MAX_INPUT_LENGTH]; /* buffer for raw input	*/
   char last_input[MAX_INPUT_LENGTH]; /* the last input	*/
-  QString output; /* queue of strings to send	*/
+  QByteArray output; /* queue of strings to send	*/
   char inbuf[MAX_RAW_INPUT_LENGTH];
   TXT_Q input; /* queue of unprocessed input	*/
   CHAR_DATA *character; /* linked to char		*/
