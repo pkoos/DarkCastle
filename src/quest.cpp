@@ -28,7 +28,6 @@ typedef vector<quest_info *> quest_list_t;
 quest_list_t quest_list;
 
 extern CWorld world;
-extern zone_data *zone_table;
 
 char *valid_fields[] = {
     "name",

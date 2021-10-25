@@ -38,7 +38,6 @@ char_data *origsing = NULL;
 
 using namespace std;
 
-extern struct zone_data *zone_table;
 extern int check_social(CHAR_DATA *ch, char *pcomm, int length, char *arg);
 void check_eq(CHAR_DATA *ch);
 

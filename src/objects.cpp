@@ -175,8 +175,7 @@ void object_activity(uint64_t pulse_type)
     } else
     {
       int retval = 0;
-      extern struct zone_data *zone_table;
-
+      
       if (obj->in_room != NOWHERE)
       {
         if (zone_table[world[obj->in_room].zone].players)

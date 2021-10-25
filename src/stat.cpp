@@ -28,7 +28,6 @@ using namespace std;
 
 
 extern int top_of_zone_table;
-extern zone_data *zone_table;
 
 
 /******************* Area start **************************************/
