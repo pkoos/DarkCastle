@@ -40,7 +40,6 @@ extern struct index_data *obj_index;
 extern struct index_data *mob_index; 
 extern struct obj_data *object_list;
 
-extern struct zone_data *zone_table;
 extern struct descriptor_data *descriptor_list;
 
 extern CHAR_DATA *initiate_oproc(CHAR_DATA *ch, OBJ_DATA *obj);
