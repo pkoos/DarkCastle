@@ -20,6 +20,7 @@
 #include "character.h"
 #include "fileinfo.h"
 #include "connect.h"
+#include "db.h"
 
 using namespace std;
 
@@ -32,7 +33,8 @@ typedef set<char_data *>::iterator character_list_i;
 typedef set<int>::iterator client_descriptor_list_i;
 typedef set<int>::iterator server_descriptor_list_i;
 typedef vector<in_port_t>::iterator port_list_i;
-
+typedef class zone_data zone_t;
+typedef vector<zone_t> zone_list_t;
 class DC {
   // Favor reference semantics over pointer semantics
 public:
@@ -51,6 +53,7 @@ public:
   obj_list_t active_obj_list;
   obj_list_t obj_free_list;
   unordered_set<char_data*> shooting_list;
+  zone_list_t zones;
   
   struct config {
     port_list_t ports;
@@ -69,6 +72,8 @@ public:
   } cf;
 
   void init_game(void);
+  zone_list_t& getZones(void);
+ 
 
 private:
 
@@ -90,7 +95,6 @@ extern vector<string> continent_names;
 extern CVoteData *DCVote;
 extern struct room_data ** world_array;
 extern struct obj_data  *object_list;
-extern struct zone_data *zone_table;
 extern struct spell_info_type spell_info [ ];
 
 #endif /* SRC_INCLUDE_DC_H_ */
