@@ -253,6 +253,26 @@ int do_load(struct char_data *ch, char *arg, int cmd)
           return eFAILURE;
         } 
 
+		if (random[0] == 'r')
+		{
+			obj_data *obj = (obj_data *)(obj_index[number].item);
+			if (IS_SET(obj->obj_flags.extra_flags, ITEM_SPECIAL))
+			{
+				csendf(ch, "You cannot random load vnum %d because extra flag ITEM_SPECIAL is set.\r\n", num);
+				return eFAILURE;
+			}
+			else if (IS_SET(obj->obj_flags.extra_flags, ITEM_QUEST))
+			{
+				csendf(ch, "You cannnot random load vnum %d because extra flag ITEM_QUEST is set.\r\n", num);
+				return eFAILURE;
+			}
+			else if (IS_SET(obj->obj_flags.more_flags, ITEM_NO_CUSTOM))
+			{
+				csendf(ch, "You cannot random load vnum %d because more flag ITEM_NO_CUSTOM is set.\r\n", num);
+				return eFAILURE;
+			}
+		}
+
         do_oload(ch, number, cnt, (random[0] == 'r'? true : false));
         return eSUCCESS;
       }
@@ -2126,11 +2146,13 @@ int do_oclone(struct char_data *ch, char *argument, int cmd)
   obj = clone_object(r1);
   if (!obj) {csendf(ch, "Failure. Unable to clone item.\r\n"); return eFAILURE; }
 
+/*
   if(obj_index[obj->item_number].non_combat_func ||
         obj->obj_flags.type_flag == ITEM_MEGAPHONE ||
         has_random(obj)) {
     DC::instance().obj_free_list.insert(obj);
   }
+*/
 
   csendf(ch, "Ok.\n\rYou copied item %d (%s) and replaced item %d (%s).\n\r",
 	 v1, ((OBJ_DATA*)obj_index[real_object(v1)].item)->short_description,
@@ -2146,7 +2168,7 @@ int do_oclone(struct char_data *ch, char *argument, int cmd)
   obj_index[r2].mobprogs = NULL;
   obj_index[r2].combat_func = 0;
   obj_index[r2].mobspec = 0;
-  extract_obj(otmp);
+  //extract_obj(otmp);
 
   ch->pcdata->last_obj_edit = r2;
   set_zone_modified_obj(r2);

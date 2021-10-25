@@ -33,6 +33,8 @@ extern "C"
 #include "fileinfo.h"
 #include <string>
 #include <vector>
+#include <map>
+#include <set>
 
 extern CWorld world;
 extern struct index_data *obj_index;
@@ -367,220 +369,379 @@ char * toggle_txt[] = {
   "news-up",
   "ascii",
   "damage",
+  "nodupekeys",
   ""
 };
 
-int do_toggle(struct char_data * ch, char * arg, int cmd)
+int do_toggle(struct char_data *ch, char *arg, int cmd)
 {
   int x;
   char buf[MAX_STRING_LENGTH];
-  
+
   one_argument(arg, buf);
-  
-  if(IS_MOB(ch)) {
+
+  if (IS_MOB(ch))
+  {
     send_to_char("You can't toggle anything, you're a mob!\r\n", ch);
     return eFAILURE;
   }
 
-  if(!*buf) {
-    for(x = 0; toggle_txt[x][0] != '\0'; x++) {
-	if (x != 8 || GET_CLASS(ch) == CLASS_BARD)
-	  if (x != 14 ||  (IS_SET(ch->pcdata->toggles, PLR_GUIDE)))
-       sprintf(buf + strlen(buf), "%-10s ", toggle_txt[x]);
+  if (!*buf)
+  {
+    for (x = 0; toggle_txt[x][0] != '\0'; x++)
+    {
+      if (x != 14 || (IS_SET(ch->pcdata->toggles, PLR_GUIDE)))
+      {
+        sprintf(buf + strlen(buf), "%-11s ", toggle_txt[x]);
+      }
 
-       switch(x) {
-         case 0:
-	 sprintf(buf + strlen(buf), "%s\n\r",
-	   IS_SET(ch->pcdata->toggles, PLR_BRIEF) ? "$B$2on$R" : "$B$4off$R");
-	 break;
-	 
-         case 1:
-	 sprintf(buf + strlen(buf), "%s\n\r",
-	   IS_SET(ch->pcdata->toggles, PLR_COMPACT) ? "$B$2on$R" : "$B$4off$R");
-	 break;
-	 
-         case 2:
-	 sprintf(buf + strlen(buf), "%s\n\r",
-	   IS_SET(ch->pcdata->toggles, PLR_BEEP) ? "$B$2on$R" : "$B$4off$R");
-	 break;
-	 
-         case 3:
-	 sprintf(buf + strlen(buf), "%s\n\r",
-           IS_SET(ch->pcdata->toggles, PLR_ANONYMOUS) ? "$B$2on$R" : "$B$4off$R");
-	 break;
-	 
-         case 4:
-	 sprintf(buf + strlen(buf), "%s\n\r",
-	   IS_SET(ch->pcdata->toggles, PLR_ANSI) ? "$B$2on$R" : "$B$4off$R");
-	 break;
-	 
-         case 5:
-	 sprintf(buf + strlen(buf), "%s\n\r",
-	   IS_SET(ch->pcdata->toggles, PLR_VT100) ? "$B$2on$R" : "$B$4off$R");
-	 break;
-	 
-         case 6:
-	 sprintf(buf + strlen(buf), "%s\n\r",
-	   IS_SET(ch->pcdata->toggles, PLR_WIMPY) ? "$B$2on$R" : "$B$4off$R");
-	 break;
-	 
-         case 7:
-	 sprintf(buf + strlen(buf), "%s\n\r",
-	   IS_SET(ch->pcdata->toggles, PLR_PAGER) ? "$B$4off$R" : "$B$2on$R");
-	 break;
-	 
-         case 8:
-				if (GET_CLASS(ch) == CLASS_BARD) {
-	 sprintf(buf + strlen(buf), "%s\n\r",
-	   IS_SET(ch->pcdata->toggles, PLR_BARD_SONG) ? "$B$2on$R" : "$B$4off$R");
-				}
-	 break;
-	 
-         case 9:
-	 sprintf(buf + strlen(buf), "%s\n\r",
-	   IS_SET(ch->pcdata->toggles, PLR_AUTOEAT) ? "$B$2on$R" : "$B$4off$R");
-	 break;
-	 
-         case 10:
-	 sprintf(buf + strlen(buf), "%s\n\r",
-	   IS_SET(ch->pcdata->toggles, PLR_SUMMONABLE) ? "$B$2on$R" : "$B$4off$R");
-	 break;
-	 
-         case 11:
-	 sprintf(buf + strlen(buf), "%s\n\r",
-	   IS_SET(ch->pcdata->toggles, PLR_LFG) ? "$B$2on$R" : "$B$4off$R");
-	 break;
-	 
-         case 12:
-	 sprintf(buf + strlen(buf), "%s\n\r",
-	   IS_SET(ch->pcdata->toggles, PLR_CHARMIEJOIN) ? "$B$2on$R" : "$B$4off$R");
-	 break;
-         case 13:
-         sprintf(buf + strlen(buf), "%s\n\r",
-           IS_SET(ch->pcdata->toggles, PLR_NOTAX) ? "$B$2on$R" : "$B$4off$R");
-         break;
-         case 14:
-				if (IS_SET(ch->pcdata->toggles, PLR_GUIDE)) {
-         sprintf(buf + strlen(buf), "%s\n\r",
-           IS_SET(ch->pcdata->toggles, PLR_GUIDE_TOG) ? "$B$2on$R" : "$B$4off$R");
-				}
-         break;
-         case 15:
-         sprintf(buf + strlen(buf), "%s\n\r",
-           IS_SET(ch->pcdata->toggles, PLR_NEWS) ? "$B$2on$R" : "$B$4off$R");
-	break;
-         case 16:
-         sprintf(buf + strlen(buf), "%s\n\r",
-           IS_SET(ch->pcdata->toggles, PLR_ASCII) ? "$B$4off$R" : "$B$2on$R");
-         break;
-         case 17:
-         sprintf(buf + strlen(buf), "%s\n\r",
-           IS_SET(ch->pcdata->toggles, PLR_DAMAGE) ? "$B$2on$R" : "$B$4off$R");
-         break;
+      switch (x)
+      {
+      case 0:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_BRIEF) ? "$B$2on$R" : "$B$4off$R");
+        break;
 
+      case 1:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_COMPACT) ? "$B$2on$R" : "$B$4off$R");
+        break;
 
-	 
-         default:
-	 break;
-       }
+      case 2:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_BEEP) ? "$B$2on$R" : "$B$4off$R");
+        break;
+
+      case 3:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_ANONYMOUS) ? "$B$2on$R" : "$B$4off$R");
+        break;
+
+      case 4:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_ANSI) ? "$B$2on$R" : "$B$4off$R");
+        break;
+
+      case 5:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_VT100) ? "$B$2on$R" : "$B$4off$R");
+        break;
+
+      case 6:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_WIMPY) ? "$B$2on$R" : "$B$4off$R");
+        break;
+
+      case 7:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_PAGER) ? "$B$4off$R" : "$B$2on$R");
+        break;
+
+      case 8:
+          sprintf(buf + strlen(buf), "%s\n\r",
+                  IS_SET(ch->pcdata->toggles, PLR_BARD_SONG) ? "$B$2on$R (brief)" : "$B$4off$R (verbose)");
+        break;
+
+      case 9:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_AUTOEAT) ? "$B$2on$R" : "$B$4off$R");
+        break;
+
+      case 10:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_SUMMONABLE) ? "$B$2on$R" : "$B$4off$R");
+        break;
+
+      case 11:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_LFG) ? "$B$2on$R" : "$B$4off$R");
+        break;
+
+      case 12:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_CHARMIEJOIN) ? "$B$2on$R" : "$B$4off$R");
+        break;
+      case 13:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_NOTAX) ? "$B$2on$R" : "$B$4off$R");
+        break;
+      case 14:
+        if (IS_SET(ch->pcdata->toggles, PLR_GUIDE))
+        {
+          sprintf(buf + strlen(buf), "%s\n\r",
+                  IS_SET(ch->pcdata->toggles, PLR_GUIDE_TOG) ? "$B$2on$R" : "$B$4off$R");
+        }
+        break;
+      case 15:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_NEWS) ? "$B$2on$R" : "$B$4off$R");
+        break;
+      case 16:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_ASCII) ? "$B$4off$R" : "$B$2on$R");
+        break;
+      case 17:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_DAMAGE) ? "$B$2on$R" : "$B$4off$R");
+        break;
+      case 18:
+        sprintf(buf + strlen(buf), "%s\n\r",
+                IS_SET(ch->pcdata->toggles, PLR_NODUPEKEYS) ? "$B$2on$R" : "$B$4off$R");
+        break;
+      default:
+        break;
+      }
     }
-    
+
     send_to_char(buf, ch);
     return eSUCCESS;
   }
-  
-  for(x = 0; toggle_txt[x][0] != '\0'; x++)
-     if(is_abbrev(buf, toggle_txt[x]))
-       break;
-  
-  if(toggle_txt[x][0] == '\0') {
+
+  for (x = 0; toggle_txt[x][0] != '\0'; x++)
+    if (is_abbrev(buf, toggle_txt[x]))
+      break;
+
+  if (toggle_txt[x][0] == '\0')
+  {
     send_to_char("Bad option.  Type toggle with no arguments for a list of "
-                 "good ones.\n\r", ch);
+                 "good ones.\n\r",
+                 ch);
     return eFAILURE;
   }
 
-  switch(x) {
-    case 0:
+  switch (x)
+  {
+  case 0:
     do_brief(ch, "", 9);
     break;
-    
-    case 1:
+
+  case 1:
     do_compact(ch, "", 9);
     break;
-    
-    case 2:
+
+  case 2:
     do_beep_set(ch, "", 9);
     break;
-    
-    case 3:
+
+  case 3:
     do_anonymous(ch, "", 9);
     break;
-    
-    case 4:
+
+  case 4:
     do_ansi(ch, "", 9);
     break;
-    
-    case 5:
+
+  case 5:
     do_vt100(ch, "", 9);
     break;
-    
-    case 6:
+
+  case 6:
     do_wimpy(ch, "", 9);
     break;
-    
-    case 7:
+
+  case 7:
     do_pager(ch, "", 9);
     break;
-    
-    case 8:
-   if (GET_CLASS(ch) == CLASS_BARD)
+
+  case 8:
     do_bard_song_toggle(ch, "", 9);
-   else send_to_char("You're not a bard!\r\n",ch);
     break;
-    
-    case 9:
+
+  case 9:
     do_autoeat(ch, "", 9);
     break;
-    
-    case 10:
+
+  case 10:
     do_summon_toggle(ch, "", 9);
     break;
-    
-    case 11:
+
+  case 11:
     do_lfg_toggle(ch, "", 9);
     break;
-    
-    case 12:
+
+  case 12:
     do_charmiejoin_toggle(ch, "", 9);
     break;
 
-    case 13:
+  case 13:
     do_notax_toggle(ch, "", 9);
     break;
-    
-    case 14:
-	if (IS_SET(ch->pcdata->toggles, PLR_GUIDE))
-    do_guide_toggle(ch, "", 9);
-   else send_to_char("You're not a guide!\r\n",ch);
+
+  case 14:
+    if (IS_SET(ch->pcdata->toggles, PLR_GUIDE))
+      do_guide_toggle(ch, "", 9);
+    else
+      send_to_char("You're not a guide!\r\n", ch);
     break;
 
-    case 15:
+  case 15:
     do_news_toggle(ch, "", 9);
     break;
 
-    case 16:
+  case 16:
     do_ascii_toggle(ch, "", 9);
     break;
-    case 17:
+  case 17:
     do_damage_toggle(ch, "", 9);
     break;
-
-    default:
+  case 18:
+    do_nodupekeys_toggle(ch, "", 9);
+    break;
+  default:
     send_to_char("A bad thing just happened.  Tell the gods.\n\r", ch);
     break;
   }
   return eSUCCESS;
 }
+
+int do_config(char_data *ch, char *argument, int cmd)
+{
+  if (ch == nullptr || ch->pcdata == nullptr || IS_MOB(ch))
+  {
+    return eFAILURE;
+  }
+
+  if (ch->pcdata->options == nullptr)
+  {
+    ch->pcdata->options = new map<string,string>();
+  }
+
+  if (ch->pcdata->options->empty())
+  {
+    (*ch->pcdata->options)["color.good"] = string("green");
+    (*ch->pcdata->options)["color.bad"] = string("red");
+  }
+
+  map<string,string> colors;
+  //colors["black"]="$0";
+  colors["blue"]="$1";
+  colors["green"]="$2";
+  colors["cyan"]="$3";
+  colors["red"]="$4";
+  colors["yellow"]="$5";
+  colors["magenta"]="$6";
+  colors["white"]="$7";
+  colors["gray"]="$B$0";
+  colors["bright blue"]="$B$1";
+  colors["bright green"]="$B$2";
+  colors["bright cyan"]="$B$3";
+  colors["bright red"]="$B$4";
+  colors["bright yellow"]="$B$5";
+  colors["bright magenta"]="$B$6";
+  colors["bright white"]="$B$7";
+
+  string key, value, orig_arguments = string(argument);
+  tie (key, value) = half_chop(argument, '=');
+  size_t equal_position = orig_arguments.find('=');
+
+  if (key.empty() == false && key != "color.good" && key != "color.bad")
+  {
+    csendf(ch, "Invalid configuration key specified.\r\n");
+    return eFAILURE;
+  }
+
+  // config
+  // config key
+  if (equal_position == string::npos && value.empty() == true)
+  {
+    csendf(ch, "Usage:\r\n");
+    csendf(ch, "config                       - Show all currently set configuration options.\r\n");
+    csendf(ch, "config color.good=color name - Set color to use for \"good\" values in game.\r\n");
+    csendf(ch, "config color.bad=color name  - Set color to use for \"bad\" values in game.\r\n");
+    csendf(ch, "                               Use ? as color name to see valid colors.\r\n");
+    csendf(ch, "config color.good=           - Unset color.good. Will use default \"good\" color.\r\n");
+    csendf(ch, "config color.bad=            - Unset color.bad. Will use default \"bad\" color.\r\n\r\n");
+    csendf(ch, "Current config:\r\n");
+
+    bool found=false;
+    for (auto &option : *ch->pcdata->options)
+    {      
+      if ((key.empty() == false && key == option.first) || key.empty() == true)
+      {
+        found=true;
+        csendf(ch, "%s=%s\r\n", option.first.c_str(), option.second.c_str());
+      }     
+    }
+
+    if (found == false)
+    {
+      if (key.empty() == false)
+      {
+        csendf(ch, "%s not found.\r\n", key.c_str());
+      }
+      else
+      {
+        csendf(ch, "No config options set.\r\n");
+      }
+      return eFAILURE;
+    }
+
+    return eSUCCESS;
+  }
+
+  // config key=
+  if (equal_position == (orig_arguments.length() - 1) && key.empty() == false && value.empty() == true)
+  {
+    if (ch->pcdata->options->find(key) != ch->pcdata->options->end())
+    {
+      csendf(ch, "%s unset.\r\n", key.c_str());
+      (*ch->pcdata->options)[key]=string();
+      return eSUCCESS;
+    }
+    return eFAILURE;
+  }
+
+  // config key=value
+  if (key.empty() == false && value.empty() == false)
+  {
+    if (key == "color.good" || key == "color.bad")
+    {
+      if (colors.find(value) == colors.end())
+      {
+        if (value == "?")
+        {
+          csendf(ch, "Valid colors:\r\n");
+        }
+        else
+        {
+          csendf(ch, "Invalid color specified. Valid colors:\r\n");
+        }
+        
+        for (auto &color : colors)
+        {
+          if (color.first == "black")
+          {
+            csendf(ch, "%s\r\n", color.first.c_str());
+          }
+          else
+          {
+            csendf(ch, "%-15s - %sExample$R\r\n", color.first.c_str(), color.second.c_str());
+          }
+          
+        }
+
+        return eFAILURE;
+      }
+
+      (*ch->pcdata->options)[key] = value;
+      csendf(ch, "Setting %s=%s\r\n", key.c_str(), value.c_str());
+      return eSUCCESS;
+    }
+    else
+    {
+      csendf(ch, "Invalid config option.\r\n");
+      return eFAILURE;
+    }   
+  }
+
+  // debug. This point should not be reached.
+  csendf(ch, "Invalid scenario.\r\n");
+  csendf(ch, "=:%u orig length:%u [%s]\r\n", equal_position, orig_arguments.length(), orig_arguments.c_str());
+  csendf(ch, "key:[%s] value:[%s]\r\n", key.c_str(), value.c_str());
+
+  return eFAILURE;
+}
+
 
 int do_brief(struct char_data *ch, char *argument, int cmd)
 {
@@ -892,6 +1053,20 @@ int do_bard_song_toggle(struct char_data *ch, char *argument, int cmd)
 
   send_to_char("Bard singing now in brief mode.\n\r", ch);
   SET_BIT(ch->pcdata->toggles, PLR_BARD_SONG);
+  return eSUCCESS;
+}
+
+int do_nodupekeys_toggle(char_data *ch, char *argument, int cmd)
+{
+  if (IS_SET(ch->pcdata->toggles, PLR_NODUPEKEYS))
+  {
+    send_to_char("You will attach duplicate keys to keyrings.\r\n", ch);
+    REMOVE_BIT(ch->pcdata->toggles, PLR_NODUPEKEYS);
+    return eFAILURE;
+  }
+
+  send_to_char("You will not attach duplicate keys to keyrings.\r\n", ch);
+  SET_BIT(ch->pcdata->toggles, PLR_NODUPEKEYS);
   return eSUCCESS;
 }
 

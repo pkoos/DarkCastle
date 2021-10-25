@@ -2215,6 +2215,7 @@ int do_oedit(struct char_data *ch, char *argument, int cmd)
       // stat
       case 20: {
         obj_stat(ch, (obj_data *) obj_index[item_num].item);
+        return eSUCCESS;
         break;
       }
 	case 21:
@@ -3442,199 +3443,166 @@ int do_medit(struct char_data *ch, char *argument, int cmd)
     send_to_char(buf, ch);
   }
   break;
-
-    // stat
-  case 24:
-  {
-    mob_stat(ch, (char_data *)mob_index[mob_num].item);
-    break;
-  }
-    // strength
-  case 25:
-  {
-    if (!*buf4)
-    {
-      send_to_char("$3Syntax$R: medit [mob_num] strength <str>\n\r"
-                   "$3Current$R: ",
-                   ch);
-      sprintf(buf, "%d\n",
-              ((char_data *)mob_index[mob_num].item)->raw_str);
-      send_to_char(buf, ch);
-      send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
-      return eFAILURE;
-    }
-    if (!check_range_valid_and_convert(intval, buf4, 1, 28))
-    {
-      send_to_char("Value out of valid range.\r\n", ch);
-      return eFAILURE;
-    }
-    ((char_data *)mob_index[mob_num].item)->raw_str = intval;
-    sprintf(buf, "Mob raw strength set to %d.\r\n", intval);
-    send_to_char(buf, ch);
-  }
-  break;
-    // dexterity
-  case 26:
-  {
-    if (!*buf4)
-    {
-      send_to_char("$3Syntax$R: medit [mob_num] dexterity <dex>\n\r"
-                   "$3Current$R: ",
-                   ch);
-      sprintf(buf, "%d\n",
-              ((char_data *)mob_index[mob_num].item)->raw_dex);
-      send_to_char(buf, ch);
-      send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
-      return eFAILURE;
-    }
-    if (!check_range_valid_and_convert(intval, buf4, 1, 28))
-    {
-      send_to_char("Value out of valid range.\r\n", ch);
-      return eFAILURE;
-    }
-    ((char_data *)mob_index[mob_num].item)->raw_dex = intval;
-    sprintf(buf, "Mob raw dexterity set to %d.\r\n", intval);
-    send_to_char(buf, ch);
-  }
-  break;
-    // intelligence
-  case 27:
-  {
-    if (!*buf4)
-    {
-      send_to_char("$3Syntax$R: medit [mob_num] intelligence <int>\n\r"
-                   "$3Current$R: ",
-                   ch);
-      sprintf(buf, "%d\n",
-              ((char_data *)mob_index[mob_num].item)->raw_intel);
-      send_to_char(buf, ch);
-      send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
-      return eFAILURE;
-    }
-    if (!check_range_valid_and_convert(intval, buf4, 1, 28))
-    {
-      send_to_char("Value out of valid range.\r\n", ch);
-      return eFAILURE;
-    }
-    ((char_data *)mob_index[mob_num].item)->raw_intel = intval;
-    sprintf(buf, "Mob raw intelligence set to %d.\r\n", intval);
-    send_to_char(buf, ch);
-  }
-  break;
-    // wisdom
-  case 28:
-  {
-    if (!*buf4)
-    {
-      send_to_char("$3Syntax$R: medit [mob_num] wisdom <wis>\n\r"
-                   "$3Current$R: ",
-                   ch);
-      sprintf(buf, "%d\n",
-              ((char_data *)mob_index[mob_num].item)->raw_wis);
-      send_to_char(buf, ch);
-      send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
-      return eFAILURE;
-    }
-    if (!check_range_valid_and_convert(intval, buf4, 1, 28))
-    {
-      send_to_char("Value out of valid range.\r\n", ch);
-      return eFAILURE;
-    }
-    ((char_data *)mob_index[mob_num].item)->raw_wis = intval;
-    sprintf(buf, "Mob raw wisdom set to %d.\r\n", intval);
-    send_to_char(buf, ch);
-  }
-  break;
-    // constitution
-  case 29:
-  {
-    if (!*buf4)
-    {
-      send_to_char("$3Syntax$R: medit [mob_num] constitution <con>\n\r"
-                   "$3Current$R: ",
-                   ch);
-      sprintf(buf, "%d\n",
-              ((char_data *)mob_index[mob_num].item)->raw_con);
-      send_to_char(buf, ch);
-      send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
-      return eFAILURE;
-    }
-    if (!check_range_valid_and_convert(intval, buf4, 1, 28))
-    {
-      send_to_char("Value out of valid range.\r\n", ch);
-      return eFAILURE;
-    }
-    ((char_data *)mob_index[mob_num].item)->raw_con = intval;
-    sprintf(buf, "Mob raw constituion set to %d.\r\n", intval);
-    send_to_char(buf, ch);
-  }
-  break;
-    // New
-  case 30:
-  {
-    if (!*buf4)
-    {
-      send_to_char("$3Syntax$R: medit new [number]\r\n", ch);
-      return eFAILURE;
-    }
-    if (!check_range_valid_and_convert(intval, buf4, 0, 35000))
-    {
-      send_to_char("Please specifiy a valid number.\r\n", ch);
-      return eFAILURE;
-    }
-    if (!can_modify_mobile(ch, intval))
-    {
-      send_to_char("You cannot create mobiles in that range.\r\n", ch);
-      return eFAILURE;
-    }
-    x = create_blank_mobile(intval);
-    if (x < 0)
-    {
-      csendf(ch,
-             "Could not create mobile '%d'.  Max index hit or mob already exists.\r\n",
-             intval);
-      return eFAILURE;
-    }
-    csendf(ch, "Mobile '%d' created successfully.\r\n", intval);
-  }
-  break;
-  case 31:
-  {
-    if (!*buf4 || strncmp(buf4, "yesiwanttodeletethismob", 23))
-    {
-      send_to_char(
-          "$3Syntax$R: medit [mob_number] delete yesiwanttodeletethismob\n\r",
-          ch);
-      return eFAILURE;
-    }
-    auto &character_list = DC::instance().character_list;
-    for (auto &v : character_list)
-    {
-      if (IS_NPC(v) && v->mobdata->nr == mob_num)
-        extract_char(v, TRUE);
-    }
-    delete_mob_from_index(mob_num);
-    send_to_char("Mobile deleted.\r\n", ch);
-  }
-  break;
-  case 32:
-  {
-    if (!*buf4)
-    {
-      send_to_char("$3Syntax$R: medit [mob_vnum] type <type id>\n\r"
-                   "$3Current$R: ",
-                   ch);
-      sprintf(buf, "%s\n",
-              mob_types[((char_data *)mob_index[mob_num].item)->mobdata->mob_flags.type]);
-      send_to_char(buf, ch);
-      send_to_char("\r\n$3Valid types$R:\r\n", ch);
-      for (i = 0; *mob_types[i] != '\n'; i++)
-      {
-        sprintf(buf, "  %d) %s\n\r", i, mob_types[i]);
-        send_to_char(buf, ch);
-      }
-      return eFAILURE;
-    }
+		// stat
+	case 24: {
+		mob_stat(ch, (char_data *) mob_index[mob_num].item);
+    return eSUCCESS;
+		break;
+	}
+		// strength
+	case 25: {
+		if (!*buf4) {
+			send_to_char("$3Syntax$R: medit [mob_num] strength <str>\n\r"
+					"$3Current$R: ", ch);
+			sprintf(buf, "%d\n",
+					((char_data *) mob_index[mob_num].item)->raw_str);
+			send_to_char(buf, ch);
+			send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
+			return eFAILURE;
+		}
+		if (!check_range_valid_and_convert(intval, buf4, 1, 28)) {
+			send_to_char("Value out of valid range.\r\n", ch);
+			return eFAILURE;
+		}
+		((char_data *) mob_index[mob_num].item)->raw_str = intval;
+		sprintf(buf, "Mob raw strength set to %d.\r\n", intval);
+		send_to_char(buf, ch);
+	}
+		break;
+		// dexterity
+	case 26: {
+		if (!*buf4) {
+			send_to_char("$3Syntax$R: medit [mob_num] dexterity <dex>\n\r"
+					"$3Current$R: ", ch);
+			sprintf(buf, "%d\n",
+					((char_data *) mob_index[mob_num].item)->raw_dex);
+			send_to_char(buf, ch);
+			send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
+			return eFAILURE;
+		}
+		if (!check_range_valid_and_convert(intval, buf4, 1, 28)) {
+			send_to_char("Value out of valid range.\r\n", ch);
+			return eFAILURE;
+		}
+		((char_data *) mob_index[mob_num].item)->raw_dex = intval;
+		sprintf(buf, "Mob raw dexterity set to %d.\r\n", intval);
+		send_to_char(buf, ch);
+	}
+		break;
+		// intelligence
+	case 27: {
+		if (!*buf4) {
+			send_to_char("$3Syntax$R: medit [mob_num] intelligence <int>\n\r"
+					"$3Current$R: ", ch);
+			sprintf(buf, "%d\n",
+					((char_data *) mob_index[mob_num].item)->raw_intel);
+			send_to_char(buf, ch);
+			send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
+			return eFAILURE;
+		}
+		if (!check_range_valid_and_convert(intval, buf4, 1, 28)) {
+			send_to_char("Value out of valid range.\r\n", ch);
+			return eFAILURE;
+		}
+		((char_data *) mob_index[mob_num].item)->raw_intel = intval;
+		sprintf(buf, "Mob raw intelligence set to %d.\r\n", intval);
+		send_to_char(buf, ch);
+	}
+		break;
+		// wisdom
+	case 28: {
+		if (!*buf4) {
+			send_to_char("$3Syntax$R: medit [mob_num] wisdom <wis>\n\r"
+					"$3Current$R: ", ch);
+			sprintf(buf, "%d\n",
+					((char_data *) mob_index[mob_num].item)->raw_wis);
+			send_to_char(buf, ch);
+			send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
+			return eFAILURE;
+		}
+		if (!check_range_valid_and_convert(intval, buf4, 1, 28)) {
+			send_to_char("Value out of valid range.\r\n", ch);
+			return eFAILURE;
+		}
+		((char_data *) mob_index[mob_num].item)->raw_wis = intval;
+		sprintf(buf, "Mob raw wisdom set to %d.\r\n", intval);
+		send_to_char(buf, ch);
+	}
+		break;
+		// constitution
+	case 29: {
+		if (!*buf4) {
+			send_to_char("$3Syntax$R: medit [mob_num] constitution <con>\n\r"
+					"$3Current$R: ", ch);
+			sprintf(buf, "%d\n",
+					((char_data *) mob_index[mob_num].item)->raw_con);
+			send_to_char(buf, ch);
+			send_to_char("$3Valid Range$R: 1 to 28\r\n", ch);
+			return eFAILURE;
+		}
+		if (!check_range_valid_and_convert(intval, buf4, 1, 28)) {
+			send_to_char("Value out of valid range.\r\n", ch);
+			return eFAILURE;
+		}
+		((char_data *) mob_index[mob_num].item)->raw_con = intval;
+		sprintf(buf, "Mob raw constituion set to %d.\r\n", intval);
+		send_to_char(buf, ch);
+	}
+		break;
+		// New
+	case 30: {
+		if (!*buf4) {
+			send_to_char("$3Syntax$R: medit new [number]\r\n", ch);
+			return eFAILURE;
+		}
+		if (!check_range_valid_and_convert(intval, buf4, 0, 35000)) {
+			send_to_char("Please specifiy a valid number.\r\n", ch);
+			return eFAILURE;
+		}
+		if (!can_modify_mobile(ch, intval)) {
+			send_to_char("You cannot create mobiles in that range.\r\n", ch);
+			return eFAILURE;
+		}
+		x = create_blank_mobile(intval);
+		if (x < 0) {
+			csendf(ch,
+					"Could not create mobile '%d'.  Max index hit or mob already exists.\r\n",
+					intval);
+			return eFAILURE;
+		}
+		csendf(ch, "Mobile '%d' created successfully.\r\n", intval);
+	}
+		break;
+	case 31: {
+		if (!*buf4 || strncmp(buf4, "yesiwanttodeletethismob", 23)) {
+			send_to_char(
+					"$3Syntax$R: medit [mob_number] delete yesiwanttodeletethismob\n\r",
+					ch);
+			return eFAILURE;
+		}
+		auto &character_list = DC::instance().character_list;
+		for (auto& v : character_list) {
+			if (IS_NPC(v) && v->mobdata->nr == mob_num)
+				extract_char(v, TRUE);
+		}
+		delete_mob_from_index(mob_num);
+		send_to_char("Mobile deleted.\r\n", ch);
+	}
+		break;
+	case 32: {
+		if (!*buf4) {
+			send_to_char("$3Syntax$R: medit [mob_vnum] type <type id>\n\r"
+					"$3Current$R: ", ch);
+			sprintf(buf, "%s\n",
+					mob_types[((char_data *) mob_index[mob_num].item)->mobdata->mob_flags.type]);
+			send_to_char(buf, ch);
+			send_to_char("\r\n$3Valid types$R:\r\n", ch);
+			for (i = 0; *mob_types[i] != '\n'; i++) {
+				sprintf(buf, "  %d) %s\n\r", i, mob_types[i]);
+				send_to_char(buf, ch);
+			}
+			return eFAILURE;
+		}
 
     if (!check_range_valid_and_convert(intval, buf4, MOB_TYPE_FIRST,
                                        MOB_TYPE_LAST))
@@ -3935,14 +3903,25 @@ int do_redit(struct char_data *ch, char *argument, int cmd)
 
     string arg3;
     tie(arg3, remainder_args) = half_chop(remainder_args);
-    d = stoi(arg3);
+    try {
+      d = stoi(arg3);
+    } catch(...)
+    {
+      d=0;
+    }
     c = real_room(d);
 
     if (!remainder_args.empty())
     {
       string arg4;
       tie(arg4, remainder_args) = half_chop(remainder_args);
-      a = stoi(arg4);
+      try {
+        a = stoi(arg4);
+      } catch(...)
+      {
+        a=0;
+      }
+      
       if (remainder_args.empty())
       {
         return eFAILURE;
@@ -3950,7 +3929,13 @@ int do_redit(struct char_data *ch, char *argument, int cmd)
 
       string arg5;
       tie(arg5, remainder_args) = half_chop(remainder_args);
-      b = stoi(arg5);
+      try {
+        b = stoi(arg5);
+      } catch (...)
+      {
+        b=0;
+      }
+      
       if (b == 0)
       {
         send_to_char("No key 0's allowed.  Changing to -1.\r\n", ch);
@@ -4288,9 +4273,57 @@ int do_redit(struct char_data *ch, char *argument, int cmd)
     }
   
   break;
-}
-set_zone_modified_world(ch->in_room);
-return eSUCCESS;
+  case 7: // denymob
+    if (remainder_args.empty() || !is_number(remainder_args.c_str()))
+    {
+      send_to_char("Syntax: redit denymob <vnum>\r\nDoing this on an already denied mob will allow it once more.\r\n", ch);
+      return eFAILURE;
+    }
+    bool done = FALSE;
+    int mob=0;
+    try {
+      mob = stoi(remainder_args);
+    } catch(...)
+    {
+      mob=0;
+    }
+    struct deny_data *nd, *pd = NULL;
+    for (nd = world[ch->in_room].denied; nd; nd = nd->next)
+    {
+      if (nd->vnum == mob)
+      {
+        if (pd)
+          pd->next = nd->next;
+        else
+          world[ch->in_room].denied = nd->next;
+        dc_free(nd);
+        csendf(ch, "Mobile %d ALLOWED entrance.\r\n", mob);
+        done = TRUE;
+        break;
+      }
+      pd = nd;
+    }
+    if (done)
+      break;
+#ifdef LEAK_CHECK
+    nd = (struct deny_data *)calloc(1, sizeof(struct deny_data));
+#else
+    nd = (struct deny_data *)dc_alloc(1, sizeof(struct deny_data));
+#endif
+    nd->next = world[ch->in_room].denied;
+    try {
+      nd->vnum = stoi(remainder_args);
+    } catch(...)
+    {
+      nd->vnum = 0;
+    }
+    
+    world[ch->in_room].denied = nd;
+    csendf(ch, "Mobile %d DENIED entrance.\r\n", mob);
+    break;
+  }
+  set_zone_modified_world(ch->in_room);
+  return eSUCCESS;
 }
 
 int do_rdelete(struct char_data *ch, char *arg, int cmd)

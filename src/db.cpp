@@ -4282,6 +4282,14 @@ void randomize_object(obj_data *obj)
 		return;
 	}
 
+	// NO_CUSTOM, QUEST or SPECIAL ("godload") items cannot be randomized
+	if (IS_SET(obj->obj_flags.more_flags, ITEM_NO_CUSTOM)
+		|| IS_SET(obj->obj_flags.extra_flags, ITEM_QUEST)
+		|| IS_SET(obj->obj_flags.extra_flags, ITEM_SPECIAL))
+	{
+		return;
+	}
+
 	SET_BIT(obj->obj_flags.more_flags, ITEM_CUSTOM);
 
 	switch (obj->obj_flags.type_flag) {
@@ -4293,24 +4301,34 @@ void randomize_object(obj_data *obj)
 		break;
 	case ITEM_ARMOR:
 		obj->obj_flags.cost = MAX(1, random_percent_change(33, obj->obj_flags.cost));
-		// AC-apply
-		obj->obj_flags.value[1] = random_percent_change(25, obj->obj_flags.value[1]);
+		// v1 AC-apply
+		obj->obj_flags.value[0] = random_percent_change(25, obj->obj_flags.value[0]);
 		randomize_object_affects(obj);
 		break;
 	case ITEM_WAND:
+	case ITEM_STAFF:
 		obj->obj_flags.cost = MAX(1, random_percent_change(33, obj->obj_flags.cost));
-		// total charges
+		// v2 total charges
 		obj->obj_flags.value[1] = random_percent_change(10, obj->obj_flags.value[2]);
-		// current charges
+		// v3 current charges
 		obj->obj_flags.value[2] = obj->obj_flags.value[1];
 		break;
 	case ITEM_INSTRUMENT:
 		obj->obj_flags.cost = MAX(1, random_percent_change(33, obj->obj_flags.cost));
-		// non-combat
+		// v2 non-combat
 		obj->obj_flags.value[1] = random_percent_change(33, obj->obj_flags.value[1]);
-		// combat
+		// v3 combat
 		obj->obj_flags.value[2] = random_percent_change(33, obj->obj_flags.value[2]);
 		randomize_object_affects(obj);
+		break;
+	case ITEM_CONTAINER:
+		obj->obj_flags.cost = MAX(1, random_percent_change(33, obj->obj_flags.cost));
+		randomize_object_affects(obj);
+		break;
+	case ITEM_POTION:
+		obj->obj_flags.cost = MAX(1, random_percent_change(33, obj->obj_flags.cost));
+		// v1 level of potion
+		obj->obj_flags.value[0] = random_percent_change(10, obj->obj_flags.value[0]);		
 		break;
 	}
 }
@@ -5512,7 +5530,7 @@ void init_char(CHAR_DATA *ch)
 		ch->pcdata->quest_complete[j] = 0;
 
 	SET_BIT(ch->pcdata->toggles, PLR_ANSI);
-	SET_BIT(ch->pcdata->toggles, PLR_BARD_SONG);
+	SET_BIT(ch->pcdata->toggles, PLR_DAMAGE);
 	int i;
 	for (i = 0; i < AFF_MAX / ASIZE + 1; i++)
 		ch->affected_by[i] = 0;

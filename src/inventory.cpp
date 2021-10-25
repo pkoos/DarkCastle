@@ -1412,10 +1412,27 @@ int do_put(struct char_data *ch, char *argument, int cmd)
                 return eFAILURE;
               }
 
-              if (IS_SET(obj_object->obj_flags.more_flags, ITEM_UNIQUE) && (sub_object->carried_by != ch) && search_container_for_item(sub_object, obj_object->item_number))
+              if (IS_SET(obj_object->obj_flags.more_flags, ITEM_UNIQUE) && search_container_for_item(sub_object, obj_object->item_number))
               {
                 send_to_char("The object's uniqueness prevents it!\r\n", ch);
                 return eFAILURE;
+              }
+
+              bool duplicate_key = search_container_for_item(sub_object, obj_object->item_number);
+              if (GET_ITEM_TYPE(sub_object) == ITEM_KEYRING)
+              {
+                if (duplicate_key == true)
+                {
+                  if (ch && ch->pcdata && IS_SET(ch->pcdata->toggles, PLR_NODUPEKEYS))
+                  {
+                    csendf(ch, "A duplicate of %s is already on your keyring so you will not attach another one.\r\n", GET_OBJ_SHORT(obj_object));
+                    return eFAILURE;
+                  }
+                  else
+                  {
+                    csendf(ch, "A duplicate of %s is already on your keyring but you don't care.\r\n", GET_OBJ_SHORT(obj_object));
+                  }
+                }
               }
 
               if (((sub_object->obj_flags.weight) +
@@ -1439,8 +1456,8 @@ int do_put(struct char_data *ch, char *argument, int cmd)
 
                 if (GET_ITEM_TYPE(sub_object) == ITEM_KEYRING)
                 {
-                  act("$n attaches $p to the $P.", ch, obj_object, sub_object, TO_ROOM, INVIS_NULL);
-                  act("You attach $p to the $P.", ch, obj_object, sub_object, TO_CHAR, 0);
+                  act("$n attaches $p to $P.", ch, obj_object, sub_object, TO_ROOM, INVIS_NULL);
+                  act("You attach $p to $P.", ch, obj_object, sub_object, TO_CHAR, 0);
                   logf(IMP, LOG_OBJECTS, "%s attaches %s[%d] to %s[%d]",
                       ch->name,
                       obj_object->short_description,
@@ -1966,7 +1983,7 @@ bool search_container_for_item(obj_data *obj, int item_number)
 
   for (obj_data *i = obj->contains; i; i = i->next_content)
   {
-    if (IS_KEY(i) && i->item_number == item_number)
+    if (i->item_number == item_number)
     {
       return true;
     }
@@ -1989,7 +2006,7 @@ bool search_container_for_vnum(obj_data *obj, int vnum)
 
   for (obj_data *i = obj->contains; i; i = i->next_content)
   {
-    if (IS_KEY(i) && obj_index[i->item_number].virt == vnum)
+    if (obj_index[i->item_number].virt == vnum)
     {
       return true;
     }

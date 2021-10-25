@@ -252,6 +252,7 @@ struct pc_data
     CHAR_DATA *hiding_from[MAX_HIDE];
     std::queue<char *> *away_msgs;
     std::queue<std::string> *tell_history;
+    std::queue<std::string> *gtell_history;
     char *joining;
     uint32 quest_points;
     int16  quest_current[QUEST_MAX];
@@ -262,6 +263,7 @@ struct pc_data
     std::multimap<int, std::pair<timeval, timeval> > *lastseen;
     uint8_t profession;
     bool multi;
+    std::map<string,string> *options;
 };
 
 enum mob_type_t { MOB_NORMAL = 0, MOB_GUARD, MOB_CLAN_GUARD, MOB_TYPE_FIRST = MOB_NORMAL, MOB_TYPE_LAST = MOB_CLAN_GUARD };
@@ -488,6 +490,7 @@ public:
     const QUuid & getUUID();
     bool swapSkills(int16 old_skill, int16 new_skill);
     bool removeSkill(int16 skill);
+    void tell_history(string message);
 };
 
 // This structure was created as a replacement for char_file_u so that it

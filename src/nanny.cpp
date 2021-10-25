@@ -545,9 +545,18 @@ void do_on_login_stuff(char_data *ch)
          ch->swapSkills(SPELL_FIRESTORM, SPELL_LIFE_LEECH);
       }
 
-   int search_skills2(int arg, class_skill_defines *list_skills);
-   struct class_skill_defines *get_skill_list(char_data * ch);
-   struct class_skill_defines *a = get_skill_list(ch);
+     struct char_skill_data *  curr = ch->skills; 
+	  struct char_skill_data *  prev = NULL;
+ 	  struct class_skill_defines *a = get_skill_list(ch);
+
+	while (curr) {
+		if (curr->skillnum < 600 && search_skills2(curr->skillnum,a)==-1 && search_skills2(curr->skillnum, g_skills) == -1 && curr->skillnum != 385) {
+			printf("Removing skill %d from %s\n", curr->skillnum, GET_NAME(ch));
+			struct char_skill_data *a = curr->next;
+			if (prev)
+				prev->next = curr->next;
+			else
+				ch->skills = curr->next;
 
    queue<int16> copy = ch->skillsSaveLoadOrder;
    while (copy.size() > 0)
@@ -1697,14 +1706,16 @@ bool check_reconnect( struct descriptor_data *d, char *name, bool fReconnect )
             GET_NAME(tmp_ch), d->host );
          act( "$n has reconnected and is ready to kick ass.", tmp_ch, 0,
             0, TO_ROOM, INVIS_NULL);
-         if(GET_LEVEL(tmp_ch) < ANGEL) {
-            WAIT_STATE(tmp_ch, PULSE_VIOLENCE * 4);
-            send_to_char("Heya sport, how about some RECONNECT LAG?\n\r", tmp_ch); 
-            log( log_buf, OVERSEER, LOG_SOCKET );
-         } 
+
+         if (GET_LEVEL(tmp_ch) < IMMORTAL)
+         {
+            log(log_buf, COORDINATOR, LOG_SOCKET);
+         }
          else
-            log( log_buf, GET_LEVEL(tmp_ch), LOG_SOCKET );
-         
+         {
+            log(log_buf, GET_LEVEL(tmp_ch), LOG_SOCKET);
+         }
+
          STATE(d)            = CON_PLAYING;
       }
       return TRUE;

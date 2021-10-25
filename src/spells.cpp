@@ -380,15 +380,15 @@ struct spell_info_type spell_info [] =
 
  { /* 144 */ 3*PULSE_TIMER, POSITION_STANDING, 12, TAR_CHAR_ROOM|TAR_SELF_DEFAULT, cast_oaken_fortitude, SKILL_INCREASE_MEDIUM },
  
- { /* 145 */ 3*PULSE_TIMER, POSITION_STANDING, 24, TAR_CHAR_ROOM|TAR_SELF_DEFAULT, NULL, SKILL_INCREASE_MEDIUM },
+ { /* 145 */ 3*PULSE_TIMER, POSITION_STANDING, 24, TAR_CHAR_ROOM|TAR_SELF_DEFAULT, cast_frostshield, SKILL_INCREASE_MEDIUM },
 
- { /* 146 */ 3*PULSE_TIMER, POSITION_STANDING, 24, TAR_CHAR_ROOM|TAR_SELF_DEFAULT, NULL, SKILL_INCREASE_MEDIUM },
+ { /* 146 */ 3*PULSE_TIMER, POSITION_STANDING, 24, TAR_CHAR_ROOM|TAR_SELF_DEFAULT, cast_stability, SKILL_INCREASE_MEDIUM },
 
  { /* 147 */ 3*PULSE_TIMER, POSITION_STANDING, 24, TAR_CHAR_ROOM|TAR_SELF_DEFAULT, NULL, SKILL_INCREASE_MEDIUM },
 
  { /* 148*/ 3*PULSE_TIMER, POSITION_STANDING, 24, TAR_CHAR_ROOM|TAR_SELF_DEFAULT, NULL, SKILL_INCREASE_MEDIUM },
 
- { /* 149*/ 3*PULSE_TIMER, POSITION_STANDING, 24, TAR_CHAR_ROOM|TAR_SELF_DEFAULT, NULL, SKILL_INCREASE_MEDIUM },
+ { /* 149*/ 3*PULSE_TIMER, POSITION_STANDING, 24, TAR_CHAR_ROOM|TAR_SELF_DEFAULT, cast_solidity, SKILL_INCREASE_MEDIUM },
 
  { /* 150*/ 3*PULSE_TIMER, POSITION_STANDING, 24, TAR_CHAR_ROOM|TAR_SELF_DEFAULT, NULL, SKILL_INCREASE_MEDIUM },
 
@@ -1359,9 +1359,11 @@ int say_spell( CHAR_DATA *ch, int si, int room )
 	temp_char = temp_char->next_in_room)
 	if(temp_char != ch) {
 	  if (GET_CLASS(ch) == GET_CLASS(temp_char)) {
-	      retval = act(buf, ch, 0, temp_char, TO_VICT, 0);
+	      act_return ar = act(buf, ch, 0, temp_char, TO_VICT, 0);
+        retval = ar.retval;
 	  } else {
-	      retval = act(buf2, ch, 0, temp_char, TO_VICT, 0);
+	      act_return ar = act(buf2, ch, 0, temp_char, TO_VICT, 0);
+        retval = ar.retval;
 	  }
 
 	  // Need better solution, but this will keep DC from crashing when a act_prog trigger kills a mob in the room
@@ -1564,7 +1566,6 @@ bool skill_success(CHAR_DATA *ch, CHAR_DATA *victim, int skillnum, int mod )
 {
 //  extern int stat_mod[];
 //  int modifier = 0;
-  extern class_skill_defines *get_skill_list(char_data *ch);
   extern int get_stat(CHAR_DATA *ch, int stat);
   //struct class_skill_defines *t;
   int stat=0;
