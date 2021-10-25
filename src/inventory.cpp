@@ -202,8 +202,7 @@ void get(struct char_data *ch, struct obj_data *obj_object, struct obj_data *sub
 	  send_to_char(buffer, ch);
 	  send_to_char("\r\n",ch);
 	}
-	extern zone_data *zone_table;
-	bool tax = FALSE;
+		bool tax = FALSE;
 
         if (zone_table[world[ch->in_room].zone].clanowner > 0 && ch->clan != 
 		zone_table[world[ch->in_room].zone].clanowner)
