@@ -81,11 +81,6 @@ extern struct index_data *obj_index;
 extern CWorld world;
 extern CVoteData *DCVote;
 
-extern "C" {
-  char *crypt(const char *key, const char *salt);
-}
-
-
 int isbanned(char *hostname);
 int _parse_email( char * arg );
 int _parse_name(char *arg, char *name);
@@ -545,19 +540,6 @@ void do_on_login_stuff(char_data *ch)
          ch->swapSkills(SPELL_FIRESTORM, SPELL_LIFE_LEECH);
       }
 
-     struct char_skill_data *  curr = ch->skills; 
-	  struct char_skill_data *  prev = NULL;
- 	  struct class_skill_defines *a = get_skill_list(ch);
-
-	while (curr) {
-		if (curr->skillnum < 600 && search_skills2(curr->skillnum,a)==-1 && search_skills2(curr->skillnum, g_skills) == -1 && curr->skillnum != 385) {
-			printf("Removing skill %d from %s\n", curr->skillnum, GET_NAME(ch));
-			struct char_skill_data *a = curr->next;
-			if (prev)
-				prev->next = curr->next;
-			else
-				ch->skills = curr->next;
-
    queue<int16> copy = ch->skillsSaveLoadOrder;
    while (copy.size() > 0)
    {
@@ -567,7 +549,7 @@ void do_on_login_stuff(char_data *ch)
       {
          char_skill_data skill = i->second;
          if (skillnum < 600 &&
-            search_skills2(skillnum, a) == -1 &&
+            search_skills2(skillnum, get_skill_list(ch)) == -1 &&
             search_skills2(skillnum, g_skills) == -1 &&
             skillnum != 385)
          {
