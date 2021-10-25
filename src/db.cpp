@@ -115,9 +115,6 @@ CWorld world;
 #define SEEK_CUR 1
 #endif
 
-struct zone_data zone_table_array[MAX_ZONE + 50];
-struct zone_data *zone_table = zone_table_array;
-
 /* table of reset data             */
 int top_of_zone_table = 0;
 struct message_list fight_messages[MAX_MESSAGES]; /* fighting messages   */
@@ -645,6 +642,7 @@ void boot_db(void)
 		fprintf( stderr, "\n[ Room  Room]\t{Level}\t  Author\tZone\n");
 	}
 
+	zone_list_t zone_table = DC::instance().getZones();
 	for (i = 0; i <= top_of_zone_table; i++)
 			{
 		if (cf.verbose_mode) {
@@ -1444,6 +1442,7 @@ int read_one_room(FILE *fl, int & room_nr)
 	char ch;
 	int dir;
 	struct extra_descr_data *new_new_descr;
+	zone_list_t zone_table = DC::instance().getZones();
 
 	ch = fread_char(fl);
 
@@ -1692,12 +1691,14 @@ bool can_modify_object(char_data * ch, long obj)
 
 void set_zone_saved_zone(long room)
 {
+	zone_list_t zone_table = DC::instance().getZones();
 	int zone = world[room].zone;
 	REMOVE_BIT(zone_table[zone].zone_flags, ZONE_MODIFIED);
 }
 
 void set_zone_modified_zone(long room)
 {
+	zone_list_t zone_table = DC::instance().getZones();
 	int zone = world[room].zone;
 	SET_BIT(zone_table[zone].zone_flags, ZONE_MODIFIED);
 }
@@ -2017,6 +2018,7 @@ void setup_dir(FILE *fl, int room, int dir)
 // return true for success
 int create_one_room(CHAR_DATA *ch, int vnum)
 {
+	zone_list_t zone_table = DC::instance().getZones();
 	struct room_data *rp;
 	extern int top_of_zone_table;
 	int x;
@@ -2099,6 +2101,7 @@ void renum_world(void)
 void renum_zone_table(void)
 {
 	int zone, comm;
+	zone_list_t zone_table = DC::instance().getZones();
 
 	for (zone = 0; zone <= top_of_zone_table; zone++)
 		for (comm = 0; zone_table[zone].cmd[comm].command != 'S'; comm++)
@@ -2199,6 +2202,7 @@ void renum_zone_table(void)
 
 void free_zones_from_memory()
 {
+	zone_list_t zone_table = DC::instance().getZones();
 	for (int i = 0; i < MAX_ZONE; i++)
 			{
 		if (zone_table[i].name)
@@ -2214,6 +2218,7 @@ void free_zones_from_memory()
 
 void write_one_zone(FILE * fl, int zon)
 {
+	zone_list_t zone_table = DC::instance().getZones();
 	fprintf(fl, "V2\n");
 	fprintf(fl, "#%d\n", (zon ? ((zone_table[zon - 1].top + 1) / 100) : 0));
 	fprintf(fl, "%s~\n", zone_table[zon].name);
@@ -2314,6 +2319,7 @@ void write_one_zone(FILE * fl, int zon)
 
 void read_one_zone(FILE * fl, int zon)
 {
+	zone_list_t zone_table = DC::instance().getZones();
 	struct reset_com reset_tab[MAX_RESET];
 	char *check, buf[MAX_STRING_LENGTH+1], ch;
 	int reset_top, i, tmp;
@@ -2500,6 +2506,7 @@ void boot_zones(void)
 	int zon = 0;
 	char * temp;
 	char endfile[200]; // hopefully noone is stupid and makes a 180 char filename
+	zone_list_t zone_table = DC::instance().getZones();
 
 //  for (zon = 0;zon < MAX_ZONE;zon++)
 	//  zone_table[zon] = NULL; // Null list, top_of_z can't be used now
@@ -3522,6 +3529,7 @@ int create_blank_mobile(int nr)
 void delete_mob_from_index(int nr)
 {
 	int i = 0, j = 0;
+	zone_list_t zone_table = DC::instance().getZones();
 
 	if (nr < 0 || nr > top_of_mobt) // doesn't exist!
 		return;
@@ -3605,6 +3613,7 @@ void delete_item_from_index(int nr)
 {
 	int i = 0, j = 0;
 	struct obj_data * curr;
+	zone_list_t zone_table = DC::instance().getZones();
 
 	if (nr < 0 || nr > top_of_objt) // doesn't exist!
 		return;
@@ -4351,13 +4360,20 @@ void reset_zone(int zone)
 	// find last command in zone
 	last_no = 0;
 	while (zone_table[zone].cmd[last_no].command != 'S')
+	{
+		//DEBUG
+		//logf(LOG_GOD, LOG_BUG, "%d", zone_table[zone].cmd.size());
+		//logf(LOG_GOD, LOG_BUG, "%d", zone_table[zone].cmd[last_no].command);
 		last_no++;
+	}
+	//DEBUG
+	//logf(LOG_GOD, LOG_BUG, "%d", zone_table[zone].cmd.size());
 
 	for (cmd_no = 0; cmd_no <= last_no; cmd_no++) {
 		if (cmd_no >= zone_table[zone].cmd.size()) {
 			sprintf(buf,
-					"Trapped zone error, Command is null, zone: %d cmd_no: %d",
-					zone, cmd_no);
+					"Trapped zone error, Command is null, zone: %d cmd_no: %d %d",
+					zone, cmd_no, zone_table[zone].cmd.size());
 			log(buf, IMMORTAL, LOG_WORLD);
 			break;
 		}
