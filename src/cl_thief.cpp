@@ -32,7 +32,6 @@ extern CWorld world;
 extern struct index_data *mob_index;
 extern struct index_data *obj_index;
 extern int top_of_world;
-extern struct zone_data *zone_table;
 
 int find_door(CHAR_DATA *ch, char *type, char *dir);
 int get_weapon_damage_type(struct obj_data * wielded);
@@ -156,6 +155,8 @@ int palm(CHAR_DATA *ch, struct obj_data *obj_object,
     else
       act("$n gets $p.", ch, obj_object, 0, TO_ROOM, INVIS_NULL); 
   }
+
+  zone_list_t zone_table = DC::instance().getZones();
   if((obj_object->obj_flags.type_flag == ITEM_MONEY) &&
      (obj_object->obj_flags.value[0] >= 1)) {
     obj_from_char(obj_object);
