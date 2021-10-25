@@ -56,7 +56,6 @@ extern struct obj_data *object_list;
 extern struct index_data *mob_index;
 extern struct index_data *obj_index;
 extern struct descriptor_data *descriptor_list;
-extern struct zone_data *zone_table;
 
 void huntclear_item(struct obj_data *obj);
 
