@@ -29,7 +29,6 @@ extern "C"
 
 // Externs
 extern CWorld world;
-extern zone_data *zone_table;
 
 
 // Locals
