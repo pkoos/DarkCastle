@@ -45,7 +45,6 @@ using namespace std;
 extern descriptor_data *descriptor_list;
 extern index_data *obj_index;
 extern CWorld world;
-extern zone_data *zone_table;
 
 void addtimer(struct timer_data *timer);
 void delete_clan(const clan_data *currclan);
@@ -2915,6 +2914,7 @@ void takeover_pause(int clan, int zone)
 void claimArea(int clan, bool defend, bool challenge, int clan2, int zone)
 {
   char buf[MAX_STRING_LENGTH];
+  zone_list_t zone_table = DC::instance().getZones();
 
   if (challenge) {
     if (!defend) {
@@ -2949,6 +2949,7 @@ void claimArea(int clan, bool defend, bool challenge, int clan2, int zone)
 
 int count_controlled_areas(int clan)
 {
+  zone_list_t zone_table = DC::instance().getZones();
   int i,z=0;
   for (i = 0; i <= top_of_zonet; i++)
     if (zone_table[i].clanowner == clan && can_collect(i)) z++;
@@ -3007,6 +3008,8 @@ void check_victory(struct takeover_pulse_data *take)
 
 void check_quitter(void *arg1, void *arg2,void *arg3)
 {
+  zone_list_t zone_table = DC::instance().getZones();
+  
   int clan = (qint64)arg1;
   char buf[MAX_STRING_LENGTH];
   if (count_controlled_areas(clan) > online_clan_members(clan))
@@ -3094,7 +3097,8 @@ bool can_lose(struct takeover_pulse_data *take)
 }
 
 void pulse_takeover()
-{ 
+{
+  zone_list_t zone_table = DC::instance().getZones();
   struct takeover_pulse_data *take,*next;
   for (take = pulse_list;take;take = next)
   {
@@ -3134,7 +3138,8 @@ int do_clanarea(CHAR_DATA *ch, char *argument, int cmd)
   char arg[MAX_INPUT_LENGTH];
   argument = one_argument(argument, arg);
   bool clanless_challenge = false;
-
+  zone_list_t zone_table = DC::instance().getZones();
+  
   if (!ch->clan)
   {
 	if(!str_cmp(arg, "challenge"))
@@ -3166,8 +3171,6 @@ int do_clanarea(CHAR_DATA *ch, char *argument, int cmd)
       send_to_char("You did not issue the challenge, or you have waited too long to withdraw.\n\r", ch);
       return eFAILURE;
     }
-
-
     struct takeover_pulse_data *take;
     for (take = pulse_list;take; take = take->next)
 	if (take->zone == world[ch->in_room].zone &&
@@ -3186,8 +3189,7 @@ int do_clanarea(CHAR_DATA *ch, char *argument, int cmd)
     if (affected_by_spell(ch, SKILL_CLANAREA_CLAIM)) {
       send_to_char("You need to wait before you can attempt to claim an area.\n\r", ch);
       return eFAILURE;
-    }
-    
+    }    
     if (zone_table[world[ch->in_room].zone].clanowner == 0 
         && !can_challenge(ch->clan, world[ch->in_room].zone))
     {
