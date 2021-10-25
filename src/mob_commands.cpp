@@ -74,7 +74,6 @@ extern CHAR_DATA *activeTarget;
 extern OBJ_DATA *activeObj;
 extern void *activeVo;
 
-extern struct zone_data *zone_table;
 extern int top_of_world;     
 extern room_data ** world_array;
 extern struct index_data *obj_index;
