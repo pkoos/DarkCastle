@@ -19,9 +19,6 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
-//#include <sys/stat.h>
-//#include <unistd.h>
-}
 
 #include <QFile>
 
