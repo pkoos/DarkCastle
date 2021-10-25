@@ -62,7 +62,6 @@ extern int top_of_world;
 extern CWorld world;
 extern struct index_data *mob_index;
 extern struct index_data *obj_index;
-extern struct zone_data *zone_table;
 
 void getAreaData(unsigned int zone, int mob, unsigned int xps, unsigned int gold);
 /* functions that nobody else should be calling */
