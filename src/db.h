@@ -210,8 +210,9 @@ struct reset_com
 
 
 /* zone definition structure. for the 'zone-table'   */
-struct zone_data
+class zone_data
 {
+  public:
     zone_data();
     char *name;             /* name of this zone                  */
     int lifespan;           /* how long between resets (minutes)  */
@@ -254,8 +255,6 @@ struct zone_data
   int repops_without_deaths; // Number of repops in a row with no deaths
   int repops_with_bonus;     // Number of repops where a 10% bonus occurred.
 };
-
-
 
 
 /* element in monster and object index-tables   */
