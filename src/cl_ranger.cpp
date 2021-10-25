@@ -35,7 +35,6 @@ extern "C"  {
 #include "const.h"
 
 extern CWorld world;
-extern struct zone_data *zone_table;
 extern struct obj_data *object_list; 
 extern int rev_dir[];
 void save_corpses(void);
@@ -342,6 +341,7 @@ int do_track(CHAR_DATA *ch, char *argument, int cmd)
                   dirs[y]);
           ansi_color( NTEXT, ch); 
 
+          zone_list_t zone_table = DC::instance().getZones();
           if (IS_NPC(ch)) {
                    // temp disable tracking mobs into town
              if ( (/*!ISSET(ch->mobdata->actflags, ACT_STAY_NO_TOWN) ||*/
@@ -998,7 +998,8 @@ int mob_arrow_response(struct char_data *ch, struct char_data *victim,
 
   if(dir < 0) // in the same room
      return eSUCCESS;
-
+     
+  zone_list_t zone_table = DC::instance().getZones();
   if(number(0,1))
   {
     /* Send the mob in a random dir */
