@@ -265,9 +265,8 @@ struct index_data
   int (*non_combat_func)(CHAR_DATA *, struct obj_data *, int, char *, CHAR_DATA *); // non Combat special proc
   int (*combat_func)(CHAR_DATA *, struct obj_data *, int, char *, CHAR_DATA *);     // combat special proc
   void *item;                                                                       /* the mobile/object itself                 */
-
-  MPROG_DATA *mobprogs;
-  MPROG_DATA *mobspec;
+  struct mob_prog_data *mobprogs;
+  struct mob_prog_data *mobspec;
   int progtypes;
 };
 
@@ -294,7 +293,11 @@ struct world_file_list_item
 };
 
 // The CWorld class, to control the world a bit better.
-
+class ErrorHandler {
+ public:
+  class underrun {};
+  class overrun {};
+};
 class CWorld : public ErrorHandler
 {
  public:
