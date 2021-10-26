@@ -127,11 +127,7 @@ int get_number(char **name);
 
 bool is_wearing(CHAR_DATA *ch, OBJ_DATA *item);
 
-class ErrorHandler {
- public:
-  class underrun {};
-  class overrun {};
-};
+
 
 bool objExists(OBJ_DATA *obj);
 bool charge_moves(char_data *ch, int skill, double modifier = 1);
