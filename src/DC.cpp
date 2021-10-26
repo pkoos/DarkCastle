@@ -70,7 +70,7 @@ string DC::getBuildTime(void)
   return BUILD_TIME;
 }
 
-zone_list& DC::getZones(void)
+zone_list_t& DC::getZones(void)
 {
 	return zones;
 }
