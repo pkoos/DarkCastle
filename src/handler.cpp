@@ -2072,6 +2072,7 @@ int char_from_room(CHAR_DATA *ch) {
 /* move a player out of a room */
 /* Returns 0 on failure, non-zero otherwise */
 int char_from_room(CHAR_DATA *ch, bool stop_all_fighting) {
+	zone_list_t zone_table = DC::instance().getZones();
 	CHAR_DATA *i, *fighter, *next_char;
 	bool Other = FALSE, More = FALSE, kimore = FALSE;
 
@@ -2163,6 +2164,7 @@ int char_to_room(CHAR_DATA *ch, int room) {
 /* Returns zero on failure, and one on success */
 int char_to_room(CHAR_DATA *ch, int room, bool stop_all_fighting)
 {
+	zone_list_t zone_table = DC::instance().getZones();
 	CHAR_DATA *temp;
 	if (room == NOWHERE)
 		return (0);
@@ -3303,6 +3305,7 @@ void update_char_objects(CHAR_DATA *ch) {
 
 /* Extract a ch completely from the world, and leave his stuff behind */
 void extract_char(CHAR_DATA *ch, bool pull) {
+	zone_list_t zone_table = DC::instance().getZones();
 	CHAR_DATA *k, *next_char;
 	struct descriptor_data *t_desc;
 	int l, was_in;

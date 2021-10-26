@@ -242,6 +242,7 @@ int do_newPath(char_data *ch, char *argument, int cmd)
 
 int do_listPathsByZone(char_data *ch, char *argument, int cmd)
 {
+  zone_list_t zone_table = DC::instance().getZones();
   int i = world[ch->in_room].zone, low = zone_table[i].bottom_rnum, high = zone_table[i].top_rnum;
 
   class Path *p;

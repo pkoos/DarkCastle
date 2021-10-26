@@ -1786,6 +1786,7 @@ int do_mppause( CHAR_DATA *ch, char *argument, int cmd )
 
 int do_mpteleport(struct char_data *ch, char *argument, int cmd)
 {
+  zone_list_t zone_table = DC::instance().getZones();
     struct char_data *victim;
     char person[MAX_INPUT_LENGTH], type[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
     int to_room = 0;

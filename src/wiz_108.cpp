@@ -22,6 +22,7 @@ int get_number(char **name);
 
 int do_zoneexits(struct char_data *ch, char *argument, int cmd)
 {
+  zone_list_t zone_table = DC::instance().getZones();
 //  try
  // {
     char buf[MAX_STRING_LENGTH];

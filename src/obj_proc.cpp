@@ -1707,6 +1707,7 @@ int weenie_weedy(struct char_data*ch, struct obj_data *obj, int cmd, char*arg,
 int stupid_message(struct char_data*ch, struct obj_data *obj, int cmd, char*arg, 
                    CHAR_DATA *invoker)
 {
+  zone_list_t zone_table = DC::instance().getZones();
    if (cmd)
      return eFAILURE;
 

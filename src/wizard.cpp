@@ -1695,6 +1695,7 @@ char * last_hunt_time(char * last_hunt)
 
 void begin_hunt(int item, int duration, int amount, char *huntname)
 { // time, itme, item
+  zone_list_t zone_table = DC::instance().getZones();
   struct hunt_data *n;
   char *tmp;
   struct tm *pTime = NULL;

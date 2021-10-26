@@ -52,6 +52,7 @@ bool search_container_for_vnum(obj_data * obj, int vnum);
 /* procedures related to get */
 void get(struct char_data *ch, struct obj_data *obj_object, struct obj_data *sub_object, bool has_consent, int cmd)
 {
+  zone_list_t zone_table = DC::instance().getZones();
     string buffer;
    
     if(!sub_object || sub_object->carried_by != ch) 

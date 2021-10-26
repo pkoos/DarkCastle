@@ -4726,6 +4726,7 @@ void do_combatmastery(CHAR_DATA *ch, CHAR_DATA *vict, int weapon)
 
 void raw_kill(CHAR_DATA * ch, CHAR_DATA * victim)
 {
+  zone_list_t zone_table = DC::instance().getZones();
   char buf[MAX_STRING_LENGTH];
   char buf2[100];
   int is_thief = 0;

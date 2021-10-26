@@ -4335,6 +4335,7 @@ void randomize_object(obj_data *obj)
 
 void zone_update(void)
 {
+	zone_list_t zone_table = DC::instance().getZones();
 	int i;
 
 	for (i = 0; i <= top_of_zone_table; i++) {
@@ -4357,6 +4358,7 @@ void zone_update(void)
 /* execute the reset command table of a given zone */
 void reset_zone(int zone)
 {
+	zone_list_t zone_table = DC::instance().getZones();
 	extern int top_of_world;
 	int cmd_no, last_cmd, last_mob, last_obj, last_percent;
 	int last_no;

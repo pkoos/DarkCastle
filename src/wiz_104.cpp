@@ -386,6 +386,7 @@ char* dirNumToChar(int dir)
 
 int show_zone_commands(struct char_data *ch, int i, int start = 0)
 {
+	zone_list_t zone_table = DC::instance().getZones();
   char buf[MAX_STRING_LENGTH];
   int k = 0;
   int num_to_show;
@@ -650,6 +651,7 @@ int find_file(world_file_list_item *itm, int high)
 }
 
 int do_show(struct char_data *ch, char *argument, int cmd) {
+	zone_list_t zone_table = DC::instance().getZones();
 	char name[MAX_INPUT_LENGTH], buf[200];
 	char beginrange[MAX_INPUT_LENGTH];
 	char endrange[MAX_INPUT_LENGTH];

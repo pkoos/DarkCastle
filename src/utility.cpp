@@ -1094,6 +1094,7 @@ int do_bug(struct char_data *ch, char *argument, int cmd)
 
 int do_recall( CHAR_DATA *ch, char *argument, int cmd )
 {
+  zone_list_t zone_table = DC::instance().getZones();
   int location, percent, level, cost = 0, x;
   CHAR_DATA *victim;
   CHAR_DATA *loop_ch;

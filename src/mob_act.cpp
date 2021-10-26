@@ -61,6 +61,7 @@ bool is_r_denied(CHAR_DATA *ch, int room)
 }
 void mobile_activity(void)
 {
+  zone_list_t zone_table = DC::instance().getZones();
 	CHAR_DATA *tmp_ch, *pch;
   struct obj_data *obj, *best_obj;
   char buf[1000];

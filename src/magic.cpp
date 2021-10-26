@@ -1554,6 +1554,7 @@ int spell_divine_fury(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_
 	// TODO - make this spell have an effect based on skill level
 int spell_teleport(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_data *obj, int skill)
 {
+  zone_list_t zone_table = DC::instance().getZones();
   int to_room;
   char buf[100]; 
   extern int top_of_world;      /* ref to the top element of world */
@@ -3782,6 +3783,7 @@ int spell_ventriloquate(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct ob
 
 int spell_word_of_recall(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_data *obj, int skill)
 {
+  zone_list_t zone_table = DC::instance().getZones();
   int location;
   char buf[200];
   clan_data * clan;
@@ -4015,6 +4017,7 @@ int spell_eagle_eye(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_da
 
 int spell_summon(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_data *obj, int skill)
 {
+  zone_list_t zone_table = DC::instance().getZones();
   unsigned target;
   int retval;
   assert(ch && victim);
@@ -6063,6 +6066,7 @@ int spell_hellstream(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_d
 
 void make_portal(CHAR_DATA * ch, CHAR_DATA * vict)
 {
+  zone_list_t zone_table = DC::instance().getZones();
   struct obj_data *ch_portal, * vict_portal;
   extern struct obj_data *object_list;
   extern int top_of_world;
@@ -6156,6 +6160,7 @@ void make_portal(CHAR_DATA * ch, CHAR_DATA * vict)
 
 int spell_portal(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_data *obj, int skill)
 {
+  zone_list_t zone_table = DC::instance().getZones();
   struct obj_data *portal = 0;
 
   if(IS_SET(world[victim->in_room].room_flags, PRIVATE) ||
@@ -11407,6 +11412,7 @@ int spell_release_golem(ubyte level, CHAR_DATA *ch, char *arg, int type, CHAR_DA
 
 int spell_beacon(ubyte level, CHAR_DATA *ch, char *arg, int type, CHAR_DATA *victim, struct obj_data * tar_obj, int skill)
 {
+  zone_list_t zone_table = DC::instance().getZones();
 //   extern int top_of_world;
 //   int to_room = 0;
 

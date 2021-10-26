@@ -161,6 +161,7 @@ int damage_eq_once(obj_data * obj)
 
 void object_activity(uint64_t pulse_type)
 {
+  zone_list_t zone_table = DC::instance().getZones();
   for (auto &obj : DC::instance().active_obj_list)
   {
     int32 item_number = obj->item_number;

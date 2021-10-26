@@ -489,6 +489,7 @@ void show_complete_quests(CHAR_DATA *ch)
 
 int start_quest(CHAR_DATA *ch, struct quest_info *quest)
 {
+   zone_list_t zone_table = DC::instance().getZones();
    int count = 0;
    uint16 price;
    OBJ_DATA *obj, *brownie = 0;

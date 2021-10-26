@@ -83,6 +83,7 @@ bool CompareAreaGoldStats( AreaStats first, AreaStats second)
 
 void AreaData::SortAreaData(CHAR_DATA *ch, SortState state)
 {
+	zone_list_t zone_table = DC::instance().getZones();
 	list<AreaStats> lAreaStats;
 	map<unsigned int,AreaStats>::iterator it;
 	AreaStats aStats;
@@ -128,7 +129,7 @@ void AreaData::SortAreaData(CHAR_DATA *ch, SortState state)
 
 void AreaData::DisplaySingleArea(CHAR_DATA *ch, int area)
 {
-	
+	zone_list_t zone_table = DC::instance().getZones();
 	char buf[MAX_STRING_LENGTH];
 	string output_buf;
 	vector<MobKills>::iterator mobs;
@@ -162,6 +163,7 @@ void AreaData::DisplaySingleArea(CHAR_DATA *ch, int area)
 }
 void AreaData::DisplayAreaData(CHAR_DATA *ch) 
 {
+	zone_list_t zone_table = DC::instance().getZones();
 	int i;
 	char buf[MAX_STRING_LENGTH];
 	char buf2[MAX_STRING_LENGTH];

@@ -305,6 +305,7 @@ int do_fall(CHAR_DATA *ch, short dir) {
 // 1. No master and no followers.
 // 2. That the direction exists.
 int do_simple_move(CHAR_DATA *ch, int cmd, int following) {
+	zone_list_t zone_table = DC::instance().getZones();
 	char tmp[80];
 	int dir;
 	int was_in;

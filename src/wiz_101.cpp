@@ -32,6 +32,7 @@ extern struct room_data ** world_array;
 
 int do_wizhelp(struct char_data *ch, char *argument, int cmd_arg)
 {
+  zone_list_t zone_table = DC::instance().getZones();
   extern struct command_info cmd_info[];
 
   char buf[MAX_STRING_LENGTH];
@@ -620,6 +621,7 @@ int do_wiz(struct char_data *ch, char *argument, int cmd)
 
 int do_findfix(char_data *ch, char *argument, int cmd)
 {
+  zone_list_t zone_table = DC::instance().getZones();
   int i, j, z;
 
   // Lazy code. Nested fors > thinking.

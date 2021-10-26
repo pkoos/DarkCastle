@@ -1560,6 +1560,7 @@ void do_astral_chanty_movement(CHAR_DATA *victim, CHAR_DATA *target) {
 }
 
 int execute_song_astral_chanty(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *victim, int skill) {
+	zone_list_t zone_table = DC::instance().getZones();
 	int status = 0;
 	vector<songInfo>::iterator i;
 
