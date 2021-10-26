@@ -52,6 +52,7 @@ using namespace std;
 // Saving zones after this SHOULD not be required, as the old savefiles contain vnums, which should remain correct.
 void rebuild_rnum_references(int startAt, int type)
 {
+  zone_list_t zone_table = DC::instance().getZones();
     int zone, comm;
 
     for (zone = 0; zone <= top_of_zone_table; zone++) {
@@ -103,6 +104,7 @@ int do_check(struct char_data *ch, char *arg, int cmd) {
   char buf[120];
   char tmp_buf[MAX_STRING_LENGTH];
   char *c;
+  zone_list_t zone_table = DC::instance().getZones();
 
   while(isspace(*arg))
     arg++;
@@ -434,6 +436,7 @@ int do_mpstat(struct char_data *ch, char *arg, int cmd)
 
 int do_zone_single_edit(struct char_data * ch, char * argument, int zone)
 {
+  zone_list_t zone_table = DC::instance().getZones();
   char cmdnum[MAX_INPUT_LENGTH];
   char select[MAX_INPUT_LENGTH];
   char last[MAX_INPUT_LENGTH];
@@ -627,6 +630,7 @@ int do_zone_single_edit(struct char_data * ch, char * argument, int zone)
 }
 int max_res(int zone)
 {
+  zone_list_t zone_table = DC::instance().getZones();
  int i;
   for(i = 0 ;
       zone_table[zone].cmd[i].command != 'S' && i < (zone_table[zone].reset_total-1) ;
@@ -647,6 +651,7 @@ int do_zedit(struct char_data *ch, char *argument, int cmd)
   int zone, last_cmd;
   int robj, rmob;
   int show_zone_commands(struct char_data * ch, int i, int start = 0);
+  zone_list_t zone_table = DC::instance().getZones();
 
   const char * zedit_values[] = {
     "remove", "add", "edit", "list", "name", 
@@ -1238,8 +1243,8 @@ int do_sedit(struct char_data *ch, char *argument, int cmd)
         return eFAILURE;
       }
 
-      auto i = ch->skills.find(skillnum);
-      if (i != ch->skills.end())
+      auto i = vict->skills.find(skillnum);
+      if (i != vict->skills.end())
       {
         sprintf(buf, "Skill '%s'(%d) removed from %s by %s.", text, 
                      i->second.learned, GET_NAME(vict), GET_NAME(ch));
@@ -1299,12 +1304,12 @@ int do_sedit(struct char_data *ch, char *argument, int cmd)
       send_to_char(buf, ch);
 
       bool found = false;
-      queue<int16> copy = ch->skillsSaveLoadOrder;
+      queue<int16> copy = vict->skillsSaveLoadOrder;
       while (copy.size() > 0)
       {
         int16 skillnum = copy.front();
-        auto i = ch->skills.find(skillnum);
-        if (i != ch->skills.end())
+        auto i = vict->skills.find(skillnum);
+        if (i != vict->skills.end())
         {
           char_skill_data skill = i->second;
           const char *skillname = get_skill_name(skill.skillnum);
@@ -4220,6 +4225,24 @@ int do_redit(struct char_data *ch, char *argument, int cmd)
           csendf(ch, "%-18s", sector_types[x]);
         }
       }
+      send_to_char("\r\n\r\n", ch);
+      return eFAILURE;
+    }
+    for (x = 0;; x++)
+    {
+      if (!strcmp(sector_types[x], "\n"))
+      {
+        send_to_char("No such sector type.\n\r", ch);
+        return eFAILURE;
+      }
+      else if (is_abbrev(remainder_args, sector_types[x]))
+      {
+        world[ch->in_room].sector_type = x;
+        csendf(ch, "Sector type set to %s.\n\r", sector_types[x]);
+        break;
+      }
+    }
+  }
       break;
     case 7: // denymob
       if (remainder_args.empty() || !is_number(remainder_args.c_str()))
@@ -4228,7 +4251,15 @@ int do_redit(struct char_data *ch, char *argument, int cmd)
         return eFAILURE;
       }
       bool done = FALSE;
-      int mob = stoi(remainder_args);
+      int mob = 0;
+      try
+      {
+        mob = stoi(remainder_args);
+      }
+      catch (...)
+      {
+        mob = 0;
+      }
       struct deny_data *nd, *pd = NULL;
       for (nd = world[ch->in_room].denied; nd; nd = nd->next)
       {
@@ -4249,79 +4280,17 @@ int do_redit(struct char_data *ch, char *argument, int cmd)
         break;
       nd = new deny_data;
       nd->next = world[ch->in_room].denied;
-      nd->vnum = stoi(remainder_args);
+      try {
+        nd->vnum = stoi(remainder_args);
+      } catch(...)
+      {
+        nd->vnum = 0;
+      }
       world[ch->in_room].denied = nd;
       csendf(ch, "Mobile %d DENIED entrance.\r\n", mob);
       break;
     }
-    send_to_char("\r\n\r\n", ch);
-    return eFAILURE;
-  }
-    for (x = 0;; x++)
-    {
-      if (!strcmp(sector_types[x], "\n"))
-      {
-        send_to_char("No such sector type.\n\r", ch);
-        return eFAILURE;
-      }
-      else if (is_abbrev(remainder_args, sector_types[x]))
-      {
-        world[ch->in_room].sector_type = x;
-        csendf(ch, "Sector type set to %s.\n\r", sector_types[x]);
-        break;
-      }
-    }
-  
-  break;
-  case 7: // denymob
-    if (remainder_args.empty() || !is_number(remainder_args.c_str()))
-    {
-      send_to_char("Syntax: redit denymob <vnum>\r\nDoing this on an already denied mob will allow it once more.\r\n", ch);
-      return eFAILURE;
-    }
-    bool done = FALSE;
-    int mob=0;
-    try {
-      mob = stoi(remainder_args);
-    } catch(...)
-    {
-      mob=0;
-    }
-    struct deny_data *nd, *pd = NULL;
-    for (nd = world[ch->in_room].denied; nd; nd = nd->next)
-    {
-      if (nd->vnum == mob)
-      {
-        if (pd)
-          pd->next = nd->next;
-        else
-          world[ch->in_room].denied = nd->next;
-        dc_free(nd);
-        csendf(ch, "Mobile %d ALLOWED entrance.\r\n", mob);
-        done = TRUE;
-        break;
-      }
-      pd = nd;
-    }
-    if (done)
-      break;
-#ifdef LEAK_CHECK
-    nd = (struct deny_data *)calloc(1, sizeof(struct deny_data));
-#else
-    nd = (struct deny_data *)dc_alloc(1, sizeof(struct deny_data));
-#endif
-    nd->next = world[ch->in_room].denied;
-    try {
-      nd->vnum = stoi(remainder_args);
-    } catch(...)
-    {
-      nd->vnum = 0;
-    }
-    
-    world[ch->in_room].denied = nd;
-    csendf(ch, "Mobile %d DENIED entrance.\r\n", mob);
-    break;
-  }
+
   set_zone_modified_world(ch->in_room);
   return eSUCCESS;
 }
@@ -4473,6 +4442,7 @@ int do_oneway(struct char_data *ch, char *arg, int cmd)
 
 int do_zsave(struct char_data *ch, char *arg, int cmd)
 {
+  zone_list_t zone_table = DC::instance().getZones();
   FILE *f = (FILE *)NULL;
   char buf[180];
   char buf2[180];
