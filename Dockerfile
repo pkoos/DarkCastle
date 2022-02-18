@@ -6,7 +6,7 @@ RUN zypper -n rm patterns-base-fips
 RUN zypper -n install git scons fmt-devel libfmt8 libfmt8-32bit libfmt8-32bit-debuginfo libfmt8-debuginfo gcc-c++-32bit gcc-c++ libpq5-32bit libpq5 postgresql14-server libcrypt1-32bit zlib-devel-32bit
 RUN mkdir -p /srv/dcastle2/git
 WORKDIR /srv/dcastle2/git
-RUN git clone https://github.com/DarkCastleMUD/DarkCastle.git
+RUN git clone https://github.com/pkoos/DarkCastle.git
 WORKDIR /srv/dcastle2/git/DarkCastle/src
 RUN ln -s /usr/lib/libcrypt.so.1 /usr/lib/libcrypt.so
 RUN ln -s /usr/lib/libfmt.so.8 /usr/lib/libfmt.so
