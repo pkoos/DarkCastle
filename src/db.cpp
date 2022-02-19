@@ -5251,7 +5251,7 @@ int64_t fread_int(FILE *fl, int64_t beg_range, int64_t end_range)
 	while ((ch = getc(fl))) {
 		printf("%c", ch);
 		if (ch == EOF) {
-			printf("Reading %s: %s, %d\n", curr_type, curr_name, curr_virtno);
+			// printf("Reading %s: %s, %d\n", curr_type, curr_name, curr_virtno);
 			perror("fread_int: premature EOF");
 			abort();
 		}
@@ -5259,17 +5259,17 @@ int64_t fread_int(FILE *fl, int64_t beg_range, int64_t end_range)
 		if (ch != ' ' && ch != '\n') /* eat the white space */
 			break;
 	}
-	printf("\n");
+	// printf("\n");
 
 	pBufLast = buf;		
 	if (ch == '-' && beg_range >= 0) {
-		printf("ch: %c beg_range: %ld\n", ch, beg_range);
+		// printf("ch: %c beg_range: %ld\n", ch, beg_range);
 		cerr << "Reading " << curr_type << ": " << curr_name << ", " << curr_virtno << endl;
 		cerr << "fread_int: Bad value - < 0 on positive only num" << endl;
 		while (isdigit(getc(fl))) {
 			printf("%c", ch);
 		}
-		printf("\n");
+		// printf("\n");
 		throw error_negative_int();
 	} else if (ch == '-') {
 		*pBufLast = ch;
