@@ -101,10 +101,10 @@ pulse_data *bard_list = 0; /* global l-list of bards          */
 
 room_data & CWorld::operator[](int rnum)
 {
-	printf("rnum: %d top_of_world: %d\n", rnum, top_of_world);
 	if (rnum > top_of_world)
 		throw overrun();
 	else if (rnum < 0)
+	printf("rnum: %d\n", rnum);
 		throw underrun();
 
 	return *world_array[rnum];
