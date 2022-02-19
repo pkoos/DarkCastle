@@ -19,7 +19,7 @@
 /* $Id: db.cpp,v 1.229 2015/06/14 02:38:12 pirahna Exp $ */
 /* Again, one of those scary files I'd like to stay away from. --Morc XXX */
 
-int load_debug = 1;
+int load_debug = 0;
 
 extern "C"
 {
@@ -104,7 +104,7 @@ room_data & CWorld::operator[](int rnum)
 	if (rnum > top_of_world)
 		throw overrun();
 	else if (rnum < 0)
-	printf("rnum: %d\n", rnum);
+		printf("rnum: %d\n", rnum);
 		throw underrun();
 
 	return *world_array[rnum];
