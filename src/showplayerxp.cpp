@@ -472,8 +472,11 @@ void showObject(char_data* ch, obj_data* obj)
 int main(int argc, char **argv)
 {
   string orig_cwd, dclib;
-  if (argc < 2)
+  if (argc < 2) {
+    printf("too few arguments.\n");
     return 1;
+  }
+    
 
   if (getenv("DCLIB"))
   {
