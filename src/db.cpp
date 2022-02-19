@@ -104,7 +104,7 @@ room_data & CWorld::operator[](int rnum)
 	if (rnum > top_of_world)
 		throw overrun();
 	else if (rnum < 0)
-		printf("rnum: %d\n", rnum);
+		// printf("rnum: %d\n", rnum);
 		throw underrun();
 
 	return *world_array[rnum];
