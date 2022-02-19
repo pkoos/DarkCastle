@@ -19,7 +19,7 @@
 /* $Id: db.cpp,v 1.229 2015/06/14 02:38:12 pirahna Exp $ */
 /* Again, one of those scary files I'd like to stay away from. --Morc XXX */
 
-int load_debug = 0;
+int load_debug = 1;
 
 extern "C"
 {
