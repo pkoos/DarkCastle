@@ -5259,14 +5259,15 @@ int64_t fread_int(FILE *fl, int64_t beg_range, int64_t end_range)
 			break;
 	}
 
-	pBufLast = buf;
-	printf("ch == '-' && beg_range >= 0\n");
-	printf("ch: %c beg_range: %ld\n", ch, beg_range);	
+	pBufLast = buf;		
 	if (ch == '-' && beg_range >= 0) {
+		printf("ch: %c beg_range: %ld\n", ch, beg_range);
 		cerr << "Reading " << curr_type << ": " << curr_name << ", " << curr_virtno << endl;
 		cerr << "fread_int: Bad value - < 0 on positive only num" << endl;
 		while (isdigit(getc(fl))) {
+			printf("%c", ch);
 		}
+		printf("\n");
 		throw error_negative_int();
 	} else if (ch == '-') {
 		*pBufLast = ch;
