@@ -622,7 +622,7 @@ D0
 The wall seems worn to the north here.
 ~
 wall hidden~
-15 1 -1
+15 1 0
 D2
 There appears to be some kind of door in the tunnel to the south.
 ~
