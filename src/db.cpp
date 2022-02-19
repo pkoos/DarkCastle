@@ -5249,6 +5249,7 @@ int64_t fread_int(FILE *fl, int64_t beg_range, int64_t end_range)
 	int64_t i;
 
 	while ((ch = getc(fl))) {
+		printf("%c", ch);
 		if (ch == EOF) {
 			printf("Reading %s: %s, %d\n", curr_type, curr_name, curr_virtno);
 			perror("fread_int: premature EOF");
@@ -5258,6 +5259,7 @@ int64_t fread_int(FILE *fl, int64_t beg_range, int64_t end_range)
 		if (ch != ' ' && ch != '\n') /* eat the white space */
 			break;
 	}
+	printf("\n");
 
 	pBufLast = buf;		
 	if (ch == '-' && beg_range >= 0) {
