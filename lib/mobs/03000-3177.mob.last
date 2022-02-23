@@ -3867,12 +3867,11 @@ S
 #10009
 meta shopkeeper physician phil~
 Meta-Physician~
-The Meta-Physician stands here.
+an empty mob description~
 ~
-~
-296774 0 -1
+2 0 -1
 0 0 0 -1
-0 0 109
+0 0 0
 20 10 0d1+0 1d1+0
 0 0
 8 8 0 0 0 0
