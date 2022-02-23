@@ -14,7 +14,7 @@ Town Square~
 D0
 ~
 ~
-0 -1 ????
+0 -1 4056
 D1
 ~
 ~
@@ -33,7 +33,7 @@ Town Square~
 D1
 ~
 ~
-0 -1 ????
+0 -1 4030
 D2
 ~
 ~
@@ -60,7 +60,7 @@ D2
 D3
 ~
 ~
-0 -1 ????
+0 -1 4009
 S
 #4004
 Town Square~
@@ -109,19 +109,19 @@ D1
 S
 #4007
 Town Square~
-D1
+D0
 ~
 ~
 0 -1 4004
 D1
 ~
 ~
-0 -1 4005
-D1
+0 -1 4008
+D2
 ~
 ~
-0 -1 ????
-D1
+0 -1 4055
+D3
 ~
 ~
 0 -1 4006
@@ -136,16 +136,16 @@ D3
 ~
 0 -1 4007
 S
-#4009
-Center Street~
+#4009 
+Temple Way~
 D1
 ~
 ~
-0 -1 ????
+0 -1 4003
 D3
 ~
 ~
-0 -1 4002
+0 -1 4051
 S
 #4010
 Heartsong Meadows~
@@ -268,7 +268,7 @@ Origination Institute~
 D0
 ~
 ~
-0 -1 ????
+0 -1 4044
 S
 #4027
 Temple of Balance~
@@ -432,7 +432,6 @@ D2
 ~
 ~
 0 -1 4040
-
 S
 #4040
 College Way~
@@ -502,30 +501,159 @@ D3
 0 -1 4045
 S
 #4045
+College Way~
+D1
+~
+~
+0 -1 4044
+D3
+~
+~
+0 -1 4046
 S
 #4046
+Outside the Temple of Balance~
+D1
+~
+~
+0 -1 4045
+D3
+~
+~
+0 -1 4027
 S
 #4047
+Outside the Temple of Balance~
+D0
+~
+~
+0 -1 4048
+D2
+~
+~
+0 -1 4027
 S
 #4048
+Alley to Main Street~
+D0
+~
+~
+0 -1 4050
+D1
+~
+~
+0 -1 4049
+D2
+~
+~
+0 -1 4047
 S
 #4049
+Alley to Temple Way~
+D1
+~
+~
+0 -1 4051
+D3
+~
+~
+0 -1 4048
 S
 #4050
+Alley from Main Street~
+D0
+~
+~
+0 -1 4067
+D2
+~
+~
+0 -1 4049
 S
 #4051
+Temple Way~
+D0
+~
+~
+0 -1 4099
+D1
+~
+~
+0 -1 4009
+D3
+~
+~
+0 -1 4049
 S
 #4052
+Prophecy Place~
+D0
+~
+~
+0 -1 4053
+D2
+~
+~
+0 -1 4041
 S
 #4053
+Prophecy Place~
+D0
+~
+~
+0 -1 4031
+D2
+~
+~
+0 -1 4028
+D2
+~
+~
+0 -1 4052
 S
 #4054
+Dungeon Drive~
+D0
+~
+~
+0 -1 4055
+D2
+~
+~
+0 -1 4042
 S
 #4055
+Dungeon Drive~
+D1
+~
+~
+0 -1 4007
+D2
+~
+~
+0 -1 4054
 S
 #4056
+Dungeon Drive~
+D0
+~
+~
+0 -1 4091
+D2
+~
+~
+0 -1 4001
 S
 #4057
+Prophecy Place~
+D0
+~
+~
+0 -1 4058
+D2
+~
+~
+0 -1 4031
 S
 #4058
 S
