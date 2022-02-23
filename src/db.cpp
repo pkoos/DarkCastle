@@ -1507,7 +1507,7 @@ int read_one_room(FILE *fl, int & room_nr)
 		total_rooms++;
 		if (top_of_zone_table >= 0)
 				{
-			tmp = fread_int(fl, -1, 64000); // zone nr
+			tmp = fread_int(fl, -1, MAX_FREAD_INT); // zone nr
 
 			// OBS: Assumes ordering of input rooms
 
@@ -2367,8 +2367,8 @@ void read_one_zone(FILE * fl, int zon)
 
 	ch = fread_char(fl);
 	if (ch == 'V') {
-		version = fread_int(fl, 0, 64000);
-		ch = fread_char(fl);
+		version = fread_int(fl, 0, MAX_FREAD_INT);
+		ch = fread_char(fl); // read # from the second line, do nothing with this going forward
 		modified = true;
 	}
 
@@ -2393,7 +2393,7 @@ void read_one_zone(FILE * fl, int zon)
 	curr_name = check;
 
 	zone_table[zon].name = check;
-	zone_table[zon].top = fread_int(fl, 0, 64000);
+	zone_table[zon].top = fread_int(fl, 0, MAX_FREAD_INT);
 	zone_table[zon].clanowner = 0;
 	zone_table[zon].gold = 0;
 	zone_table[zon].repops_without_deaths = -1;
@@ -2412,8 +2412,8 @@ void read_one_zone(FILE * fl, int zon)
 	zone_table[zon].bottom_rnum = WORLD_MAX_ROOM;
 	zone_table[zon].top_rnum = 0;
 
-	zone_table[zon].lifespan = fread_int(fl, 0, 64000);
-	zone_table[zon].reset_mode = fread_int(fl, 0, 64000);
+	zone_table[zon].lifespan = fread_int(fl, 0, MAX_FREAD_INT);
+	zone_table[zon].reset_mode = fread_int(fl, 0, MAX_FREAD_INT);
 	zone_table[zon].zone_flags = fread_bitvector(fl, 0, LONG_MAX);
 
 	// if its old version set the altered flag so that
@@ -2576,7 +2576,7 @@ void boot_zones(void)
 			temp = read_next_worldfile_name(flZoneIndex))
 					{
 		strcpy(endfile, "zonefiles/");
-		strcat(endfile, temp);
+		strcat(endfile, temp); // "zonefiles/filename.zon"
 
 		if (cf.verbose_mode) {
 			log(temp, 0, LOG_MISC);
@@ -2681,20 +2681,20 @@ CHAR_DATA *read_mobile(int nr, FILE *fl)
 
 	GET_LEVEL(mob) = fread_int(fl, 0, IMP);
 
-	mob->hitroll = 20 - fread_int(fl, -64000, 64000);
-	mob->armor = 10 * fread_int(fl, -64000, 64000);
+	mob->hitroll = 20 - fread_int(fl, -64000, MAX_FREAD_INT);
+	mob->armor = 10 * fread_int(fl, -64000, MAX_FREAD_INT);
 
-	tmp = fread_int(fl, 0, 64000);
-	tmp2 = fread_int(fl, 0, 64000);
-	tmp3 = fread_int(fl, 0, 64000);
+	tmp = fread_int(fl, 0, MAX_FREAD_INT);
+	tmp2 = fread_int(fl, 0, MAX_FREAD_INT);
+	tmp3 = fread_int(fl, 0, MAX_FREAD_INT);
 
 	mob->raw_hit = dice(tmp, tmp2) + tmp3;
 	mob->max_hit = mob->raw_hit;
 	mob->hit = mob->max_hit;
 
-	mob->mobdata->damnodice = fread_int(fl, 0, 64000);
-	mob->mobdata->damsizedice = fread_int(fl, 0, 64000);
-	mob->damroll = fread_int(fl, 0, 64000);
+	mob->mobdata->damnodice = fread_int(fl, 0, MAX_FREAD_INT);
+	mob->mobdata->damsizedice = fread_int(fl, 0, MAX_FREAD_INT);
+	mob->damroll = fread_int(fl, 0, MAX_FREAD_INT);
 	mob->mobdata->last_room = -1;
 	mob->mana = 100 + (mob->level * 10);
 	mob->max_mana = 100 + (mob->level * 10);

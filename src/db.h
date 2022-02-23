@@ -47,6 +47,7 @@ struct error_range_over {};
                                      // doing a 'goto 1831919131928' and 
                                      // creating it
 
+#define MAX_FREAD_INT 64000
 #define MAX_ZONE    200
 #define MAX_INDEX   6000
 #define MAX_RESET  16383
