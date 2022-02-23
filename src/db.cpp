@@ -1549,7 +1549,7 @@ int read_one_room(FILE *fl, int & room_nr)
 		// This bitvector is for runtime and not stored in the files, so just initialize it to 0
 		world[room_nr].temp_room_flags = 0;
 
-		world[room_nr].sector_type = fread_int(fl, -1, 64000);
+		world[room_nr].sector_type = fread_int(fl, -1, MAX_FREAD_INT);
 
 		if (load_debug)
 		{
@@ -2372,7 +2372,7 @@ void read_one_zone(FILE * fl, int zon)
 		modified = true;
 	}
 
-	tmp = fread_int(fl, 0, 64000);
+	tmp = fread_int(fl, 0, MAX_FREAD_INT);
 	check = fread_string(fl, 0);
 	//a = fread_int(fl, 0, 64000);
 	/* alloc a new_new zone */
@@ -2422,7 +2422,7 @@ void read_one_zone(FILE * fl, int zon)
 		SET_BIT(zone_table[zon].zone_flags, ZONE_MODIFIED);
 
 	if (version > 1) {
-		zone_table[zon].continent = fread_int(fl, 0, 64000);
+		zone_table[zon].continent = fread_int(fl, 0, MAX_FREAD_INT);
 	}
 
 	/* read the command table */
