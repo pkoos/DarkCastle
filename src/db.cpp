@@ -104,6 +104,7 @@ room_data & CWorld::operator[](int rnum)
 	if (rnum > top_of_world)
 		throw overrun();
 	else if (rnum < 0)
+		// printf("rnum: %d\n", rnum);
 		throw underrun();
 
 	return *world_array[rnum];
@@ -1506,7 +1507,7 @@ int read_one_room(FILE *fl, int & room_nr)
 		total_rooms++;
 		if (top_of_zone_table >= 0)
 				{
-			tmp = fread_int(fl, -1, 64000); // zone nr
+			tmp = fread_int(fl, -1, MAX_FREAD_INT); // zone nr
 
 			// OBS: Assumes ordering of input rooms
 
@@ -1548,7 +1549,7 @@ int read_one_room(FILE *fl, int & room_nr)
 		// This bitvector is for runtime and not stored in the files, so just initialize it to 0
 		world[room_nr].temp_room_flags = 0;
 
-		world[room_nr].sector_type = fread_int(fl, -1, 64000);
+		world[room_nr].sector_type = fread_int(fl, -1, MAX_FREAD_INT);
 
 		if (load_debug)
 		{
@@ -2366,13 +2367,13 @@ void read_one_zone(FILE * fl, int zon)
 
 	ch = fread_char(fl);
 	if (ch == 'V') {
-		version = fread_int(fl, 0, 64000);
-		ch = fread_char(fl);
+		version = fread_int(fl, 0, MAX_FREAD_INT);
+		ch = fread_char(fl); // read # from the second line, do nothing with this going forward
 		modified = true;
 	}
 
-	tmp = fread_int(fl, 0, 64000);
-	check = fread_string(fl, 0);
+	tmp = fread_int(fl, 0, MAX_FREAD_INT); // number from line 2
+	check = fread_string(fl, 0); // name from line 3
 	//a = fread_int(fl, 0, 64000);
 	/* alloc a new_new zone */
 	//*num = zon = a / 100;
@@ -2392,7 +2393,7 @@ void read_one_zone(FILE * fl, int zon)
 	curr_name = check;
 
 	zone_table[zon].name = check;
-	zone_table[zon].top = fread_int(fl, 0, 64000);
+	zone_table[zon].top = fread_int(fl, 0, MAX_FREAD_INT);
 	zone_table[zon].clanowner = 0;
 	zone_table[zon].gold = 0;
 	zone_table[zon].repops_without_deaths = -1;
@@ -2411,8 +2412,8 @@ void read_one_zone(FILE * fl, int zon)
 	zone_table[zon].bottom_rnum = WORLD_MAX_ROOM;
 	zone_table[zon].top_rnum = 0;
 
-	zone_table[zon].lifespan = fread_int(fl, 0, 64000);
-	zone_table[zon].reset_mode = fread_int(fl, 0, 64000);
+	zone_table[zon].lifespan = fread_int(fl, 0, MAX_FREAD_INT);
+	zone_table[zon].reset_mode = fread_int(fl, 0, MAX_FREAD_INT);
 	zone_table[zon].zone_flags = fread_bitvector(fl, 0, LONG_MAX);
 
 	// if its old version set the altered flag so that
@@ -2421,7 +2422,7 @@ void read_one_zone(FILE * fl, int zon)
 		SET_BIT(zone_table[zon].zone_flags, ZONE_MODIFIED);
 
 	if (version > 1) {
-		zone_table[zon].continent = fread_int(fl, 0, 64000);
+		zone_table[zon].continent = fread_int(fl, 0, MAX_FREAD_INT);
 	}
 
 	/* read the command table */
@@ -2575,7 +2576,7 @@ void boot_zones(void)
 			temp = read_next_worldfile_name(flZoneIndex))
 					{
 		strcpy(endfile, "zonefiles/");
-		strcat(endfile, temp);
+		strcat(endfile, temp); // "zonefiles/filename.zon"
 
 		if (cf.verbose_mode) {
 			log(temp, 0, LOG_MISC);
@@ -2680,20 +2681,20 @@ CHAR_DATA *read_mobile(int nr, FILE *fl)
 
 	GET_LEVEL(mob) = fread_int(fl, 0, IMP);
 
-	mob->hitroll = 20 - fread_int(fl, -64000, 64000);
-	mob->armor = 10 * fread_int(fl, -64000, 64000);
+	mob->hitroll = 20 - fread_int(fl, -64000, MAX_FREAD_INT);
+	mob->armor = 10 * fread_int(fl, -64000, MAX_FREAD_INT);
 
-	tmp = fread_int(fl, 0, 64000);
-	tmp2 = fread_int(fl, 0, 64000);
-	tmp3 = fread_int(fl, 0, 64000);
+	tmp = fread_int(fl, 0, MAX_FREAD_INT);
+	tmp2 = fread_int(fl, 0, MAX_FREAD_INT);
+	tmp3 = fread_int(fl, 0, MAX_FREAD_INT);
 
 	mob->raw_hit = dice(tmp, tmp2) + tmp3;
 	mob->max_hit = mob->raw_hit;
 	mob->hit = mob->max_hit;
 
-	mob->mobdata->damnodice = fread_int(fl, 0, 64000);
-	mob->mobdata->damsizedice = fread_int(fl, 0, 64000);
-	mob->damroll = fread_int(fl, 0, 64000);
+	mob->mobdata->damnodice = fread_int(fl, 0, MAX_FREAD_INT);
+	mob->mobdata->damsizedice = fread_int(fl, 0, MAX_FREAD_INT);
+	mob->damroll = fread_int(fl, 0, MAX_FREAD_INT);
 	mob->mobdata->last_room = -1;
 	mob->mana = 100 + (mob->level * 10);
 	mob->max_mana = 100 + (mob->level * 10);
@@ -5259,8 +5260,7 @@ int64_t fread_int(FILE *fl, int64_t beg_range, int64_t end_range)
 			break;
 	}
 
-	pBufLast = buf;
-
+	pBufLast = buf;		
 	if (ch == '-' && beg_range >= 0) {
 		cerr << "Reading " << curr_type << ": " << curr_name << ", " << curr_virtno << endl;
 		cerr << "fread_int: Bad value - < 0 on positive only num" << endl;

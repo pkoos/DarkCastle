@@ -47,6 +47,7 @@ struct error_range_over {};
                                      // doing a 'goto 1831919131928' and 
                                      // creating it
 
+#define MAX_FREAD_INT 64000
 #define MAX_ZONE    200
 #define MAX_INDEX   6000
 #define MAX_RESET  16383
@@ -63,7 +64,7 @@ struct error_range_over {};
 #define ZONE_IS_TOWN       1<<1  // Keep out the really bad baddies that are STAY_NO_TOWN
 #define ZONE_MODIFIED      1<<2
 #define ZONE_UNUSED        1<<3
-#define ZONE_BPORT	   1<<4
+#define ZONE_BPORT	       1<<4
 #define ZONE_NOCLAIM       1<<5 // cannot claim this area
 #define ZONE_NOHUNT        1<<6
 // Remember to update const.C  zone_bits[] if you change this
