@@ -2372,8 +2372,8 @@ void read_one_zone(FILE * fl, int zon)
 		modified = true;
 	}
 
-	tmp = fread_int(fl, 0, MAX_FREAD_INT);
-	check = fread_string(fl, 0);
+	tmp = fread_int(fl, 0, MAX_FREAD_INT); // number from line 2
+	check = fread_string(fl, 0); // name from line 3
 	//a = fread_int(fl, 0, 64000);
 	/* alloc a new_new zone */
 	//*num = zon = a / 100;
