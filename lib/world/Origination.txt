@@ -1,7 +1,7 @@
 #4000
 Entrance to the Dungeon~
 Entrance to the Dungeon~
-
+1 0 0
 D2
 ~
 ~
@@ -17,6 +17,7 @@ S
 #4002
 Walking Bear Outfitter~
 Walking Bear Outfitter~
+1 0 0
 D2
 ~
 ~
@@ -25,6 +26,7 @@ S
 #4003
 Sew Nice~
 Sew Nice~
+1 0 0
 D2
 ~
 ~
@@ -33,6 +35,7 @@ S
 #4004
 Dungeon Drive~
 Dungeon Drive~
+1 0 0
 D0
 ~
 ~
@@ -45,6 +48,7 @@ S
 #4005
 The Guild~
 The Guild~
+1 0 0
 D2
 ~
 ~
@@ -53,6 +57,7 @@ S
 #4006
 Outside the Red Commands~
 Outside the Red Commands~
+1 0 0
 D1
 ~
 ~
@@ -65,6 +70,7 @@ S
 #4007
 The Red Commands~
 The Red Commands~
+1 0 0
 D3
 ~
 ~
@@ -73,6 +79,7 @@ S
 #4008
 Heartsong Meadows~
 Heartsong Meadows~
+1 0 0
 D1
 ~
 ~
@@ -81,6 +88,7 @@ S
 #4009
 Outside the Starlight~
 Outside the Starlight~
+1 0 0
 D0
 ~
 ~
@@ -97,6 +105,7 @@ S
 #4010
 Outside the Careful Moon~
 Outside the Careful Moon~
+1 0 0
 D1
 ~
 ~
@@ -113,6 +122,7 @@ S
 #4011
 Outside the Velvet Pot~
 Outside the Velvet Pot~
+1 0 0
 D1
 ~
 ~
@@ -129,6 +139,7 @@ S
 #4012
 Outside the Walking Bear Outfitter~
 Outside the Walking Bear Outfitter~
+1 0 0
 D0
 ~
 ~
@@ -145,6 +156,7 @@ S
 #4013
 Main Street~
 Main Street~
+1 0 0
 D1
 ~
 ~
@@ -161,6 +173,7 @@ S
 #4014
 Outside Sew Nice~
 Outside Sew Nice~
+1 0 0
 D0
 ~
 ~
@@ -177,6 +190,7 @@ S
 #4015
 Intersection of Main Street and Dungeon Drive~
 Intersection of Main Street and Dungeon Drive~
+1 0 0
 D0
 ~
 ~
@@ -197,6 +211,7 @@ S
 #4016
 Intersection of Main Street and Prophecy Place~
 Intersection of Main Street and Prophecy Place~
+1 0 0
 D0
 ~
 ~
@@ -217,6 +232,7 @@ S
 #4017
 Outside the Bronze Griffin~
 Outside the Bronze Griffin~
+1 0 0
 D1
 ~
 ~
@@ -233,6 +249,7 @@ S
 #4018
 Intersection of Main Street and Merchant Boulevard~
 Intersection of Main Street and Merchant Boulevard~
+1 0 0
 D0
 ~
 ~
@@ -253,6 +270,7 @@ S
 #4019
 Alleyway~
 Alleyway~
+1 0 0
 D1
 ~
 ~
@@ -265,6 +283,7 @@ S
 #4020
 Outside of Crumb~
 Outside of Crumb~
+1 0 0
 D2
 ~
 ~
@@ -277,6 +296,7 @@ S
 #4021
 Careful Moon~
 Careful Moon~
+1 0 0
 D0
 ~
 ~
@@ -285,6 +305,7 @@ S
 #4022
 Velvet Pot~
 Velvet Pot~
+1 0 0
 D0
 ~
 ~
@@ -293,6 +314,7 @@ S
 #4023
 The Common Tome~
 The Common Tome~
+1 0 0
 D1
 ~
 ~
@@ -301,6 +323,7 @@ S
 #4024
 Alley from Main Street~
 Alley from Main Street~
+1 0 0
 D0
 ~
 ~
@@ -321,6 +344,7 @@ S
 #4025
 Odds and Ends~
 Odds and Ends~
+1 0 0
 D3
 ~
 ~
@@ -329,6 +353,7 @@ S
 #4026
 Dungeon Drive~
 Dungeon Drive~
+1 0 0
 D0
 ~
 ~
@@ -341,6 +366,7 @@ S
 #4027
 Outside the Bronze Griffin~
 Outside the Bronze Griffin~
+1 0 0
 D0
 ~
 ~
@@ -357,6 +383,7 @@ S
 #4028
 The Bronze Griffin~
 The Bronze Griffin~
+1 0 0
 D0
 ~
 ~
@@ -369,6 +396,7 @@ S
 #4029
 Outside Drumphy's Toys~
 Outside Drumphy's Toys~
+1 0 0
 D0
 ~
 ~
@@ -381,6 +409,7 @@ S
 #4030
 Drumphy's Toys~
 Drumphy's Toys~
+1 0 0
 D3
 ~
 ~
@@ -389,6 +418,7 @@ S
 #4031
 Crumb~
 Crumb~
+1 0 0
 D0
 ~
 ~
@@ -397,6 +427,7 @@ S
 #4032
 La Fable~
 La Fable~
+1 0 0
 D2
 ~
 ~
@@ -405,6 +436,7 @@ S
 #4033
 Merchant Boulevard~
 Merchant Boulevard~
+1 0 0
 D0
 ~
 ~
@@ -417,6 +449,7 @@ S
 #4034
 Town Center~
 Town Center~
+1 0 0
 D1
 ~
 ~
@@ -429,6 +462,7 @@ S
 #4035
 Town Center~
 Town Center~
+1 0 0
 D0
 ~
 ~
@@ -449,6 +483,7 @@ S
 #4036
 Town Center~
 Town Center~
+1 0 0
 D1
 ~
 ~
@@ -465,6 +500,7 @@ S
 #4037
 Intersection of Center Street and Prophecy Place~
 Intersection of Center Street and Prophecy Place~
+1 0 0
 D0
 ~
 ~
@@ -481,6 +517,7 @@ S
 #4038
 Outside the Heavenly Barrel~
 Outside the Heavenly Barrel~
+1 0 0
 D1
 ~
 ~
@@ -497,6 +534,7 @@ S
 #4039
 Outside of La Fable~
 Outside of La Fable~
+1 0 0
 D0
 ~
 ~
@@ -513,6 +551,7 @@ S
 #4040
 Intersection of Center Street and Merchant Boulevard~
 Intersection of Center Street and Merchant Boulevard~
+1 0 0
 D0
 ~
 ~
@@ -529,6 +568,7 @@ S
 #4041
 Alley to Temple Way~
 Alley to Temple Way~
+1 0 0
 D0
 ~
 ~
@@ -545,6 +585,7 @@ S
 #4042
 Temple Way~
 Temple Way~
+1 0 0
 D1
 ~
 ~
@@ -557,6 +598,7 @@ S
 #4043
 Town Center~
 Town Center~
+1 0 0
 D0
 ~
 ~
@@ -577,6 +619,7 @@ S
 #4044
 Central Portal~
 Central Portal~
+1 0 0
 D0
 ~
 ~
@@ -597,6 +640,7 @@ S
 #4045
 Town Center~
 Town Center~
+1 0 0
 D0
 ~
 ~
@@ -613,6 +657,7 @@ S
 #4046
 The Heavenly Barrel~
 The Heavenly Barrel~
+1 0 0
 D0
 ~
 ~
@@ -621,6 +666,7 @@ S
 #4047
 Outside the Cobalt Forge~
 Outside the Cobalt Forge~
+1 0 0
 D0
 ~
 ~
@@ -637,6 +683,7 @@ S
 #4048
 The Cobalt Forge~
 The Cobalt Forge~
+1 0 0
 D3
 ~
 ~
@@ -645,6 +692,7 @@ S
 #4049
 Alley to Main Street~
 Alley to Main Street~
+1 0 0
 D0
 ~
 ~
@@ -657,6 +705,7 @@ S
 #4050
 Town Center~
 Town Center~
+1 0 0
 D0
 ~
 ~
@@ -669,6 +718,7 @@ S
 #4051
 Town Center~
 Town Center~
+1 0 0
 D0
 ~
 ~
@@ -689,6 +739,7 @@ S
 #4052
 Town Center~
 Town Center~
+1 0 0
 D0
 ~
 ~
@@ -701,6 +752,7 @@ S
 #4053
 Outside the Tanned Hide~
 Outside the Tanned Hide~
+1 0 0
 D0
 ~
 ~
@@ -717,6 +769,7 @@ S
 #4054
 The Tanned Hide~
 The Tanned Hide~
+1 0 0
 D3
 ~
 ~
@@ -725,6 +778,7 @@ S
 #4055
 Outside the Temple of Balance~
 Outside the Temple of Balance~
+1 0 0
 D0
 ~
 ~
@@ -737,6 +791,7 @@ S
 #4056
 Dungeon Drive~
 Dungeon Drive~
+1 0 0
 D0
 ~
 ~
@@ -749,6 +804,7 @@ S
 #4057
 Merchant Boulevard~
 Merchant Boulevard~
+1 0 0
 D0
 ~
 ~
@@ -761,6 +817,7 @@ S
 #4058
 Temple of Balance~
 Temple of Balance~
+1 0 0
 D0
 ~
 ~
@@ -773,6 +830,7 @@ S
 #4059
 Outside the Temple of Balance~
 Outside the Temple of Balance~
+1 0 0
 D1
 ~
 ~
@@ -785,6 +843,7 @@ S
 #4060
 Outside the Origination Institute~
 Outside the Origination Institute~
+1 0 0
 D1
 ~
 ~
@@ -801,6 +860,7 @@ S
 #4061
 Intersection of College Way and Dungeon Drive~
 Intersection of College Way and Dungeon Drive~
+1 0 0
 D0
 ~
 ~
@@ -817,6 +877,7 @@ S
 #4062
 Intersection of College Way and Prophecy Place~
 Intersection of College Way and Prophecy Place~
+1 0 0
 D1
 ~
 ~
@@ -829,6 +890,7 @@ S
 #4063
 College Way~
 College Way~
+1 0 0
 D0
 ~
 ~
@@ -841,6 +903,7 @@ S
 #4064
 Origination Institute~
 Origination Institute~
+1 0 0
 D0
 ~
 ~
