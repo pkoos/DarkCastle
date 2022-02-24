@@ -897,6 +897,7 @@ vector<string> get_cont_names()
   tmp.push_back("Behind the Mirror");
   tmp.push_back("Planes of Existence");
   tmp.push_back("Forbidden Island");
+  tmp.push_back("Origination");
   tmp.push_back("Other");
   return tmp;
 }
