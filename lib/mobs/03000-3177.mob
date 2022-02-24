@@ -825,7 +825,7 @@ executioner~
 The Executioner (currently non-loading)~
 The executioner is here polishing his blade.
 ~
-““““““““““““““““““““““““““““““““““““““““““““““““““““““×~
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½~
 788294 0 -1
 2621448 0 0 -1
 920 1 50
@@ -3864,17 +3864,5 @@ clothing.  A long bow in his hands, he keeps watch for enemies of the town.
 10386 128700
 8 8 1 0 0 0
 S
-#10009
-meta shopkeeper physician phil~
-Meta-Physician~
-The Meta-Physician stands here.
-~
-~
-296774 0 -1
-0 0 0 -1
-0 0 109
-20 10 0d1+0 1d1+0
-0 0
-8 8 0 0 0 0
-S
+
 $~
