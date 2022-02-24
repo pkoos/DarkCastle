@@ -53,3 +53,8 @@ One folder you will need that will not be immediately apparent is a save folder 
 where A is the first initial of your character's name. You can create one for all letters if you'd like, or just the ones you'll use.
 
 Once the folders and files are created, you should be good to go! Be warned, this is an open-source project with the bare minimums of areas, mobs and objects, and as such there will be crashes when you attempt to go to a location that does not have an exit.
+
+To connect to the game, you can use a client such as Mudlet, or connect directly from terminal. Type this command to connect
+```
+telnet localhost 6969
+```
