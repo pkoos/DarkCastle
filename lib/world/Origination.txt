@@ -1,0 +1,784 @@
+#4000
+Entrance to the Dungeon~
+D2
+~
+~
+0 -1 4004
+S
+#4001
+Starlight~
+D2
+~
+~
+0 -1 4009
+S
+#4002
+Walking Bear Outfitter~
+D2
+~
+~
+0 -1 4012
+S
+#4003
+Sew Nice~
+D2
+~
+~
+0 -1 4013
+S
+#4004
+Dungeon Drive~
+D0
+~
+~
+0 -1 4000
+D2
+~
+~
+0 -1 4015
+S
+#4005
+The Guild~
+D2
+~
+~
+0 -1 4016
+S
+#4006
+Outside the Red Commands~
+D1
+~
+~
+0 -1 4007
+D2
+~
+~
+0 -1 4018
+S
+#4007
+The Red Commands~
+D3
+~
+~
+0 -1 4006
+S
+#4008
+Heartsong Meadows~
+D1
+~
+~
+0 -1 4009
+S
+#4009
+Outside the Starlight~
+D0
+~
+~
+0 -1 4001
+D1
+~
+~
+0 -1 4010
+D3
+~
+~
+0 -1 4008
+S
+#4010
+Outside the Careful Moon~
+D1
+~
+~
+0 -1 4011
+D2
+~
+~
+0 -1 4021
+D3
+~
+~
+0 -1 4010
+S
+#4011
+Outside the Velvet Pot~
+D1
+~
+~
+0 -1 4012
+D2
+~
+~
+0 -1 4022
+D3
+~
+~
+0 -1 4010
+S
+#4012
+Outside the Walking Bear Outfitter~
+D0
+~
+~
+0 -1 4002
+D1
+~
+~
+0 -1 4013
+D3
+~
+~
+0 -1 4011
+S
+#4013
+Main Street~
+D1
+~
+~
+0 -1 4014
+D2
+~
+~
+0 -1 4024
+D3
+~
+~
+0 -1 4012
+S
+#4014
+Outside Sew Nice~
+D0
+~
+~
+0 -1 4003
+D1
+~
+~
+0 -1 4015
+D3
+~
+~
+0 -1 4013
+S
+#4015
+Intersection of Main Street and Dungeon Drive~
+D0
+~
+~
+0 -1 4004
+D1
+~
+~
+0 -1 4016
+D2
+~
+~
+0 -1 4026
+D3
+~
+~
+0 -1 4014
+S
+#4016
+Intersection of Main Street and Prophecy Place~
+D0
+~
+~
+0 -1 4005
+D1
+~
+~
+0 -1 4017
+D2
+~
+~
+0 -1 4027
+D3
+~
+~
+0 -1 4015
+S
+#4017
+Outside the Bronze Griffin~
+D1
+~
+~
+0 -1 4018
+D2
+~
+~
+0 -1 4028
+D3
+~
+~
+0 -1 4016
+S
+#4018
+Intersection of Main Street and Merchant Boulevard~
+D0
+~
+~
+0 -1 4006
+D1
+~
+~
+0 -1 4019
+D2
+~
+~
+0 -1 4029
+D3
+~
+~
+0 -1 4017
+S
+#4019
+Alleyway~
+D1
+~
+~
+0 -1 4020
+D3
+~
+~
+0 -1 4018
+S
+#4020
+Outside of Crumb~
+D2
+~
+~
+0 -1 4031
+D3
+~
+~
+0 -1 4019
+S
+#4021
+Careful Moon~
+D0
+~
+~
+0 -1 4010
+S
+#4022
+Velvet Pot~
+D0
+~
+~
+0 -1 4011
+S
+#4023
+The Common Tome~
+D1
+~
+~
+0 -1 4024
+S
+#4024
+Alley from Main Street~
+D0
+~
+~
+0 -1 4013
+D1
+~
+~
+0 -1 4025
+D2
+~
+~
+0 -1 4041
+D3
+~
+~
+0 -1 4023
+S
+#4025
+Odds and Ends~
+D3
+~
+~
+0 -1 4024
+S
+#4026
+Dungeon Drive~
+D0
+~
+~
+0 -1 4015
+D2
+~
+~
+0 -1 4035
+S
+#4027
+Outside the Bronze Griffin~
+D0
+~
+~
+0 -1 4016
+D1
+~
+~
+0 -1 4028
+D2
+~
+~
+0 -1 4037
+S
+#4028
+The Bronze Griffin~
+D0
+~
+~
+0 -1 4017
+D3
+~
+~
+0 -1 4027
+S
+#4029
+Outside Drumphy's Toys~
+D0
+~
+~
+0 -1 4018
+D2
+~
+~
+0 -1 4033
+S
+#4030
+Drumphy's Toys~
+D3
+~
+~
+0 -1 4029
+S
+#4031
+Crumb~
+D0
+~
+~
+0 -1 4020
+S
+#4032
+La Fable~
+D2
+~
+~
+0 -1 4039
+S
+#4033
+Merchant Boulevard~
+D0
+~
+~
+0 -1 4029
+D2
+~
+~
+0 -1 4040
+S
+#4034
+Town Center~
+D1
+~
+~
+0 -1 4035
+D2
+~
+~
+0 -1 4043
+S
+#4035
+Town Center~
+D0
+~
+~
+0 -1 4026
+D1
+~
+~
+0 -1 4036
+D2
+~
+~
+0 -1 4044
+D3
+~
+~
+0 -1 4034
+S
+#4036
+Town Center~
+D1
+~
+~
+0 -1 4037
+D2
+~
+~
+0 -1 4045
+D3
+~
+~
+0 -1 4035
+S
+#4037
+Intersection of Center Street and Prophecy Place~
+D0
+~
+~
+0 -1 4027
+D1
+~
+~
+0 -1 4038
+D3
+~
+~
+0 -1 4036
+S
+#4038
+Outside the Heavenly Barrel~
+D1
+~
+~
+0 -1 4039
+D2
+~
+~
+0 -1 4046
+D3
+~
+~
+0 -1 4037
+S
+#4039
+Outside of La Fable~
+D0
+~
+~
+0 -1 4032
+D1
+~
+~
+0 -1 4040
+D3
+~
+~
+0 -1 4038
+S
+#4040
+Intersection of Center Street and Merchant Boulevard~
+D0
+~
+~
+0 -1 4033
+D2
+~
+~
+0 -1 4047
+D3
+~
+~
+0 -1 4039
+S
+#4041
+Alley to Temple Way~
+D0
+~
+~
+0 -1 4024
+D1
+~
+~
+0 -1 4042
+D3
+~
+~
+0 -1 4049
+S
+#4042
+Temple Way~
+D1
+~
+~
+0 -1 4043
+D3
+~
+~
+0 -1 4041
+S
+#4043
+Town Center~
+D0
+~
+~
+0 -1 4034
+D1
+~
+~
+0 -1 4044
+D2
+~
+~
+0 -1 4050
+D3
+~
+~
+0 -1 4042
+S
+#4044
+Central Portal~
+D0
+~
+~
+0 -1 4035
+D1
+~
+~
+0 -1 4045
+D2
+~
+~
+0 -1 4051
+D3
+~
+~
+0 -1 4043
+S
+#4045
+Town Center~
+D0
+~
+~
+0 -1 4036
+D2
+~
+~
+0 -1 4052
+D3
+~
+~
+0 -1 4044
+S
+#4046
+The Heavenly Barrel~
+D0
+~
+~
+0 -1 4038
+S
+#4047
+Outside the Cobalt Forge~
+D0
+~
+~
+0 -1 4040
+D1
+~
+~
+0 -1 4048
+D2
+~
+~
+0 -1 4053
+S
+#4048
+The Cobalt Forge~
+D3
+~
+~
+0 -1 4047
+S
+#4049
+Alley to Main Street~
+D0
+~
+~
+0 -1 4041
+D2
+~
+~
+0 -1 4055
+S
+#4050
+Town Center~
+D0
+~
+~
+0 -1 4043
+D1
+~
+~
+0 -1 4051
+S
+#4051
+Town Center~
+D0
+~
+~
+0 -1 4044
+D1
+~
+~
+0 -1 4052
+D2
+~
+~
+0 -1 4056
+D3
+~
+~
+0 -1 4040
+S
+#4052
+Town Center~
+D0
+~
+~
+0 -1 4045
+D3
+~
+~
+0 -1 4051
+S
+#4053
+Outside the Tanned Hide~
+D0
+~
+~
+0 -1 4047
+D1
+~
+~
+0 -1 4054
+D2
+~
+~
+0 -1 4057
+S
+#4054
+The Tanned Hide~
+D3
+~
+~
+0 -1 4053
+S
+#4055
+Outside the Temple of Balance~
+D0
+~
+~
+0 -1 4049
+D2
+~
+~
+0 -1 4058
+S
+#4056
+Dungeon Drive~
+D0
+~
+~
+0 -1 4051
+D2
+~
+~
+0 -1 4061
+S
+#4057
+Merchant Boulevard~
+D0
+~
+~
+0 -1 4057
+D2
+~
+~
+0 -1 4063
+S
+#4058
+Temple of Balance~
+D0
+~
+~
+0 -1 4055
+D1
+~
+~
+0 -1 4059
+S
+#4059
+Outside the Temple of Balance~
+D1
+~
+~
+0 -1 4060
+D3
+~
+~
+0 -1 4058
+S
+#4060
+Outside the Origination Institute~
+D1
+~
+~
+0 -1 4061
+D2
+~
+~
+0 -1 4064
+D3
+~
+~
+0 -1 4059
+S
+#4061
+Intersection of College Way and Dungeon Drive~
+D0
+~
+~
+0 -1 4056
+D1
+~
+~
+0 -1 4062
+D2
+~
+~
+0 -1 4060
+S
+#4062
+Intersection of College Way and Prophecy Place~
+D1
+~
+~
+0 -1 4063
+D3
+~
+~
+0 -1 4061
+S
+#4063
+College Way~
+D0
+~
+~
+0 -1 4057
+D3
+~
+~
+0 -1 4062
+S
+#4064
+Origination Institute~
+D0
+~
+~
+0 -1 4060
+S
+$~
