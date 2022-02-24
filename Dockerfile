@@ -15,8 +15,7 @@ RUN ln -s /usr/lib/libpq.so.5 /usr/lib/libpq.so
 RUN scons -c
 RUN scons -j128
 
-WORKDIR /srv/dcastle.6969/lib
-
-#CMD ["/srv/dcastle2/git/DarkCastle/src/dcastle", "-p6969"]
+WORKDIR /srv/dcastle2/git/DarkCastle/src
+EXPOSE 6969
 
 LABEL Name=darkcastle Version=0.0.1
