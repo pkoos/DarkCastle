@@ -73,6 +73,8 @@ const unsigned int NOWHERE = 0;
 #define DOWN            5
 #define MAX_DIRS        6
 
+/* For exit_info */
+
 #define EX_ISDOOR       1
 #define EX_CLOSED       2
 #define EX_LOCKED       4
