@@ -6,6 +6,7 @@
 | Description:  This file contains all of the room header file/constant
 |   information.  It also contains information about the 'world' structs.
 */
+#include "Direction.h"
 #include "RoomFlags.h"
 #include "structs.h" // ubyte
 #include "obj.h" // ubyte
@@ -15,8 +16,6 @@
 // The following defs are for room_data
 
 const unsigned int NOWHERE = 0;
-
-
 
 /* Bitvector For 'temp_room_flags' 
    temp_room_flags are NOT in the world file and cannot be saved or added at boot time
@@ -29,16 +28,6 @@ const unsigned int NOWHERE = 0;
 /* Internal flags */
 #define iNO_TRACK   1
 #define iNO_MAGIC   1<<1
-
-/* For 'dir_option' */
-
-#define NORTH           0
-#define EAST            1
-#define SOUTH           2
-#define WEST            3
-#define UP              4
-#define DOWN            5
-#define MAX_DIRS        6
 
 /* For exit_info */
 
