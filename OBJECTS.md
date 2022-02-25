@@ -9,7 +9,7 @@ First off, here is the format for an object:
 name~
 short_desc~
 desc~
-action_description~
+act_desc~
 type_flag extra_flags wear_flags size
 v1 v2 v3 v4 eq_level
 weight cost more_flags
