@@ -28,48 +28,57 @@ This is the end of file marker:
 $~
 ```
 
-## <ins>`onum`</ins>
-
-the id given in the .obj file
-
-## <ins>`name`
-
-The name used to pick up the item. Can be multiple words, separated by spaces.
-
-## <ins>`short_desc`
-
-What appears when the item is worn, in your inventory, etc.
-
-## <ins>`desc`
-
-What you see when the item is in a room.
-
 ## <ins>`act_desc`
-
 What displays when the item is used. Optional, with 'Fixed.' appearing when it is not included.
 
-## <ins>`type_flag` - obj.h
+## <ins>`cost`
+The cost of the item
 
-An integer based on the item type.
+## <ins>`curr_desc`
+This is extra description, and is an optional section. This only appears if there is extra description is completed.
+
+## <ins>`curr_keyword`
+This is extra description, and is an optional section. This only appears if there is extra description, and is the keyword to see the extra description.
+
+These two sections are not unique, you can have many different locations and modifiers, each under its own A from above.
+
+## <ins>`desc`
+What you see when the item is in a room.
+
+## <ins>`eq_level`
+The level of the item.
 
 ## <ins>`extra_flags` - obj.h
-
 A bitvector for item extras. 
 
-## <ins>`wear_flags` - obj.h
+## <ins>`location`</ins> - player.h
+This is an apply type, and can be searched with APPLY_ in the above file.
 
-A bitvector for the item wear location.
+## <ins>`modifier`
+The amount to give to the apply. 
 
-## <ins>`size` - obj.h
+## <ins>`more_flags`</ins> - obj.h
+A bitvector of other optional flags.
 
+## <ins>`name`
+The name used to pick up the item. Can be multiple words, separated by spaces.
+
+## <ins>`onum`</ins>
+the id given in the .obj file
+
+## <ins>`short_desc`
+What appears when the item is worn, in your inventory, etc.
+
+## <ins>`size`</ins> - obj.h
 The bitvector for the item size.
 
-## <ins>`v1 - v4`
+## <ins>`type_flag` - obj.h
+An integer based on the item type.
 
+## <ins>`v1 - v4`
 What these do depends on the item type.
 
 ### <ins>ITEM_LIGHT       1
-
 v1 - Colour  
 v2 - Type  
 v3 - hours  
@@ -166,36 +175,8 @@ v2 - interval, again
 v3 - unused  
 v4 - unused  
 
-## <ins>`eq_level`
-
-The level of the item.
+## <ins>`wear_flags` - obj.h
+A bitvector for the item wear location.
 
 ## <ins>`weight`
-
 The weight of the item
-
-## <ins>`cost`
-
-The cost of the item
-
-## <ins>`more_flags` - obj.h
-
-A bitvector of other optional flags.
-
-## <ins>`curr_keyword`
-
-This is extra description, and is an optional section. This only appears if there is extra description, and is the keyword to see the extra description.
-
-## <ins>`curr_desc`
-
-This is extra description, and is an optional section. This only appears if there is extra description is completed.
-
-These two sections are not unique, you can have many different locations and modifiers, each under its own A from above.
-
-## <ins>`location` - player.h
-
-This is an apply type, and can be searched with APPLY_ in the above file.
-
-## <ins>`modifier`
-
-The amount to give to the apply. 
