@@ -21,6 +21,10 @@ extern "C" {
   #include <time.h>
 }
 
+#include "WorldFileStatus.h"
+#include "Continents.h"
+#include "BanAction.h"
+#include "ZoneFlags.h"
 #include "character.h"
 #include "weather.h"
 #include "handler.h"
@@ -58,26 +62,7 @@ struct error_range_over {};
 #define INT_MIN     -32768
 #endif
 
-/* Zone Flag Bits */
-
-#define ZONE_NO_TELEPORT   1
-#define ZONE_IS_TOWN       1<<1  // Keep out the really bad baddies that are STAY_NO_TOWN
-#define ZONE_MODIFIED      1<<2
-#define ZONE_UNUSED        1<<3
-#define ZONE_BPORT	       1<<4
-#define ZONE_NOCLAIM       1<<5 // cannot claim this area
-#define ZONE_NOHUNT        1<<6
-// Remember to update const.C  zone_bits[] if you change this
-
-
 #define VERSION_NUMBER    2     /* used for changing pfile format */
-
-/* ban system stuff */
-
-#define BAN_NOT        0
-#define BAN_NEW        1
-#define BAN_SELECT     2
-#define BAN_ALL        3
 
 #define BANNED_FILE   "banned"
 
@@ -92,21 +77,6 @@ struct ban_list_element {
 };
 
 extern std::vector<std::string> continent_names;
-
-enum Continents 
-{
-  NO_CONTINENT = 1,	//1
-  SORPIGAL_CONTINENT,	//2
-  FAR_REACH,		//3	
-  DIAMOND_ISLE,		//4
-  UNDERDARK,    	//5
-  BEHIND_THE_MIRROR,	//6
-  PLANES_OF_EXISTANCE,	//7
-  FORBIDDEN_ISLAND,	//8
-  ORIGINATION, //9
-  OTHER_CONTINENT,	//10
-  MAX_CONTINENTS 	//for iteration
-};
 
 /* public procedures in db.c */
 void set_zone_modified_zone(long room);
@@ -279,11 +249,6 @@ struct help_index_element
 };
 
 extern int exp_table[61+1];
-
-#define WORLD_FILE_MODIFIED        1
-#define WORLD_FILE_IN_PROGRESS     1<<1
-#define WORLD_FILE_READY           1<<2
-#define WORLD_FILE_APPROVED        1<<3
 
 struct world_file_list_item
 {
