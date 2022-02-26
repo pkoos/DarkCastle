@@ -6,7 +6,6 @@
 
 #include "BanAction.h"
 #include "Pulses.h"
-#include "character.h"
 #include <string>
 
 using namespace std;
@@ -31,6 +30,8 @@ struct pulse_info {
 	uint64_t duration;
 	char name[];
 };
+
+#include "character.h"
 
 //void     write_to_output(const char *txt, struct descriptor_data *d);
 void     write_to_output(const char *txt, struct descriptor_data *d);
