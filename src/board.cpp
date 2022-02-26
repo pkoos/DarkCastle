@@ -46,6 +46,10 @@ extern "C"
   #include <string.h> // memset()
   #include <ctype.h> // isspace(), isdigit()
 }
+
+#include "ClassIds.h"
+#include "ClanIds.h"
+#include "BoardType.h"
 #include "room.h"
 #include "obj.h"
 #include "player.h" // MAX_*
@@ -101,45 +105,6 @@ void board_load_board();
 int board_show_board(CHAR_DATA *ch, char *arg, std::map<std::string, BOARD_INFO>::iterator board);
 int fwrite_string(char *buf, FILE *fl);
 void new_edit_board_unlock_board(CHAR_DATA *ch, int abort);
-
-#define ANY_BOARD 	0
-#define CLASS_BOARD 	1
-#define CLAN_BOARD 	2
-
-#define NO_OWNER 		-1
-#define CLAN_ULNHYRR 		1
-#define CLAN_DARKTIDE	 	2
-#define CLAN_ARCANA 		3
-#define CLAN_DARKENED 		4
-#define CLAN_DCGUARD 		5
-#define CLAN_TIMEWARP		6
-#define CLAN_CONTINUUM      	7
-#define CLAN_MERC		8
-#define CLAN_NAZGUL		9
-#define CLAN_BLACKAXE		10
-#define CLAN_TRIAD		11
-#define CLAN_KOBAL		12
-#define CLAN_SLACKERS		13
-#define CLAN_KEHUA		14
-#define CLAN_ASKANI		15
-#define CLAN_HOUSELESSROGUES	16
-#define CLAN_THEHORDE		17
-#define CLAN_ANARCHIST		18
-#define CLAN_SOLARIS		19
-#define CLAN_SINDICATE		20
-
-#define CLASS_MAGE		1
-#define CLASS_CLERIC		2
-#define CLASS_THIEF		3
-#define CLASS_WARRIOR		4
-#define CLASS_ANTI		5
-#define CLASS_PAL		6
-#define CLASS_BARB		7
-#define CLASS_MONK		8
-#define CLASS_RANGER		9
-#define CLASS_BARD		10
-#define CLASS_DRUID		11
-
 
 struct RESERVATION_DATA
 {
