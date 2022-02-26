@@ -41,7 +41,7 @@ A number designating the direction of the exit from the room you are in.
 4: Up  
 5: Down  
 
-## <ins>`exit_info`</ins> - room.h
+## <ins>`exit_info`</ins> - ExitInfo.h
 A bitvector of exit information.
 
 ## <ins>`extra_desc`
@@ -59,13 +59,13 @@ The title of the room when you are standing in it.
 ## <ins>`room_desc`
 A description of the room you are in. This section is ended with a tilde. Make sure the tilde is BELOW the description, as this is what adds the newline.
 
-## <ins>`room_flags`</ins> - room.h
+## <ins>`room_flags`</ins> - RoomFlags.h
 A bitvector of room flags
 
 ## <ins>`room_num`
 The id of the room. Must be unique, and in ascending order.
 
-## <ins>`sector_type`</ins> - room.h
+## <ins>`sector_type`</ins> - SectorType.h
 An id for the sector type.
 
 ## <ins>`zone_num`
