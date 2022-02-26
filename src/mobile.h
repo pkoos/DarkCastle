@@ -14,10 +14,10 @@ using namespace std;
 
 
 void rebuild_rnum_references(int startAt, int type);
-void    mprog_driver            ( char* com_list, CHAR_DATA* mob,
-                                       CHAR_DATA* actor, OBJ_DATA* obj,
-                                       void* vo, struct mprog_throw_type *thrw, CHAR_DATA *rndm );
-char *  mprog_next_command      ( char* clist );
+void mprog_driver(char * com_list, 
+  CHAR_DATA * mob, CHAR_DATA * actor, OBJ_DATA * obj, 
+  void* vo, struct mprog_throw_type * thrw, CHAR_DATA * rndm);
+char * mprog_next_command(char * clist);
 
 
 bool charExists(CHAR_DATA *ch);
