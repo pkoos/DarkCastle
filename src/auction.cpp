@@ -22,6 +22,7 @@ void load_auction_tickets()
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "AuctionBounds.h"
 #include "obj.h"
 #include "spells.h"
 #include "player.h" 
@@ -46,10 +47,6 @@ void load_auction_tickets()
 #include "inventory.h"
 
 using namespace std;
-
-#define auction_duration 1209600
-#define AUC_MIN_PRICE 1000
-#define AUC_MAX_PRICE 2000000000
 
 struct AuctionTicket;
 obj_data * ticket_object_load(map<unsigned int, AuctionTicket>::iterator Item_it, int ticket);
