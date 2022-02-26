@@ -16,6 +16,7 @@
 #ifndef OBJ_H_
 #define OBJ_H_
 
+#include "ItemExtra.h"
 #include "WearLocation.h"
 #include "ItemType.h"
 #include "structs.h" // ubyte
