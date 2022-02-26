@@ -4,10 +4,11 @@
 #ifndef __COMM_H__
 #define __COMM_H__
 
-#include "BanAction.h"
-#include "Pulses.h"
+
 #include "character.h"
 #include <string>
+#include "BanAction.h"
+#include "Pulses.h"
 
 using namespace std;
 typedef int socket_t;
