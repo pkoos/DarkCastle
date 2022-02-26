@@ -16,6 +16,10 @@
 #ifndef OBJ_H_
 #define OBJ_H_
 
+#include "EquipmentLocation.h"
+#include "ContainerStatus.h"
+#include "LiquidType.h"
+#include "UtilityType.h"
 #include "ItemMoreFlags.h"
 #include "ItemExtra.h"
 #include "WearLocation.h"
@@ -25,50 +29,13 @@
 
 /* The following defs are for obj_data  */
 
-
-
-
 /* Bitvector for 'size' */
 #define SIZE_ANY		1U
 #define SIZE_SMALL		1U<<1
 #define SIZE_MEDIUM		1U<<2
 #define SIZE_LARGE		1U<<3
 
-/* Different types of 'utility' items */
 
-#define UTILITY_CATSTINK        1
-#define UTILITY_EXIT_TRAP       2
-#define UTILITY_MOVEMENT_TRAP   3
-#define UTILITY_MORTAR          4 
-#define UTILITY_ITEM_MAX        4 
-
-/* Some different kind of liquids */
-#define LIQ_WATER       0
-#define LIQ_BEER        1
-#define LIQ_WINE        2
-#define LIQ_ALE         3
-#define LIQ_DARKALE     4
-#define LIQ_WHISKY      5
-#define LIQ_LEMONADE    6
-#define LIQ_FIREBRT     7
-#define LIQ_LOCALSPC    8
-#define LIQ_SLIME       9
-#define LIQ_MILK        10
-#define LIQ_TEA         11
-#define LIQ_COFFEE      12
-#define LIQ_BLOOD       13
-#define LIQ_SALTWATER   14
-#define LIQ_COKE        15
-#define LIQ_GATORADE    16
-#define LIQ_HOLYWATER   17
-#define LIQ_INK         18
-
-/* for containers  - value[1] */
-
-#define CONT_CLOSEABLE      1
-#define CONT_PICKPROOF      2
-#define CONT_CLOSED         4
-#define CONT_LOCKED         8
 
 struct active_object
 {
@@ -139,32 +106,6 @@ struct obj_data {
 	time_t save_expiration;
 };
 
-/* For 'equipment' */
-
-#define WEAR_LIGHT       0
-#define WEAR_FINGER_R    1
-#define WEAR_FINGER_L    2
-#define WEAR_NECK_1      3
-#define WEAR_NECK_2      4
-#define WEAR_BODY        5
-#define WEAR_HEAD        6
-#define WEAR_LEGS        7
-#define WEAR_FEET        8
-#define WEAR_HANDS       9
-#define WEAR_ARMS       10
-#define WEAR_SHIELD     11
-#define WEAR_ABOUT      12
-#define WEAR_WAISTE     13
-#define WEAR_WRIST_R    14
-#define WEAR_WRIST_L    15
-#define WIELD           16
-#define SECOND_WIELD    17
-#define HOLD            18
-#define HOLD2		    19
-#define WEAR_FACE       20
-#define WEAR_EAR_L      21
-#define WEAR_EAR_R      22
-//#define WEAR_MAX        22
 
 /* ***********************************************************************
 *  file element for object file. BEWARE: Changing it will ruin the file  *
