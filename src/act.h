@@ -42,9 +42,9 @@ void send_message(const char *str, CHAR_DATA *to);
 // Constants
 //--
 // Undefine the old ones if this header is included
-#undef TO_ROOM
-#undef TO_VICT
-#undef TO_CHAR
+// #undef TO_ROOM
+// #undef TO_VICT
+// #undef TO_CHAR
 
 // These constants go in the flags part (optional -- 0 for none)
 #define DEFAULT       0    // "someone" if invisible, sleepers skipped
