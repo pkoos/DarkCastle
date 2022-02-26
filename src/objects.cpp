@@ -118,7 +118,7 @@ int eq_max_durability(obj_data *obj)
   return amount;
 }
 
-int eq_current_damage(obj_data * obj)
+int eq_current_durability(obj_data * obj)
 {
   for(int i = 0; i < obj->num_affects; i++) 
     if(obj->affected[i].location == APPLY_DAMAGED)
@@ -2408,7 +2408,7 @@ bool fullSave(obj_data *obj)
     if (!obj)
 	return 0;
 
-  if (eq_current_damage(obj))
+  if (eq_current_durability(obj))
     return 1;
 
   obj_data *tmp_obj = get_obj(GET_OBJ_VNUM(obj));

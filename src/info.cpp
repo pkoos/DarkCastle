@@ -189,7 +189,7 @@ char *find_ex_description(char *word, struct extra_descr_data *list)
 
 const char *item_condition(struct obj_data *object)
 {
-         int percent = 100 - (int)(100 * ((float)eq_current_damage(object) / (float)eq_max_durability(object)));
+         int percent = 100 - (int)(100 * ((float)eq_current_durability(object) / (float)eq_max_durability(object)));
 
          if (percent >= 100)
             return " [$B$2Excellent$R]";
@@ -301,7 +301,7 @@ void show_obj_to_char(struct obj_data *object, struct char_data *ch, int mode)
          )
       {
 	 strcat(buffer, item_condition(object));/*
-         percent = 100 - (int)(100 * ((float)eq_current_damage(object) / (float)eq_max_durability(object)));
+         percent = 100 - (int)(100 * ((float)eq_current_durability(object) / (float)eq_max_durability(object)));
 
          if (percent >= 100)
             strcat(buffer, " [$B$2Excellent$R]");

@@ -6146,7 +6146,7 @@ void string_to_file(ofstream &f, char *string)
 void copySaveData(obj_data *target, obj_data *source)
 {
 	int i;
-	if ((i = eq_current_damage(source)) > 0)
+	if ((i = eq_current_durability(source)) > 0)
 	{
 		for (; i > 0; i--)
 			damage_eq_once(target);

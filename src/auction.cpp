@@ -1702,7 +1702,7 @@ void AuctionHouse::AddItem(CHAR_DATA *ch, OBJ_DATA *obj, unsigned int price, str
     return;
   }
 
-  if(eq_current_damage(obj) > 0)
+  if(eq_current_durability(obj) > 0)
   {
     send_to_char("The Consignment Broker curtly informs you that all items sold must be in $B$2Excellent Condition$R.\n\r", ch);
     return;

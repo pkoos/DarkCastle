@@ -117,7 +117,7 @@ struct obj_file_elem
 // functions from objects.cpp
 int eq_max_durability(obj_data * obj);
 int damage_eq_once(obj_data * obj);
-int eq_current_damage(obj_data * obj);
+int eq_current_durability(obj_data * obj);
 void eq_remove_damage(obj_data * obj);
 void add_obj_affect(obj_data * obj, int loc, int mod);
 void remove_obj_affect_by_index(obj_data * obj, int index);

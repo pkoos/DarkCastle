@@ -115,7 +115,7 @@ int repair_guy(struct char_data *ch, struct obj_data *obj, int cmd, char *arg, s
 		return eSUCCESS;
 	}
 
-	eqdam = eq_current_damage(obj);
+	eqdam = eq_current_durability(obj);
 
 	if (eqdam <= 0) {
 		do_say(owner, "Looks fine to me.", 9);
@@ -183,7 +183,7 @@ int super_repair_guy(struct char_data *ch, struct obj_data *obj, int cmd, char *
 	act("\n\r$N examines $p...", ch, obj, owner, TO_CHAR, 0);
 	act("\n\r$N examines $p...", ch, obj, owner, TO_ROOM, INVIS_NULL);
 
-	eqdam = eq_current_damage(obj);
+	eqdam = eq_current_durability(obj);
 
 	if (eqdam <= 0) {
 		do_say(owner, "Looks fine to me.", 9);
@@ -271,7 +271,7 @@ int repair_shop(struct char_data *ch, struct obj_data *obj, int cmd, char *arg, 
 	act("\n\r$N examines $p...", ch, obj, owner, TO_CHAR, 0);
 	act("\n\r$N examines $p...", ch, obj, owner, TO_ROOM, INVIS_NULL);
 
-	eqdam = eq_current_damage(obj);
+	eqdam = eq_current_durability(obj);
 
 	if (eqdam <= 0) {
 		do_say(owner, "Looks fine to me.", 9);
@@ -704,7 +704,7 @@ int gl_repair_shop(struct char_data *ch, struct obj_data *obj, int cmd, char *ar
 	act("\n\r$N examines $p...", ch, obj, owner, TO_CHAR, 0);
 	act("\n\r$N examines $p...", ch, obj, owner, TO_ROOM, INVIS_NULL);
 
-	eqdam = eq_current_damage(obj);
+	eqdam = eq_current_durability(obj);
 
 	if (eqdam <= 0) {
 		do_say(owner, "Looks fine to me.", 9);
