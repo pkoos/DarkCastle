@@ -5558,7 +5558,7 @@ void reset_char(CHAR_DATA *ch)
 	ch->carry_items = 0;
 
 	switch (GET_CLASS(ch)) {
-	case CLASS_MAGE:
+	case CLASS_MAGIC_USER:
 		GET_AC(ch) = 200;
 		break;
 	case CLASS_DRUID:
@@ -5708,7 +5708,7 @@ void init_char(CHAR_DATA *ch)
 	ch->move = GET_MAX_MOVE(ch);
 
 	switch (GET_CLASS(ch)) {
-	case CLASS_MAGE:
+	case CLASS_MAGIC_USER:
 		GET_AC(ch) = 200;
 		break;
 	case CLASS_DRUID:

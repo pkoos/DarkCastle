@@ -1638,7 +1638,7 @@ void char_to_store(CHAR_DATA *ch, struct char_file_u *st, struct time_data & tmp
 //  st->afected_by[x] = -1;
   } else { 
     switch(GET_CLASS(ch)) {
-      case CLASS_MAGE: st->armor = 150; break;
+      case CLASS_MAGIC_USER: st->armor = 150; break;
       case CLASS_DRUID: st->armor = 140; break;
       case CLASS_CLERIC: st->armor = 130; break;
       case CLASS_ANTI_PAL: st->armor = 120; break;

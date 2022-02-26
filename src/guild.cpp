@@ -727,7 +727,7 @@ int guild(struct char_data *ch, struct obj_data *obj, int cmd, char *arg,
       int skl = -1;
       switch (GET_CLASS(ch))
       {
-      case CLASS_MAGE:
+      case CLASS_MAGIC_USER:
         skl = SKILL_SPELLCRAFT;
         break;
       case CLASS_BARBARIAN:
@@ -890,7 +890,7 @@ int skill_master(struct char_data *ch, struct obj_data *obj, int cmd, char *arg,
   int skl = -1;
   switch (GET_CLASS(ch))
   {
-    case CLASS_MAGE: skl = SKILL_SPELLCRAFT; break;
+    case CLASS_MAGIC_USER: skl = SKILL_SPELLCRAFT; break;
     case CLASS_BARBARIAN: skl = SKILL_BULLRUSH; break;
     case CLASS_PALADIN: skl = SPELL_HOLY_AURA; break;
     case CLASS_MONK: skl = KI_OFFSET+KI_MEDITATION; break;

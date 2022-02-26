@@ -3431,7 +3431,7 @@ void extract_char(CHAR_DATA *ch, bool pull, Trace t) {
 	}
 	/*
 	 switch (GET_CLASS(ch)) {
-	 case CLASS_MAGE: GET_AC(ch) = 200; break;
+	 case CLASS_MAGIC_USER: GET_AC(ch) = 200; break;
 	 case CLASS_DRUID: GET_AC(ch) = 185; break;
 	 case CLASS_CLERIC: GET_AC(ch) = 170; break;
 	 case CLASS_ANTI_PAL: GET_AC(ch) = 155; break;
@@ -3449,7 +3449,7 @@ void extract_char(CHAR_DATA *ch, bool pull, Trace t) {
 	 */
 
 	switch (GET_CLASS(ch)) {
-	case CLASS_MAGE:
+	case CLASS_MAGIC_USER:
 		GET_AC(ch) = 150;
 		break;
 	case CLASS_DRUID:

@@ -957,7 +957,7 @@ void prepare_character_for_sixty(CHAR_DATA *ch) {
 	if (!IS_NPC(ch) && MAX_MORTAL == 60) {
 		int skl = -1;
 		switch (GET_CLASS(ch)) {
-		case CLASS_MAGE:
+		case CLASS_MAGIC_USER:
 			skl = SKILL_SPELLCRAFT;
 			break;
 		case CLASS_BARBARIAN:

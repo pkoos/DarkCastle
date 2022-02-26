@@ -1802,7 +1802,7 @@ int getRealSpellDamage( CHAR_DATA * ch)
   int spell_dam;
   switch(GET_CLASS(ch))
   {
-    case CLASS_MAGE:
+    case CLASS_MAGIC_USER:
     case CLASS_ANTI_PAL:
     case CLASS_BARD:
     case CLASS_RANGER:

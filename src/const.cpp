@@ -229,13 +229,13 @@ vector<profession> fill_professions(void)
 
   p.name = string("warmage");
   p.Name = string("Warmage");
-  p.c_class = CLASS_MAGE;
+  p.c_class = CLASS_MAGIC_USER;
   p.skillno = SKILL_WARMAGE;
   tmp_professions.push_back(p);
 
   p.name = string("spellbinder");
   p.Name = string("Spellbinder");
-  p.c_class = CLASS_MAGE;
+  p.c_class = CLASS_MAGIC_USER;
   p.skillno = SKILL_SPELLBINDER;
   tmp_professions.push_back(p);
 

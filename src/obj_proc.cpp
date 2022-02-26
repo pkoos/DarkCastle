@@ -3444,7 +3444,7 @@ int talkingsword(struct char_data *ch, struct obj_data *obj, int cmd, char *arg,
         buf = "I hate fighting people in platemail. I get such a headache.";
         tmp.push_back(buf);
         break;
-      case CLASS_MAGE:
+      case CLASS_MAGIC_USER:
         buf = "Hey magey, you'd better lose or I'm going to have the gods nerf you again.";
         tmp.push_back(buf);
         break;

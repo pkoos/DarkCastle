@@ -426,7 +426,7 @@ std::map<std::string, BOARD_INFO> populate_boards()
   board_struct.min_write_level = 1;
   board_struct.min_remove_level = IMMORTAL;
   board_struct.type = CLASS_BOARD;
-  board_struct.owner = CLASS_MAGE;
+  board_struct.owner = CLASS_MAGIC_USER;
   board_struct.save_file = "board/mage";
   board_tmp["board guild mage glyph glyphs column"] = board_struct;
 
@@ -458,7 +458,7 @@ std::map<std::string, BOARD_INFO> populate_boards()
   board_struct.min_write_level = 1;
   board_struct.min_remove_level = IMMORTAL;
   board_struct.type = CLASS_BOARD;
-  board_struct.owner = CLASS_ANTI;
+  board_struct.owner = CLASS_ANTI_PAL;
   board_struct.save_file = "board/anti";
   board_tmp["board guild anti journal"] = board_struct;
 
@@ -466,7 +466,7 @@ std::map<std::string, BOARD_INFO> populate_boards()
   board_struct.min_write_level = 1;
   board_struct.min_remove_level = IMMORTAL;
   board_struct.type = CLASS_BOARD;
-  board_struct.owner = CLASS_PAL;
+  board_struct.owner = CLASS_PALADIN;
   board_struct.save_file = "board/pal";
   board_tmp["board guild paladin register"] = board_struct;
 
@@ -474,7 +474,7 @@ std::map<std::string, BOARD_INFO> populate_boards()
   board_struct.min_write_level = 1;
   board_struct.min_remove_level = IMMORTAL;
   board_struct.type = CLASS_BOARD;
-  board_struct.owner = CLASS_BARB;
+  board_struct.owner = CLASS_BARBARIAN;
   board_struct.save_file = "board/barb";
   board_tmp["board guild barb"] = board_struct;
 

@@ -506,7 +506,7 @@ void do_on_login_stuff(char_data *ch)
    {
       switch (GET_CLASS(ch))
       {
-      case CLASS_MAGE:
+      case CLASS_MAGIC_USER:
          GET_AC(ch) += 100;
          break;
       case CLASS_DRUID:
