@@ -8,7 +8,6 @@
 */
 
 /* Bits for 'affected_by' */
-//#define AFF_CHECKTHISASIZE     0
 #define AFF_BLIND               1
 #define AFF_INVISIBLE           2
 #define AFF_DETECT_EVIL         3

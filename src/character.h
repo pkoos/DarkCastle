@@ -8,6 +8,10 @@
 
 #define  COMPILE_WITH_CHANGES 1
 
+#include "Progs.h"
+#include "Attributes.h"
+#include "Position.h"
+#include "SexType.h" /* Male, Female, etc. */
 #include "Affect.h"  /* MAX_AFFECTS, etc.. */
 #include "alias.h"   /* struct char_player_alias, MAX_ALIASES, etc.. */
 #include "structs.h" /* ubyte, ubyte, int16, etc.. */
@@ -54,32 +58,6 @@ extern "C" {
 struct char_data;
 typedef struct char_data CHAR_DATA;
 
-#define SEX_NEUTRAL   0
-#define SEX_MALE      1
-#define SEX_FEMALE    2
-
-#define POSITION_DEAD        0
-//#define POSITION_MORTALLYW   1
-//#define POSITION_INCAP       2
-#define POSITION_STUNNED     3
-#define POSITION_SLEEPING    4
-#define POSITION_RESTING     5
-#define POSITION_SITTING     6
-#define POSITION_FIGHTING    7
-#define POSITION_STANDING    8
-
-#define STRENGTH             1
-#define DEXTERITY            2
-#define INTELLIGENCE         3
-#define WISDOM               4
-#define CONSTITUTION         5
-
-#define STR STRENGTH
-#define DEX DEXTERITY
-#define INT INTELLIGENCE
-#define WIS WISDOM
-#define CON CONSTITUTION // Gawddamn I'm lazy ;)
-
 #define MAX_HIDE 10
 #define CHAMPION_ITEM 45
 
@@ -113,29 +91,7 @@ struct  mob_prog_data
     char *      comlist;
 };
 
-#define ERROR_PROG        -1
-#define IN_FILE_PROG       0
-#define ACT_PROG           1
-#define SPEECH_PROG        2
-#define RAND_PROG          4
-#define FIGHT_PROG         8
-#define DEATH_PROG        16
-#define HITPRCNT_PROG     32
-#define ENTRY_PROG        64
-#define GREET_PROG       128
-#define ALL_GREET_PROG   256
-#define GIVE_PROG        512
-#define BRIBE_PROG      1024
-#define CATCH_PROG      2048
-#define ATTACK_PROG     4096
-#define ARAND_PROG      8192
-#define LOAD_PROG      16384
-#define COMMAND_PROG   16384 <<1
-#define WEAPON_PROG    16384 <<2
-#define ARMOUR_PROG    16384 <<3
-#define CAN_SEE_PROG   16384 <<4
-#define DAMAGE_PROG    16384 <<5
-#define MPROG_MAX_TYPE_VALUE (16384 << 6)
+
 
 // * ------- End MOBProg stuff ----------- *
 
