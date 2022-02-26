@@ -15,7 +15,7 @@
 /* $Id: obj.h,v 1.36 2015/06/16 04:10:54 pirahna Exp $ */
 #ifndef OBJ_H_
 #define OBJ_H_
-
+#include "Size.h"
 #include "EquipmentLocation.h"
 #include "ContainerStatus.h"
 #include "LiquidType.h"
@@ -28,12 +28,6 @@
 #include "character.h"
 
 /* The following defs are for obj_data  */
-
-/* Bitvector for 'size' */
-#define SIZE_ANY		1U
-#define SIZE_SMALL		1U<<1
-#define SIZE_MEDIUM		1U<<2
-#define SIZE_LARGE		1U<<3
 
 
 
