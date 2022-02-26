@@ -15,6 +15,7 @@
 /* $Id: obj.h,v 1.36 2015/06/16 04:10:54 pirahna Exp $ */
 #ifndef OBJ_H_
 #define OBJ_H_
+
 #include "Size.h"
 #include "EquipmentLocation.h"
 #include "ContainerStatus.h"
