@@ -25,7 +25,7 @@
 
 /* The following defs are for obj_data  */
 
-#define ALL_CLASSES ITEM_WARRIOR|ITEM_MAGE|ITEM_THIEF|ITEM_CLERIC|ITEM_PAL|ITEM_ANTI|ITEM_BARB|ITEM_MONK|ITEM_RANGER|ITEM_DRUID|ITEM_BARD
+
 
 /* Bitvector for 'more_flags' */
 

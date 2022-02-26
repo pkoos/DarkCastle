@@ -3,6 +3,8 @@
 
 /* Bitvector for 'extra_flags' */
 
+#define ALL_CLASSES ITEM_WARRIOR|ITEM_MAGE|ITEM_THIEF|ITEM_CLERIC|ITEM_PAL|ITEM_ANTI|ITEM_BARB|ITEM_MONK|ITEM_RANGER|ITEM_DRUID|ITEM_BARD
+
 #define ITEM_GLOW               1U
 #define ITEM_HUM                1U<<1
 #define ITEM_DARK               1U<<2
