@@ -22,7 +22,7 @@ using namespace std;
 #include "race.h"
 #include "act.h"
 #include "magic.h"
-#include "affect.h"
+#include "Affect.h"
 #include "utility.h"
 #include "isr.h"
 #include "handler.h"

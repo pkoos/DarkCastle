@@ -14,7 +14,7 @@ extern "C"  {
 //#include <iostream.h>
 #include <stdio.h>
 #include "character.h"
-#include "affect.h"
+#include "Affect.h"
 #include "mobile.h"
 #include "utility.h"
 #include "spells.h"

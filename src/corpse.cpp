@@ -27,7 +27,7 @@
 #include "spells.h"
 #include "player.h"
 #include "handler.h"
-#include "affect.h"
+#include "Affect.h"
 #include "levels.h"
 #include "interp.h"
 #include "character.h"

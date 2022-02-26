@@ -9,7 +9,7 @@
  *************************************************************************
  */
 #include "character.h"
-#include "affect.h"
+#include "Affect.h"
 #include "room.h"
 #include "levels.h"
 #include "utility.h"

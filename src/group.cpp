@@ -10,7 +10,7 @@ extern "C"
 
 #include "character.h"
 #include "room.h"
-#include "affect.h"
+#include "Affect.h"
 #include "utility.h"
 #include "mobile.h"
 #include "interp.h"

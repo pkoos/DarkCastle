@@ -34,7 +34,7 @@ extern "C"
 #include <sstream>
 #include <limits>
 
-#include "affect.h"
+#include "Affect.h"
 #include "db.h"
 #include "memory.h"
 #include "structs.h" // MAX_STRING_LENGTH
