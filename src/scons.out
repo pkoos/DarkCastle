@@ -1,0 +1,288 @@
+scons: Reading SConscript files ...
+v0.1-461-g0bde94b6
+scons: done reading SConscript files.
+scons: Building targets ...
+g++-11 -o DC.o -c -ggdb3 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -DVERSION=\"v0.1-461-g0bde94b6\" "-DBUILD_TIME=\"2022-02-25 21:51:36\"" -Iinclude DC.cpp
+g++-11 -o casino.o -c -ggdb3 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql casino.cpp
+g++-11 -o clan.o -c -ggdb3 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql clan.cpp
+g++-11 -o fight.o -c -ggdb3 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql fight.cpp
+g++-11 -o wizard.o -c -ggdb3 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wizard.cpp
+g++-11 -o modify.o -c -ggdb3 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql modify.cpp
+g++-11 -o mob_prog.o -c -ggdb3 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql mob_prog.cpp
+g++-11 -o magic.o -c -ggdb3 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql magic.cpp
+g++-11 -o sing.o -c -ggdb3 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql sing.cpp
+casino.cpp: In function 'void add_timer(player_data*)':
+casino.cpp:488:17: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+  488 |   timer->arg2 = (void*)plr->table->handnr;
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+casino.cpp: In function 'void add_timer_bj_dealer2(table_data*, int)':
+casino.cpp:531:17: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+  531 |   timer->arg2 = (void*)(++tbl->handnr);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~
+casino.cpp:533:19: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+  533 |     timer->arg2 = (void*)(++tbl->handnr);
+      |                   ^~~~~~~~~~~~~~~~~~~~~~
+casino.cpp: In function 'void bj_dealer_ai(void*, void*, void*)':
+casino.cpp:640:11: error: cast from 'void*' to 'int' loses precision [-fpermissive]
+  640 |   int a = (int)arg2;
+      |           ^~~~~~~~~
+casino.cpp: In function 'char* show_hand(int*, int, bool)':
+casino.cpp:911:24: warning: field width specifier '*' expects argument of type 'int', but argument 4 has type 'size_t' {aka 'long unsigned int'} [-Wformat=]
+  911 |   sprintf(lineTwo, "%s%*s", lineTwo, strlen(tempBuf)+padnext, " ");
+      |                       ~^~            ~~~~~~~~~~~~~~~~~~~~~~~
+      |                        |                            |
+      |                        int                          size_t {aka long unsigned int}
+casino.cpp:912:24: warning: field width specifier '*' expects argument of type 'int', but argument 4 has type 'size_t' {aka 'long unsigned int'} [-Wformat=]
+  912 |   sprintf(lineTop, "%s%*s", lineTop, strlen(tempBuf)+padnext, " ");
+      |                       ~^~            ~~~~~~~~~~~~~~~~~~~~~~~
+      |                        |                            |
+      |                        int                          size_t {aka long unsigned int}
+casino.cpp: In function 'void slot_timer(machine_data*, int, int, int)':
+casino.cpp:1999:18: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 1999 |    timer->arg2 = (void*)stop1;
+      |                  ^~~~~~~~~~~~
+casino.cpp:2000:18: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 2000 |    timer->arg3 = (void*)stop2;
+      |                  ^~~~~~~~~~~~
+casino.cpp: In function 'void reel_spin(void*, void*, void*)':
+casino.cpp:2009:16: error: cast from 'void*' to 'int' loses precision [-fpermissive]
+ 2009 |    int stop1 = (int)arg2;
+      |                ^~~~~~~~~
+casino.cpp:2010:16: error: cast from 'void*' to 'int' loses precision [-fpermissive]
+ 2010 |    int stop2 = (int)arg3;
+      |                ^~~~~~~~~
+casino.cpp: In function 'void roulette_timer(wheel_data*, int)':
+casino.cpp:2426:18: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 2426 |    timer->arg2 = (void*)spin;
+      |                  ^~~~~~~~~~~
+casino.cpp: In function 'void pulse_countdown(void*, void*, void*)':
+casino.cpp:2435:15: error: cast from 'void*' to 'int' loses precision [-fpermissive]
+ 2435 |    int spin = (int) arg2;
+      |               ^~~~~~~~~~
+casino.cpp: In function 'void save_slot_machines()':
+casino.cpp:1901:9: warning: ignoring return value of 'int system(const char*)' declared with attribute 'warn_unused_result' [-Wunused-result]
+ 1901 |   system(buf2);
+      |   ~~~~~~^~~~~~
+scons: *** [casino.o] Error 1
+fight.cpp: In function 'int one_hit(CHAR_DATA*, CHAR_DATA*, int, int)':
+fight.cpp:1402:94: error: cast from 'CHAR_DATA*' {aka 'char_data*'} to 'int' loses precision [-fpermissive]
+ 1402 |     if(affected_by_spell(ch, SKILL_SMITE) && affected_by_spell(ch, SKILL_SMITE)->modifier == (int)vict)
+      |                                                                                              ^~~~~~~~~
+wizard.cpp: In function 'void mob_stat(char_data*, char_data*)':
+wizard.cpp:578:60: error: cast from 'MPROG_DATA*' {aka 'mob_prog_data*'} to 'int' loses precision [-fpermissive]
+  578 |     sprintf(buf, "$3Mobspec$R: %d  $3Progtypes$R: %d\r\n", (int)(mob_index[k->mobdata->nr].mobspec), mob_index[k->mobdata->nr].progtypes);
+      |                                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wizard.cpp:625:61: warning: format '%d' expects argument of type 'int', but argument 5 has type 'intptr_t' {aka 'long int'} [-Wformat=]
+  625 |     sprintf(buf, "$3Plats$R:[%d]  $3Bank$R:[%d]  $3Clan$R:[%d]  $3Quest Points$R:[%d]\n\r",
+      |                                                            ~^
+      |                                                             |
+      |                                                             int
+      |                                                            %ld
+modify.cpp: In function 'void show_string(descriptor_data*, char*)':
+modify.cpp:684:77: error: cast from 'const char*' to 'int' loses precision [-fpermissive]
+  684 |                 strncpy(buffer, d->showstr_vector[d->showstr_page], diff = ((int) d->showstr_vector[d->showstr_page + 1]) - ((int) d->showstr_vector[d->showstr_page]));
+      |                                                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+modify.cpp:684:126: error: cast from 'const char*' to 'int' loses precision [-fpermissive]
+  684 |                 strncpy(buffer, d->showstr_vector[d->showstr_page], diff = ((int) d->showstr_vector[d->showstr_page + 1]) - ((int) d->showstr_vector[d->showstr_page]));
+      |                                                                                                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mob_prog.cpp: In function 'int mprog_do_ifchck(char*, CHAR_DATA*, CHAR_DATA*, OBJ_DATA*, void*, CHAR_DATA*)':
+mob_prog.cpp:1787:14: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 1787 |          o = (OBJ_DATA*) mob->mobdata->last_room;
+      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mob_prog.cpp:1992:18: error: cast from 'affected_type*' to 'int' loses precision [-fpermissive]
+ 1992 |           return (int)(affected_by_spell(fvict, find_skill_num(val)));
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mob_prog.cpp:1997:24: error: cast from 'affected_type*' to 'int' loses precision [-fpermissive]
+ 1997 |                 return (int)(affected_by_spell(mob, find_skill_num(val)));
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mob_prog.cpp:1999:21: error: cast from 'affected_type*' to 'int' loses precision [-fpermissive]
+ 1999 |              return (int)(affected_by_spell(((CHAR_DATA*)mob->beacon), find_skill_num(val)));
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mob_prog.cpp:2004:24: error: cast from 'affected_type*' to 'int' loses precision [-fpermissive]
+ 2004 |                 return (int)(affected_by_spell(actor, find_skill_num(val)));
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mob_prog.cpp:2008:24: error: cast from 'affected_type*' to 'int' loses precision [-fpermissive]
+ 2008 |                 return (int)(affected_by_spell(vict, find_skill_num(val)));
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mob_prog.cpp:2012:24: error: cast from 'affected_type*' to 'int' loses precision [-fpermissive]
+ 2012 |                 return (int)(affected_by_spell(rndm, find_skill_num(val)));
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mob_prog.cpp:2015:28: error: cast from 'affected_type*' to 'int' loses precision [-fpermissive]
+ 2015 |                     return (int)(affected_by_spell(actor->fighting, find_skill_num(val)));
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mob_prog.cpp:2018:28: error: cast from 'affected_type*' to 'int' loses precision [-fpermissive]
+ 2018 |                     return (int)(affected_by_spell(mob->fighting, find_skill_num(val)));
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fight.cpp: In function 'void do_pkill(CHAR_DATA*, CHAR_DATA*, int, bool)':
+fight.cpp:5981:11: error: cast from 'char_data*' to 'int' loses precision [-fpermissive]
+ 5981 |       if ((int)findchar == affected_by_spell(victim, SPELL_POISON)->modifier)
+      |           ^~~~~~~~~~~~~
+fight.cpp:6027:30: warning: zero-length gnu_printf format string [-Wformat-zero-length]
+ 6027 |       sprintf(killer_message,"");
+      |                              ^~
+fight.cpp:6032:30: warning: zero-length gnu_printf format string [-Wformat-zero-length]
+ 6032 |       sprintf(killer_message,"");
+      |                              ^~
+mob_prog.cpp: In function 'CHAR_DATA* initiate_oproc(CHAR_DATA*, OBJ_DATA*)':
+mob_prog.cpp:4070:30: error: cast from 'OBJ_DATA*' {aka 'obj_data*'} to 'int' loses precision [-fpermissive]
+ 4070 |   temp->mobdata->last_room = (int)obj;
+      |                              ^~~~~~~~
+sing.cpp: In lambda function:
+sing.cpp:665:45: error: cast from 'char*' to 'int' loses precision [-fpermissive]
+  665 |                                         if ((int) (*j).song_data > 10) // Otherwise it's a temp variable.
+      |                                             ^~~~~~~~~~~~~~~~~~~~
+sing.cpp:703:37: error: cast from 'char*' to 'int' loses precision [-fpermissive]
+  703 |                                 if ((int) (*j).song_data > 10) // Otherwise it's a temp variable.
+      |                                     ^~~~~~~~~~~~~~~~~~~~
+sing.cpp:731:37: error: cast from 'char*' to 'int' loses precision [-fpermissive]
+  731 |                                 if ((int) (*j).song_data > 10) // Otherwise it's a temp variable.
+      |                                     ^~~~~~~~~~~~~~~~~~~~
+sing.cpp:754:45: error: cast from 'char*' to 'int' loses precision [-fpermissive]
+  754 |                                         if ((int) (*j).song_data > 10) // Otherwise it's a temp variable.
+      |                                             ^~~~~~~~~~~~~~~~~~~~
+clan.cpp: In function 'void save_clans()':
+clan.cpp:315:44: warning: format '%llu' expects argument of type 'long long unsigned int', but argument 3 has type 'uint64_t' {aka 'long unsigned int'} [-Wformat=]
+  315 |                         fprintf(fl, "B\n%llu\n", pclan->getBalance());
+      |                                         ~~~^     ~~~~~~~~~~~~~~~~~~~
+      |                                            |                      |
+      |                                            long long unsigned int uint64_t {aka long unsigned int}
+      |                                         %lu
+modify.cpp: In function 'help_index_element* build_help_index(FILE*, int*)':
+modify.cpp:449:22: warning: ignoring return value of 'char* fgets(char*, int, FILE*)' declared with attribute 'warn_unused_result' [-Wunused-result]
+  449 |                 fgets(buf, 81, fl);
+      |                 ~~~~~^~~~~~~~~~~~~
+modify.cpp:470:30: warning: ignoring return value of 'char* fgets(char*, int, FILE*)' declared with attribute 'warn_unused_result' [-Wunused-result]
+  470 |                         fgets(buf, 81, fl);
+      |                         ~~~~~^~~~~~~~~~~~~
+scons: *** [modify.o] Error 1
+scons: *** [wizard.o] Error 1
+sing.cpp: In function 'int execute_song_crushing_crescendo(ubyte, CHAR_DATA*, char*, CHAR_DATA*, int)':
+sing.cpp:2944:25: error: cast from 'char*' to 'int' loses precision [-fpermissive]
+ 2944 |         for (j = 0; j < (int) (*i).song_data; j++)
+      |                         ^~~~~~~~~~~~~~~~~~~~
+sing.cpp:2948:35: error: cast from 'char*' to 'int' loses precision [-fpermissive]
+ 2948 |         (*i).song_data = (char*) ((int) (*i).song_data + 1); // Add one round.
+      |                                   ^~~~~~~~~~~~~~~~~~~~
+sing.cpp:2948:26: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 2948 |         (*i).song_data = (char*) ((int) (*i).song_data + 1); // Add one round.
+      |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sing.cpp:2963:25: error: cast from 'char*' to 'int' loses precision [-fpermissive]
+ 2963 |                 switch ((int) (*i).song_data) {
+      |                         ^~~~~~~~~~~~~~~~~~~~
+sing.cpp:3017:13: error: cast from 'char*' to 'int' loses precision [-fpermissive]
+ 3017 |         if ((int) (*i).song_data > has_skill(ch, SKILL_SONG_CRUSHING_CRESCENDO) / 20 || (int) (*i).song_data > 3) {
+      |             ^~~~~~~~~~~~~~~~~~~~
+sing.cpp:3017:89: error: cast from 'char*' to 'int' loses precision [-fpermissive]
+ 3017 |         if ((int) (*i).song_data > has_skill(ch, SKILL_SONG_CRUSHING_CRESCENDO) / 20 || (int) (*i).song_data > 3) {
+      |                                                                                         ^~~~~~~~~~~~~~~~~~~~
+sing.cpp:3023:14: error: cast from 'char*' to 'int' loses precision [-fpermissive]
+ 3023 |         if (((int) (*i).song_data) != 3) {
+      |              ^~~~~~~~~~~~~~~~~~~~
+fight.cpp: In function 'void load_messages(char*, int)':
+fight.cpp:3649:10: warning: ignoring return value of 'int fscanf(FILE*, const char*, ...)' declared with attribute 'warn_unused_result' [-Wunused-result]
+ 3649 |    fscanf(fl, "%s\n", chk);
+      |    ~~~~~~^~~~~~~~~~~~~~~~~
+fight.cpp:3653:12: warning: ignoring return value of 'int fscanf(FILE*, const char*, ...)' declared with attribute 'warn_unused_result' [-Wunused-result]
+ 3653 |      fscanf(fl, " %d\n", &type);
+      |      ~~~~~~^~~~~~~~~~~~~~~~~~~~
+fight.cpp:3694:12: warning: ignoring return value of 'int fscanf(FILE*, const char*, ...)' declared with attribute 'warn_unused_result' [-Wunused-result]
+ 3694 |      fscanf(fl, " %s \n", chk);
+      |      ~~~~~~^~~~~~~~~~~~~~~~~~~
+clan.cpp: In function 'int do_cinfo(CHAR_DATA*, char*, int)':
+clan.cpp:2548:44: warning: format '%llu' expects argument of type 'long long unsigned int', but argument 3 has type 'uint64_t' {aka 'long unsigned int'} [-Wformat=]
+ 2548 |      sprintf(buf, "$3Balance$R:         %llu coins\r\n", clan->getBalance());
+      |                                         ~~~^             ~~~~~~~~~~~~~~~~~~
+      |                                            |                             |
+      |                                            long long unsigned int        uint64_t {aka long unsigned int}
+      |                                         %lu
+magic.cpp: In function 'int spell_dispel_evil(ubyte, CHAR_DATA*, CHAR_DATA*, obj_data*, int)':
+magic.cpp:1420:16: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 1420 |    if( (pal = ((CHAR_DATA *)(obj->obj_flags.value[3]) )  )  && charExists(pal)) {
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+magic.cpp: In function 'int spell_dispel_good(ubyte, CHAR_DATA*, CHAR_DATA*, obj_data*, int)':
+magic.cpp:1461:15: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 1461 |    if( (pal = (CHAR_DATA *)(obj->obj_flags.value[3])) && charExists(pal) ) {
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+clan.cpp: In function 'int do_cwithdraw(CHAR_DATA*, char*, int)':
+clan.cpp:2752:53: warning: format '%llu' expects argument of type 'long long unsigned int', but argument 5 has type 'uint64_t' {aka 'long unsigned int'} [-Wformat=]
+ 2752 |     snprintf(buf, MAX_INPUT_LENGTH, "%s withdrew %llu gold coins from the clan bank account.\r\n", ch->name, wdraw);
+      |                                                  ~~~^                                                        ~~~~~
+      |                                                     |                                                        |
+      |                                                     long long unsigned int                                   uint64_t {aka long unsigned int}
+      |                                                  %lu
+scons: *** [fight.o] Error 1
+clan.cpp: In function 'void check_quitter(void*, void*, void*)':
+clan.cpp:3041:14: error: cast from 'void*' to 'int' loses precision [-fpermissive]
+ 3041 |   int clan = (int)arg1;
+      |              ^~~~~~~~~
+magic.cpp: In function 'int spell_poison(ubyte, CHAR_DATA*, CHAR_DATA*, obj_data*, int)':
+magic.cpp:2902:39: error: cast from 'CHAR_DATA*' {aka 'char_data*'} to 'int' loses precision [-fpermissive]
+ 2902 |         af.modifier = IS_NPC(ch)?-123:(int)ch;
+      |                                       ^~~~~~~
+scons: *** [mob_prog.o] Error 1
+magic.cpp: In function 'int spell_dispel_minor(ubyte, CHAR_DATA*, CHAR_DATA*, obj_data*, int)':
+magic.cpp:5019:14: error: cast from 'obj_data*' to 'unsigned int' loses precision [-fpermissive]
+ 5019 |    if(obj && (unsigned int)obj > 100) /* Trying to dispel_minor an obj */
+      |              ^~~~~~~~~~~~~~~~~
+magic.cpp:5060:16: error: cast from 'obj_data*' to 'int' loses precision [-fpermissive]
+ 5060 |    int spell = (int) obj;
+      |                ^~~~~~~~~
+magic.cpp: In function 'int spell_dispel_magic(ubyte, CHAR_DATA*, CHAR_DATA*, obj_data*, int)':
+magic.cpp:5304:16: error: cast from 'obj_data*' to 'int' loses precision [-fpermissive]
+ 5304 |    int spell = (int) obj;
+      |                ^~~~~~~~~
+scons: *** [sing.o] Error 1
+magic.cpp: In function 'int cast_dispel_magic(ubyte, CHAR_DATA*, char*, int, CHAR_DATA*, obj_data*, int)':
+magic.cpp:9341:55: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 9341 |          return spell_dispel_magic(level, ch, tar_ch, (obj_data*) spell, skill);
+      |                                                       ^~~~~~~~~~~~~~~~~
+magic.cpp: In function 'int cast_dispel_minor(ubyte, CHAR_DATA*, char*, int, CHAR_DATA*, obj_data*, int)':
+magic.cpp:9393:22: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 9393 |            tar_obj = (struct obj_data *) spell;
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+magic.cpp: In function 'int cast_creeping_death(ubyte, CHAR_DATA*, char*, int, CHAR_DATA*, obj_data*, int)':
+magic.cpp:10462:39: error: cast from 'CHAR_DATA*' {aka 'char_data*'} to 'int' loses precision [-fpermissive]
+10462 |         af.modifier = IS_NPC(ch)?-123:(int)ch;
+      |                                       ^~~~~~~
+magic.cpp: In function 'int check_components(CHAR_DATA*, int, int, int, int, int, bool)':
+magic.cpp:11191:15: error: cast from 'obj_data*' to 'int' loses precision [-fpermissive]
+11191 |      all_ok = (int) ptr_one;
+      |               ^~~~~~~~~~~~~
+magic.cpp:11193:15: error: cast from 'obj_data*' to 'int' loses precision [-fpermissive]
+11193 |      all_ok = (int) ptr_two;
+      |               ^~~~~~~~~~~~~
+magic.cpp:11195:15: error: cast from 'obj_data*' to 'int' loses precision [-fpermissive]
+11195 |      all_ok = (int) ptr_three;
+      |               ^~~~~~~~~~~~~~~
+magic.cpp:11197:15: error: cast from 'obj_data*' to 'int' loses precision [-fpermissive]
+11197 |      all_ok = (int) ptr_four;
+      |               ^~~~~~~~~~~~~~
+magic.cpp: In function 'int spell_immunity(ubyte, CHAR_DATA*, CHAR_DATA*, OBJ_DATA*, int)':
+magic.cpp:13623:13: error: cast from 'CHAR_DATA*' {aka 'char_data*'} to 'int' loses precision [-fpermissive]
+13623 |   int spl = (int)victim;
+      |             ^~~~~~~~~~~
+magic.cpp: In function 'int spell_channel(ubyte, CHAR_DATA*, CHAR_DATA*, OBJ_DATA*, int)':
+magic.cpp:13717:14: error: cast from 'OBJ_DATA*' {aka 'obj_data*'} to 'int' loses precision [-fpermissive]
+13717 |   int heal = (int)obj;
+      |              ^~~~~~~~
+magic.cpp: In function 'int cast_channel(ubyte, CHAR_DATA*, char*, int, CHAR_DATA*, OBJ_DATA*, int)':
+magic.cpp:13744:47: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+13744 |       return spell_channel(level, ch, tar_ch, (OBJ_DATA *)atoi(arg), skill);
+      |                                               ^~~~~~~~~~~~~~~~~~~~~
+magic.cpp: In function 'int spell_consecrate(ubyte, CHAR_DATA*, CHAR_DATA*, obj_data*, int)':
+magic.cpp:14237:37: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+14237 |                                 == ((CHAR_DATA*) (cItem->obj_flags.value[3])) && spl == SPELL_CONSECRATE) {
+      |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+magic.cpp:14286:37: error: cast from 'CHAR_DATA*' {aka 'char_data*'} to 'int' loses precision [-fpermissive]
+14286 |         cItem->obj_flags.value[3] = (int) (ch);
+      |                                     ^~~~~~~~~~
+magic.cpp: In function 'int spell_desecrate(ubyte, CHAR_DATA*, CHAR_DATA*, obj_data*, int)':
+magic.cpp:14375:28: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+14375 |                 if (ch == ((CHAR_DATA *) (cItem->obj_flags.value[3]))) {
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+magic.cpp:14422:37: error: cast from 'CHAR_DATA*' {aka 'char_data*'} to 'int' loses precision [-fpermissive]
+14422 |         cItem->obj_flags.value[3] = (int) (ch);
+      |                                     ^~~~~~~~~~
+scons: *** [magic.o] Error 1
+scons: *** [clan.o] Error 1
+scons: building terminated because of errors.
