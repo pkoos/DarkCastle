@@ -16,6 +16,7 @@
 #ifndef OBJ_H_
 #define OBJ_H_
 
+#include "ItemMoreFlags.h"
 #include "ItemExtra.h"
 #include "WearLocation.h"
 #include "ItemType.h"
@@ -23,10 +24,6 @@
 #include "character.h"
 
 /* The following defs are for obj_data  */
-
-
-
-
 
 #define ALL_CLASSES ITEM_WARRIOR|ITEM_MAGE|ITEM_THIEF|ITEM_CLERIC|ITEM_PAL|ITEM_ANTI|ITEM_BARB|ITEM_MONK|ITEM_RANGER|ITEM_DRUID|ITEM_BARD
 
