@@ -630,7 +630,7 @@ int hooktippedsteelhalberd(CHAR_DATA *ch, struct obj_data *obj, int cmd,
      return eFAILURE; // Lucky
    int i = damage_eq_once(victim->equipment[which]);
    if(!victim->equipment[which]) return eSUCCESS;
-   if (i >= eq_max_damage(victim->equipment[which]))
+   if (i >= eq_max_durability(victim->equipment[which]))
      eq_destroyed(victim, victim->equipment[which], which);
    else {
      if(obj_index[obj->item_number].virt == 17904) {

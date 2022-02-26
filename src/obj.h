@@ -27,10 +27,6 @@
 #include "structs.h" // ubyte
 #include "character.h"
 
-/* The following defs are for obj_data  */
-
-
-
 struct active_object
 {
     struct obj_data *obj;
@@ -118,7 +114,7 @@ struct obj_file_elem
 };
 
 // functions from objects.cpp
-int eq_max_damage(obj_data * obj);
+int eq_max_durability(obj_data * obj);
 int damage_eq_once(obj_data * obj);
 int eq_current_damage(obj_data * obj);
 void eq_remove_damage(obj_data * obj);

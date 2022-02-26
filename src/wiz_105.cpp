@@ -391,7 +391,7 @@ int do_dmg_eq(struct char_data *ch, char *argument, int cmd)
   }
   eqdam = damage_eq_once(obj_object);
 
-  if(eqdam >= eq_max_damage(obj_object))
+  if(eqdam >= eq_max_durability(obj_object))
     eq_destroyed(ch, obj_object, -1);
   else 
   {

@@ -125,7 +125,7 @@ int repair_guy(struct char_data *ch, struct obj_data *obj, int cmd, char *arg, s
 	}
 
 	cost = obj->obj_flags.cost;
-	value0 = eq_max_damage(obj);
+	value0 = eq_max_durability(obj);
 	percent = ((100 * eqdam) / value0);
 	price = ((cost * percent) / 100);   // now we know what to charge them fuckers!
 
@@ -193,7 +193,7 @@ int super_repair_guy(struct char_data *ch, struct obj_data *obj, int cmd, char *
 	}
 
 	cost = obj->obj_flags.cost;
-	value0 = eq_max_damage(obj);
+	value0 = eq_max_durability(obj);
 	value2 = obj->obj_flags.value[2];
 
 	if ((obj->obj_flags.type_flag == ITEM_ARMOR || ARE_CONTAINERS(obj) || obj->obj_flags.type_flag == ITEM_LIGHT)
@@ -281,7 +281,7 @@ int repair_shop(struct char_data *ch, struct obj_data *obj, int cmd, char *arg, 
 	}
 
 	cost = obj->obj_flags.cost;
-	value0 = eq_max_damage(obj);
+	value0 = eq_max_durability(obj);
 	value2 = obj->obj_flags.value[2];
 
 	if ((obj->obj_flags.type_flag == ITEM_ARMOR || obj->obj_flags.type_flag == ITEM_LIGHT) && !IS_SET(obj->obj_flags.extra_flags, ITEM_SPECIAL)) {
@@ -714,7 +714,7 @@ int gl_repair_shop(struct char_data *ch, struct obj_data *obj, int cmd, char *ar
 	}
 
 	cost = obj->obj_flags.cost;
-	value0 = eq_max_damage(obj);
+	value0 = eq_max_durability(obj);
 	value2 = obj->obj_flags.value[2];
 
 	if (!IS_SET(obj->obj_flags.extra_flags, ITEM_SPECIAL)) {

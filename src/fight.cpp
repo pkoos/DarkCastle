@@ -1675,7 +1675,7 @@ void eq_damage(CHAR_DATA * ch, CHAR_DATA * victim,
     if (obj_index[obj->item_number].progtypes & ARMOUR_PROG)
       oprog_armour_trigger(victim, obj);
     // determine if time to scrap it              
-    if(eqdam >= eq_max_damage(obj))
+    if(eqdam >= eq_max_durability(obj))
       eq_destroyed(victim, obj, pos);
     else {
       act("$p is damaged.", victim, obj, 0, TO_CHAR, 0);
@@ -1704,7 +1704,7 @@ void eq_damage(CHAR_DATA * ch, CHAR_DATA * victim,
  
 
     // determine if time to scrap it              
-    if(eqdam >= eq_max_damage(obj))
+    if(eqdam >= eq_max_durability(obj))
       eq_destroyed(victim, obj, -1);
     else {
       act("$p is damaged.", victim, obj, 0, TO_CHAR, 0);
@@ -2358,7 +2358,7 @@ int damage(CHAR_DATA *ch, CHAR_DATA *victim,
             {
               if (obj_index[victim->equipment[WEAR_SHIELD]->item_number].progtypes & ARMOUR_PROG)
                 oprog_armour_trigger(victim, victim->equipment[WEAR_SHIELD]);
-              if (eqdam >= eq_max_damage(victim->equipment[WEAR_SHIELD]))
+              if (eqdam >= eq_max_durability(victim->equipment[WEAR_SHIELD]))
                 eq_destroyed(victim, victim->equipment[WEAR_SHIELD], WEAR_SHIELD);
               else
               {

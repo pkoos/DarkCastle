@@ -85,7 +85,7 @@ void remove_obj_affect_by_type(obj_data * obj, int loc)
 
 // given an object, return the maximum points of damage the item
 // can take before being scrapped
-int eq_max_damage(obj_data *obj)
+int eq_max_durability(obj_data *obj)
 {
   int amount = 0;
 
