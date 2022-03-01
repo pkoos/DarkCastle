@@ -1,7 +1,7 @@
 VERSION := "$(shell git describe --tags --always --abbrev=8)"
 BUILD_TIME := "$(shell date +'%Y-%m-%d %H:%M:%S')"
 
-CXX = g++-7
+CXX = g++-11
 SRC_DIR=.
 SRCS = $(shell find $(SRC_DIR) -maxdepth 2 -name showplayerxp.cpp -prune -o -name '*.cpp' -print)
 
