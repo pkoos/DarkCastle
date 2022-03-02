@@ -85,8 +85,8 @@
         "*.inc": "cpp"
     },
     "cmake.buildBeforeRun": true,
-    "cmake.buildDirectory": "${workspaceFolder}/test",
-    "cmakeExplorer.buildDir": "${workspaceFolder}/test",
+    "cmake.buildDirectory": "${workspaceFolder}/test/build",
+    "cmakeExplorer.buildDir": "${workspaceFolder}/test/build",
     "cmakeExplorer.buildConfig": "${buildType}",
     "cmake.configureSettings": {
         "gtest_build_samples": "ON"
