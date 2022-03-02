@@ -6,6 +6,7 @@
 | Description: This file defines the player vectors..punishment, specials,
 |   etc...
 */
+#include "NumberTypes.h"
 #include "ItemApply.h"
 #include "punish.h" // punishment vectors
 #include "structs.h" // ubyte

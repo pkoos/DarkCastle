@@ -16,6 +16,7 @@
 #ifndef OBJ_H_
 #define OBJ_H_
 
+#include "NumberTypes.h"
 #include "Size.h"
 #include "EquipmentLocation.h"
 #include "ContainerStatus.h"
