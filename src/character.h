@@ -41,6 +41,8 @@ extern "C" {
 #include <algorithm>
 #include "DC.h"
 
+struct songInfo;
+
 #define ASIZE 32
 #define MAX_GOLEMS           2 // amount of golems above +1
 
