@@ -30,7 +30,8 @@ extern "C" {
 #include <string>
 #include <vector>
 
-#include "structs.h"
+#include "NumberTypes.h"
+// #include "structs.h"
 #include "weather.h"
 #include "memory.h"
 #include "player.h"

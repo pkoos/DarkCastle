@@ -12,6 +12,7 @@ extern "C"  {
   #include <string.h>
 }
 //#include <iostream.h>
+#include "NumberTypes.h"
 #include <stdio.h>
 #include "character.h"
 #include "Affect.h"

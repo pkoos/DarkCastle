@@ -6,6 +6,7 @@ extern "C" {
 
 #endif
 
+#include "NumberTypes.h"
 #include "memory.h"
 
 /************************************************************************

@@ -7,6 +7,7 @@
 | Description:  This file contains the header information for the new
 |   act() function
 */
+#include "NumberTypes.h"
 #include "MessageDisplay.h"
 #include "MessageDestination.h"
 #include <string>

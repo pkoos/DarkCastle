@@ -3,7 +3,8 @@
 #ifndef LEVELS_H_
 #define LEVELS_H_
 
-#include "structs.h"
+#include "NumberTypes.h"
+// #include "structs.h"
 
 #define MORTAL 60
 #define MAX_MORTAL 60

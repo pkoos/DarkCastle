@@ -20,6 +20,7 @@
 #include <ctype.h>
 #include <string.h>
 
+#include "NumberTypes.h"
 #include "obj.h"
 #include "room.h"
 #include "character.h"

@@ -20,6 +20,7 @@ extern "C"
 
 // #include "structs.h"
 #include "levels.h"
+#include "NumberTypes.h"
 
 #ifndef LOG_BUG
 #define LOG_BUG           1

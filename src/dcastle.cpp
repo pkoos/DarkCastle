@@ -13,6 +13,7 @@
 #include <iostream>
 
 // DC headers
+#include "NumberTypes.h"
 #include "fileinfo.h"
 #include "utility.h"
 #include "DC.h"

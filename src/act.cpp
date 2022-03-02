@@ -15,6 +15,7 @@ extern "C" {
 
 #include <string>
 
+#include "NumberTypes.h"
 #include "comm.h"
 #include "character.h"
 #include "levels.h"

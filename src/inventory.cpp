@@ -11,6 +11,7 @@ extern "C"
 #include <queue>
 #include <fmt/format.h>
 
+#include "NumberTypes.h"
 #include "connect.h"
 #include "character.h"
 #include "obj.h"

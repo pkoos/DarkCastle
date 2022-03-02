@@ -20,6 +20,7 @@
 #include "returnvals.h"
 #include <errno.h>
 
+#include "NumberTypes.h"
 #include "obj.h"
 #include "connect.h"
 #include "utility.h"
@@ -32,7 +33,7 @@
 #include "interp.h"
 #include "character.h"
 #include "act.h"
-#include "structs.h"
+// #include "structs.h"
 #include "db.h"
 #include <assert.h>
 #include "mobile.h" // ACT_ISNPC

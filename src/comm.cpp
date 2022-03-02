@@ -29,12 +29,13 @@
 #include <signal.h>
 #include <ctype.h>
 
+#include "NumberTypes.h"
 #include "fileinfo.h"
 #include "act.h"
 #include "player.h"
 #include "levels.h"
 #include "room.h"
-#include "structs.h"
+// #include "structs.h"
 #include "utility.h"
 #include "connect.h"
 #include "interp.h"

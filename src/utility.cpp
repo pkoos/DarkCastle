@@ -46,8 +46,9 @@ extern "C"
 #include <fmt/format.h>
 #include <algorithm>
 
+#include "NumberTypes.h"
 #include "innate.h"
-#include "structs.h"
+// #include "structs.h"
 #include "levels.h"
 #include "player.h"
 #include "timeinfo.h"

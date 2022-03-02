@@ -5,6 +5,7 @@
 #include <cmath>
 #include <filesystem>
 
+#include "NumberTypes.h"
 #include "spells.h"
 #include "connect.h"
 #include "utility.h"

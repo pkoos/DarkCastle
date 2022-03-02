@@ -20,6 +20,7 @@
 #include <tuple>
 #include <fmt/format.h>
 
+#include "NumberTypes.h"
 #include "wizard.h"
 #include "utility.h"
 #include "connect.h"
@@ -37,7 +38,7 @@
 #include "returnvals.h"
 #include "vault.h"
 #include "set.h"
-#include "structs.h"
+// #include "structs.h"
 #include "guild.h"
 #include "const.h"
 #include "newedit.h"

@@ -9,6 +9,7 @@
 #define COMMANDSTACK_H_
 
 #include <stdint.h>
+#include "NumberTypes.h"
 
 class CommandStack
 {
