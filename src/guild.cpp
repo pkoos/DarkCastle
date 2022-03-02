@@ -3,8 +3,9 @@
 | guild.C
 | This contains all the guild commands - practice, gain, etc..
 */
+#include "NumberTypes.h"
 #include "character.h"
-#include "structs.h"
+// #include "structs.h"
 #include "spells.h"
 #include "utility.h"
 #include "levels.h"

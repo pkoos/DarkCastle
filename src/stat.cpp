@@ -10,6 +10,7 @@ extern "C"
 #include <algorithm>
 #include <list>
 
+#include "NumberTypes.h"
 #include "obj.h"
 #include "spells.h"
 #include "player.h"
