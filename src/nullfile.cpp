@@ -19,7 +19,6 @@ extern "C"
 #endif
 
 #include "nullfile.h"
-// #include "structs.h"
 #include "levels.h"
 #include "NumberTypes.h"
 
@@ -32,8 +31,6 @@ extern "C"
 #define LOG_MISC          1<<5
 #define LOG_PLAYER        1<<6
 #endif
-
-FILE * NULL_FILE = 0;
 
 FILE * dc_fopen(const char *f, const char *type)
 {

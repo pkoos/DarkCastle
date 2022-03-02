@@ -16,6 +16,7 @@ extern "C"
 {
   #include <string.h>
 }
+#include "nullfile.h"
 #include "MaxLength.h"
 #include "NumberTypes.h"
 #include <assert.h>
