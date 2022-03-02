@@ -120,11 +120,10 @@
     // "testMate.cpp.log.logfile": "/home/koosp/projects/DarkCastle/test/testMate.log",
     "testMate.cpp.log.logpanel": true,
     "testMate.cpp.discovery.strictPattern": true,
-    "testMate.cpp.test.executables": "/home/koosp/projects/DarkCastle/test/main_test",
     "testMate.cpp.test.advancedExecutables": [
         {
             "name": "main_test",
-            "pattern": "/home/koosp/projects/DarkCastle/test/main_test",
+            "pattern": "${workspaceFolder}/test/main_test",
             "runTask": {
                 "before": [
                     "cmake --build test --config Debug --target main_test -j 18 --"
