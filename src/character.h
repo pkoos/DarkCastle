@@ -8,6 +8,7 @@
 
 #define  COMPILE_WITH_CHANGES 1
 
+#include "obj.h"
 #include "Progs.h"
 #include "Attributes.h"
 #include "Position.h"
