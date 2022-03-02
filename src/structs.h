@@ -15,7 +15,7 @@ extern "C" {
 // #include "CVoteData.h"
 
 // #include <string>
-#include <vector>
+// #include <vector>
 #include <map>
 
 
