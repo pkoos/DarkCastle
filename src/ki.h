@@ -8,6 +8,8 @@
 #ifndef KI_H_
 #define KI_H_
 
+#include "character.h"
+#include "MaxLength.h"
 #include "NumberTypes.h"
 #include "structs.h" // ubyte, ubyte, etc..
 

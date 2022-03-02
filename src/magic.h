@@ -9,6 +9,7 @@
 #ifndef MAGIC_H_
 #define MAGIC_H_
 
+#include "character.h"
 #include "structs.h" // ubyte, etc..
 
 #define GLOBE_OF_DARKNESS_OBJECT      101

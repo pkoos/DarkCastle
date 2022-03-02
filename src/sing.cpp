@@ -11,8 +11,7 @@ extern "C" {
 }
 #include <vector>
 
-#include "MaxLength.h"
-#include "NumberTypes.h"
+
 #include "sing.h"
 #include "room.h"
 #include "character.h"
