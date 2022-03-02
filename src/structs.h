@@ -12,7 +12,7 @@ extern "C" {
     #include <stdio.h> // FILE
 }
 
-#include "CVoteData.h"
+// #include "CVoteData.h"
 
 #include <string>
 #include <vector>
