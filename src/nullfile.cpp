@@ -13,7 +13,7 @@ extern "C"
 {
 #include <string.h>
 }
-#include <stdio.h>
+
 #ifdef LEAK_CHECK
 #include <dmalloc.h>
 #endif

@@ -1,6 +1,8 @@
 #ifndef NULLFILE_H_
 #define NULLFILE_H_
 
+#include <stdio.h>
+
 FILE * NULL_FILE = 0;
 
 FILE * dc_fopen(const char *filename, const char *type);
