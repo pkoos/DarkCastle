@@ -1,0 +1,448 @@
+scons: Reading SConscript files ...
+v0.1-502-g9ab4323e
+scons: done reading SConscript files.
+scons: Building targets ...
+g++-11 -o CommandStack.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql CommandStack.cpp
+g++-11 -o DC.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -DVERSION=\"v0.1-502-g9ab4323e\" "-DBUILD_TIME=\"2022-03-02 04:14:38\"" -Iinclude DC.cpp
+g++-11 -o Leaderboard.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql Leaderboard.cpp
+g++-11 -o MobActivity.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql MobActivity.cpp
+g++-11 -o Timer.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql Timer.cpp
+g++-11 -o Trace.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql Trace.cpp
+g++-11 -o act.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql act.cpp
+g++-11 -o act_comm.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql act_comm.cpp
+g++-11 -o act_info.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql act_info.cpp
+g++-11 -o alias.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql alias.cpp
+g++-11 -o arena.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql arena.cpp
+g++-11 -o assign_proc.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql assign_proc.cpp
+g++-11 -o auction.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql auction.cpp
+g++-11 -o ban.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql ban.cpp
+g++-11 -o board.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql board.cpp
+g++-11 -o casino.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql casino.cpp
+g++-11 -o channel.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql channel.cpp
+g++-11 -o cl_barbarian.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql cl_barbarian.cpp
+g++-11 -o cl_mage.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql cl_mage.cpp
+g++-11 -o cl_monk.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql cl_monk.cpp
+g++-11 -o cl_paladin.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql cl_paladin.cpp
+g++-11 -o cl_ranger.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql cl_ranger.cpp
+g++-11 -o cl_thief.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql cl_thief.cpp
+g++-11 -o cl_warrior.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql cl_warrior.cpp
+g++-11 -o clan.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql clan.cpp
+g++-11 -o class.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql class.cpp
+g++-11 -o combinables.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql combinables.cpp
+g++-11 -o comm.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql comm.cpp
+g++-11 -o const.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql const.cpp
+g++-11 -o corpse.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql corpse.cpp
+g++-11 -o db.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql db.cpp
+g++-11 -o dcastle.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude dcastle.cpp
+g++-11 -o guild.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql guild.cpp
+g++-11 -o ki.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql ki.cpp
+g++-11 -o fount.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql fount.cpp
+g++-11 -o help.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql help.cpp
+g++-11 -o golem.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql golem.cpp
+g++-11 -o info.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql info.cpp
+In file included from CommandStack.cpp:9:
+player.h:203:15: error: 'CHAR_DATA' was not declared in this scope; did you mean 'CMSG_DATA'?
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |               ^~~~~~~~~
+      |               CMSG_DATA
+player.h:203:26: error: 'ch' was not declared in this scope
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |                          ^~
+player.h:203:30: error: expected primary-expression before 'int'
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |                              ^~~
+player.h:203:42: error: expression list treated as compound expression in initializer [-fpermissive]
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |                                          ^
+g++-11 -o innate.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql innate.cpp
+g++-11 -o inventory.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql inventory.cpp
+g++-11 -o handler.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql handler.cpp
+g++-11 -o group.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql group.cpp
+g++-11 -o limits.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql limits.cpp
+g++-11 -o fight.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql fight.cpp
+g++-11 -o game_portal.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql game_portal.cpp
+g++-11 -o interp.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql interp.cpp
+g++-11 -o non_off.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql non_off.cpp
+g++-11 -o offense.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql offense.cpp
+g++-11 -o nlog.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql nlog.cpp
+g++-11 -o nullfile.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql nullfile.cpp
+g++-11 -o objects.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql objects.cpp
+g++-11 -o news.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql news.cpp
+g++-11 -o new_edit.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql new_edit.cpp
+g++-11 -o quest.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql quest.cpp
+g++-11 -o nanny.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql nanny.cpp
+g++-11 -o obj_proc.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql obj_proc.cpp
+g++-11 -o wiz_102.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_102.cpp
+g++-11 -o wiz_104.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_104.cpp
+g++-11 -o who.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql who.cpp
+g++-11 -o wiz_108.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_108.cpp
+g++-11 -o wiz_103.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_103.cpp
+g++-11 -o token.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql token.cpp
+g++-11 -o wiz_106.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_106.cpp
+g++-11 -o vault.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql vault.cpp
+g++-11 -o wiz_107.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_107.cpp
+g++-11 -o wiz_109.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_109.cpp
+g++-11 -o wizard.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wizard.cpp
+g++-11 -o wiz_110.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_110.cpp
+g++-11 -o wiz_101.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_101.cpp
+g++-11 -o wiz_105.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_105.cpp
+g++-11 -o weather.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql weather.cpp
+g++-11 -o utility.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql utility.cpp
+g++-11 -o modify.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql modify.cpp
+g++-11 -o mob_prog.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql mob_prog.cpp
+g++-11 -o mob_act.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql mob_act.cpp
+g++-11 -o mob_proc.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql mob_proc.cpp
+g++-11 -o mob_proc2.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql mob_proc2.cpp
+g++-11 -o move.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql move.cpp
+g++-11 -o mob_commands.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql mob_commands.cpp
+g++-11 -o magic.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql magic.cpp
+g++-11 -o memory.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql memory.cpp
+g++-11 -o meta.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql meta.cpp
+g++-11 -o save.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql save.cpp
+g++-11 -o shop.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql shop.cpp
+g++-11 -o sing.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql sing.cpp
+g++-11 -o social.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql social.cpp
+g++-11 -o spec.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql spec.cpp
+In file included from Leaderboard.h:17,
+                 from Leaderboard.cpp:13:
+player.h:203:15: error: 'CHAR_DATA' was not declared in this scope; did you mean 'CHAR_MAX'?
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |               ^~~~~~~~~
+      |               CHAR_MAX
+player.h:203:26: error: 'ch' was not declared in this scope
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |                          ^~
+g++-11 -o spells.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql spells.cpp
+player.h:203:30: error: expected primary-expression before 'int'
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |                              ^~~
+player.h:203:42: error: expression list treated as compound expression in initializer [-fpermissive]
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |                                          ^
+In file included from Leaderboard.cpp:13:
+Leaderboard.h:32:21: error: 'CHAR_DATA' has not been declared
+   32 |         int pdscore(CHAR_DATA * ch);
+      |                     ^~~~~~~~~
+Leaderboard.h:35:18: error: 'char_data' has not been declared
+   35 |         int scan(char_data* ch);
+      |                  ^~~~~~~~~
+g++-11 -o stat.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql stat.cpp
+g++-11 -o showplayerxp.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude showplayerxp.cpp
+In file included from cl_mage.cpp:9:
+player.h:203:15: error: 'CHAR_DATA' was not declared in this scope; did you mean 'CMSG_DATA'?
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |               ^~~~~~~~~
+      |               CMSG_DATA
+player.h:203:26: error: 'ch' was not declared in this scope
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |                          ^~
+player.h:203:30: error: expected primary-expression before 'int'
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |                              ^~~
+player.h:203:42: error: expression list treated as compound expression in initializer [-fpermissive]
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |                                          ^
+scons: *** [CommandStack.o] Error 1
+In file included from nullfile.cpp:22:
+levels.h:47:3: error: 'int16' does not name a type; did you mean 'int16_t'?
+   47 |   int16 num;    // ID # of command
+      |   ^~~~~
+      |   int16_t
+scons: *** [nullfile.o] Error 1
+In file included from sing.cpp:15:
+sing.h:16:56: error: 'CHAR_DATA' has not been declared
+   16 | typedef int     SING_FUN                ( ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *victim, int skill);
+      |                                                        ^~~~~~~~~
+sing.h:16:82: error: 'CHAR_DATA' has not been declared
+   16 | typedef int     SING_FUN                ( ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *victim, int skill);
+      |                                                                                  ^~~~~~~~~
+sing.h:45:6: error: variable or field 'stop_grouped_bards' declared void
+   45 | void stop_grouped_bards(CHAR_DATA *ch, int action);
+      |      ^~~~~~~~~~~~~~~~~~
+sing.h:45:25: error: 'CHAR_DATA' was not declared in this scope; did you mean 'CMSG_DATA'?
+   45 | void stop_grouped_bards(CHAR_DATA *ch, int action);
+      |                         ^~~~~~~~~
+      |                         CMSG_DATA
+sing.h:45:36: error: 'ch' was not declared in this scope; did you mean 'char'?
+   45 | void stop_grouped_bards(CHAR_DATA *ch, int action);
+      |                                    ^~
+      |                                    char
+sing.h:45:40: error: expected primary-expression before 'int'
+   45 | void stop_grouped_bards(CHAR_DATA *ch, int action);
+      |                                        ^~~
+In file included from ki.cpp:17:
+ki.h:14:48: error: 'CHAR_DATA' has not been declared
+   14 | typedef int     KI_FUN          ( ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *vict);
+      |                                                ^~~~~~~~~
+ki.h:14:74: error: 'CHAR_DATA' has not been declared
+   14 | typedef int     KI_FUN          ( ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *vict);
+      |                                                                          ^~~~~~~~~
+ki.h:45:13: error: 'CHAR_DATA' was not declared in this scope; did you mean 'CHAR_MAX'?
+   45 | int ki_gain(CHAR_DATA *ch);
+      |             ^~~~~~~~~
+      |             CHAR_MAX
+ki.h:45:24: error: 'ch' was not declared in this scope
+   45 | int ki_gain(CHAR_DATA *ch);
+      |                        ^~
+ki.h:46:14: error: 'CHAR_DATA' was not declared in this scope; did you mean 'CHAR_MAX'?
+   46 | int ki_check(CHAR_DATA *ch);
+      |              ^~~~~~~~~
+      |              CHAR_MAX
+ki.h:46:25: error: 'ch' was not declared in this scope
+   46 | int ki_check(CHAR_DATA *ch);
+      |                         ^~
+ki.h:47:6: error: variable or field 'reduce_ki' declared void
+   47 | void reduce_ki(CHAR_DATA *ch, int type);
+      |      ^~~~~~~~~
+ki.h:47:16: error: 'CHAR_DATA' was not declared in this scope; did you mean 'CHAR_MAX'?
+   47 | void reduce_ki(CHAR_DATA *ch, int type);
+      |                ^~~~~~~~~
+      |                CHAR_MAX
+ki.h:47:27: error: 'ch' was not declared in this scope
+   47 | void reduce_ki(CHAR_DATA *ch, int type);
+      |                           ^~
+ki.h:47:31: error: expected primary-expression before 'int'
+   47 | void reduce_ki(CHAR_DATA *ch, int type);
+      |                               ^~~
+Leaderboard.cpp: In member function 'void Leaderboard::check()':
+Leaderboard.cpp:315:40: error: cannot convert 'CHAR_DATA*' {aka 'char_data*'} to 'int*'
+  315 |                         if (pdscore(d->character) > pdactive[i]) {
+      |                                     ~~~^~~~~~~~~
+      |                                        |
+      |                                        CHAR_DATA* {aka char_data*}
+In file included from Leaderboard.cpp:13:
+Leaderboard.h:32:33: note:   initializing argument 1 of 'int Leaderboard::pdscore(int*)'
+   32 |         int pdscore(CHAR_DATA * ch);
+      |                     ~~~~~~~~~~~~^~
+Leaderboard.cpp:321:58: error: cannot convert 'CHAR_DATA*' {aka 'char_data*'} to 'int*'
+  321 |                                 pdactive[i] = pdscore(d->character);
+      |                                                       ~~~^~~~~~~~~
+      |                                                          |
+      |                                                          CHAR_DATA* {aka char_data*}
+In file included from Leaderboard.cpp:13:
+Leaderboard.h:32:33: note:   initializing argument 1 of 'int Leaderboard::pdscore(int*)'
+   32 |         int pdscore(CHAR_DATA * ch);
+      |                     ~~~~~~~~~~~~^~
+Leaderboard.cpp:412:40: error: cannot convert 'CHAR_DATA*' {aka 'char_data*'} to 'int*'
+  412 |                         if (pdscore(d->character) > pdactiveclass[k][i]) {
+      |                                     ~~~^~~~~~~~~
+      |                                        |
+      |                                        CHAR_DATA* {aka char_data*}
+In file included from Leaderboard.cpp:13:
+Leaderboard.h:32:33: note:   initializing argument 1 of 'int Leaderboard::pdscore(int*)'
+   32 |         int pdscore(CHAR_DATA * ch);
+      |                     ~~~~~~~~~~~~^~
+Leaderboard.cpp:419:66: error: cannot convert 'CHAR_DATA*' {aka 'char_data*'} to 'int*'
+  419 |                                 pdactiveclass[k][i] = pdscore(d->character);
+      |                                                               ~~~^~~~~~~~~
+      |                                                                  |
+      |                                                                  CHAR_DATA* {aka char_data*}
+In file included from Leaderboard.cpp:13:
+Leaderboard.h:32:33: note:   initializing argument 1 of 'int Leaderboard::pdscore(int*)'
+   32 |         int pdscore(CHAR_DATA * ch);
+      |                     ~~~~~~~~~~~~^~
+Leaderboard.cpp: In member function 'void Leaderboard::check_offline()':
+Leaderboard.cpp:822:37: error: cannot convert 'char_data* const' to 'int*'
+  822 |                         if (pdscore(ch) > pdactive[i])
+      |                                     ^~
+      |                                     |
+      |                                     char_data* const
+In file included from Leaderboard.cpp:13:
+Leaderboard.h:32:33: note:   initializing argument 1 of 'int Leaderboard::pdscore(int*)'
+   32 |         int pdscore(CHAR_DATA * ch);
+      |                     ~~~~~~~~~~~~^~
+Leaderboard.cpp:830:55: error: cannot convert 'char_data* const' to 'int*'
+  830 |                                 pdactive[i] = pdscore(ch);
+      |                                                       ^~
+      |                                                       |
+      |                                                       char_data* const
+In file included from Leaderboard.cpp:13:
+Leaderboard.h:32:33: note:   initializing argument 1 of 'int Leaderboard::pdscore(int*)'
+   32 |         int pdscore(CHAR_DATA * ch);
+      |                     ~~~~~~~~~~~~^~
+Leaderboard.cpp:940:37: error: cannot convert 'char_data* const' to 'int*'
+  940 |                         if (pdscore(ch) > pdactiveclass[k][i])
+      |                                     ^~
+      |                                     |
+      |                                     char_data* const
+In file included from Leaderboard.cpp:13:
+Leaderboard.h:32:33: note:   initializing argument 1 of 'int Leaderboard::pdscore(int*)'
+   32 |         int pdscore(CHAR_DATA * ch);
+      |                     ~~~~~~~~~~~~^~
+Leaderboard.cpp:949:63: error: cannot convert 'char_data* const' to 'int*'
+  949 |                                 pdactiveclass[k][i] = pdscore(ch);
+      |                                                               ^~
+      |                                                               |
+      |                                                               char_data* const
+In file included from Leaderboard.cpp:13:
+Leaderboard.h:32:33: note:   initializing argument 1 of 'int Leaderboard::pdscore(int*)'
+   32 |         int pdscore(CHAR_DATA * ch);
+      |                     ~~~~~~~~~~~~^~
+Leaderboard.cpp: At global scope:
+Leaderboard.cpp:1261:5: error: no declaration matches 'int Leaderboard::pdscore(CHAR_DATA*)'
+ 1261 | int Leaderboard::pdscore(CHAR_DATA * ch) {
+      |     ^~~~~~~~~~~
+In file included from Leaderboard.cpp:13:
+Leaderboard.h:32:13: note: candidate is: 'int Leaderboard::pdscore(int*)'
+   32 |         int pdscore(CHAR_DATA * ch);
+      |             ^~~~~~~
+Leaderboard.h:22:7: note: 'class Leaderboard' defined here
+   22 | class Leaderboard {
+      |       ^~~~~~~~~~~
+Leaderboard.cpp: In function 'int do_leaderboard(char_data*, char*, int)':
+Leaderboard.cpp:1327:42: error: cannot convert 'char_data*' to 'int*'
+ 1327 |                         leaderboard.scan(ch);
+      |                                          ^~
+      |                                          |
+      |                                          char_data*
+In file included from Leaderboard.cpp:13:
+Leaderboard.h:35:29: note:   initializing argument 1 of 'int Leaderboard::scan(int*)'
+   35 |         int scan(char_data* ch);
+      |                  ~~~~~~~~~~~^~
+Leaderboard.cpp:1527:52: error: cannot convert 'CHAR_DATA*' {aka 'char_data*'} to 'int*'
+ 1527 |                         if (leaderboard.pdscore(d->character) > pdonline[i]) {
+      |                                                 ~~~^~~~~~~~~
+      |                                                    |
+      |                                                    CHAR_DATA* {aka char_data*}
+In file included from Leaderboard.cpp:13:
+Leaderboard.h:32:33: note:   initializing argument 1 of 'int Leaderboard::pdscore(int*)'
+   32 |         int pdscore(CHAR_DATA * ch);
+      |                     ~~~~~~~~~~~~^~
+Leaderboard.cpp:1533:70: error: cannot convert 'CHAR_DATA*' {aka 'char_data*'} to 'int*'
+ 1533 |                                 pdonline[i] = leaderboard.pdscore(d->character);
+      |                                                                   ~~~^~~~~~~~~
+      |                                                                      |
+      |                                                                      CHAR_DATA* {aka char_data*}
+In file included from Leaderboard.cpp:13:
+Leaderboard.h:32:33: note:   initializing argument 1 of 'int Leaderboard::pdscore(int*)'
+   32 |         int pdscore(CHAR_DATA * ch);
+      |                     ~~~~~~~~~~~~^~
+Leaderboard.cpp: At global scope:
+Leaderboard.cpp:1899:5: error: no declaration matches 'int Leaderboard::scan(char_data*)'
+ 1899 | int Leaderboard::scan(char_data* ch)
+      |     ^~~~~~~~~~~
+In file included from Leaderboard.cpp:13:
+Leaderboard.h:35:13: note: candidate is: 'int Leaderboard::scan(int*)'
+   35 |         int scan(char_data* ch);
+      |             ^~~~
+Leaderboard.h:22:7: note: 'class Leaderboard' defined here
+   22 | class Leaderboard {
+      |       ^~~~~~~~~~~
+scons: *** [Leaderboard.o] Error 1
+scons: *** [cl_mage.o] Error 1
+In file included from ban.cpp:6:
+player.h:203:15: error: 'CHAR_DATA' was not declared in this scope; did you mean 'CHAR_MAX'?
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |               ^~~~~~~~~
+      |               CHAR_MAX
+player.h:203:26: error: 'ch' was not declared in this scope
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |                          ^~
+player.h:203:30: error: expected primary-expression before 'int'
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |                              ^~~
+player.h:203:42: error: expression list treated as compound expression in initializer [-fpermissive]
+  203 | int get_saves(CHAR_DATA *ch, int savetype);
+      |                                          ^
+ki.cpp: In function 'int do_ki(CHAR_DATA*, char*, int)':
+ki.cpp:351:75: error: cannot convert 'CHAR_DATA*' {aka 'char_data*'} to 'int*' in argument passing
+  351 |                         return ((*ki_info[spl].ki_pointer)(GET_LEVEL(ch), ch, argument,
+      |                                                                           ^~
+      |                                                                           |
+      |                                                                           CHAR_DATA* {aka char_data*}
+ki.cpp: At global scope:
+ki.cpp:372:26: error: 'int ki_gain(CHAR_DATA*)' redeclared as different kind of entity
+  372 | int ki_gain(CHAR_DATA *ch)
+      |                          ^
+In file included from ki.cpp:17:
+ki.h:45:5: note: previous declaration 'int ki_gain'
+   45 | int ki_gain(CHAR_DATA *ch);
+      |     ^~~~~~~
+sing.cpp: In function 'int do_sing(CHAR_DATA*, char*, int)':
+sing.cpp:603:110: error: cannot convert 'CHAR_DATA*' {aka 'char_data*'} to 'int*' in argument passing
+  603 |                                                 ((*song_info[(*i).song_number].intrp_pointer)(GET_LEVEL(ch), ch, NULL, NULL, learned));
+      |                                                                                                              ^~
+      |                                                                                                              |
+      |                                                                                                              CHAR_DATA* {aka char_data*}
+sing.cpp:632:79: error: cannot convert 'CHAR_DATA*' {aka 'char_data*'} to 'int*' in argument passing
+  632 |                         return ((*song_info[spl].song_pointer)(GET_LEVEL(ch), ch, argument, tar_char, learned));
+      |                                                                               ^~
+      |                                                                               |
+      |                                                                               CHAR_DATA* {aka char_data*}
+sing.cpp: In lambda function:
+sing.cpp:659:101: error: cannot convert 'char_data* const' to 'int*' in argument passing
+  659 |                                         ((*song_info[(*j).song_number].intrp_pointer)(GET_LEVEL(i), i, NULL, NULL, -1));
+      |                                                                                                     ^
+      |                                                                                                     |
+      |                                                                                                     char_data* const
+sing.cpp:698:93: error: cannot convert 'char_data* const' to 'int*' in argument passing
+  698 |                                 ((*song_info[(*j).song_number].intrp_pointer)(GET_LEVEL(i), i, NULL, NULL, -1));
+      |                                                                                             ^
+      |                                                                                             |
+      |                                                                                             char_data* const
+sing.cpp:726:93: error: cannot convert 'char_data* const' to 'int*' in argument passing
+  726 |                                 ((*song_info[(*j).song_number].intrp_pointer)(GET_LEVEL(i), i, NULL, NULL, -1));
+      |                                                                                             ^
+      |                                                                                             |
+      |                                                                                             char_data* const
+sing.cpp:748:101: error: cannot convert 'char_data* const' to 'int*' in argument passing
+  748 |                                         ((*song_info[(*j).song_number].intrp_pointer)(GET_LEVEL(i), i, NULL, NULL, -1));
+      |                                                                                                     ^
+      |                                                                                                     |
+      |                                                                                                     char_data* const
+sing.cpp:788:93: error: cannot convert 'char_data* const' to 'int*' in argument passing
+  788 |                         retval = ((*song_info[(*j).song_number].exec_pointer)(GET_LEVEL(i), i, NULL, NULL, learned));
+      |                                                                                             ^
+      |                                                                                             |
+      |                                                                                             char_data* const
+In file included from utility.cpp:51:
+levels.h:47:3: error: 'int16' does not name a type; did you mean 'int16_t'?
+   47 |   int16 num;    // ID # of command
+      |   ^~~~~
+      |   int16_t
+sing.cpp: In function 'int song_stop(ubyte, CHAR_DATA*, char*, CHAR_DATA*, int)':
+sing.cpp:1470:102: error: cannot convert 'CHAR_DATA*' {aka 'char_data*'} to 'int*' in argument passing
+ 1470 |                                         ((*song_info[(*i).song_number].intrp_pointer)(GET_LEVEL(ch), ch, NULL, NULL, -1));
+      |                                                                                                      ^~
+      |                                                                                                      |
+      |                                                                                                      CHAR_DATA* {aka char_data*}
+sing.cpp:1482:94: error: cannot convert 'CHAR_DATA*' {aka 'char_data*'} to 'int*' in argument passing
+ 1482 |                                 ((*song_info[(*i).song_number].intrp_pointer)(GET_LEVEL(ch), ch, NULL, NULL, -1));
+      |                                                                                              ^~
+      |                                                                                              |
+      |                                                                                              CHAR_DATA* {aka char_data*}
+sing.cpp: In function 'int execute_song_jig_of_alacrity(ubyte, CHAR_DATA*, char*, CHAR_DATA*, int)':
+sing.cpp:2067:53: error: cannot convert 'CHAR_DATA*' {aka 'char_data*'} to 'int*'
+ 2067 |                 return intrp_jig_of_alacrity(level, ch, arg, victim, -1);
+      |                                                     ^~
+      |                                                     |
+      |                                                     CHAR_DATA* {aka char_data*}
+In file included from sing.cpp:15:
+sing.h:83:10: note:   initializing argument 2 of 'int intrp_jig_of_alacrity(ubyte, int*, char*, int*, int)'
+   83 | SING_FUN intrp_jig_of_alacrity;
+      |          ^~~~~~~~~~~~~~~~~~~~~
+sing.cpp: In function 'int execute_song_mking_charge(ubyte, CHAR_DATA*, char*, CHAR_DATA*, int)':
+sing.cpp:2182:50: error: cannot convert 'CHAR_DATA*' {aka 'char_data*'} to 'int*'
+ 2182 |                 return intrp_mking_charge(level, ch, arg, victim, -1);
+      |                                                  ^~
+      |                                                  |
+      |                                                  CHAR_DATA* {aka char_data*}
+In file included from sing.cpp:15:
+sing.h:111:10: note:   initializing argument 2 of 'int intrp_mking_charge(ubyte, int*, char*, int*, int)'
+  111 | SING_FUN intrp_mking_charge;
+      |          ^~~~~~~~~~~~~~~~~~
+sing.cpp: In function 'int execute_song_vigilant_siren(ubyte, CHAR_DATA*, char*, CHAR_DATA*, int)':
+sing.cpp:2736:52: error: cannot convert 'CHAR_DATA*' {aka 'char_data*'} to 'int*'
+ 2736 |                 return intrp_vigilant_siren(level, ch, arg, victim, -1);
+      |                                                    ^~
+      |                                                    |
+      |                                                    CHAR_DATA* {aka char_data*}
+In file included from sing.cpp:15:
+sing.h:95:10: note:   initializing argument 2 of 'int intrp_vigilant_siren(ubyte, int*, char*, int*, int)'
+   95 | SING_FUN intrp_vigilant_siren;
+      |          ^~~~~~~~~~~~~~~~~~~~
+scons: *** [ki.o] Error 1
+scons: *** [sing.o] Error 1
+scons: *** [ban.o] Error 1
+scons: *** [utility.o] Error 1
+scons: building terminated because of errors.
