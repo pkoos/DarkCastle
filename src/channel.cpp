@@ -13,7 +13,7 @@
 
 #include "MaxLength.h"
 #include "NumberTypes.h"
-// //#include "structs.h"
+#include "structs.h"
 #include "player.h"
 #include "room.h"
 #include "character.h"

@@ -4,7 +4,7 @@
  * Description: Commands for the barbarian class.
  *************************************************************************/
 
-// //#include "structs.h"
+#include "structs.h"
 #include "MaxLength.h"
 #include "player.h"
 #include "levels.h"

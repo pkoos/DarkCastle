@@ -14,7 +14,7 @@ extern "C"
 
 #include "MaxLength.h"
 #include "NumberTypes.h"
-//#include "structs.h"
+#include "structs.h"
 #include "db.h"
 #include "utility.h"
 #include "vault.h"

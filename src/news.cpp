@@ -19,7 +19,7 @@ extern "C"
 #include <string.h>
 }
 #include <cstdlib>
-//#include "structs.h"
+#include "structs.h"
 #include "MaxLength.h"
 #include "room.h"
 #include "character.h"

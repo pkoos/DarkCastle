@@ -4,7 +4,7 @@
 #define LEVELS_H_
 
 #include "NumberTypes.h"
-// //#include "structs.h"
+#include "structs.h"
 
 #define MORTAL 60
 #define MAX_MORTAL 60

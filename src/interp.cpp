@@ -33,7 +33,7 @@ extern "C"
 
 using namespace std;
 
-//#include "structs.h" // MAX_STRING_LENGTH
+#include "structs.h" // MAX_STRING_LENGTH
 #include "MaxLength.h"
 #include "character.h" // POSITION_*
 #include "interp.h"

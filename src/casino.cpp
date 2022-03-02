@@ -12,7 +12,7 @@ extern "C"
 }
 #include "MaxLength.h"
 #include "NumberTypes.h"
-// //#include "structs.h"
+#include "structs.h"
 #include "room.h"
 #include "character.h"
 #include "obj.h"

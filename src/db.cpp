@@ -39,7 +39,7 @@ extern "C"
 #include "db.h"
 #include "memory.h"
 #include "NumberTypes.h"
-// //#include "structs.h" // MAX_STRING_LENGTH
+#include "structs.h" // MAX_STRING_LENGTH
 #include "weather.h" // structs
 #include "timeinfo.h" // structs
 #include "player.h" // log info

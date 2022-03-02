@@ -6,7 +6,7 @@
 
 #include "MaxLength.h"
 #include "NumberTypes.h"
-// //#include "structs.h"
+#include "structs.h"
 #include "player.h"
 #include "levels.h"
 #include "character.h"

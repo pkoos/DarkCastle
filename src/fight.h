@@ -6,7 +6,7 @@
 | fight.h
 | This file defines the header information for fight.
 */
-// //#include "structs.h" // ubyte, ubyte, etc..
+#include "structs.h" // ubyte, ubyte, etc..
 #include "obj.h" // WIELD, SECOND_WIELD
 #include "character.h"
 #include "utility.h" // FALSE
