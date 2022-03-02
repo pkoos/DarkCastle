@@ -22,6 +22,7 @@ extern "C"
 #include <map>
 #include <string>
 
+#include "NumberTypes.h"
 #include "obj.h"
 #include "player.h" // *app_type
 #include "character.h"

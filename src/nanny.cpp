@@ -29,12 +29,13 @@ extern "C"
 #include <queue>
 #include <fmt/format.h>
 
+#include "NumberTypes.h"
 #include "character.h"
 #include "comm.h"
 #include "connect.h"
 #include "race.h"
 #include "player.h"
-#include "structs.h" // TRUE
+// #include "structs.h" // TRUE
 #include "utility.h"
 #include "levels.h"
 #include "ki.h"

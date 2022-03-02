@@ -16,8 +16,9 @@
 #include <assert.h>
 #include <string.h>
 
+#include "NumberTypes.h"
 #include "character.h"
-#include "structs.h"
+// #include "structs.h"
 #include "utility.h"
 #include "mobile.h"
 #include "spells.h"

@@ -8,6 +8,7 @@
 
 #include <string.h> // strstr()
 
+#include "NumberTypes.h"
 #include "db.h"
 #include "fight.h"
 #include "room.h"

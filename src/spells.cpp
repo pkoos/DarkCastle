@@ -30,6 +30,7 @@ extern "C"
 #include <stdlib.h>
 }
 
+#include "NumberTypes.h"
 #include "character.h"
 #include "race.h"
 #include "levels.h"

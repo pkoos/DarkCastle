@@ -7,6 +7,7 @@
 |   control.
 */
 
+#include "NumberTypes.h"
 #include "Actions.h"
 #include <string>
 

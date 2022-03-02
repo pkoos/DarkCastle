@@ -17,6 +17,7 @@
 #ifndef INTERP_H_
 #define INTERP_H_
 
+#include "NumberTypes.h"
 #include "character.h"
 
 char *remove_trailing_spaces(char *arg);

@@ -18,7 +18,7 @@ extern "C"
 #include <dmalloc.h>
 #endif
 
-#include "structs.h"
+// #include "structs.h"
 #include "levels.h"
 
 #ifndef LOG_BUG

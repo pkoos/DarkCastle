@@ -17,7 +17,8 @@
 #ifndef HANDLER_H_
 #define HANDLER_H_
 
-#include "structs.h" // ubyte, etc..
+#include "NumberTypes.h"
+// #include "structs.h" // ubyte, etc..
 #include "comm.h"
 #include "Trace.h"
 

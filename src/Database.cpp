@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <cstring>
+#include "NumberTypes.h"
 #include "levels.h"
 #include "Database.h"
 

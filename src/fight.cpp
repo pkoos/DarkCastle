@@ -29,6 +29,7 @@
 #include <assert.h>
 #include <sstream>
 
+#include "NumberTypes.h"
 #include "fight.h"
 #include "levels.h"
 #include "race.h"

@@ -8,7 +8,8 @@
 #ifndef SING_H_
 #define SING_H_
 
-#include "structs.h" // ubyte, ubyte, etc..
+#include "NumberTypes.h"
+// #include "structs.h" // ubyte, ubyte, etc..
 
 #define BARD_MAX_RATING 3
 
