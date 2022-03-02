@@ -4,7 +4,7 @@ extern "C"
 #include <string.h>
 }
 
-#include "structs.h"
+//#include "structs.h"
 #include "room.h"
 #include "character.h"
 #include "obj.h"

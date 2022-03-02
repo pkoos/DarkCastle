@@ -28,7 +28,7 @@ extern "C"
 #include "fight.h"
 #include "returnvals.h"
 #include "comm.h"
-#include "structs.h"
+//#include "structs.h"
 #include "utility.h"
 #include "fileinfo.h"
 #include <string>

@@ -9,7 +9,7 @@
 #define SING_H_
 
 #include "NumberTypes.h"
-// #include "structs.h" // ubyte, ubyte, etc..
+// //#include "structs.h" // ubyte, ubyte, etc..
 
 #define BARD_MAX_RATING 3
 

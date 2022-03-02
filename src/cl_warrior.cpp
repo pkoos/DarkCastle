@@ -7,7 +7,7 @@
 
 #include <algorithm>
 
-#include "structs.h"
+// //#include "structs.h"
 #include "character.h"
 #include "player.h"
 #include "fight.h"

@@ -9,7 +9,7 @@
 #include "NumberTypes.h"
 #include "ItemApply.h"
 #include "punish.h" // punishment vectors
-// #include "structs.h" // ubyte
+// //#include "structs.h" // ubyte
 #include "class.h"
 /************************************************************************
 | CHAR_DATA.misc vector

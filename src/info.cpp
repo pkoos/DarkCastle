@@ -22,7 +22,7 @@
 #include <fstream>
 #include <fmt/format.h>
 
-#include "structs.h"
+// //#include "structs.h"
 #include "room.h"
 #include "character.h"
 #include "obj.h"

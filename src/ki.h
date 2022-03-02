@@ -9,7 +9,7 @@
 #define KI_H_
 
 #include "NumberTypes.h"
-// #include "structs.h" // ubyte, ubyte, etc..
+// //#include "structs.h" // ubyte, ubyte, etc..
 
 typedef int	KI_FUN		( ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *vict);
 

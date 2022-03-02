@@ -9,7 +9,7 @@
 #include <cctype>
 #include <cstring>
 
-#include "structs.h"
+//#include "structs.h"
 #include "character.h"
 #include "utility.h"
 #include "handler.h"

@@ -4,7 +4,7 @@ one liner quest shit
 
 #include "NumberTypes.h"
 #include <math.h>
-#include "structs.h"
+//#include "structs.h"
 #include "character.h"
 #include "comm.h"
 #include "fileinfo.h"

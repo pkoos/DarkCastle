@@ -3,7 +3,7 @@
  * cl_barbarian.cpp
  * Description: Commands for the barbarian class.
  *************************************************************************/
-#include "structs.h"
+// //#include "structs.h"
 #include "player.h"
 #include "levels.h"
 #include "character.h"

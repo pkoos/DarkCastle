@@ -5,7 +5,7 @@
 | connect.h
 | Description: State of connectedness information.
 */
-// #include "structs.h"  // MAX_INPUT_LENGTH
+// //#include "structs.h"  // MAX_INPUT_LENGTH
 #include "NumberTypes.h"
 #include "comm.h"
  
