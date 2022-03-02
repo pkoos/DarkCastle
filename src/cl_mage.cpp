@@ -3,27 +3,7 @@
 | Description:  Commands for the mage class.
 */
 #include <string.h>
-
-#include "MaxLength.h"
-#include "NumberTypes.h"
-#include "player.h"
-#include "levels.h"
-#include "character.h"
-#include "spells.h"
-#include "utility.h"
-#include "fight.h"
-#include "mobile.h"
-#include "connect.h"
-#include "handler.h"
-#include "act.h"
-#include "interp.h"
-#include "returnvals.h"
-#include "room.h"
-#include "db.h"
-
-extern CWorld world;
-extern struct spell_info_type spell_info[MAX_SPL_LIST];
-
+#include "cl_mage.h"
 
 int spellcraft(struct char_data *ch, int spell)
 {

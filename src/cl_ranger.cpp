@@ -12,41 +12,7 @@ extern "C"  {
   #include <string.h>
   #include <stdio.h>
 }
-//#include <iostream.h>
-#include "MaxLength.h"
-#include "NumberTypes.h"
-
-#include "character.h"
-#include "Affect.h"
-#include "mobile.h"
-#include "utility.h"
-#include "spells.h"
-#include "isr.h"
-#include "handler.h"
-#include "room.h"
-#include "terminal.h"
-#include "player.h"
-#include "levels.h"
-#include "connect.h"
-#include "fight.h"
-#include "interp.h"
-#include "db.h"
-#include "act.h"
-#include "fileinfo.h" // SAVE_DIR
-#include "returnvals.h"
-#include "inventory.h"
-#include "const.h"
-
-extern CWorld world;
-extern struct zone_data *zone_table;
-extern struct obj_data *object_list; 
-extern int rev_dir[];
-void save_corpses(void);
-
-int saves_spell(CHAR_DATA *ch, CHAR_DATA *vict, int spell_base, int16 save_type);
-void check_eq(CHAR_DATA *ch);
-extern struct index_data *mob_index;
-int get_difficulty(int);
+#include "cl_ranger.h"
 
 int charm_space(int level)
 {

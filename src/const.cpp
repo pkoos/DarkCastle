@@ -1474,176 +1474,6 @@ struct class_skill_defines a_skills[] = { // anti-paladin skills
 {    "\n",                   0,                       1,      0,   0,   0 }
 };
 
-// paladin 10006 guildmaster - done and checked, Apoc
-struct class_skill_defines p_skills[] = { // paladin skills
-
-//   Ability Name            Ability File            Level     Max  Group   Requisites 
-//   ------------            ------------            -----     ---  -----   ---------- 
-{    "layhands",             SKILL_LAY_HANDS,          1,     100,  0,   INTWIS },
-{    "kick",                 SKILL_KICK,               2,      70,  0,   STRCON },
-{    "bless",                SPELL_BLESS,              3,      90,  0,   CONWIS },
-{    "double",               SKILL_SECOND_ATTACK,      5,      85,  0,   DEXINT },
-{    "shield block",         SKILL_SHIELDBLOCK,        7,      90,  0,   CONWIS },
-{    "rescue",               SKILL_RESCUE,             8,      85,  0,   CONWIS },
-{    "cure light",           SPELL_CURE_LIGHT,         9,      85,  0,   INTWIS },
-{    "dual wield",           SKILL_DUAL_WIELD,         10,     80,  0,   STRCON },
-{    "detect poison",        SPELL_DETECT_POISON,      11,     85,  0,   STRWIS },
-{    "create food",          SPELL_CREATE_FOOD,        12,     85,  0,   INTWIS },
-{    "create water",         SPELL_CREATE_WATER,       13,     85,  0,   INTWIS },
-{    "cure serious",         SPELL_CURE_SERIOUS,       15,     85,  0,   INTWIS },
-{    "detect evil",          SPELL_DETECT_EVIL,        17,    100,  0,   STRWIS },
-{    "remove poison",        SPELL_REMOVE_POISON,      18,     85,  0,   CONWIS },
-{    "detect invisibility",  SPELL_DETECT_INVISIBLE,   20,     85,  0,   STRWIS },
-{    "cure critical",        SPELL_CURE_CRITIC,        22,     85,  0,   INTWIS },
-{    "parry",                SKILL_PARRY,              23,     70,  0,   DEXINT },
-{    "bash",                 SKILL_BASH,               25,     80,  0,   STRCON },
-{    "sense life",           SPELL_SENSE_LIFE,         26,     85,  0,   STRWIS },
-{    "strength",             SPELL_STRENGTH,           28,     70,  0,   STRWIS },
-{    "earthquake",           SPELL_EARTHQUAKE,         29,     70,  0,   STRCON },
-{    "bludgeoning",          SKILL_BLUDGEON_WEAPONS,   30,     85,  0,   DEXINT },
-{    "slashing",             SKILL_SLASHING_WEAPONS,   30,     85,  0,   DEXINT },
-{    "crushing",             SKILL_CRUSHING_WEAPONS,   30,     85,  0,   DEXINT },
-{    "blessed halo",         SPELL_BLESSED_HALO,       31,    100,  0,   STRWIS },
-{    "triple",               SKILL_THIRD_ATTACK,       33,     80,  0,   DEXINT },
-{    "two handers",          SKILL_TWO_HANDED_WEAPONS, 35,     80,  0,   DEXINT },
-{    "heal",                 SPELL_HEAL,               37,     85,  0,   INTWIS },
-{    "harm",                 SPELL_HARM,               38,     85,  0,   STRCON },
-{    "sanctuary",            SPELL_SANCTUARY,          40,     85,  0,   CONWIS },
-{    "holy aegis",           SPELL_AEGIS,              42,    100,  0,   STRWIS },
-{    "dispel evil",          SPELL_DISPEL_EVIL,        43,     90,  0,   STRCON },
-{    "protection from evil", SPELL_PROTECT_FROM_EVIL,  45,     85,  0,   CONWIS },
-{    "resist cold",          SPELL_RESIST_COLD,        46,     70,  0,   STRWIS },
-{    "divine fury",          SPELL_DIVINE_FURY,        48,    100,  0,   STRCON },
-{    "behead",               SKILL_BEHEAD,             49,    100,  0,   DEXINT },
-{    "holy aura",            SPELL_HOLY_AURA,          50,    100,  0,   CONWIS },
-{    "heroism",              SPELL_HEROISM,            51,    100,  0,   CONWIS },
-{    "consecrate",           SPELL_CONSECRATE,         55,    100,  0,   STRWIS },
-//{    "spirit shield",        SPELL_SPIRIT_SHIELD,      57,    100,  0,   INTWIS },
-{    "\n",                   0,                        1,      0,   0,   0 }
-};
-
-// barbarian 10007 guildmaster - done and checked, Apoc
-struct class_skill_defines b_skills[] = { // barbarian skills
-
-//   Ability Name       Ability File            Level  Max  Group  Requisites
-//   ------------       ------------            -----  ---  -----  ----------
-{    "dual wield",      SKILL_DUAL_WIELD,         1,    85,  0,  DEXCON },
-{    "bash",            SKILL_BASH,               2,    90,  0,  STRINT },
-{    "kick",            SKILL_KICK,               3,    80,  0,  STRINT },
-{    "parry",           SKILL_PARRY,              5,    70,  0,  DEXCON },
-{    "double",          SKILL_SECOND_ATTACK,      8,    85,  0,  DEXWIS },
-{    "dodge",           SKILL_DODGE,  	          10,   70,  0,  DEXCON },
-{    "blood fury",      SKILL_BLOOD_FURY,         12,  100,  0,  STRCON },
-{    "crazed assault",  SKILL_CRAZED_ASSAULT,     15,  100,  0,  STRCON },
-{    "frenzy",          SKILL_FRENZY,             18,   90,  0,  DEXCON },
-{    "rage",            SKILL_RAGE,               20,  100,  0,  STRCON },
-{"enhanced regeneration",SKILL_ENHANCED_REGEN,    22,   90,  0,  DEXCON },
-{    "triple",          SKILL_THIRD_ATTACK,       25,   85,  0,  DEXWIS },
-{    "battlecry",       SKILL_BATTLECRY,          27,  100,  0,  STRINT },
-{    "blindfighting",   SKILL_BLINDFIGHTING,      28,   60,  0,  DEXCON },
-{    "whipping",        SKILL_WHIPPING_WEAPONS,   30,   85,  0,  DEXWIS },
-{    "piercing",        SKILL_PIERCEING_WEAPONS,  30,   85,  0,  DEXWIS },
-{    "slashing",        SKILL_SLASHING_WEAPONS,   30,   85,  0,  DEXWIS },
-{    "bludgeoning",     SKILL_BLUDGEON_WEAPONS,   30,   85,  0,  DEXWIS },
-{    "crushing",        SKILL_CRUSHING_WEAPONS,   30,   85,  0,  DEXWIS },
-{    "ferocity",        SKILL_FEROCITY,           31,  100,  0,  STRINT },
-{    "headbutt",        SKILL_HEADBUTT,           33,   90,  0,  STRINT },
-{    "two handers",     SKILL_TWO_HANDED_WEAPONS, 35,   90,  0,  DEXWIS },
-{    "archery",         SKILL_ARCHERY,            38,   80,  0,  DEXWIS },
-{    "berserk",         SKILL_BERSERK,            40,  100,  0,  STRCON },
-{    "hitall",          SKILL_HITALL,             45,   90,  0,  STRCON },
-{    "magic resistance", SKILL_MAGIC_RESIST,      47,  100,  0,  DEXCON },
-{    "knockback",       SKILL_KNOCKBACK,          48,  100,  0,  STRINT },
-{    "bullrush",        SKILL_BULLRUSH,           50,  100,  0,  STRCON },
-{    "batterbrace",     SKILL_BATTERBRACE,        51,  100,  0,  DEXWIS },
-{    "vigor",           SKILL_VIGOR,              55,  100,  0,  DEXCON },
-{    "pursuit",         SKILL_PURSUIT,            55,  100,  1,  DEXCON },
-{    "\n",              0,                        1,    0,   0,  0 }
-};
-
-// monk 10008 guildmaster - done and checked, Apoc
-struct class_skill_defines k_skills[] = { // monk skills
-
-//   Ability Name       Ability File          Level    Max   Group   Requisites
-//   ------------       ------------          -----    ---   -----   ----------
-{    "kick",            SKILL_KICK,             1,      90,  0,   STRDEX },
-{    "dodge",           SKILL_DODGE,            2,      80,  0,   DEXWIS },
-{    "redirect",        SKILL_REDIRECT,         3,      85,  0,   DEXWIS },
-{    "trip",            SKILL_TRIP,             5,      70,  0,   DEXWIS },
-{    "purify",          KI_PURIFY+KI_OFFSET,    8,     100,  0,   CONWIS },
-{    "martial defense", SKILL_DEFENSE,          10,    100,  0,   DEXWIS },
-{    "rescue",          SKILL_RESCUE,           12,     80,  0,   DEXWIS },
-{    "punch",           KI_PUNCH+KI_OFFSET,     15,    100,  0,   STRDEX },
-{    "eagleclaw",       SKILL_EAGLE_CLAW,       17,    100,  0,   CONWIS },
-{    "dual wield",      SKILL_DUAL_WIELD,       20,     50,  0,   DEXWIS },
-{    "sense",           KI_SENSE+KI_OFFSET,     21,    100,  0,   CONWIS },
-{    "stance",          KI_STANCE+KI_OFFSET,    24,    100,  0,   CONWIS },
-{    "speed",           KI_SPEED+KI_OFFSET,     27,    100,  0,   STRDEX },
-{    "whipping",        SKILL_WHIPPING_WEAPONS, 30,     60,  0,   STRDEX },
-{    "hand to hand",    SKILL_HAND_TO_HAND,     30,    100,  0,   STRDEX },
-{    "agility",         KI_AGILITY+KI_OFFSET,   31,    100,  0,   STRDEX },
-{    "stun",            SKILL_STUN,             33,     90,  0,   CONINT },
-{    "storm",           KI_STORM+KI_OFFSET,     35,    100,  0,   CONINT },
-{    "blindfighting",   SKILL_BLINDFIGHTING,    38,     90,  0,   CONWIS },
-{    "quiver",          SKILL_QUIVERING_PALM,   40,    100,  0,   CONINT },
-{    "blast",           KI_BLAST+KI_OFFSET,     45,    100,  0,   CONINT },
-{    "disrupt",         KI_DISRUPT+KI_OFFSET,   47,    100,  0,   CONINT },
-{    "meditation",      KI_MEDITATION+KI_OFFSET,50,    100,  0,   CONWIS },
-{    "transfer",        KI_TRANSFER+KI_OFFSET,  51,    100,  0,   CONWIS },
-{    "counter strike",  SKILL_COUNTER_STRIKE,   55,    100,  0,   STRDEX },
-{    "\n",              0,                      1,      0,   0,   0 }
-};
-
-// ranger 10013 guildmaster - done and checked, Apoc
-struct class_skill_defines r_skills[] = { // ranger skills
-
-//   Ability Name       Ability File           Level     Max  Group   Requisites 
-//   ------------       ------------           -----     ---  -----   ---------- 
-{    "bee sting",       SPELL_BEE_STING,         1,     100,  0,   STRCON },
-{    "hide",            SKILL_HIDE,              2,      80,  0,   CONWIS },
-{    "kick",            SKILL_KICK,              3,      70,  0,   STRDEX },
-{    "dual wield",      SKILL_DUAL_WIELD,        5,      90,  0,   STRDEX },
-{    "redirect",        SKILL_REDIRECT,          7,      80,  0,   CONWIS },
-{    "eyes of the owl", SPELL_EYES_OF_THE_OWL,   8,      85,  0,   STRCON },
-{    "sense life",      SPELL_SENSE_LIFE,        9,      85,  0,   CONWIS },
-{    "dodge",    	SKILL_DODGE,    	 10,     70,  0,   CONWIS },
-{    "tame",            SKILL_TAME,              11,    100,  0,   STRCON },
-{    "double",          SKILL_SECOND_ATTACK,     12,     85,  0,   STRDEX },
-{    "free animal",     SKILL_FREE_ANIMAL,       13,    100,  0,   STRCON },
-{    "feline agility",  SPELL_FELINE_AGILITY,    14,    100,  0,   STRCON },
-{    "bee swarm",       SPELL_BEE_SWARM,         15,    100,  0,   STRCON },
-{    "forage",          SKILL_FORAGE,            16,     85,  0,   INTWIS },
-{    "entangle",        SPELL_ENTANGLE,          18,     85,  0,   INTWIS },
-{    "archery",         SKILL_ARCHERY,           20,     90,  0,   DEXINT },
-{    "blindfighting",   SKILL_BLINDFIGHTING,     21,     85,  0,   CONWIS },
-{    "parry",           SKILL_PARRY,             22,     80,  0,   CONWIS },
-{    "herb lore",       SPELL_HERB_LORE,         23,     85,  0,   INTWIS },
-{    "poison",          SPELL_POISON,            25,     85,  0,   INTWIS },
-{    "tempest arrows",  SKILL_TEMPEST_ARROW,     26,    100,  0,   DEXINT },
-{    "track",           SKILL_TRACK,             28,    100,  0,   DEXINT },
-{    "barkskin",        SPELL_BARKSKIN,          29,     85,  0,   INTWIS },
-{    "piercing",        SKILL_PIERCEING_WEAPONS, 30,     85,  0,   STRDEX },
-{    "slashing",        SKILL_SLASHING_WEAPONS,  30,     85,  0,   STRDEX },
-{    "whipping",        SKILL_WHIPPING_WEAPONS,  30,     90,  0,   STRDEX },
-{    "ice arrows",      SKILL_ICE_ARROW,         31,    100,  0,   DEXINT },
-{    "rescue",          SKILL_RESCUE,            32,     85,  0,   STRDEX },
-{    "trip",            SKILL_TRIP,              33,     85,  0,   STRDEX },
-{    "ambush",          SKILL_AMBUSH,            35,    100,  0,   DEXINT },
-{    "fire arrows",     SKILL_FIRE_ARROW,        36,    100,  0,   DEXINT },
-{    "call follower",   SPELL_CALL_FOLLOWER,     38,    100,  0,   STRCON },
-{    "stun",            SKILL_STUN,              40,     80,  0,   INTWIS },
-{    "granite arrows",  SKILL_GRANITE_ARROW,     41,    100,  0,   DEXINT },
-{    "disarm",          SKILL_DISARM,            42,     80,  0,   CONWIS },
-{    "staunchblood",    SPELL_STAUNCHBLOOD,      44,     85,  0,   CONWIS },
-{    "forest meld",     SPELL_FOREST_MELD,       45,     85,  0,   INTWIS },
-{    "camouflage",      SPELL_CAMOUFLAGE,        46,     85,  0,   INTWIS },
-{    "creeping death",  SPELL_CREEPING_DEATH,    48,    100,  0,   STRCON },
-{ "natural selection",	SKILL_NAT_SELECT,	 50,	100,  0,   DEXINT },
-{    "make camp",       SKILL_MAKE_CAMP,          51,  100,  0,   CONWIS },
-{    "offhand double",  SKILL_OFFHAND_DOUBLE,    55,    100,  0,   STRDEX },
-{      "\n",            0,                       1,      0,   0,   0 }
-};
-
 // bard 3204 guildmaster - done and checked, Apoc
 struct class_skill_defines d_skills[] = { // bard skills
 
@@ -1692,7 +1522,6 @@ struct class_skill_defines d_skills[] = { // bard skills
 { "tumbling",              SKILL_TUMBLING,                 55,    100,  0,   STRDEX },
 { "\n",                    0,                              1,      0,   0,   0 }
 };
-
 
 // druid 3203 guildmaster - done and checked, Apoc
 struct class_skill_defines u_skills[] = { // druid skills
@@ -1755,7 +1584,6 @@ struct class_skill_defines u_skills[] = { // druid skills
 {    "brew",                 SKILL_BREW,                 55,    100,  0,   CONINT },
 {    "\n",                   0,                          1,      0,   0,   0 }
 };
-
 
 // cleric 3021 guildmaster - done and checked, Apoc
 struct class_skill_defines c_skills[] = { // cleric skills
@@ -1824,69 +1652,7 @@ struct class_skill_defines c_skills[] = { // cleric skills
 {    "\n",                   0,                        1,      0,  0,   0 }
 };
 
-// mage 3020 guildmaster - done and checked, Apoc
-struct class_skill_defines m_skills[] = { // mage skills
-
-//   Ability Name           Ability File           Level     Max  Group   Requisites   
-//   ------------           ------------           -----     ---  -----   ----------   
-{    "magic missile",       SPELL_MAGIC_MISSILE,     1,     100,  0,   STRINT }, 
-{    "ventriloquate",       SPELL_VENTRILOQUATE,     2,     100,  0,   DEXWIS },
-{    "clarity",             SPELL_CLARITY,           2,     100,  0,   DEXINT },
-{    "detect magic",        SPELL_DETECT_MAGIC,      3,      90,  0,   INTWIS },
-{    "detect invisibility", SPELL_DETECT_INVISIBLE,  4,      90,  0,   INTWIS },
-{    "invisibility",        SPELL_INVISIBLE,         5,      90,  0,   DEXWIS },
-{    "burning hands",       SPELL_BURNING_HANDS,     6,     100,  0,   STRINT },
-{    "armor",               SPELL_ARMOR,             7,      85,  0,   CONWIS },
-{    "continual light",     SPELL_CONT_LIGHT,        8,      90,  0,   STRCON },
-{    "refresh",             SPELL_REFRESH,           9,      90,  0,   DEXWIS },
-{    "lightning bolt",      SPELL_LIGHTNING_BOLT,    10,    100,  0,   STRINT },
-{    "infravision",         SPELL_INFRAVISION,       11,     90,  0,   INTWIS },
-{    "fly",                 SPELL_FLY,               12,    100,  0,   DEXINT },
-{    "strength",            SPELL_STRENGTH,          13,     90,  0,   DEXINT },
-{    "fear",                SPELL_FEAR,              15,     90,  0,   CONWIS },
-{    "identify",            SPELL_IDENTIFY,          16,    100,  0,   INTWIS },
-{    "locate object",       SPELL_LOCATE_OBJECT,     17,     90,  0,   INTWIS },
-{    "call familiar",       SPELL_SUMMON_FAMILIAR,   18,     85,  0,   STRCON },
-{    "dismiss familiar",    SPELL_DISMISS_FAMILIAR,  18,     85,  0,   STRCON },
-{    "chill touch",         SPELL_CHILL_TOUCH,       20,     90,  0,   DEXWIS },
-{    "shield",              SPELL_SHIELD,            21,    100,  0,   CONWIS },
-{    "souldrain",           SPELL_SOULDRAIN,         22,    100,  0,   DEXWIS },
-{    "ethereal focus",      SPELL_ETHEREAL_FOCUS,    24,    100,  0,   DEXWIS },
-{    "dispel minor",        SPELL_DISPEL_MINOR,      25,     90,  0,   CONWIS },
-{    "mass invisibility",   SPELL_MASS_INVISIBILITY, 26,    100,  0,   DEXWIS },
-{    "firestorm",           SPELL_FIRESTORM,         27,    100,  0,   STRINT },
-{    "portal",              SPELL_PORTAL,            28,     90,  0,   STRCON },
-{    "fireball",            SPELL_FIREBALL,          29,    100,  0,   STRINT },
-{    "focused repelance",   SKILL_FOCUSED_REPELANCE, 30,    100,  0,   CONWIS },
-{    "piercing",            SKILL_PIERCEING_WEAPONS, 30,     50,  0,   DEXINT },
-{    "bludgeoning",         SKILL_BLUDGEON_WEAPONS,  30,     50,  0,   DEXINT },
-{    "resist magic",        SPELL_RESIST_MAGIC,      31,     90,  0,   CONWIS },
-{    "haste",               SPELL_HASTE,             33,    100,  0,   DEXINT },
-{    "true sight",          SPELL_TRUE_SIGHT,        34,     90,  0,   INTWIS },
-{    "dispel magic",        SPELL_DISPEL_MAGIC,      35,     90,  0,   CONWIS },
-{    "resist fire",         SPELL_RESIST_FIRE,       36,     70,  0,   CONWIS },
-{    "wizard eye",          SPELL_WIZARD_EYE,        37,    100,  0,   INTWIS },
-{    "teleport",            SPELL_TELEPORT,          38,    100,  0,   DEXWIS },
-{    "stoneskin",           SPELL_STONE_SKIN,        39,     70,  0,   CONWIS },
-{    "meteor swarm",        SPELL_METEOR_SWARM,      40,    100,  0,   STRCON },
-{    "life leech",          SPELL_LIFE_LEECH,        41,    100,  0,   CONWIS },
-{    "word of recall",      SPELL_WORD_OF_RECALL,    42,     90,  0,   DEXWIS },
-{    "create golem",        SPELL_CREATE_GOLEM,      43,    100,  0,   STRCON },
-{    "release golem",       SPELL_RELEASE_GOLEM,     43,    100,  0,   STRCON },
-{    "mend golem",          SPELL_MEND_GOLEM,        44,    100,  0,   STRCON },
-{    "hellstream",          SPELL_HELLSTREAM,        45,    100,  0,   STRINT },
-{    "fireshield",          SPELL_FIRESHIELD,        47,    100,  0,   STRINT },
-{    "paralyze",            SPELL_PARALYZE,          48,    100,  0,   DEXINT },
-{    "solar gate",          SPELL_SOLAR_GATE,        49,    100,  0,   STRINT },
-{    "spellcraft",          SKILL_SPELLCRAFT,        50,    100,  0,   INTWIS },
-{    "imbue",               SKILL_IMBUE,             51,    100,  0,   INTWIS },
-{    "elemental filter",    SKILL_ELEMENTAL_FILTER,  55,    100,  0,   DEXWIS },
-{    "\n",                  0,                       1,      0,   0,   0 }
-};
-
 // End of abilities listings for each class.
-
-
 
 const char *languages[] =
 {

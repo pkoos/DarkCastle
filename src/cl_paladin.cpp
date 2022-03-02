@@ -5,24 +5,8 @@
 |
 | File create with do_layhands -Pirahna 7/6/1999
 */
-#include "MaxLength.h"
-#include "character.h"
-#include "player.h"
-#include "fight.h"
-#include "utility.h"
-#include "spells.h"
-#include "handler.h"
-#include "levels.h"
-#include "connect.h"
-#include "mobile.h"
-#include "room.h"
-#include "act.h"
-#include "db.h"
-#include "returnvals.h"
-#include "interp.h"
 
-extern CWorld world;
- 
+#include "cl_paladin.h"
 
 /************************************************************************
 | OFFENSIVE commands.  These are commands that should require the

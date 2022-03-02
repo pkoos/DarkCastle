@@ -4,32 +4,7 @@
  * Description: Commands for the barbarian class.
  *************************************************************************/
 
-#include "MaxLength.h"
-#include "player.h"
-#include "levels.h"
-#include "character.h"
-#include "spells.h"
-#include "utility.h"
-#include "fight.h"
-#include "mobile.h"
-#include "magic.h"
-#include "connect.h"
-#include "handler.h"
-#include "act.h"
-#include "interp.h"
-#include "returnvals.h"
-#include "room.h"
-#include "db.h"
-#include "clan.h"
-#include "utility.h"
-#include "const.h"
-
-extern struct index_data *obj_index;
-extern int rev_dir[];
-extern bool str_prefix(const char *astr, const char *bstr);
-extern CWorld world;
-int attempt_move(CHAR_DATA *ch, int cmd, int is_retreat = 0);
-int find_door(CHAR_DATA *ch, char *type, char *dir);
+#include "cl_barbarian.h"
 
 int do_batter(struct char_data *ch, char *argument, int cmd)
 {
