@@ -4,8 +4,9 @@
 | Functions declared primarily for the thief class; some may be used in
 |   other classes, but they are mainly thief-oriented.
 */
+#include "NumberTypes.h"
 #include "character.h"
-#include "structs.h"
+// #include "structs.h"
 #include "utility.h"
 #include "spells.h"
 #include "levels.h"

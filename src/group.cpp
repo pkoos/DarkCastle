@@ -8,6 +8,7 @@ extern "C"
 #include <ctype.h> // isspace()
 }
 
+#include "NumberTypes.h"
 #include "character.h"
 #include "room.h"
 #include "Affect.h"

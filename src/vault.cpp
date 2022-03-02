@@ -12,6 +12,7 @@ extern "C"
 #include <list>
 #include <fmt/format.h>
 
+#include "NumberTypes.h"
 #include "structs.h"
 #include "db.h"
 #include "utility.h"

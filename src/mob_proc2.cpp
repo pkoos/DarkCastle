@@ -17,6 +17,7 @@
 
 using namespace std;
 
+#include "NumberTypes.h"
 #include "room.h"
 #include "obj.h"
 #include "connect.h"

@@ -10,7 +10,8 @@ extern "C"
 #include <ctype.h>
 #include <string.h>
 }
-#include "structs.h"
+#include "NumberTypes.h"
+// #include "structs.h"
 #include "room.h"
 #include "character.h"
 #include "obj.h"

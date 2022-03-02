@@ -2,6 +2,7 @@
 | Level 108 wizard commands
 | 11/20/95 -- Azrack
 **********************/
+#include "NumberTypes.h"
 #include "wizard.h"
 #include "interp.h"
 #include "utility.h"

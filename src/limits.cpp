@@ -22,6 +22,7 @@ extern "C" {
 #ifdef BANDWIDTH
 #include "bandwidth.h"
 #endif
+#include "NumberTypes.h"
 #include "room.h"
 #include "character.h"
 #include "utility.h"

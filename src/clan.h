@@ -7,6 +7,7 @@
 | Description:  Header information for clans.
 */
 
+#include "NumberTypes.h"
 #include "ClanPermissions.h"
 
 struct clan_room_data

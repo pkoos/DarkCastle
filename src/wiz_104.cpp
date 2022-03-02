@@ -4,6 +4,7 @@
 #include <string>
 #include <utility>
 
+#include "NumberTypes.h"
 #include "wizard.h"
 #include "utility.h"
 #include "connect.h"

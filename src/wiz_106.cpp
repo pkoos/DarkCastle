@@ -2,6 +2,7 @@
 | Level 106 wizard commands
 | 11/20/95 -- Azrack
 **********************/
+#include "NumberTypes.h"
 #include "wizard.h"
 #include "handler.h"
 #include "spells.h"
