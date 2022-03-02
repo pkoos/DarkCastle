@@ -4,7 +4,7 @@
 | Description:  This file declares implementation for warrior-specific
 |   skills.
 */
-
+#include <algorithm>
 #include "cl_warrior.h"
 
 using namespace std;

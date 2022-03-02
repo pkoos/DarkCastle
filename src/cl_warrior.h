@@ -1,8 +1,6 @@
 #ifndef CL_WARRIOR_H_
 #define CL_WARRIOR_H_
 
-#include <algorithm>
-
 #include "MaxLength.h"
 #include "character.h"
 #include "player.h"
