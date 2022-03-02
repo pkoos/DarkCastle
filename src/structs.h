@@ -11,7 +11,7 @@ extern "C" {
 #include <sys/types.h>
 
 }
-// #include "NumberTypes.h"
+
 #include <stdio.h> // FILE
 #include <string>
 #include <vector>
@@ -75,39 +75,6 @@ struct message_list
     int number_of_attacks;    /* # messages to chose from		*/
     struct message_type *msg; /* List of messages			*/
     struct message_type *msg2; /* List of messages with toggle damage ON */
-};
-
-struct SVoteData
-{
-  std::string answer;
-  int votes;
-};
-
-class CVoteData
-{
-public:
-  void SetQuestion(struct char_data *ch, std::string question);
-  void AddAnswer(struct char_data *ch, std::string answer);
-  void RemoveAnswer(struct char_data *ch, unsigned int answer);
-  void StartVote(struct char_data *ch);
-  void EndVote(struct char_data *ch);
-  void Reset(struct char_data *ch);
-  void OutToFile();
-  bool HasVoted(struct char_data *ch);
-  bool Vote(struct char_data *ch, unsigned int vote);
-  void DisplayVote(struct char_data *ch);
-  void DisplayResults(struct char_data *ch);
-  bool IsActive() {return active;}
-  CVoteData();
-  ~CVoteData();  
-
-private:
-  bool active;
-  std::string vote_question;
-  std::vector<SVoteData> answers;
-  int total_votes;
-  std::map<std::string, bool> ip_voted;
-  std::map<std::string, bool> char_voted;
 };
 
 extern void debugpoint();

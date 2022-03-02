@@ -12,6 +12,7 @@ extern "C"
   #include <ctype.h>
   #include <string.h>
 }
+#include "CVoteData.h"
 #include "MaxLength.h"
 #include "connect.h"
 #include "character.h"
