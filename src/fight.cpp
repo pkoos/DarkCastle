@@ -99,6 +99,7 @@ CHAR_DATA *get_highest_level_killer(CHAR_DATA *leader, CHAR_DATA *killer);
  
 CHAR_DATA *combat_list = NULL, *combat_next_dude = NULL;
 
+struct message_list fight_messages[MAX_MESSAGES]; /* fighting messages   */
 
 int isHit(CHAR_DATA *ch, CHAR_DATA *victim, int attacktype, int &type, int &reduce);
 int check_pursuit(char_data *ch, char_data *victim, char *dircommand);

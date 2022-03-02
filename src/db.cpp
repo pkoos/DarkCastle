@@ -124,7 +124,7 @@ struct zone_data *zone_table = zone_table_array;
 #define zone_table  zone_table_array
 /* table of reset data             */
 int top_of_zone_table = 0;
-struct message_list fight_messages[MAX_MESSAGES]; /* fighting messages   */
+// struct message_list fight_messages[MAX_MESSAGES]; /* fighting messages   */
 
 struct wizlist_info
 {
