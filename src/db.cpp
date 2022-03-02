@@ -34,6 +34,7 @@ extern "C"
 #include <sstream>
 #include <limits>
 
+#include "nullfile.h"
 #include "MaxLength.h"
 #include "Affect.h"
 #include "db.h"

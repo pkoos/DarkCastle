@@ -4,6 +4,7 @@
 |   move throughout the game.
 */
 #include <stdio.h>
+#include "nullfile.h"
 #include "game_portal.h"
 #include "fileinfo.h"
 #include "structs.h"

@@ -46,6 +46,7 @@ extern "C"
 #include <fmt/format.h>
 #include <algorithm>
 
+#include "nullfile.h"
 #include "MaxLength.h"
 #include "NumberTypes.h"
 #include "innate.h"

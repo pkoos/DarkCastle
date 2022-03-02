@@ -5,6 +5,7 @@
 #include <cmath>
 #include <filesystem>
 
+#include "nullfile.h"
 #include "CVoteData.h"
 #include "MaxLength.h"
 #include "NumberTypes.h"

@@ -10,6 +10,7 @@ extern "C"
 #include <ctype.h>
 #include <string.h>
 }
+#include "nullfile.h"
 #include "MaxLength.h"
 #include "NumberTypes.h"
 #include "structs.h"

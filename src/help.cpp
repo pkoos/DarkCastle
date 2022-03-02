@@ -4,6 +4,7 @@ extern "C"
 #include <string.h>
 }
 
+#include "nullfile.h"
 #include "structs.h"
 #include "MaxLength.h"
 #include "room.h"

@@ -20,6 +20,7 @@ extern "C"
 #include <string.h>
 }
 
+#include "nullfile.h"
 #include "MaxLength.h"
 #include "Affect.h"
 #include "character.h"

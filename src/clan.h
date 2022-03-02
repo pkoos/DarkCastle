@@ -7,6 +7,7 @@
 | Description:  Header information for clans.
 */
 
+#include "nullfile.h"
 #include "NumberTypes.h"
 #include "ClanPermissions.h"
 

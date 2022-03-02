@@ -7,6 +7,7 @@
 
 using namespace std;
 
+#include "nullfile.h"
 #include "MaxLength.h"
 #include "NumberTypes.h"
 #include "character.h"

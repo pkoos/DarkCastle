@@ -29,6 +29,7 @@ extern "C"
 #include <queue>
 #include <fmt/format.h>
 
+#include "nullfile.h"
 #include "CVoteData.h"
 #include "MaxLength.h"
 #include "NumberTypes.h"

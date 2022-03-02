@@ -21,6 +21,7 @@
 #include "returnvals.h"
 #include <errno.h>
 
+#include "nullfile.h"
 #include "NumberTypes.h"
 #include "obj.h"
 #include "connect.h"

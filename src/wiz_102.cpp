@@ -20,6 +20,7 @@
 #include <tuple>
 #include <fmt/format.h>
 
+#include "nullfile.h"
 #include "MaxLength.h"
 #include "NumberTypes.h"
 #include "wizard.h"
