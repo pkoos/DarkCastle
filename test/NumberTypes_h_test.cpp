@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/structs.h"
+#include "../src/NumberTypes.h"
 #include <limits.h>
 
 TEST(TypeDefinitions, Sbyte) {
