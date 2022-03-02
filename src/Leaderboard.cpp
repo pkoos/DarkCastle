@@ -9,7 +9,9 @@ extern "C" {
 #include <string.h>
 }
 #include <sstream>
+#include <limits.h>
 
+#include "nullfile.h"
 #include "MaxLength.h"
 #include "NumberTypes.h"
 #include "Leaderboard.h"
@@ -18,7 +20,6 @@ extern "C" {
 #include "fileinfo.h"
 #include "connect.h"
 #include "levels.h"
-#include <limits.h>
 #include "db.h"
 #include "interp.h"
 #include "returnvals.h"
