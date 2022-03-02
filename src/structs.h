@@ -17,8 +17,8 @@ extern "C" {
 #include <string>
 #include <vector>
 #include <map>
-FILE * dc_fopen(const char *filename, const char *type);
-int dc_fclose(FILE * fl);
+
+
 
 typedef	struct char_data	CHAR_DATA;
 typedef	struct obj_data		OBJ_DATA;
@@ -36,13 +36,6 @@ typedef struct txt_q
     struct txt_block *head;
     struct txt_block *tail;
 } TXT_Q;
-
-// struct snoop_data
-// {
-//     CHAR_DATA *snooping; 
-//     CHAR_DATA *snoop_by;
-// };
-
 
 struct msg_type 
 {

@@ -18,7 +18,8 @@ extern "C"
 #include <dmalloc.h>
 #endif
 
-#include "structs.h"
+#include "nullfile.h"
+// #include "structs.h"
 #include "levels.h"
 #include "NumberTypes.h"
 
