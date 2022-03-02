@@ -58,7 +58,7 @@ extern "C" {
 #define MAX_WEAR     23
 
 struct char_data;
-
+typedef struct char_data CHAR_DATA;
 
 #define MAX_HIDE 10
 #define CHAMPION_ITEM 45
@@ -415,8 +415,6 @@ struct char_data
     void fillHPLimit(void);
     void send(string);
 };
-
-typedef struct char_data CHAR_DATA;
 
 // This structure is written to the disk.  DO NOT MODIFY THIS STRUCTURE
 // There is a method in save.C for adding additional items to the pfile
