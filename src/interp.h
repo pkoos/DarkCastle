@@ -19,6 +19,7 @@
 
 #include "NumberTypes.h"
 #include "character.h"
+#include "cl_barbarian_skills.h"
 
 char *remove_trailing_spaces(char *arg);
 int command_interpreter(CHAR_DATA *ch, char *argument, bool procced = 0);
