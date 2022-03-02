@@ -15,6 +15,8 @@ RUN ln -s /usr/lib/libcrypt.so.1 /usr/lib/libcrypt.so
 RUN ln -s /usr/lib/libfmt.so.8 /usr/lib/libfmt.so
 RUN ln -s /usr/lib/libpq.so.5 /usr/lib/libpq.so
 
+WORKDIR /srv/dcastle2/git/DarkCastle/src
+
 RUN scons -c
 RUN scons -j128
 
