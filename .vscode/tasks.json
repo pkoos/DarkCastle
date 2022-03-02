@@ -6,7 +6,12 @@
         {
             "label": "cmake --build test --config Debug --target main_test -j 18 --",
             "type": "shell",
-            "command": "/usr/bin/cmake --build /home/koosp/projects/DarkCastle/test --config Debug --target main_test -j 18 --"
+            "command": "/usr/bin/cmake --build /home/koosp/projects/DarkCastle/test --config Debug --target main_test -j 18 --",
+            "presentation": {
+                "reveal": "silent",
+                "revealProblems": "onProblem",
+                "close": true
+            }
         },
         {
             "label": "scons -C src -j 128",

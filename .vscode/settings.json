@@ -117,9 +117,9 @@
             }
         ]
     },
+    // "testMate.cpp.log.logfile": "/home/koosp/projects/DarkCastle/test/testMate.log",
     "testMate.cpp.log.logpanel": true,
     "testMate.cpp.discovery.strictPattern": true,
-    "testMate.cpp.log.logfile": "/home/koosp/projects/DarkCastle/test/testMate.log",
     "testMate.cpp.test.executables": "/home/koosp/projects/DarkCastle/test/main_test",
     "testMate.cpp.test.advancedExecutables": [
         {
