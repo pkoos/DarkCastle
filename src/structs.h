@@ -23,15 +23,6 @@ int dc_fclose(FILE * fl);
 typedef	struct char_data	CHAR_DATA;
 typedef	struct obj_data		OBJ_DATA;
 
-// #define MAX_STRING_LENGTH   8192
-// #define MAX_INPUT_LENGTH     160
-// #define MAX_MESSAGES         150
-// #define MAX_OBJ_SDESC_LENGTH 100
-
-#define MESS_ATTACKER 1
-#define MESS_VICTIM   2
-#define MESS_ROOM     3
-
 /* ======================================================================== */
 struct txt_block
 {
@@ -46,11 +37,11 @@ typedef struct txt_q
     struct txt_block *tail;
 } TXT_Q;
 
-struct snoop_data
-{
-    CHAR_DATA *snooping; 
-    CHAR_DATA *snoop_by;
-};
+// struct snoop_data
+// {
+//     CHAR_DATA *snooping; 
+//     CHAR_DATA *snoop_by;
+// };
 
 
 struct msg_type 
