@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "\"*.rb\"": "\"Ruby\"",
         "vector": "cpp",
         "string": "cpp",
         "iosfwd": "cpp",
@@ -66,6 +67,69 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "semaphore": "cpp"
-    }
+        "semaphore": "cpp",
+        "any": "cpp",
+        "bitset": "cpp",
+        "cassert": "cpp",
+        "cerrno": "cpp",
+        "cfloat": "cpp",
+        "ciso646": "cpp",
+        "climits": "cpp",
+        "forward_list": "cpp",
+        "filesystem": "cpp",
+        "ios": "cpp",
+        "locale": "cpp",
+        "queue": "cpp",
+        "stack": "cpp",
+        "cstdbool": "cpp",
+        "*.inc": "cpp"
+    },
+    "cmake.buildBeforeRun": true,
+    "cmake.buildDirectory": "${workspaceFolder}/test",
+    "cmakeExplorer.buildDir": "${workspaceFolder}/test",
+    "cmakeExplorer.buildConfig": "${buildType}",
+    "cmake.configureSettings": {
+        "gtest_build_samples": "ON"
+    },
+    "C_Cpp.loggingLevel": "Debug",
+    "cmakeExplorer.cmakeIntegration": true,
+    "testExplorer.onReload": "reset",
+    "testExplorer.onStart": "reset",
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "googletest.failed",
+                "settings": {
+                    "foreground": "#f00"
+                }
+            },
+            {
+                "scope": "googletest.passed",
+                "settings": {
+                    "foreground": "#0f0"
+                }
+            },
+            {
+                "scope": "googletest.run",
+                "settings": {
+                    "foreground": "#0f0"
+                }
+            }
+        ]
+    },
+    "testMate.cpp.log.logpanel": true,
+    "testMate.cpp.discovery.strictPattern": true,
+    "testMate.cpp.log.logfile": "/home/koosp/projects/DarkCastle/test/testMate.log",
+    "testMate.cpp.test.executables": "/home/koosp/projects/DarkCastle/test/main_test",
+    "testMate.cpp.test.advancedExecutables": [
+        {
+            "name": "main_test",
+            "pattern": "/home/koosp/projects/DarkCastle/test/main_test",
+            "runTask": {
+                "before": [
+                    "cmake --build test --config Debug --target main_test -j 18 --"
+                ]
+            }
+        }
+    ]
 }

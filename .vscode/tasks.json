@@ -4,6 +4,11 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "cmake --build test --config Debug --target main_test -j 18 --",
+            "type": "shell",
+            "command": "/usr/bin/cmake --build /home/koosp/projects/DarkCastle/test --config Debug --target main_test -j 18 --"
+        },
+        {
             "label": "scons -C src -j 128",
             "type": "shell",
             "command": "scons -C src -c; scons -C src -j 128",

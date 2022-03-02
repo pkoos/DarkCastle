@@ -5,14 +5,18 @@
             "includePath": [
                 "${workspaceFolder}/**"
             ],
-            "defines": [],
-            "compilerPath": "/usr/bin/g++-10",
+            "defines": [
+                "VERSION=\"v0.1-490-g33d9ae00\"",
+                "BUILD_TIME=\"2022-02-28 12:41:07\""
+            ],
+            "compilerPath": "/usr/bin/g++-11",
             "cStandard": "c17",
             "cppStandard": "gnu++20",
             "intelliSenseMode": "gcc-x64",
             "compilerArgs": [
                 "-m32"
-            ]
+            ],
+            "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
     "version": 4

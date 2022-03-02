@@ -6,6 +6,19 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "CMake Recompile",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/test/main_test",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "preLaunchTask": "cmake --build test --config Debug --target main_test -j 18 --"
+        },
+        {
             "name": "(gdb) Launch using ../lib",
             "type": "cppdbg",
             "request": "launch",
