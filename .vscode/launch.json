@@ -16,7 +16,7 @@
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "preLaunchTask": "cmake --build test --config Debug --target main_test -j 18 --"
+            "preLaunchTask": "cmake --build test --config Debug --target main_test -j 18 --clean-first --"
         },
         {
             "name": "(gdb) Launch using ../lib",

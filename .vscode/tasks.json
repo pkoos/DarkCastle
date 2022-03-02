@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "cmake --build test --config Debug --target main_test -j 18 --",
+            "label": "cmake --build test --config Debug --target main_test -j 18 --clean-first --",
             "type": "shell",
-            "command": "/usr/bin/cmake --build ${workspaceFolder}/test --config Debug --target main_test -j 18 --",
+            "command": "/usr/bin/cmake --build ${workspaceFolder}/test/build --config Debug --target main_test -j 18 --clean-first --",
             "presentation": {
                 "reveal": "silent",
                 "revealProblems": "onProblem",

@@ -19,16 +19,10 @@ Once the container is built, start it using the following command:
 docker start
 ```
 
-We will need the docker image container ID for the next command. Collect this by typing:
+The following command will get you into the container itself: 
 
 ```
-docker ps
-```
-
-It is the first value. With that, the following command will get you into the container itself: 
-
-```
-docker exec -it container_id /bin/bash
+docker exec -it 'container_tag' /bin/bash
 ```
 
 To start the app, from the container go to

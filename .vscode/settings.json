@@ -123,10 +123,10 @@
     "testMate.cpp.test.advancedExecutables": [
         {
             "name": "main_test",
-            "pattern": "${workspaceFolder}/test/main_test",
+            "pattern": "${workspaceFolder}/test/build/main_test",
             "runTask": {
                 "before": [
-                    "cmake --build test --config Debug --target main_test -j 18 --"
+                    "cmake --build test --config Debug --target main_test -j 18 --clean-first --"
                 ]
             }
         }
