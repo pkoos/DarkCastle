@@ -1,3 +1,5 @@
+#ifndef CVOTEDATA_H_
+#define CVOTEDATA_H_
 
 #include <string>
 #include <vector>
@@ -36,3 +38,5 @@ private:
   std::map<std::string, bool> ip_voted;
   std::map<std::string, bool> char_voted;
 };
+
+#endif 
