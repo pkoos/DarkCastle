@@ -25,10 +25,12 @@
  *  easiest possible way to install and begin using. Documentation for     *
  *  such installation can be found in INSTALL.  Enjoy...         N'Atas-Ha *
  ***************************************************************************/
-
+extern "C" {
+	#include <stdio.h>
+}
 #include "MaxLength.h"
 #include <sys/types.h>
-#include <stdio.h>
+
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>

@@ -3,7 +3,7 @@
 | Description:  Handles creation and removal of the magical portals that
 |   move throughout the game.
 */
-#include <stdio.h>
+
 #include "nullfile.h"
 #include "game_portal.h"
 #include "fileinfo.h"
@@ -20,6 +20,7 @@
 extern "C" 
 {
   #include <string.h>
+  #include <stdio.h>
 }
   
 int make_arbitrary_portal(int from_room, int to_room, int duplicate, int timer);

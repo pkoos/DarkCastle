@@ -1,5 +1,8 @@
+extern "C" {
+   #include <stdio.h>
+}
+
 #include <signal.h>
-#include <stdio.h>
 #include <ctype.h>
 #include <cstring>
 #include <time.h>

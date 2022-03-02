@@ -14,9 +14,11 @@
  *  share your changes too.  What goes around, comes around.               *
  ***************************************************************************/
 /* $Id: save.cpp,v 1.76 2015/06/15 01:06:10 pirahna Exp $ */
-
+extern "C" {
+  #include <stdio.h>
+}
 #include <stdlib.h>
-#include <stdio.h>
+
 #include <ctype.h>
 #include <string.h>
 

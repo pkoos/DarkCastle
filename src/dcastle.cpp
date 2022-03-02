@@ -1,12 +1,15 @@
 // System C headers
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <unistd.h>
-#include <string.h>
-#include <errno.h>
+extern "C" {
+  #include <sys/types.h>
+  #include <sys/stat.h>
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <ctype.h>
+  #include <unistd.h>
+  #include <string.h>
+  #include <errno.h>
+}
+
 
 // System C++ headers
 #include <sstream>

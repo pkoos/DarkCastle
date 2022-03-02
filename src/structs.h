@@ -8,12 +8,12 @@
 #define STRUCTS_H_
 
 extern "C" {
-#include <sys/types.h>
-
+    #include <sys/types.h>
+    #include <stdio.h> // FILE
 }
 
 #include "CVoteData.h"
-#include <stdio.h> // FILE
+
 #include <string>
 #include <vector>
 #include <map>
