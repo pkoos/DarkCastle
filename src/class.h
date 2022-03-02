@@ -1,6 +1,7 @@
 #ifndef CLASS_H
 #define CLASS_H
 
+#include "NumberTypes.h"
 #include "ClassIds.h"
 #include <string>
 #include <vector>
