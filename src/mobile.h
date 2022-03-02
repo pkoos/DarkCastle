@@ -6,7 +6,8 @@
 | Description:  This file contains the header information for mobile
 |   control.
 */
-
+#include "obj.h"
+#include "character.h"
 #include "NumberTypes.h"
 #include "Actions.h"
 #include <string>

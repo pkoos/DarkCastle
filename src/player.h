@@ -10,6 +10,7 @@
 #include "ItemApply.h"
 #include "punish.h" // punishment vectors
 #include "structs.h" // ubyte
+#include "character.h"
 #include "class.h"
 /************************************************************************
 | CHAR_DATA.misc vector
