@@ -7,20 +7,20 @@
 #ifndef STRUCTS_H_
 #define STRUCTS_H_
 
-extern "C" {
-    #include <sys/types.h>
-    #include <stdio.h> // FILE
-}
+// extern "C" {
+//     #include <sys/types.h>
+//     #include <stdio.h> // FILE
+// }
 
 // #include "CVoteData.h"
 
 // #include <string>
 // #include <vector>
-#include <map>
+// #include <map>
 
 
 /* ======================================================================== */
 
-extern void debugpoint();
+// extern void debugpoint();
 
 #endif
