@@ -29,7 +29,7 @@
 #include "structs.h" // ubyte
 #include "character.h"
 
-typedef	struct obj_data OBJ_DATA;
+
 
 struct active_object
 {
@@ -99,6 +99,8 @@ struct obj_data {
 	wheel_data *wheel;
 	time_t save_expiration;
 };
+
+typedef	struct obj_data OBJ_DATA;
 
 
 /* ***********************************************************************
