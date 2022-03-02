@@ -20,6 +20,7 @@
 #include <ctype.h>
 #include <string.h>
 
+#include "nullfile.h"
 #include "MaxLength.h"
 #include "NumberTypes.h"
 #include "obj.h"
