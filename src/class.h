@@ -20,6 +20,16 @@ struct class_data
     int8_t min_wis;
 };
 
+struct class_skill_defines
+{
+    char * skillname;         // name of skill
+    int16  skillnum;          // ID # of skill
+    int16  levelavailable;    // what level class can get it
+    int16  maximum;           // maximum value PC can train it to (1-100)
+    uint8_t group;             // which class tree group it is assigned
+    int16  attrs;	      // What attributes the skill is based on
+};
+
 typedef vector<struct class_data> classes_t;
 
 extern classes_t classes;

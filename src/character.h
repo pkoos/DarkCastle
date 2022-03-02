@@ -26,6 +26,7 @@ typedef struct char_data CHAR_DATA;
 #include "mobile.h"
 #include "sing.h"
 #include "quest.h"
+#include "class.h"
 
 extern "C" {
 #include <sys/time.h>
@@ -108,15 +109,7 @@ struct char_skill_data
     char_skill_data * next;   // Next skill in ch's skill list    
 };
 
-struct class_skill_defines
-{
-    char * skillname;         // name of skill
-    int16  skillnum;          // ID # of skill
-    int16  levelavailable;    // what level class can get it
-    int16  maximum;           // maximum value PC can train it to (1-100)
-    uint8_t group;             // which class tree group it is assigned
-    int16  attrs;	      // What attributes the skill is based on
-};
+
 
 /* Used in CHAR_FILE_U *DO*NOT*CHANGE* */
 struct affected_type
