@@ -5,27 +5,7 @@
 |   skills.
 */
 
-#include <algorithm>
-
 #include "cl_warrior.h"
-#include "MaxLength.h"
-#include "character.h"
-#include "player.h"
-#include "fight.h"
-#include "utility.h"
-#include "handler.h"
-#include "levels.h"
-#include "connect.h"
-#include "mobile.h"
-#include "room.h"
-#include "act.h"
-#include "db.h"
-#include "DC.h"
-#include "returnvals.h"
-#include "race.h"
-#include <iostream>
-#include "interp.h"
-#include "const.h"
 
 using namespace std;
 
