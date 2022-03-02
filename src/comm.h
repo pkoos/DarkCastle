@@ -31,6 +31,19 @@ struct pulse_info {
 	char name[];
 };
 
+struct txt_block
+{
+    char *text;
+    struct txt_block *next;
+    int aliased;
+};
+
+typedef struct txt_q
+{
+    struct txt_block *head;
+    struct txt_block *tail;
+} TXT_Q;
+
 #include "character.h"
 
 //void     write_to_output(const char *txt, struct descriptor_data *d);

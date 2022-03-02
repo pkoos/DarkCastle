@@ -30,6 +30,7 @@ extern "C" {
 #include <string>
 #include <vector>
 
+#include "comm.h"
 #include "MaxLength.h"
 #include "NumberTypes.h"
 #include "structs.h"

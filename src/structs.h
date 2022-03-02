@@ -24,18 +24,6 @@ typedef	struct char_data	CHAR_DATA;
 typedef	struct obj_data		OBJ_DATA;
 
 /* ======================================================================== */
-struct txt_block
-{
-    char *text;
-    struct txt_block *next;
-    int aliased;
-};
-
-typedef struct txt_q
-{
-    struct txt_block *head;
-    struct txt_block *tail;
-} TXT_Q;
 
 extern void debugpoint();
 
