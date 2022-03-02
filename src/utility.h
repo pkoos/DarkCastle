@@ -47,8 +47,10 @@ using namespace std;
 extern struct weather_data weather_info;
 extern char log_buf[MAX_STRING_LENGTH];
 
-//extern struct char_data;
-//typedef struct char_data CHAR_DATA;
+struct char_data;
+typedef struct char_data CHAR_DATA;
+struct obj_data;
+typedef struct obj_data OBJ_DATA;
 
 void check_timer();
 

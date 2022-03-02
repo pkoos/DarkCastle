@@ -8,7 +8,10 @@
 
 #define  COMPILE_WITH_CHANGES 1
 
-#include "obj.h"
+struct char_data;
+typedef struct char_data CHAR_DATA;
+
+// #include "obj.h"
 #include "Progs.h"
 #include "Attributes.h"
 #include "Position.h"
@@ -56,9 +59,6 @@ extern "C" {
 | max stuff - this is needed almost everywhere
 */
 #define MAX_WEAR     23
-
-struct char_data;
-typedef struct char_data CHAR_DATA;
 
 #define MAX_HIDE 10
 #define CHAMPION_ITEM 45
