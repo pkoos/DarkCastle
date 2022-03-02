@@ -29,6 +29,7 @@
 #include "structs.h" // ubyte
 #include "character.h"
 
+struct char_data;
 struct obj_data;
 typedef	struct obj_data OBJ_DATA;
 
