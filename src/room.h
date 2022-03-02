@@ -11,7 +11,6 @@
 #include "ExitInfo.h"
 #include "Direction.h"
 #include "RoomFlags.h"
-#include "structs.h" // ubyte
 #include "obj.h" // ubyte
 #include "MobActivity.h" // struct path_data
 #include "player.h" // CLASS_MAX

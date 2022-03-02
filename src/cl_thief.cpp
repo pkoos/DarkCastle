@@ -7,7 +7,6 @@
 #include "MaxLength.h"
 #include "NumberTypes.h"
 #include "character.h"
-#include "structs.h"
 #include "utility.h"
 #include "spells.h"
 #include "levels.h"

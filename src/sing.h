@@ -11,7 +11,6 @@
 #include "MaxLength.h"
 #include "NumberTypes.h"
 #include "character.h"
-#include "structs.h" // ubyte, ubyte, etc..
 
 #define BARD_MAX_RATING 3
 

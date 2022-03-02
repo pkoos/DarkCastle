@@ -7,7 +7,6 @@
 #include "nullfile.h"
 #include "game_portal.h"
 #include "fileinfo.h"
-#include "structs.h"
 #include "character.h"
 #include "utility.h"
 #include "player.h"

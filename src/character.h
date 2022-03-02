@@ -19,7 +19,6 @@ typedef struct char_data CHAR_DATA;
 #include "Affect.h"  /* MAX_AFFECTS, etc.. */
 #include "alias.h"   /* struct char_player_alias, MAX_ALIASES, etc.. */
 #include "NumberTypes.h"
-#include "structs.h" /* ubyte, ubyte, int16, etc.. */
 #include "timeinfo.h" // time data, etc..
 #include "event.h" // eventBrief
 #include "isr.h"   // SAVE_TYPE_MAX

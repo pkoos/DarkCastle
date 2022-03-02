@@ -18,7 +18,6 @@
 #define HANDLER_H_
 
 #include "NumberTypes.h"
-#include "structs.h" // ubyte, etc..
 #include "comm.h"
 #include "Trace.h"
 

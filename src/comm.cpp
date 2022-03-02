@@ -36,7 +36,6 @@
 #include "player.h"
 #include "levels.h"
 #include "room.h"
-#include "structs.h"
 #include "utility.h"
 #include "connect.h"
 #include "interp.h"

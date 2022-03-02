@@ -18,7 +18,6 @@
 #define SPELLS_H_
 
 #include "NumberTypes.h"
-#include "structs.h" // ubyte, int16
 #include "handler.h"
 #include "obj.h"
 #include <map>

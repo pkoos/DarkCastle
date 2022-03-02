@@ -11,7 +11,6 @@ using namespace std;
 #include "MaxLength.h"
 #include "NumberTypes.h"
 #include "character.h"
-#include "structs.h"
 #include "spells.h"
 #include "utility.h"
 #include "levels.h"

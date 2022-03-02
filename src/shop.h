@@ -6,7 +6,6 @@
 #define SHOP_H_
 
 #include "NumberTypes.h"
-#include "structs.h" // ubyte, ubyte, etc..
 
 struct player_shop_item {
    int item_vnum;               // id of item for sale

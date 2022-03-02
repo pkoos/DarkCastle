@@ -35,7 +35,6 @@
 #include "interp.h"
 #include "character.h"
 #include "act.h"
-#include "structs.h"
 #include "db.h"
 #include <assert.h>
 #include "mobile.h" // ACT_ISNPC

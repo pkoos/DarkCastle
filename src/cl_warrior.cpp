@@ -8,7 +8,6 @@
 #include <algorithm>
 
 #include "MaxLength.h"
-#include "structs.h"
 #include "character.h"
 #include "player.h"
 #include "fight.h"

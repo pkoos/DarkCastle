@@ -22,7 +22,6 @@
 #include <fstream>
 #include <fmt/format.h>
 
-#include "structs.h"
 #include "MaxLength.h"
 #include "room.h"
 #include "character.h"

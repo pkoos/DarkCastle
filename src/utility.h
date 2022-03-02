@@ -34,7 +34,6 @@ extern "C" {
 #include "comm.h"
 #include "MaxLength.h"
 #include "NumberTypes.h"
-#include "structs.h"
 #include "weather.h"
 #include "memory.h"
 #include "player.h"

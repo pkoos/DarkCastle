@@ -5,7 +5,6 @@
 |
 | File create with do_layhands -Pirahna 7/6/1999
 */
-#include "structs.h"
 #include "MaxLength.h"
 #include "character.h"
 #include "player.h"

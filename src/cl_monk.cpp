@@ -3,7 +3,6 @@
 | cl_monk.C
 | Description:  Monk skills.
 */
-#include "structs.h"
 #include "player.h"
 #include "levels.h"
 #include "fight.h"

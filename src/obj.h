@@ -27,7 +27,6 @@
 #include "ItemExtra.h"
 #include "WearLocation.h"
 #include "ItemType.h"
-#include "structs.h" // ubyte
 #include "character.h"
 
 struct char_data;

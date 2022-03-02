@@ -19,7 +19,6 @@
 #include "MaxLength.h"
 #include "NumberTypes.h"
 #include "character.h"
-#include "structs.h"
 #include "utility.h"
 #include "mobile.h"
 #include "spells.h"

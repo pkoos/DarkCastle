@@ -40,7 +40,6 @@
 #include "returnvals.h"
 #include "vault.h"
 #include "set.h"
-#include "structs.h"
 #include "guild.h"
 #include "const.h"
 #include "newedit.h"
