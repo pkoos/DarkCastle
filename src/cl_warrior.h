@@ -51,5 +51,12 @@ struct class_skill_defines w_skills[] = { // warrior skills
 {    "\n",              0,                        1,    0,   0,   0 }
 };
 
+extern CWorld world;
+extern struct index_data *obj_index;
+ 
+bool ARE_GROUPED( CHAR_DATA *sub, CHAR_DATA *obj);
+int attempt_move(CHAR_DATA *ch, int cmd, int is_retreat = 0);
+
+extern struct index_data *mob_index;
 
 #endif

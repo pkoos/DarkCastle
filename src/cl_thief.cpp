@@ -4,41 +4,7 @@
 | Functions declared primarily for the thief class; some may be used in
 |   other classes, but they are mainly thief-oriented.
 */
-#include "MaxLength.h"
-#include "NumberTypes.h"
-#include "character.h"
-#include "utility.h"
-#include "spells.h"
-#include "levels.h"
-#include "player.h"
-#include "obj.h"
-#include "room.h"
-#include "handler.h"
-#include "mobile.h"
-#include "fight.h"
-#include "connect.h"
-#include "interp.h"
-#include "act.h"
-#include "db.h"
-#include <string.h>
-#include "returnvals.h"
-#include "clan.h"
-#include "arena.h"
-#include "const.h"
-#include "inventory.h"
-
-extern int rev_dir[];
-extern CWorld world;
-
-extern struct index_data *mob_index;
-extern struct index_data *obj_index;
-extern int top_of_world;
-extern struct zone_data *zone_table;
-
-int find_door(CHAR_DATA *ch, char *type, char *dir);
-int get_weapon_damage_type(struct obj_data * wielded);
-int check_autojoiners(CHAR_DATA *ch, int skill = 0);
-int check_joincharmie(CHAR_DATA *ch, int skill = 0);
+#include "cl_thief.h"
 
 int palm(CHAR_DATA *ch, struct obj_data *obj_object,
           struct obj_data *sub_object, bool has_consent)
@@ -1917,7 +1883,6 @@ int do_vitalstrike(struct char_data *ch, char *argument, int cmd)
   affect_to_char(ch, &af);
   return eSUCCESS;
 }
-
 
 int do_deceit(struct char_data *ch, char *argument, int cmd)
 {
