@@ -16,6 +16,7 @@
 #ifndef OBJ_H_
 #define OBJ_H_
 
+#include <vector>
 #include "NumberTypes.h"
 #include "Size.h"
 #include "EquipmentLocation.h"
@@ -130,6 +131,6 @@ int recheck_height_wears(char_data *ch);
 bool fullSave(obj_data *obj);
 void heightweight(char_data *ch, bool add);
 
-typedef vector<const char *> item_types_t;
+typedef std::vector<const char *> item_types_t;
 
 #endif
