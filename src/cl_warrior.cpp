@@ -7,12 +7,12 @@
 
 #include <algorithm>
 
+#include "cl_warrior.h"
 #include "MaxLength.h"
 #include "character.h"
 #include "player.h"
 #include "fight.h"
 #include "utility.h"
-#include "spells.h"
 #include "handler.h"
 #include "levels.h"
 #include "connect.h"
@@ -25,7 +25,6 @@
 #include "race.h"
 #include <iostream>
 #include "interp.h"
-#include "spells.h"
 #include "const.h"
 
 using namespace std;
