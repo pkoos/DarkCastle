@@ -19,10 +19,6 @@ extern "C" {
 #include <map>
 
 
-
-typedef	struct char_data	CHAR_DATA;
-typedef	struct obj_data		OBJ_DATA;
-
 /* ======================================================================== */
 
 extern void debugpoint();
