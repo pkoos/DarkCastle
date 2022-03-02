@@ -1,0 +1,532 @@
+scons: Reading SConscript files ...
+v0.1-533-g3a316a1f
+scons: done reading SConscript files.
+scons: Building targets ...
+g++-11 -o CommandStack.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql CommandStack.cpp
+g++-11 -o DC.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -DVERSION=\"v0.1-533-g3a316a1f\" "-DBUILD_TIME=\"2022-03-02 19:29:38\"" -Iinclude DC.cpp
+g++-11 -o Leaderboard.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql Leaderboard.cpp
+g++-11 -o MobActivity.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql MobActivity.cpp
+g++-11 -o Timer.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql Timer.cpp
+g++-11 -o Trace.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql Trace.cpp
+g++-11 -o act.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql act.cpp
+g++-11 -o act_comm.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql act_comm.cpp
+g++-11 -o act_info.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql act_info.cpp
+g++-11 -o alias.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql alias.cpp
+g++-11 -o arena.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql arena.cpp
+g++-11 -o assign_proc.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql assign_proc.cpp
+g++-11 -o auction.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql auction.cpp
+g++-11 -o ban.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql ban.cpp
+g++-11 -o board.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql board.cpp
+g++-11 -o casino.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql casino.cpp
+g++-11 -o channel.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql channel.cpp
+g++-11 -o cl_barbarian.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql cl_barbarian.cpp
+In file included from act_comm.cpp:19:
+nullfile.h:4:1: error: 'FILE' does not name a type
+    4 | FILE * dc_fopen(const char *filename, const char *type);
+      | ^~~~
+nullfile.h:1:1: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+  +++ |+#include <cstdio>
+    1 | #ifndef NULLFILE_H_
+nullfile.h:5:15: error: 'FILE' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |               ^~~~
+nullfile.h:5:15: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+nullfile.h:5:22: error: 'fl' was not declared in this scope; did you mean 'ffsl'?
+    5 | int dc_fclose(FILE * fl);
+      |                      ^~
+      |                      ffsl
+g++-11 -o cl_mage.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql cl_mage.cpp
+g++-11 -o cl_monk.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql cl_monk.cpp
+g++-11 -o cl_paladin.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql cl_paladin.cpp
+g++-11 -o cl_ranger.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql cl_ranger.cpp
+g++-11 -o cl_thief.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql cl_thief.cpp
+g++-11 -o cl_warrior.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql cl_warrior.cpp
+g++-11 -o clan.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql clan.cpp
+g++-11 -o class.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql class.cpp
+In file included from auction.cpp:25:
+nullfile.h:4:1: error: 'FILE' does not name a type
+    4 | FILE * dc_fopen(const char *filename, const char *type);
+      | ^~~~
+nullfile.h:1:1: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+  +++ |+#include <cstdio>
+    1 | #ifndef NULLFILE_H_
+nullfile.h:5:15: error: 'FILE' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |               ^~~~
+nullfile.h:5:15: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+g++-11 -o combinables.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql combinables.cpp
+nullfile.h:5:22: error: 'fl' was not declared in this scope; did you mean 'ffsl'?
+    5 | int dc_fclose(FILE * fl);
+      |                      ^~
+      |                      ffsl
+g++-11 -o comm.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql comm.cpp
+g++-11 -o const.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql const.cpp
+g++-11 -o corpse.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql corpse.cpp
+g++-11 -o db.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql db.cpp
+g++-11 -o dcastle.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude dcastle.cpp
+g++-11 -o guild.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql guild.cpp
+g++-11 -o ki.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql ki.cpp
+g++-11 -o fount.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql fount.cpp
+g++-11 -o help.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql help.cpp
+g++-11 -o golem.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql golem.cpp
+g++-11 -o info.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql info.cpp
+g++-11 -o innate.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql innate.cpp
+g++-11 -o inventory.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql inventory.cpp
+In file included from casino.cpp:13:
+nullfile.h:4:1: error: 'FILE' does not name a type
+    4 | FILE * dc_fopen(const char *filename, const char *type);
+      | ^~~~
+nullfile.h:1:1: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+  +++ |+#include <cstdio>
+    1 | #ifndef NULLFILE_H_
+nullfile.h:5:15: error: 'FILE' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |               ^~~~
+nullfile.h:5:15: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+nullfile.h:5:22: error: 'fl' was not declared in this scope; did you mean 'ffsl'?
+    5 | int dc_fclose(FILE * fl);
+      |                      ^~
+      |                      ffsl
+g++-11 -o handler.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql handler.cpp
+g++-11 -o group.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql group.cpp
+g++-11 -o limits.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql limits.cpp
+g++-11 -o fight.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql fight.cpp
+g++-11 -o game_portal.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql game_portal.cpp
+g++-11 -o interp.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql interp.cpp
+g++-11 -o non_off.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql non_off.cpp
+g++-11 -o offense.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql offense.cpp
+g++-11 -o nlog.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql nlog.cpp
+g++-11 -o nullfile.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql nullfile.cpp
+g++-11 -o objects.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql objects.cpp
+In file included from corpse.cpp:24:
+nullfile.h:4:1: error: 'FILE' does not name a type
+    4 | FILE * dc_fopen(const char *filename, const char *type);
+      | ^~~~
+nullfile.h:1:1: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+  +++ |+#include <cstdio>
+    1 | #ifndef NULLFILE_H_
+nullfile.h:5:15: error: 'FILE' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |               ^~~~
+nullfile.h:5:15: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+g++-11 -o news.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql news.cpp
+nullfile.h:5:22: error: 'fl' was not declared in this scope; did you mean 'ffsl'?
+    5 | int dc_fclose(FILE * fl);
+      |                      ^~
+      |                      ffsl
+In file included from help.cpp:7:
+nullfile.h:4:1: error: 'FILE' does not name a type
+    4 | FILE * dc_fopen(const char *filename, const char *type);
+      | ^~~~
+nullfile.h:1:1: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+  +++ |+#include <cstdio>
+    1 | #ifndef NULLFILE_H_
+nullfile.h:5:15: error: 'FILE' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |               ^~~~
+nullfile.h:5:15: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+g++-11 -o new_edit.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql new_edit.cpp
+nullfile.h:5:22: error: 'fl' was not declared in this scope; did you mean 'ffsl'?
+    5 | int dc_fclose(FILE * fl);
+      |                      ^~
+      |                      ffsl
+g++-11 -o quest.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql quest.cpp
+In file included from golem.cpp:10:
+nullfile.h:4:1: error: 'FILE' does not name a type
+    4 | FILE * dc_fopen(const char *filename, const char *type);
+      | ^~~~
+nullfile.h:1:1: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+  +++ |+#include <cstdio>
+    1 | #ifndef NULLFILE_H_
+nullfile.h:5:15: error: 'FILE' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |               ^~~~
+nullfile.h:5:15: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+nullfile.h:5:22: error: 'fl' was not declared in this scope; did you mean 'ffsl'?
+    5 | int dc_fclose(FILE * fl);
+      |                      ^~
+      |                      ffsl
+g++-11 -o nanny.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql nanny.cpp
+g++-11 -o obj_proc.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql obj_proc.cpp
+g++-11 -o wiz_102.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_102.cpp
+g++-11 -o wiz_104.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_104.cpp
+g++-11 -o who.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql who.cpp
+g++-11 -o wiz_108.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_108.cpp
+g++-11 -o wiz_103.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_103.cpp
+In file included from non_off.cpp:15:
+nullfile.h:4:1: error: 'FILE' does not name a type
+    4 | FILE * dc_fopen(const char *filename, const char *type);
+      | ^~~~
+nullfile.h:1:1: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+  +++ |+#include <cstdio>
+    1 | #ifndef NULLFILE_H_
+nullfile.h:5:15: error: 'FILE' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |               ^~~~
+nullfile.h:5:15: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+nullfile.h:5:22: error: 'fl' was not declared in this scope; did you mean 'ffsl'?
+    5 | int dc_fclose(FILE * fl);
+      |                      ^~
+      |                      ffsl
+g++-11 -o token.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql token.cpp
+g++-11 -o wiz_106.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_106.cpp
+g++-11 -o vault.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql vault.cpp
+g++-11 -o wiz_107.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_107.cpp
+In file included from news.cpp:22:
+nullfile.h:4:1: error: 'FILE' does not name a type
+    4 | FILE * dc_fopen(const char *filename, const char *type);
+      | ^~~~
+nullfile.h:1:1: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+  +++ |+#include <cstdio>
+    1 | #ifndef NULLFILE_H_
+nullfile.h:5:15: error: 'FILE' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |               ^~~~
+nullfile.h:5:15: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+nullfile.h:5:22: error: 'fl' was not declared in this scope; did you mean 'ffsl'?
+    5 | int dc_fclose(FILE * fl);
+      |                      ^~
+      |                      ffsl
+g++-11 -o wiz_109.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_109.cpp
+g++-11 -o wizard.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wizard.cpp
+g++-11 -o wiz_110.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_110.cpp
+g++-11 -o wiz_101.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_101.cpp
+In file included from quest.cpp:5:
+nullfile.h:4:1: error: 'FILE' does not name a type
+    4 | FILE * dc_fopen(const char *filename, const char *type);
+      | ^~~~
+nullfile.h:1:1: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+  +++ |+#include <cstdio>
+    1 | #ifndef NULLFILE_H_
+nullfile.h:5:15: error: 'FILE' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |               ^~~~
+nullfile.h:5:15: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+nullfile.h:5:22: error: 'fl' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |                      ^~
+g++-11 -o wiz_105.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql wiz_105.cpp
+g++-11 -o weather.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql weather.cpp
+g++-11 -o utility.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql utility.cpp
+g++-11 -o modify.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql modify.cpp
+g++-11 -o mob_prog.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql mob_prog.cpp
+g++-11 -o mob_act.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql mob_act.cpp
+g++-11 -o mob_proc.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql mob_proc.cpp
+g++-11 -o mob_proc2.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql mob_proc2.cpp
+In file included from wiz_109.cpp:5:
+nullfile.h:4:1: error: 'FILE' does not name a type
+    4 | FILE * dc_fopen(const char *filename, const char *type);
+      | ^~~~
+nullfile.h:1:1: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+  +++ |+#include <cstdio>
+    1 | #ifndef NULLFILE_H_
+nullfile.h:5:15: error: 'FILE' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |               ^~~~
+nullfile.h:5:15: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+nullfile.h:5:22: error: 'fl' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |                      ^~
+g++-11 -o move.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql move.cpp
+g++-11 -o mob_commands.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql mob_commands.cpp
+In file included from wizard.cpp:6:
+nullfile.h:4:1: error: 'FILE' does not name a type
+    4 | FILE * dc_fopen(const char *filename, const char *type);
+      | ^~~~
+In file included from wiz_105.cpp:5:
+nullfile.h:4:1: error: 'FILE' does not name a type
+    4 | FILE * dc_fopen(const char *filename, const char *type);
+      | ^~~~
+nullfile.h:1:1: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+  +++ |+#include <cstdio>
+    1 | #ifndef NULLFILE_H_
+nullfile.h:5:15: error: 'FILE' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |               ^~~~
+nullfile.h:5:15: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+nullfile.h:1:1: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+  +++ |+#include <cstdio>
+    1 | #ifndef NULLFILE_H_
+nullfile.h:5:15: error: 'FILE' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |               ^~~~
+nullfile.h:5:22: error: 'fl' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |                      ^~
+nullfile.h:5:15: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+g++-11 -o magic.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql magic.cpp
+nullfile.h:5:22: error: 'fl' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |                      ^~
+g++-11 -o memory.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql memory.cpp
+g++-11 -o meta.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql meta.cpp
+g++-11 -o save.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql save.cpp
+g++-11 -o shop.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql shop.cpp
+g++-11 -o sing.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql sing.cpp
+g++-11 -o social.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql social.cpp
+g++-11 -o spec.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql spec.cpp
+g++-11 -o spells.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql spells.cpp
+g++-11 -o stat.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude -I/usr/include/pgsql stat.cpp
+g++-11 -o showplayerxp.o -c -ggdb3 -m32 -std=gnu++23 -Wno-write-strings -O3 -DLINUX -Iinclude showplayerxp.cpp
+In file included from social.cpp:9:
+nullfile.h:4:1: error: 'FILE' does not name a type
+    4 | FILE * dc_fopen(const char *filename, const char *type);
+      | ^~~~
+nullfile.h:1:1: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+  +++ |+#include <cstdio>
+    1 | #ifndef NULLFILE_H_
+nullfile.h:5:15: error: 'FILE' was not declared in this scope
+    5 | int dc_fclose(FILE * fl);
+      |               ^~~~
+nullfile.h:5:15: note: 'FILE' is defined in header '<cstdio>'; did you forget to '#include <cstdio>'?
+nullfile.h:5:22: error: 'fl' was not declared in this scope; did you mean 'ffsl'?
+    5 | int dc_fclose(FILE * fl);
+      |                      ^~
+      |                      ffsl
+act_comm.cpp: In function 'void load_hints()':
+act_comm.cpp:635:14: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  635 |    if(!(fl = dc_fopen(HINTS_FILE, "r"))) {
+      |              ^~~~~~~~
+      |              do_open
+act_comm.cpp:652:13: error: 'dc_fclose' cannot be used as a function
+  652 |    dc_fclose(fl);
+      |    ~~~~~~~~~^~~~
+scons: *** [act_comm.o] Error 1
+casino.cpp: In function 'void save_slot_machines()':
+casino.cpp:1906:11: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+ 1906 |   if((f = dc_fopen(buf, "w")) == NULL) {
+      |           ^~~~~~~~
+      |           do_open
+casino.cpp:1918:12: error: 'dc_fclose' cannot be used as a function
+ 1918 |   dc_fclose(f);
+      |   ~~~~~~~~~^~~
+auction.cpp: In member function 'void AuctionHouse::Load()':
+auction.cpp:837:14: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  837 |   the_file = dc_fopen(file_name.c_str(), "r");
+      |              ^~~~~~~~
+      |              do_open
+auction.cpp:893:12: error: 'dc_fclose' cannot be used as a function
+  893 |   dc_fclose(the_file);
+      |   ~~~~~~~~~^~~~~~~~~~
+auction.cpp: In member function 'void AuctionHouse::Save()':
+auction.cpp:912:14: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  912 |   the_file = dc_fopen(temp_file_name.c_str(), "w");
+      |              ^~~~~~~~
+      |              do_open
+auction.cpp:973:12: error: 'dc_fclose' cannot be used as a function
+  973 |   dc_fclose(the_file);
+      |   ~~~~~~~~~^~~~~~~~~~
+auction.cpp: In member function 'void AuctionHouse::BuyItem(CHAR_DATA*, unsigned int)':
+auction.cpp:1257:14: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+ 1257 |   if (!(fl = dc_fopen(WEB_AUCTION_FILE,"r"))) {
+      |              ^~~~~~~~
+      |              do_open
+auction.cpp:1267:12: error: 'dc_fclose' cannot be used as a function
+ 1267 |   dc_fclose(fl);
+      |   ~~~~~~~~~^~~~
+auction.cpp:1270:14: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+ 1270 |   if (!(fl = dc_fopen(WEB_AUCTION_FILE,"w"))) {
+      |              ^~~~~~~~
+      |              do_open
+auction.cpp:1280:12: error: 'dc_fclose' cannot be used as a function
+ 1280 |   dc_fclose(fl);
+      |   ~~~~~~~~~^~~~
+help.cpp: In function 'int do_reload_help(char_data*, char*, int)':
+help.cpp:607:22: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  607 |   if(!(new_help_fl = dc_fopen(NEW_HELP_FILE, "r"))) {
+      |                      ^~~~~~~~
+      |                      do_open
+help.cpp:613:12: error: 'dc_fclose' cannot be used as a function
+  613 |   dc_fclose(new_help_fl);
+      |   ~~~~~~~~~^~~~~~~~~~~~~
+help.cpp:615:22: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  615 |   if(!(new_help_fl = dc_fopen(NEW_HELP_FILE, "r"))) {
+      |                      ^~~~~~~~
+      |                      do_open
+help.cpp:624:12: error: 'dc_fclose' cannot be used as a function
+  624 |   dc_fclose(new_help_fl);
+      |   ~~~~~~~~~^~~~~~~~~~~~~
+golem.cpp: In function 'void save_golem_data(CHAR_DATA*)':
+golem.cpp:173:18: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  173 |   if (!(fpfile = dc_fopen(file,"w")))
+      |                  ^~~~~~~~
+      |                  do_open
+help.cpp: In function 'void save_help(char_data*)':
+help.cpp:796:11: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  796 |   if((f = dc_fopen(file, "w")) == NULL) {
+      |           ^~~~~~~~
+      |           do_open
+corpse.cpp: In function 'void save_corpses()':
+corpse.cpp:219:20: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  219 |         if (!(fp = dc_fopen(CORPSE_FILE, "w"))) {
+      |                    ^~~~~~~~
+      |                    do_open
+golem.cpp:184:12: error: 'dc_fclose' cannot be used as a function
+  184 |   dc_fclose(fpfile);
+      |   ~~~~~~~~~^~~~~~~~
+golem.cpp: In function 'void save_charmie_data(CHAR_DATA*)':
+golem.cpp:208:20: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  208 |     if (!(fpfile = dc_fopen(file, "w")))
+      |                    ^~~~~~~~
+      |                    do_open
+help.cpp:821:12: error: 'dc_fclose' cannot be used as a function
+  821 |   dc_fclose(f);
+      |   ~~~~~~~~~^~~
+help.cpp:828:11: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  828 |   if((f = dc_fopen(file, "w")) == NULL) {
+      |           ^~~~~~~~
+      |           do_open
+help.cpp:853:12: error: 'dc_fclose' cannot be used as a function
+  853 |   dc_fclose(f);
+      |   ~~~~~~~~~^~~
+golem.cpp:215:14: error: 'dc_fclose' cannot be used as a function
+  215 |     dc_fclose(fpfile);
+      |     ~~~~~~~~~^~~~~~~~
+corpse.cpp:237:42: error: 'dc_fclose' cannot be used as a function
+  237 |                                 dc_fclose(fp);
+      |                                 ~~~~~~~~~^~~~
+corpse.cpp:243:18: error: 'dc_fclose' cannot be used as a function
+  243 |         dc_fclose(fp);
+      |         ~~~~~~~~~^~~~
+corpse.cpp: In function 'void load_corpses()':
+corpse.cpp:269:20: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  269 |         if (!(fp = dc_fopen(CORPSE_FILE, "r"))) {
+      |                    ^~~~~~~~
+      |                    do_open
+golem.cpp: In function 'void load_golem_data(CHAR_DATA*, int)':
+golem.cpp:276:18: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  276 |   if (!(fpfile = dc_fopen(file,"r")))
+      |                  ^~~~~~~~
+      |                  do_open
+golem.cpp:296:12: error: 'dc_fclose' cannot be used as a function
+  296 |   dc_fclose(fpfile);
+      |   ~~~~~~~~~^~~~~~~~
+scons: *** [casino.o] Error 1
+corpse.cpp:489:18: error: 'dc_fclose' cannot be used as a function
+  489 |         dc_fclose(fp);
+      |         ~~~~~~~~~^~~~
+news.cpp: In function 'void savenews()':
+news.cpp:77:14: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+   77 |   if (!(fl = dc_fopen("news.data", "w")))
+      |              ^~~~~~~~
+      |              do_open
+news.cpp:90:12: error: 'dc_fclose' cannot be used as a function
+   90 |   dc_fclose(fl);
+      |   ~~~~~~~~~^~~~
+news.cpp: In function 'void loadnews()':
+news.cpp:99:14: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+   99 |   if (!(fl = dc_fopen("news.data", "r")))
+      |              ^~~~~~~~
+      |              do_open
+news.cpp:129:12: error: 'dc_fclose' cannot be used as a function
+  129 |   dc_fclose(fl);
+      |   ~~~~~~~~~^~~~
+scons: *** [corpse.o] Error 1
+scons: *** [golem.o] Error 1
+non_off.cpp: In member function 'void CVoteData::OutToFile()':
+non_off.cpp:1558:14: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+ 1558 |   the_file = dc_fopen("vote_data", "w");
+      |              ^~~~~~~~
+      |              do_open
+non_off.cpp:1598:12: error: 'dc_fclose' cannot be used as a function
+ 1598 |   dc_fclose(the_file);
+      |   ~~~~~~~~~^~~~~~~~~~
+non_off.cpp: In constructor 'CVoteData::CVoteData()':
+non_off.cpp:1623:14: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+ 1623 |   the_file = dc_fopen("../lib/vote_data", "r");
+      |              ^~~~~~~~
+      |              do_open
+non_off.cpp:1635:14: error: 'dc_fclose' cannot be used as a function
+ 1635 |     dc_fclose(the_file);
+      |     ~~~~~~~~~^~~~~~~~~~
+non_off.cpp:1645:14: error: 'dc_fclose' cannot be used as a function
+ 1645 |     dc_fclose(the_file);
+      |     ~~~~~~~~~^~~~~~~~~~
+non_off.cpp:1660:16: error: 'dc_fclose' cannot be used as a function
+ 1660 |       dc_fclose(the_file);
+      |       ~~~~~~~~~^~~~~~~~~~
+non_off.cpp:1678:16: error: 'dc_fclose' cannot be used as a function
+ 1678 |       dc_fclose(the_file);
+      |       ~~~~~~~~~^~~~~~~~~~
+non_off.cpp:1693:16: error: 'dc_fclose' cannot be used as a function
+ 1693 |       dc_fclose(the_file);
+      |       ~~~~~~~~~^~~~~~~~~~
+non_off.cpp:1705:12: error: 'dc_fclose' cannot be used as a function
+ 1705 |   dc_fclose(the_file);
+      |   ~~~~~~~~~^~~~~~~~~~
+scons: *** [help.o] Error 1
+scons: *** [auction.o] Error 1
+quest.cpp: In function 'int load_quests()':
+quest.cpp:65:14: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+   65 |    if(!(fl = dc_fopen(QUEST_FILE, "r"))) {
+      |              ^~~~~~~~
+      |              do_open
+quest.cpp:98:13: error: 'dc_fclose' cannot be used as a function
+   98 |    dc_fclose(fl);
+      |    ~~~~~~~~~^~~~
+wiz_105.cpp: In function 'int do_reloadhelp(char_data*, char*, int)':
+wiz_105.cpp:76:12: error: 'dc_fclose' cannot be used as a function
+   76 |   dc_fclose(help_fl);
+      |   ~~~~~~~~~^~~~~~~~~
+quest.cpp: In function 'int save_quests()':
+quest.cpp:108:14: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  108 |    if(!(fl = dc_fopen(QUEST_FILE, "w"))) {
+      |              ^~~~~~~~
+      |              do_open
+wiz_105.cpp:77:18: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+   77 |   if(!(help_fl = dc_fopen(HELP_KWRD_FILE, "r"))) {
+      |                  ^~~~~~~~
+      |                  do_open
+quest.cpp:128:13: error: 'dc_fclose' cannot be used as a function
+  128 |    dc_fclose(fl);
+      |    ~~~~~~~~~^~~~
+scons: *** [news.o] Error 1
+wiz_109.cpp: In function 'int do_processes(char_data*, char*, int)':
+wiz_109.cpp:106:13: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  106 |   if(!(fl = dc_fopen("../lib/whassup.txt", "a"))) {
+      |             ^~~~~~~~
+      |             do_open
+wiz_109.cpp:112:14: error: 'dc_fclose' cannot be used as a function
+  112 |     dc_fclose(fl);
+      |     ~~~~~~~~~^~~~
+wiz_109.cpp:117:12: error: 'dc_fclose' cannot be used as a function
+  117 |   dc_fclose(fl);
+      |   ~~~~~~~~~^~~~
+wiz_109.cpp:119:13: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  119 |   if(!(fl = dc_fopen("../lib/whassup.txt", "r"))) {
+      |             ^~~~~~~~
+      |             do_open
+wiz_109.cpp:125:12: error: 'dc_fclose' cannot be used as a function
+  125 |   dc_fclose(fl);
+      |   ~~~~~~~~~^~~~
+wizard.cpp: In function 'void special_log(char*)':
+wizard.cpp:1508:13: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+ 1508 |   if(!(fl = dc_fopen("../lib/special.txt", "a"))) {
+      |             ^~~~~~~~
+      |             do_open
+wizard.cpp:1514:12: error: 'dc_fclose' cannot be used as a function
+ 1514 |   dc_fclose(fl);
+      |   ~~~~~~~~~^~~~
+wizard.cpp: In function 'void init_random_hunt_items(hunt_data*)':
+wizard.cpp:1666:12: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+ 1666 |   if ((f = dc_fopen("huntitems.txt", "r")) == NULL)
+      |            ^~~~~~~~
+      |            do_open
+wizard.cpp:1689:12: error: 'dc_fclose' cannot be used as a function
+ 1689 |   dc_fclose(f);
+      |   ~~~~~~~~~^~~
+scons: *** [non_off.o] Error 1
+scons: *** [wiz_105.o] Error 1
+scons: *** [quest.o] Error 1
+scons: *** [wiz_109.o] Error 1
+scons: *** [wizard.o] Error 1
+social.cpp: In function 'void boot_social_messages()':
+social.cpp:227:13: error: 'dc_fopen' was not declared in this scope; did you mean 'do_open'?
+  227 |   if(!(fl = dc_fopen(SOCIAL_FILE, "r"))) {
+      |             ^~~~~~~~
+      |             do_open
+social.cpp:256:12: error: 'dc_fclose' cannot be used as a function
+  256 |   dc_fclose(fl);
+      |   ~~~~~~~~~^~~~
+scons: *** [social.o] Error 1
+scons: building terminated because of errors.

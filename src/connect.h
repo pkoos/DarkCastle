@@ -6,6 +6,7 @@
 | Description: State of connectedness information.
 */
 #include "structs.h"  // MAX_INPUT_LENGTH
+#include "MaxLength.h"
 #include "NumberTypes.h"
 #include "comm.h"
  
