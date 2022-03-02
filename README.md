@@ -13,10 +13,10 @@ From the base directory, run the following command to build the container:
 docker build -t `container_tag` .
 ```
 
-Once the container is built, start it using the following command: 
+Once the container is built, from the Docker program go to Images, and next to the image click run. Click optional settings, give the container a name, and fill out local port as 6969 (to match the exposed port in the container).
 
 ```
-docker start
+TODO: Figure out how to do the above step in the command line.
 ```
 
 The following command will get you into the container itself: 
@@ -25,18 +25,24 @@ The following command will get you into the container itself:
 docker exec -it 'container_tag' /bin/bash
 ```
 
-To start the app, from the container go to
+You should start in the following directory: 
 ```
 /srv/dcastle2/git/DarkCastle/src
 ```
 
-and run the following command: 
+To start the game instance, run this command:
 
 ```
 ./dcastle -p6969
 ```
+If you would like to log the output of this command (very good idea the first time running the command) then add this to the end:
 
-This will attempt to start up the game using port 6969. THERE WILL BE MANY MISSING FILES AND FOLDERS and I would suggest adding them into the directory structure.
+```
+|& tee dcastle.log
+```
+This will create a file with the output of the command, named dcastle.out.
+
+This will attempt to start up the game using port 6969. THERE WILL BE MANY MISSING FILES AND FOLDERS that need to be added. Go through the errors file or the error output and add them, running the command after each addition.
 
 One folder you will need that will not be immediately apparent is a save folder in the base git folder. This is the format
 

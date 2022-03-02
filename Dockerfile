@@ -8,7 +8,7 @@ RUN mkdir -p /srv/dcastle2/git
 WORKDIR /srv/dcastle2/git
 RUN git clone https://github.com/pkoos/DarkCastle.git
 WORKDIR /srv/dcastle2/git/DarkCastle
-RUN git clone git@github.com:google/googletest.git
+RUN git clone https://github.com/google/googletest.git
 WORKDIR /srv/dcastle2/git/DarkCastle/src
 RUN ln -s /usr/lib/libcrypt.so.1 /usr/lib/libcrypt.so
 RUN ln -s /usr/lib/libfmt.so.8 /usr/lib/libfmt.so
