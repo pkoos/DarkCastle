@@ -15,6 +15,7 @@
 #include <netinet/in.h>
 #include <string>
 
+#include "CVoteData.h"
 #include "character.h"
 #include "obj.h"
 #include "character.h"
