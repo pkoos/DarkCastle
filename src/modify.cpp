@@ -23,6 +23,7 @@ extern "C" {
 #include <stdlib.h>
 }
 
+#include "MaxLength.h"
 #include "connect.h" // descriptor_data
 #include "utility.h"
 #include "character.h"

@@ -4,6 +4,7 @@
 #include <string>
 #include <utility>
 
+#include "MaxLength.h"
 #include "NumberTypes.h"
 #include "wizard.h"
 #include "utility.h"

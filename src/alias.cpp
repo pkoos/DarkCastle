@@ -7,6 +7,7 @@ extern "C"
 {
   #include <string.h>
 }
+#include "MaxLength.h"
 #include "character.h"
 #include "utility.h"
 #include "levels.h"

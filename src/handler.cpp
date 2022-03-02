@@ -26,6 +26,7 @@
 #include <iostream>
 #include <sstream>
 
+#include "MaxLength.h"
 #include "NumberTypes.h"
 #include "magic.h"
 #include "spells.h"

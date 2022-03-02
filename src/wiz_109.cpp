@@ -2,6 +2,7 @@
 | Level 109 wizard commands
 | 11/20/95 -- Azrack
 **********************/
+#include "MaxLength.h"
 #include "wizard.h"
 #include "spells.h"
 #include "fileinfo.h"

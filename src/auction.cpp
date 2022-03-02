@@ -22,6 +22,7 @@ void load_auction_tickets()
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "MaxLength.h"
 #include "NumberTypes.h"
 #include "AuctionBounds.h"
 #include "obj.h"

@@ -12,6 +12,7 @@ extern "C"  {
   #include <string.h>
 }
 //#include <iostream.h>
+#include "MaxLength.h"
 #include "NumberTypes.h"
 #include <stdio.h>
 #include "character.h"

@@ -2,6 +2,7 @@
 one liner quest shit
 *****************************************************/
 
+#include "MaxLength.h"
 #include "NumberTypes.h"
 #include <math.h>
 //#include "structs.h"

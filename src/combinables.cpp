@@ -1,7 +1,7 @@
 // This file takes care of all the skills that make stuff by combining it
 // in it's container type.  For example, poison making.
 
-
+#include "MaxLength.h"
 #include "db.h"
 #include "fight.h"
 #include "room.h"

@@ -11,6 +11,7 @@
 #include <list>
 #include <queue>
 
+#include "MaxLength.h"
 #include "NumberTypes.h"
 // //#include "structs.h"
 #include "player.h"

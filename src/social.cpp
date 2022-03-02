@@ -6,6 +6,7 @@ extern "C"
   #include <string.h>
   #include <stdlib.h> // qsort()
 }
+#include "MaxLength.h"
 #include "fileinfo.h" // SOCIAL_FILE
 //#include "structs.h" // MAX_INPUT_LENGTH
 #include "room.h"

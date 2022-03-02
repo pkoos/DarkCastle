@@ -13,6 +13,7 @@ extern "C"
 }
 #include <fmt/format.h>
 
+#include "MaxLength.h"
 #include "NumberTypes.h"
 #include "ki.h"
 #include "room.h"

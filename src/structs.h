@@ -22,10 +22,10 @@ int dc_fclose(FILE * fl);
 typedef	struct char_data	CHAR_DATA;
 typedef	struct obj_data		OBJ_DATA;
 
-#define MAX_STRING_LENGTH   8192
-#define MAX_INPUT_LENGTH     160
-#define MAX_MESSAGES         150
-#define MAX_OBJ_SDESC_LENGTH 100
+// #define MAX_STRING_LENGTH   8192
+// #define MAX_INPUT_LENGTH     160
+// #define MAX_MESSAGES         150
+// #define MAX_OBJ_SDESC_LENGTH 100
 
 #define MESS_ATTACKER 1
 #define MESS_VICTIM   2
@@ -110,18 +110,6 @@ private:
   std::map<std::string, bool> char_voted;
 };
 
-/*
- * TO types for act() output.
- */
-/* OLD
-#define TO_ROOM    0
-#define TO_VICT    1
-#define TO_NOTVICT 2
-#define TO_CHAR    3
-#define TO_GODS    4
-*/
-
 extern void debugpoint();
-
 
 #endif

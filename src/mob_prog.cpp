@@ -26,6 +26,7 @@
  *  such installation can be found in INSTALL.  Enjoy...         N'Atas-Ha *
  ***************************************************************************/
 
+#include "MaxLength.h"
 #include <sys/types.h>
 #include <stdio.h>
 #include <string.h>

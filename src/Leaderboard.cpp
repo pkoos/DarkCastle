@@ -10,6 +10,7 @@ extern "C" {
 }
 #include <sstream>
 
+#include "MaxLength.h"
 #include "NumberTypes.h"
 #include "Leaderboard.h"
 #include "utility.h"

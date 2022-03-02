@@ -3,6 +3,7 @@
 | wizard.C
 | Description:  Utility functions necessary for wiz commands.
 */
+#include "MaxLength.h"
 #include "wizard.h"
 #include "character.h"
 #include "utility.h"

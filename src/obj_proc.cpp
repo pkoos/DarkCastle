@@ -8,6 +8,7 @@
 
 #include <string.h> // strstr()
 
+#include "MaxLength.h"
 #include "NumberTypes.h"
 #include "db.h"
 #include "fight.h"

@@ -47,6 +47,7 @@ extern "C"
   #include <ctype.h> // isspace(), isdigit()
 }
 
+#include "MaxLength.h"
 #include "ClassIds.h"
 #include "ClanIds.h"
 #include "BoardType.h"

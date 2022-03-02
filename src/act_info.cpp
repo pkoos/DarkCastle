@@ -17,6 +17,7 @@ extern "C"
   #include <string.h>
   #include <ctype.h>
 }
+#include "MaxLength.h"
 #include "obj.h"
 #include "mobile.h"
 #include "character.h"

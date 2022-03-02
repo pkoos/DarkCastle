@@ -10,6 +10,7 @@
 #include <cstring>
 
 //#include "structs.h"
+#include "MaxLength.h"
 #include "character.h"
 #include "utility.h"
 #include "handler.h"

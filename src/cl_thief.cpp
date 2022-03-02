@@ -4,6 +4,7 @@
 | Functions declared primarily for the thief class; some may be used in
 |   other classes, but they are mainly thief-oriented.
 */
+#include "MaxLength.h"
 #include "NumberTypes.h"
 #include "character.h"
 // //#include "structs.h"

@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#include "MaxLength.h"
 #include "connect.h"
 #include "character.h"
 #include "utility.h"

@@ -30,6 +30,7 @@ extern "C"
 #include <math.h> // pow(double,double)
 }
 
+#include "MaxLength.h"
 #include "NumberTypes.h"
 #include "room.h"
 #include "connect.h"

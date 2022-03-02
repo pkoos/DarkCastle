@@ -29,6 +29,7 @@ extern "C"
 #include <queue>
 #include <fmt/format.h>
 
+#include "MaxLength.h"
 #include "NumberTypes.h"
 #include "character.h"
 #include "comm.h"

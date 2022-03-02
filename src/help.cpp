@@ -5,6 +5,7 @@ extern "C"
 }
 
 // //#include "structs.h"
+#include "MaxLength.h"
 #include "room.h"
 #include "character.h"
 #include "obj.h"

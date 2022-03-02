@@ -29,6 +29,7 @@
 #include <assert.h>
 #include <sstream>
 
+#include "MaxLength.h"
 #include "NumberTypes.h"
 #include "fight.h"
 #include "levels.h"
