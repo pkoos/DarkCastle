@@ -7,7 +7,7 @@ add_subdirectory(googletest)
 
 include_directories(googletest/include)
 
-add_executable( main_test test/main_test.cpp )
+add_executable( main_test test/src/main_test.cpp )
 
 target_link_libraries( main_test PRIVATE gtest_main )
 
