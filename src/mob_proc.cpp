@@ -16,6 +16,7 @@
 #include <assert.h>
 #include <string.h>
 
+#include "Direction.h"
 #include "MaxLength.h"
 #include "character.h"
 #include "utility.h"

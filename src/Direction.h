@@ -11,4 +11,11 @@
 #define DOWN            5
 #define MAX_DIRS        6
 
+#define CMD_NORTH NORTH+1
+#define CMD_EAST EAST+1
+#define CMD_SOUTH SOUTH+1
+#define CMD_WEST WEST+1
+#define CMD_UP UP+1
+#define CMD_DOWN DOWN+1
+
 #endif

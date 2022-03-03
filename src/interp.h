@@ -42,12 +42,7 @@ bool is_abbrev(const string &abbrev, const string &word);
 int len_cmp(char *s1, char *s2);
 void add_command_lag(CHAR_DATA *ch, int cmdnum, int lag);
 
-#define CMD_NORTH 1
-#define CMD_EAST 2
-#define CMD_SOUTH 3
-#define CMD_WEST 4
-#define CMD_UP 5
-#define CMD_DOWN 6
+/* Directions are found in Direction.h */
 
 #define CMD_BELLOW 8
 #define CMD_DEFAULT 9
