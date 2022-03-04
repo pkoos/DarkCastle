@@ -29,7 +29,7 @@
 #include <signal.h>
 #include <ctype.h>
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "fileinfo.h"
 #include "act.h"

@@ -2,7 +2,7 @@
 | Level 108 wizard commands
 | 11/20/95 -- Azrack
 **********************/
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "wizard.h"
 #include "interp.h"

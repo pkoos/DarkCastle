@@ -17,7 +17,7 @@
 #include <string.h>
 
 #include "Direction.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "character.h"
 #include "utility.h"
 #include "mobile.h"

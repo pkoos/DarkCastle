@@ -9,7 +9,7 @@ extern "C"
   #include <ctype.h>
   #include <string.h>
 }
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "obj.h"
 #include "connect.h"

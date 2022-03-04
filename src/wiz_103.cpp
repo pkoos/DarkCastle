@@ -4,7 +4,7 @@
 **********************/
 #include "wizard.h"
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "utility.h"
 #include "mobile.h"
 #include "player.h"

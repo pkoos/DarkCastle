@@ -8,7 +8,7 @@
 #ifndef SING_H_
 #define SING_H_
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "character.h"
 

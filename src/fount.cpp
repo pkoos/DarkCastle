@@ -17,7 +17,7 @@ extern "C"
 #include <ctype.h>
 }
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "room.h"
 #include "obj.h"
 #include "character.h"

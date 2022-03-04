@@ -28,7 +28,7 @@
 extern "C" {
 	#include <stdio.h>
 }
-#include "MaxLength.h"
+#include "Maximums.h"
 #include <sys/types.h>
 
 #include <string.h>

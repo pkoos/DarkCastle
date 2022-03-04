@@ -12,7 +12,7 @@ extern "C" {
 #include <limits.h>
 
 #include "nullfile.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "Leaderboard.h"
 #include "utility.h"

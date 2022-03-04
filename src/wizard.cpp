@@ -4,7 +4,7 @@
 | Description:  Utility functions necessary for wiz commands.
 */
 #include "nullfile.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "wizard.h"
 #include "character.h"
 #include "utility.h"

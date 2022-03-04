@@ -31,7 +31,7 @@ extern "C"
 
 #include "nullfile.h"
 #include "CVoteData.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "character.h"
 #include "comm.h"

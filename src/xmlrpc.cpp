@@ -3,7 +3,7 @@
 #include "dc_xmlrpc.h"
 #include <string.h>
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "character.h"
 #include "handler.h"
 #include "connect.h"

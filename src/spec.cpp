@@ -9,7 +9,7 @@ extern "C"
 #include <string.h>
 }
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "room.h"
 #include "character.h"
 #include "obj.h"

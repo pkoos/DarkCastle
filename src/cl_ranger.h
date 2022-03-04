@@ -2,7 +2,7 @@
 #define CL_RANGER_H_
 
 //#include <iostream.h>
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 
 #include "character.h"

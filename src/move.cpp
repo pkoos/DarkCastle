@@ -8,7 +8,7 @@
  *                        noncombat_damage() for damage                  *
  *************************************************************************
  */
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "character.h"
 #include "Affect.h"
 #include "room.h"

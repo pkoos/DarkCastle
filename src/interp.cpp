@@ -34,7 +34,7 @@ extern "C"
 using namespace std;
 
 #include "nullfile.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "character.h" // POSITION_*
 #include "interp.h"
 #include "levels.h"

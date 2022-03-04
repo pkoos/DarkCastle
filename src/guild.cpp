@@ -3,7 +3,7 @@
 | guild.C
 | This contains all the guild commands - practice, gain, etc..
 */
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "character.h"
 #include "spells.h"

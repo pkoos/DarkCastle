@@ -5,7 +5,7 @@
 */
 #include <cstring>
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "connect.h"
 #include "utility.h"
 #include "character.h"

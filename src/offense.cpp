@@ -9,7 +9,7 @@
 #include <cctype>
 #include <cstring>
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "character.h"
 #include "utility.h"
 #include "handler.h"

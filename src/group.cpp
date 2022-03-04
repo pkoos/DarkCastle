@@ -8,7 +8,7 @@ extern "C"
 #include <ctype.h> // isspace()
 }
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "character.h"
 #include "room.h"

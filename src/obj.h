@@ -17,6 +17,7 @@
 #define OBJ_H_
 
 #include <vector>
+#include "Timer.h"
 #include "NumberTypes.h"
 #include "Size.h"
 #include "EquipmentLocation.h"
@@ -27,11 +28,12 @@
 #include "ItemExtra.h"
 #include "WearLocation.h"
 #include "ItemType.h"
-#include "character.h"
+// #include "character.h"
 
 struct char_data;
 struct obj_data;
 typedef	struct obj_data OBJ_DATA;
+typedef struct char_data CHAR_DATA;
 
 struct active_object
 {

@@ -39,7 +39,7 @@ using namespace std;
 #include <cstdlib>
 #include <cstdarg>
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "fileinfo.h" 
 #include "act.h"

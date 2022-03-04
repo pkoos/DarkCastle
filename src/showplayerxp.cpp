@@ -7,7 +7,7 @@
 
 #include "nullfile.h"
 #include "CVoteData.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "spells.h"
 #include "connect.h"

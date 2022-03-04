@@ -17,7 +17,7 @@
 
 using namespace std;
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "room.h"
 #include "obj.h"

@@ -23,7 +23,7 @@ extern "C" {
 #include <string.h>
 
 #include "nullfile.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "obj.h"
 #include "room.h"

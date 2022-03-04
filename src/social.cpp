@@ -7,7 +7,7 @@ extern "C"
   #include <stdlib.h> // qsort()
 }
 #include "nullfile.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "fileinfo.h" // SOCIAL_FILE
 #include "room.h"
 #include "character.h"

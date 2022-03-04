@@ -14,7 +14,7 @@ extern "C"
 }
 #include "nullfile.h"
 #include "CVoteData.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "connect.h"
 #include "character.h"
 #include "room.h"

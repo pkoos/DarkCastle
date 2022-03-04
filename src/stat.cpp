@@ -10,7 +10,7 @@ extern "C"
 #include <algorithm>
 #include <list>
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "obj.h"
 #include "spells.h"

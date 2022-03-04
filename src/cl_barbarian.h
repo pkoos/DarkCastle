@@ -2,7 +2,7 @@
 #define CL_BARBARIAN_H_
 
 #include "cl_barbarian_skills.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "player.h"
 #include "levels.h"
 #include "character.h"

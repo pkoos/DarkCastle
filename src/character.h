@@ -12,6 +12,7 @@ struct char_data;
 typedef struct char_data CHAR_DATA;
 
 // #include "obj.h"
+#include "Maximums.h"
 #include "Progs.h"
 #include "Attributes.h"
 #include "Position.h"
@@ -60,9 +61,6 @@ struct songInfo;
 /************************************************************************
 | max stuff - this is needed almost everywhere
 */
-#define MAX_WEAR     23
-
-#define MAX_HIDE 10
 #define CHAMPION_ITEM 45
 
 // * ------- Begin MOBProg stuff ----------- *

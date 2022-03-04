@@ -30,7 +30,7 @@
 #include <sstream>
 
 #include "nullfile.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "fight.h"
 #include "levels.h"

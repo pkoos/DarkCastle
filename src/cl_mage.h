@@ -1,7 +1,7 @@
 #ifndef CL_MAGE_H_
 #define CL_MAGE_H_
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "player.h"
 #include "levels.h"

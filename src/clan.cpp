@@ -14,7 +14,7 @@ extern "C"
   #include <stdio.h> // FILE *
   #include <ctype.h> // isspace..
 }
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include <fstream>
 #include <iostream>

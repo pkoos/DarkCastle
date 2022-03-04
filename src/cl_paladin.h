@@ -1,7 +1,7 @@
 #ifndef CL_PALADIN_H_
 #define CL_PALADIN_H_
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "character.h"
 #include "player.h"
 #include "fight.h"

@@ -47,7 +47,7 @@ extern "C"
 #include <algorithm>
 
 #include "nullfile.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "innate.h"
 #include "levels.h"

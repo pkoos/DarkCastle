@@ -35,7 +35,7 @@ extern "C"
 #include <limits>
 
 #include "nullfile.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "Affect.h"
 #include "db.h"
 #include "memory.h"

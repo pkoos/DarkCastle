@@ -1,6 +1,6 @@
 // This file takes care of all innate race abilities
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "innate.h"
 #include "race.h"
 #include "db.h"

@@ -21,7 +21,7 @@ extern "C"
 }
 
 #include "nullfile.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "Affect.h"
 #include "character.h"
 #include "utility.h"

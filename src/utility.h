@@ -32,7 +32,7 @@ extern "C" {
 
 #include "character.h"
 #include "comm.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "weather.h"
 #include "memory.h"

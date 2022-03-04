@@ -11,7 +11,7 @@
 #include <list>
 #include <queue>
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "player.h"
 #include "room.h"

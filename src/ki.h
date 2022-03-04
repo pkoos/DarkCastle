@@ -9,7 +9,7 @@
 #define KI_H_
 
 #include "character.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 
 typedef int	KI_FUN		( ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *vict);

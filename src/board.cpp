@@ -48,7 +48,7 @@ extern "C"
 }
 
 #include "nullfile.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "ClassIds.h"
 #include "ClanIds.h"
 #include "BoardType.h"

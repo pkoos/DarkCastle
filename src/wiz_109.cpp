@@ -3,7 +3,7 @@
 | 11/20/95 -- Azrack
 **********************/
 #include "nullfile.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "wizard.h"
 #include "spells.h"
 #include "fileinfo.h"

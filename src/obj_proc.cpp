@@ -10,7 +10,7 @@
 
 #include "Direction.h"
 #include "nullfile.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "db.h"
 #include "fight.h"

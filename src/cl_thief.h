@@ -2,7 +2,7 @@
 #define CL_THIEF_H_
 
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "character.h"
 #include "utility.h"

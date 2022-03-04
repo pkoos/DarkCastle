@@ -21,7 +21,7 @@
 #include <fmt/format.h>
 
 #include "nullfile.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "wizard.h"
 #include "utility.h"

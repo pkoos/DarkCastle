@@ -9,7 +9,7 @@ extern "C" {
 #include <stdlib.h>
 #include <stdarg.h>
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "connect.h"
 #include "character.h"
 #include "utility.h"

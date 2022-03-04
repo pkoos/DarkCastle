@@ -30,7 +30,7 @@ extern "C"
 #include <stdlib.h>
 }
 
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "character.h"
 #include "race.h"

@@ -2,7 +2,7 @@
 | Level 110 wizard commands
 | 11/20/95 -- Azrack
 **********************/
-#include "MaxLength.h"
+#include "Maximums.h"
 #include <cstdlib>
 #include <cstring>
 #include <cctype>

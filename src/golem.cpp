@@ -8,7 +8,7 @@
 using namespace std;
 
 #include "nullfile.h"
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "NumberTypes.h"
 #include "character.h"
 #include "spells.h"

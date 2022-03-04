@@ -17,7 +17,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
-#include "MaxLength.h"
+#include "Maximums.h"
 #include "returnvals.h"
 #include <errno.h>
 
