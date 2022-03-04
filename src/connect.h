@@ -62,8 +62,6 @@ enum conn
 // if you change, make sure you update char *connected_states[] in const.C
 // also update connected_types[]
 
-#define MAX_RAW_INPUT_LENGTH  512
-
 class stat_data
 {
 public:

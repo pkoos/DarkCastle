@@ -21,6 +21,7 @@ extern "C" {
   #include <time.h>
 }
 
+#include "Maximums.h"
 #include "WorldFileStatus.h"
 #include "Continents.h"
 #include "BanAction.h"
@@ -46,21 +47,8 @@ struct error_range_int {};
 struct error_range_under {};
 struct error_range_over {};
 
-#define WORLD_MAX_ROOM        50000  // should never get this high...
-                                     // it's just to keep builders/imps from 
-                                     // doing a 'goto 1831919131928' and 
-                                     // creating it
 
-#define MAX_FREAD_INT 64000
-#define MAX_ZONE    200
-#define MAX_INDEX   6000
-#define MAX_RESET  16383
-#ifndef LONG_MAX
-#define LONG_MAX    2147483467
-#define LONG_MIN    -2147483467
-#define INT_MAX     32768
-#define INT_MIN     -32768
-#endif
+
 
 #define VERSION_NUMBER    2     /* used for changing pfile format */
 

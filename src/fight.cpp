@@ -104,7 +104,6 @@ struct message_list fight_messages[MAX_MESSAGES]; /* fighting messages   */
 int isHit(CHAR_DATA *ch, CHAR_DATA *victim, int attacktype, int &type, int &reduce);
 int check_pursuit(char_data *ch, char_data *victim, char *dircommand);
 
-#define MAX_CHAMP_DEATH_MESSAGE		14
 char *champ_death_messages[] = 
 {
 /*1*/	"\n\r##Somewhere a village has been deprived of their idiot.\n\r",
@@ -4029,10 +4028,6 @@ void make_scraps(CHAR_DATA *ch, struct obj_data *obj)
   
   return;
 }
-
-
-#define MAX_NPC_CORPSE_TIME 7
-#define MAX_PC_CORPSE_TIME 7
 
 void make_corpse(CHAR_DATA * ch)
 {

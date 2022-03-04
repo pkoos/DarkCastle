@@ -72,7 +72,7 @@ extern "C"
 #include "interp.h"
 #include <sstream>
 
-#define MAX_MESSAGE_LENGTH 	2048
+
 
 struct message {
   std::string date;

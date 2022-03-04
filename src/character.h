@@ -46,7 +46,7 @@ extern "C" {
 struct songInfo;
 
 #define ASIZE 32
-#define MAX_GOLEMS           2 // amount of golems above +1
+
 
 #define START_ROOM        3001 // Where you login
 #define CFLAG_HOME        3014 // Where the champion flag normally rests
@@ -57,7 +57,7 @@ struct songInfo;
 #define PASSWORD_LEN    20
 #define DESC_LENGTH     80
 #define CHAR_VERSION    -4
-#define MAX_NAME_LENGTH 12
+
 
 /************************************************************************
 | max stuff - this is needed almost everywhere

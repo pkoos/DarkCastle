@@ -56,8 +56,6 @@ void delete_clan(const clan_data *currclan);
 clan_data * clan_list = 0;
 clan_data * end_clan_list = 0;
 
-#define MAX_CLAN_DESC_LENGTH 1022
-
 const char * clan_rights[] = {
    "accept",
    "outcast",

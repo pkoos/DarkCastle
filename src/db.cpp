@@ -2067,7 +2067,7 @@ int create_one_room(CHAR_DATA *ch, int vnum)
 	if (world_array[vnum])
 		return 0;
 
-	if (vnum > WORLD_MAX_ROOM)
+	if (vnum > MAX_WORLD_ROOM)
 		return 0;
 
 	if (vnum > top_of_world)
@@ -2411,7 +2411,7 @@ void read_one_zone(FILE * fl, int zon)
 	 * grep this file to see why.
 	 * -Sadus
 	 */
-	zone_table[zon].bottom_rnum = WORLD_MAX_ROOM;
+	zone_table[zon].bottom_rnum = MAX_WORLD_ROOM;
 	zone_table[zon].top_rnum = 0;
 
 	zone_table[zon].lifespan = fread_int(fl, 0, MAX_FREAD_INT);

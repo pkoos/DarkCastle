@@ -449,7 +449,7 @@ int is_ignoring(struct char_data *ch, struct char_data *i)
 
 
 
-#define MAX_NOTE_LENGTH 1000      /* arbitrary */
+
 
 int do_write(struct char_data *ch, char *argument, int cmd)
 {
@@ -623,7 +623,7 @@ int do_emote(struct char_data *ch, char *argument, int cmd)
   return eSUCCESS;
 }
 
-#define MAX_HINTS 100
+
 char hints[MAX_HINTS][MAX_STRING_LENGTH];
 
 void load_hints()
