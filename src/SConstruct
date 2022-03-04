@@ -1,6 +1,5 @@
 from SCons import Environment
 from SCons.Script import ARGUMENTS
-from argparse import Arg
 import glob
 import os
 import datetime
