@@ -27,8 +27,6 @@ using namespace std;
 queue<string> imm_history;
 queue<string> imp_history;
 
-#define MAX_MESSAGE_LENGTH      4096
-
 extern struct room_data ** world_array;
 
 int do_wizhelp(struct char_data *ch, char *argument, int cmd_arg)

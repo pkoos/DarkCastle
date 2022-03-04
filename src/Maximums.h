@@ -8,7 +8,7 @@
 #define MAX_RAW_INPUT_LENGTH  512
 #define MAX_NOTE_LENGTH 1000      /* arbitrary */
 #define MAX_HINTS 100
-#define MAX_MESSAGE_LENGTH 	2048
+#define MAX_MESSAGE_LENGTH 	4096
 #define MAX_NAME_LENGTH 12
 #define MAX_CLAN_DESC_LENGTH 1022
 #define MAX_GOLEMS           2 // amount of golems above +1
