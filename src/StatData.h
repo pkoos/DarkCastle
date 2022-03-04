@@ -1,10 +1,11 @@
 #ifndef STAT_DATA_H_
 #define STAT_DATA_H_
 
+#include "RaceData.h"
 #include "NumberTypes.h"
 #include "utility.h"
-struct race_data;
-extern struct race_data races[];
+
+extern RaceData races[];
 
 class StatData {
     public:
