@@ -1,8 +1,9 @@
+from SCons import Environment
+from SCons.Script import ARGUMENTS
+from argparse import Arg
 import glob
-import sys
 import os
 import datetime
-import subprocess
 from subprocess import *
 
 env = Environment(CCFLAGS = '-ggdb3 -m32 -std=gnu++1y -Wno-write-strings',
@@ -75,11 +76,13 @@ else:
 env.Append(CPPPATH = ['include'])
 env.Append(LIBPATH = ['/usr/local/lib', '.'])
 DC = env.Object('DC.cpp', CPPDEFINES=['LINUX', {'VERSION' :('\\"%s\\"' % version)}, {'BUILD_TIME' :('\\"%s\\"' % build_time)}])
-           
+print(f'DC: {DC}\nLIBDCASTLE_SRC: {libdcastle_src}')
+
 libdcastle=env.Clone()
 libdcastle.MergeFlags({'CPPPATH' : '/usr/include/pgsql/'})
-libdcastle.StaticLibrary('dcastle', [libdcastle_src + DC]);
+libdcastle.StaticLibrary('dcastle', [libdcastle_src + DC])
 print(f'libdcastle: {libdcastle}')
+
 dcastle=env.Clone()
 dcastle.MergeFlags({'LIBS' : ['dcastle', 'crypt', 'mcheck', 'z', 'pq', 'fmt']})
 dcastle.Program('dcastle', ['dcastle.cpp'])
