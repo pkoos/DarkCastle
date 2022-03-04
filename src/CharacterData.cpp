@@ -3,60 +3,60 @@
 class CharacterData {
     public:
         struct mob_data * mobdata;
-        struct pc_data *pcdata;
-        struct obj_data *objdata;
+        struct pc_data * pcdata;
+        struct obj_data * objdata;
 
-        struct descriptor_data *desc;
+        struct descriptor_data *desc;       // NULL normally for mobs 
 
-        char *name;
-        char *short_desc;
-        char *long_desc;
-        char *description;
+        char *name;         // Keyword 'kill X'
+        char *short_desc;   // Action 'X hits you.'
+        char *long_desc;    // For 'look room'
+        char *description;  // For 'look mob'
         char *title;
 
         sbyte sex;
         sbyte c_class;
         sbyte race;
         sbyte level;
-        sbyte position;
+        sbyte position;      // Standing, sitting, fighting
 
-        sbyte str;
-        sbyte intel;
-        sbyte wis;
-        sbyte dex;
-        sbyte con;
+        sbyte str;         sbyte raw_str;        sbyte str_bonus;
+        sbyte intel;       sbyte raw_intel;      sbyte intel_bonus;
+        sbyte wis;         sbyte raw_wis;        sbyte wis_bonus;
+        sbyte dex;         sbyte raw_dex;        sbyte dex_bonus;
+        sbyte con;         sbyte raw_con;        sbyte con_bonus;
 
-        sbyte conditions[3]; // what is this magic number?
+        sbyte conditions[3];      // Drunk full etc.                       
 
-        ubyte weight;
-        ubyte height;
+        ubyte weight;       /* PC/NPC's weight */
+        ubyte height;       /* PC/NPC's height */
 
-        int16 hometown;
-        int64 gold;
-        uint32 plat;
-        int64 exp;
-
+        int16 hometown;      /* PC/NPC home town */
+        int64 gold;           /* Money carried                           */
+        uint32 plat;           /* Platinum                                */
+        int64 exp;            /* The experience of the player            */
+                /* Changed to a long long */
         int32 in_room;
 
-        uint32 immune;
-        uint32 resist;
-        uint32 suscept;
-        int16 saves[SAVE_TYPE_MAX+1];
+        uint32 immune;         // Bitvector of damage types I'm immune to
+        uint32 resist;         // Bitvector of damage types I'm resistant to
+        uint32 suscept;        // Bitvector of damage types I'm susceptible to
+        int16 saves[SAVE_TYPE_MAX+1];  // Saving throw bonuses
 
-        int32 mana;
-        int32 max_mana;
-        int32 raw_mana;
-        int32 hit;
-        int32 max_hit;
-        int32 raw_hit;
-        int32 move;
+        int32 mana;         
+        int32 max_mana;     /* Not useable                             */
+        int32 raw_mana;     /* before int bonus                        */
+        int32 hit;   
+        int32 max_hit;      /* Max hit for NPC                         */
+        int32 raw_hit;      /* before con bonus                        */
+        int32 move;  
         int32 raw_move;
-        int32 max_move;
+        int32 max_move;     /* Max move for NPC                        */
         int32 ki;
         int32 max_ki;
         int32 raw_ki;
 
-        int16 alignment;
+        int16 alignment;          // +-1000 for alignments
 
         uint32 hpmetas;             // total number of times meta'd hps
         uint32 manametas;           // total number of times meta'd mana
@@ -159,6 +159,79 @@ class CharacterData {
     void send(std::string);
 };
 
+// struct char_data
+// {
+//     struct mob_data * mobdata;
+//     struct pc_data * pcdata;
+//     struct obj_data * objdata;
+
+//     struct descriptor_data *desc;       // NULL normally for mobs 
+
+//     char *name;         // Keyword 'kill X'
+//     char *short_desc;   // Action 'X hits you.'
+//     char *long_desc;    // For 'look room'
+//     char *description;  // For 'look mob'
+//     char *title;
+
+//     sbyte sex;
+//     sbyte c_class;
+//     sbyte race;
+//     sbyte level;
+//     sbyte position;      // Standing, sitting, fighting
+
+//     sbyte str;         sbyte raw_str;        sbyte str_bonus;
+//     sbyte intel;       sbyte raw_intel;      sbyte intel_bonus;
+//     sbyte wis;         sbyte raw_wis;        sbyte wis_bonus;
+//     sbyte dex;         sbyte raw_dex;        sbyte dex_bonus;
+//     sbyte con;         sbyte raw_con;        sbyte con_bonus;
+
+//     sbyte conditions[3];      // Drunk full etc.                       
+
+//     ubyte weight;       /* PC/NPC's weight */
+//     ubyte height;       /* PC/NPC's height */
+
+//     int16 hometown;      /* PC/NPC home town */
+//     int64 gold;           /* Money carried                           */
+//     uint32 plat;           /* Platinum                                */
+//      int64 exp;            /* The experience of the player            */
+// 			   /* Changed to a long long */
+//      int32 in_room;
+
+//     uint32 immune;         // Bitvector of damage types I'm immune to
+//     uint32 resist;         // Bitvector of damage types I'm resistant to
+//     uint32 suscept;        // Bitvector of damage types I'm susceptible to
+//      int16 saves[SAVE_TYPE_MAX+1];  // Saving throw bonuses
+
+//      int32 mana;         
+//      int32 max_mana;     /* Not useable                             */
+//      int32 raw_mana;     /* before int bonus                        */
+//      int32 hit;   
+//      int32 max_hit;      /* Max hit for NPC                         */
+//      int32 raw_hit;      /* before con bonus                        */
+//      int32 move;  
+//      int32 raw_move;
+//      int32 max_move;     /* Max move for NPC                        */
+//      int32 ki;
+//      int32 max_ki;
+//      int32 raw_ki;
+
+//      int16 alignment;          // +-1000 for alignments                 
+
+//     uint32 hpmetas;             // total number of times meta'd hps
+//     uint32 manametas;           // total number of times meta'd mana
+//     uint32 movemetas;           // total number of times meta'd moves
+//     uint32 acmetas;             // total number of times meta'd ac
+//      int32 agemetas;            // number of years age has been meta'd
+
+//      int16 hit_regen;           // modifier to hp regen
+//      int16 mana_regen;          // modifier to mana regen
+//      int16 move_regen;          // modifier to move regen
+//      int16 ki_regen;            // modifier to ki regen
+
+//      int16 melee_mitigation;    // modifies melee damage
+//      int16 spell_mitigation;    // modified spell damage
+//      int16 song_mitigation;     // modifies song damage
+//      int16 spell_reflect;
 
 //      intptr_t clan;                       /* Clan the char is in */
 
@@ -244,77 +317,3 @@ class CharacterData {
 //     void fillHPLimit(void);
 //     void send(string);
 // }
-
-// struct char_data
-// {
-//     struct mob_data * mobdata;
-//     struct pc_data * pcdata;
-//     struct obj_data * objdata;
-
-//     struct descriptor_data *desc;       // NULL normally for mobs 
-
-//     char *name;         // Keyword 'kill X'
-//     char *short_desc;   // Action 'X hits you.'
-//     char *long_desc;    // For 'look room'
-//     char *description;  // For 'look mob'
-//     char *title;
-
-//     sbyte sex;
-//     sbyte c_class;
-//     sbyte race;
-//     sbyte level;
-//     sbyte position;      // Standing, sitting, fighting
-
-//     sbyte str;         sbyte raw_str;        sbyte str_bonus;
-//     sbyte intel;       sbyte raw_intel;      sbyte intel_bonus;
-//     sbyte wis;         sbyte raw_wis;        sbyte wis_bonus;
-//     sbyte dex;         sbyte raw_dex;        sbyte dex_bonus;
-//     sbyte con;         sbyte raw_con;        sbyte con_bonus;
-
-//     sbyte conditions[3];      // Drunk full etc.                       
-
-//     ubyte weight;       /* PC/NPC's weight */
-//     ubyte height;       /* PC/NPC's height */
-
-//     int16 hometown;      /* PC/NPC home town */
-//     int64 gold;           /* Money carried                           */
-//     uint32 plat;           /* Platinum                                */
-//      int64 exp;            /* The experience of the player            */
-// 			   /* Changed to a long long */
-//      int32 in_room;
-
-//     uint32 immune;         // Bitvector of damage types I'm immune to
-//     uint32 resist;         // Bitvector of damage types I'm resistant to
-//     uint32 suscept;        // Bitvector of damage types I'm susceptible to
-//      int16 saves[SAVE_TYPE_MAX+1];  // Saving throw bonuses
-
-//      int32 mana;         
-//      int32 max_mana;     /* Not useable                             */
-//      int32 raw_mana;     /* before int bonus                        */
-//      int32 hit;   
-//      int32 max_hit;      /* Max hit for NPC                         */
-//      int32 raw_hit;      /* before con bonus                        */
-//      int32 move;  
-//      int32 raw_move;
-//      int32 max_move;     /* Max move for NPC                        */
-//      int32 ki;
-//      int32 max_ki;
-//      int32 raw_ki;
-
-//      int16 alignment;          // +-1000 for alignments                 
-
-//     uint32 hpmetas;             // total number of times meta'd hps
-//     uint32 manametas;           // total number of times meta'd mana
-//     uint32 movemetas;           // total number of times meta'd moves
-//     uint32 acmetas;             // total number of times meta'd ac
-//      int32 agemetas;            // number of years age has been meta'd
-
-//      int16 hit_regen;           // modifier to hp regen
-//      int16 mana_regen;          // modifier to mana regen
-//      int16 move_regen;          // modifier to move regen
-//      int16 ki_regen;            // modifier to ki regen
-
-//      int16 melee_mitigation;    // modifies melee damage
-//      int16 spell_mitigation;    // modified spell damage
-//      int16 song_mitigation;     // modifies song damage
-//      int16 spell_reflect;
