@@ -219,7 +219,7 @@ int do_whosolo(struct char_data *ch, char *argument, int cmd)
       if (*buf && !foundtarget)
          continue;
 
-      if (GET_LEVEL(i) <= MORTAL)
+      if (GET_LEVEL(i) <= MAX_MORTAL)
          if (!IS_AFFECTED(i, AFF_GROUP)) {
             if (!IS_ANONYMOUS(i) || (i->clan && i->clan == ch->clan))
                sprintf(tempbuffer,
@@ -515,7 +515,7 @@ int do_who(struct char_data *ch, char *argument, int cmd)
     extraBuf[0] = '\0';
     buf[0] = '\0';
     addimmbuf = FALSE;
-    if (GET_LEVEL(i) > MORTAL)
+    if (GET_LEVEL(i) > MAX_MORTAL)
     {
       /* Immortals can't be anonymous */
       if (!str_cmp(GET_NAME(i), "Urizen"))
@@ -659,7 +659,7 @@ int do_whoarena(struct char_data *ch, char *argument, int cmd)
 
    send_to_char("\n\rPlayers in the Arena:\n\r--------------------------\n\r", ch);
 
-   if (GET_LEVEL(ch) <= MORTAL) 
+   if (GET_LEVEL(ch) <= MAX_MORTAL) 
    {
 		auto &character_list = DC::instance().character_list;
 		for (auto& tmp : character_list) {

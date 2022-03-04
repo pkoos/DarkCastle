@@ -15,3 +15,4 @@ lib/leaderboard.txt
 lib/onlinewho.txt
 googletest
 test/build
+test/log

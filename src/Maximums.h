@@ -42,5 +42,18 @@
 
 #define MAX_NPC_CORPSE_TIME 7
 #define MAX_PC_CORPSE_TIME 7
+#define MAX_CLAN_LEN             15
+#define MAX_INGREDIENTS    10
+#define MAX_DIRS        6
+#define MAX_NUM_EVT     1024
+#define MAX_GAME_PORTALS 9
+
+#define MAX_HELP_KEYWORD_LENGTH     20
+#define MAX_HELP_RELATED_LENGTH     60
+#define MAX_HELP_LENGTH             8192
+
+#define MAXIMUM_KI   100
+
+#define MAX_MORTAL 60
 
 #endif

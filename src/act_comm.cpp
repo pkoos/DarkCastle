@@ -213,7 +213,7 @@ int send_to_gods(const char *str, int god_level, long type)
           BOLD, RED, NTEXT, typestr, BOLD, YELLOW, str, RED, NTEXT, GREY);
 
   for(i = descriptor_list; i; i = i->next) {
-    if((i->character == NULL) || (GET_LEVEL(i->character) <= MORTAL))
+    if((i->character == NULL) || (GET_LEVEL(i->character) <= MAX_MORTAL))
       continue;
     if(!(IS_SET(i->character->misc, type)))
       continue;

@@ -1,7 +1,6 @@
 #ifndef CLAN_PERMISSIONS_H_
 #define CLAN_PERMISSIONS_H_
 
-#define MAX_CLAN_LEN             15
 #define CLAN_RIGHTS_ACCEPT       1
 #define CLAN_RIGHTS_OUTCAST      1<<1
 #define CLAN_RIGHTS_B_READ       1<<2

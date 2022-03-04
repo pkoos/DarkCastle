@@ -3006,7 +3006,7 @@ int gotta_dance_boots(struct char_data*ch, struct obj_data *obj, int cmd, char*a
    do_say(obj->equipped_by, "I...I.....I've gotta dance!!!!", 9);
    make_person_dance(obj->equipped_by);
    send_to_char("You slump back down, exhausted.\r\n", obj->equipped_by);
-   if(GET_LEVEL(obj->equipped_by) <= MORTAL)
+   if(GET_LEVEL(obj->equipped_by) <= MAX_MORTAL)
       WAIT_STATE(obj->equipped_by, PULSE_VIOLENCE*3);
 
    return eSUCCESS;   

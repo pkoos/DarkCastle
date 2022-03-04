@@ -2293,7 +2293,7 @@ int do_remove(struct char_data *ch, char *argument, int cmd)
           if (ch->equipment[j] && CAN_SEE_OBJ(ch, ch->equipment[j])) 
           {
             obj_object =  ch->equipment[j];
-            if(IS_SET(obj_object->obj_flags.extra_flags, ITEM_NODROP) && GET_LEVEL(ch) <= MORTAL) 
+            if(IS_SET(obj_object->obj_flags.extra_flags, ITEM_NODROP) && GET_LEVEL(ch) <= MAX_MORTAL) 
             {
               sprintf(arg1, "You can't remove %s, it must be CURSED!\n\r", obj_object->short_description);
               send_to_char(arg1, ch);
@@ -2332,7 +2332,7 @@ int do_remove(struct char_data *ch, char *argument, int cmd)
       {
         if(CAN_CARRY_N(ch) != IS_CARRYING_N(ch)) 
         {
-          if(IS_SET(obj_object->obj_flags.extra_flags, ITEM_NODROP) && GET_LEVEL(ch) <= MORTAL) 
+          if(IS_SET(obj_object->obj_flags.extra_flags, ITEM_NODROP) && GET_LEVEL(ch) <= MAX_MORTAL) 
           {
             sprintf(arg1, "You can't remove %s, it must be CURSED!\n\r", obj_object->short_description);
             send_to_char(arg1, ch);

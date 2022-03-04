@@ -1,8 +1,7 @@
+#ifndef HELP_H_
+#define HELP_H_
 
 #define READ_SIZE 256
-#define MAX_HELP_KEYWORD_LENGTH     20
-#define MAX_HELP_RELATED_LENGTH     60
-#define MAX_HELP_LENGTH             8192
 
 struct help_index_element_new {
    char *keyword1;
@@ -15,3 +14,4 @@ struct help_index_element_new {
    int min_level;
 };
 
+#endif

@@ -254,7 +254,7 @@ int do_pray(struct char_data *ch, char *arg, int cmd)
   sprintf(buf1, "\a$4$B**$R$5 %s prays: %s $4$B**$R\n\r", GET_NAME(ch), arg);
 
   for(i = descriptor_list; i; i = i->next) {
-    if((i->character == NULL) || (GET_LEVEL(i->character) <= MORTAL))
+    if((i->character == NULL) || (GET_LEVEL(i->character) <= MAX_MORTAL))
       continue;
     if(!(IS_SET(i->character->misc, LOG_PRAYER)))
       continue;

@@ -624,7 +624,7 @@ int attack(CHAR_DATA *ch, CHAR_DATA *vict, int type, int weapon)
   }
   else if(GET_CLASS(ch) == CLASS_MONK && wielded == FALSE)
   {
-    if(GET_LEVEL(ch) >= MORTAL) {
+    if(GET_LEVEL(ch) >= MAX_MORTAL) {
       result = one_hit(ch, vict, type, FIRST);
       if(SOMEONE_DIED(result))       return result;
     }
@@ -1434,7 +1434,7 @@ int one_hit(CHAR_DATA *ch, CHAR_DATA *vict, int type, int weapon)
   // BACKSTAB GOES IN HERE!
   if( (type == SKILL_BACKSTAB || type == SKILL_CIRCLE ) && dam < 10000) {  // Bingo not affected.
     if(IS_SET(ch->combat, COMBAT_CIRCLE)) {
-      if(GET_LEVEL(ch) <= MORTAL)
+      if(GET_LEVEL(ch) <= MAX_MORTAL)
         if(type == SKILL_CIRCLE) dam = dam * 3 / 2; // non stabbing weapons
         else dam *= ((backstab_mult[(int)GET_LEVEL(ch)]) / 2);
       else dam *= 25;
@@ -1443,7 +1443,7 @@ int one_hit(CHAR_DATA *ch, CHAR_DATA *vict, int type, int weapon)
     else if((GET_CLASS(ch) == CLASS_THIEF) ||
       (GET_CLASS(ch) == CLASS_ANTI_PAL) || IS_NPC(ch)) 
     {
-      if(GET_LEVEL(ch) <= MORTAL)
+      if(GET_LEVEL(ch) <= MAX_MORTAL)
       {
          dam *= backstab_mult[(int)GET_LEVEL(ch)];
       }
@@ -6046,7 +6046,7 @@ void do_pkill(CHAR_DATA *ch, CHAR_DATA *victim, int type, bool vict_is_attacker)
     else if(IS_ANONYMOUS(ch))
       sprintf(killer_message,"\n\r##%s was just DEFEATED in battle by %s!\n\r", 
             GET_NAME(victim), GET_NAME(ch));
-    else if( GET_LEVEL(ch) > MORTAL )
+    else if( GET_LEVEL(ch) > MAX_MORTAL )
       sprintf(killer_message,"\n\r##%s was just SMITED...er..SMOTED..err PKILLED by %s!\n\r", GET_NAME(victim), GET_NAME(ch));
     else if (type == KILL_BINGO)
       sprintf(killer_message,"\n\r##%s was just BINGOED by %s!\n\r", 

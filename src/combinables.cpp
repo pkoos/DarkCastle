@@ -54,10 +54,10 @@ char * tradeskills[] =
   "\n"
 };
 
-#define MAX_INGREDIANTS   10
+
 
 struct trade_data_type {
-   int  pieces[MAX_INGREDIANTS];
+   int  pieces[MAX_INGREDIENTS ];
    int  result;  // last item in array must be -1 for this
    int  trivial;
 };
@@ -297,7 +297,7 @@ int valid_trade_skill_combine(obj_data * container, trade_data_type * data, char
    for(int i = 0; data[i].result != -1; i++)
    {
       valid.clear();
-      for(int k = 0; k < MAX_INGREDIANTS && data[i].pieces[k] != -1; k++)
+      for(int k = 0; k < MAX_INGREDIENTS  && data[i].pieces[k] != -1; k++)
          valid.push_back(data[i].pieces[k]);
 
       sort(valid.begin(), valid.end());

@@ -20,7 +20,6 @@ typedef int	KI_FUN		( ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *vict);
 |   at some point.  Morc XXX
 */
 /* The following defs refer to player ki and its effects */
-#define MAXIMUM_KI   100
 #define MINIMUM_KI   0
 #define MIN_REACT_KI   20
 #define NO_EFFECT   0

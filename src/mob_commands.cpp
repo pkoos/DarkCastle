@@ -1376,7 +1376,7 @@ int do_mpdamage( CHAR_DATA *ch, char *argument, int cmd )
     if(strcmp(arg, "all") && strcmp(arg, "allpc"))
     {
        victim = get_char_room( arg, ch->in_room );
-       if(victim && ( GET_LEVEL(victim) > MORTAL || IS_MOB(victim) ) ) // don't target immortals
+       if(victim && ( GET_LEVEL(victim) > MAX_MORTAL || IS_MOB(victim) ) ) // don't target immortals
            victim = NULL;
 
        if (!victim)
@@ -1498,7 +1498,7 @@ int do_mpdamage( CHAR_DATA *ch, char *argument, int cmd )
       for(victim = world[ch->in_room].people; victim; victim = next_vict)
       {
         next_vict = victim->next_in_room;
-        if((!IS_NPC(victim) && GET_LEVEL(victim) > MORTAL) || victim==ch)
+        if((!IS_NPC(victim) && GET_LEVEL(victim) > MAX_MORTAL) || victim==ch)
         {
            continue;
         }

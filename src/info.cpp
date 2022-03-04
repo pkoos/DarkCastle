@@ -2267,7 +2267,7 @@ int do_count(struct char_data *ch, char *arg, int cmd)
          i = d->character;
       if(!CAN_SEE(ch, i))
          continue;
-      if(GET_LEVEL(i) > MORTAL) {
+      if(GET_LEVEL(i) > MAX_MORTAL) {
          immortal++;
          total++;
          continue;
@@ -2678,7 +2678,7 @@ int do_consider(struct char_data *ch, char *argument, int cmd)
       }
       else {
 
-         if(ch->getHP() >= victim->getHP() || GET_LEVEL(ch) > MORTAL) {
+         if(ch->getHP() >= victim->getHP() || GET_LEVEL(ch) > MAX_MORTAL) {
             x = victim->getHP()/ch->getHP()*100;
             x /= 10;
             if(x < 0)  x = 0;

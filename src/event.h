@@ -1,5 +1,7 @@
 #ifndef _EVENT_H
 #define _EVENT_H
+
+#include "Maximums.h"
 /*
  * Important!!!!
  *
@@ -10,9 +12,6 @@
  *
  */
 /* $Id: event.h,v 1.2 2002/06/13 04:41:15 dcastle Exp $ */
-
-#define MAX_NUM_EVT     1024
-
 
 typedef struct  room_data     roomData;
 typedef struct  char_data     charData;
@@ -40,7 +39,7 @@ struct event_params {
    charData*   ch;
    objData*    obj;
    charData*   vict;
-   char        str[1024];
+   char        str[1024]; // magic_number
    int         num;
    void*       extra;
 };

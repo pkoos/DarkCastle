@@ -9,7 +9,6 @@
 #define WEST            3
 #define UP              4
 #define DOWN            5
-#define MAX_DIRS        6
 
 #define CMD_NORTH NORTH+1
 #define CMD_EAST EAST+1

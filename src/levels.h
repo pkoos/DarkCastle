@@ -5,8 +5,6 @@
 
 #include "NumberTypes.h"
 
-#define MORTAL 60
-#define MAX_MORTAL 60
 /* #define GLADIATOR */
 
 //#define IMMORTAL 101

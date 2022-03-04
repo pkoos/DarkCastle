@@ -1004,7 +1004,7 @@ int song_healing_melody(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *victim
 
 	(*i).song_timer = (song_info[(*i).song_number].beats - (skill / 15));
 
-	if (GET_LEVEL(ch) > MORTAL)
+	if (GET_LEVEL(ch) > MAX_MORTAL)
 		(*i).song_timer = 1;
 
 	return eSUCCESS;
@@ -1064,7 +1064,7 @@ int execute_song_healing_melody(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA
 
 	(*i).song_timer = (song_info[(*i).song_number].beats - (skill / 15));
 
-	if (GET_LEVEL(ch) > MORTAL)
+	if (GET_LEVEL(ch) > MAX_MORTAL)
 		(*i).song_timer = 1;
 
 	return eSUCCESS;
@@ -1371,7 +1371,7 @@ int song_traveling_march(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DATA *victi
 
 	(*i).song_timer = song_info[(*i).song_number].beats - (skill / 15);
 
-	if (GET_LEVEL(ch) > MORTAL)
+	if (GET_LEVEL(ch) > MAX_MORTAL)
 		(*i).song_timer = 1;
 
 	return eSUCCESS;
@@ -1443,7 +1443,7 @@ int execute_song_traveling_march(ubyte level, CHAR_DATA *ch, char *arg, CHAR_DAT
 
 	(*i).song_timer = song_info[(*i).song_number].beats - (skill / 15);
 
-	if (GET_LEVEL(ch) > MORTAL)
+	if (GET_LEVEL(ch) > MAX_MORTAL)
 		(*i).song_timer = 1;
 	return eSUCCESS;
 }
