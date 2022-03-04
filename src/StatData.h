@@ -9,7 +9,7 @@ extern RaceData oRaces[];
 
 class StatData {
     public:
-        StatData::StatData();
+        StatData();
         void setMin(void);
         ubyte getMin(ubyte cur, sbyte mod, ubyte min);
         int str[5], tel[5], wis[5], dex[5], con[5];
