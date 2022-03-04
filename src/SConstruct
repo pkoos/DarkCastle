@@ -1,5 +1,3 @@
-from SCons import Environment
-from SCons.Script import ARGUMENTS
 import glob
 import os
 import datetime
