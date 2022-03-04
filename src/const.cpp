@@ -1786,7 +1786,7 @@ struct race_data races[] =
 }; 
 
 /* equivalent array to above, but using an object instead of a struct */
-RaceData races[] =
+RaceData oRaces[] =
 {
 //Name,        Lowercase    Plural,       Playable Parts, Immun,    Res,  Sus,  Hates/Fears,  Frnd, MinWt, MaxWt, MinHt, MaxHt,    Str      Dex         Con      Int    Wis,   Mob Affects, UnarmedHitType
 { "NPC",       "npc",       "NPC",        false, 63,    0,        0,       0,             0,     0,   150,   150,    72,    72,    0,0,0,     0,0,0,  0,0,0,   0,0,0,   0,0,0,   AFF_IGNORE_WEAPON_WEIGHT, "hit"},

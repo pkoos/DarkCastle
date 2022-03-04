@@ -5,7 +5,7 @@
 #include "NumberTypes.h"
 #include "utility.h"
 
-extern RaceData races[];
+extern RaceData oRaces[];
 
 class StatData {
     public:
