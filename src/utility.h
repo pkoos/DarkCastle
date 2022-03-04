@@ -552,7 +552,7 @@ char *pluralize(int qty, char ending[] = "s");
 size_t nocolor_strlen(const char *s);
 extern const char menu[];
 
-#define MAX_THROW_NAME     60
+
 #define MPROG_CATCH_MIN    1
 #define MPROG_CATCH_MAX    100
 

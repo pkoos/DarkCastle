@@ -838,7 +838,7 @@ int returner(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg,
    return eSUCCESS;
 }
 
-#define MAX_GEM_ASSEMBLER_ITEM   10
+
 
 struct assemble_item {
    char * finish_to_char;

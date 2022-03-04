@@ -56,4 +56,22 @@
 
 #define MAX_MORTAL 60
 
+#define MAX_HELP  1100
+
+#define MAX_GEM_ASSEMBLER_ITEM   10
+
+#define MAX_PROFESSIONS 2
+
+#define MAX_PC_RACE 	  9
+
+#define MAX_RACE         32
+
+#define MAX_SHOP 70
+#define MAX_TRADE 5
+
+#define MAX_BUF_LENGTH               240
+#define MAX_SPL_LIST                177
+#define MAX_KI_LIST   10
+
+#define MAX_THROW_NAME     60
 #endif

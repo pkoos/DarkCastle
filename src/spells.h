@@ -22,7 +22,7 @@
 #include "obj.h"
 #include <map>
 
-#define MAX_BUF_LENGTH               240
+
 
 std::map<int,int> fill_skill_cost();
 
@@ -240,8 +240,6 @@ void check_maxes(CHAR_DATA *ch);
 #define SPELL_DESECRATE		    175
 #define SPELL_ELEMENTAL_WALL        176
 #define SPELL_ETHEREAL_FOCUS        177
-#define MAX_SPL_LIST                177
-
 
 // if you add a spell, make sure you update "spells[]" in spells.C
 
@@ -263,7 +261,6 @@ void check_maxes(CHAR_DATA *ch);
 #define KI_AGILITY    8
 #define KI_MEDITATION 9
 #define KI_TRANSFER   10
-#define MAX_KI_LIST   10
 #define KI_OFFSET     250     // why this is done differently than the rest, I have no
                               // idea....ki skills are 250-296.  -pir
 

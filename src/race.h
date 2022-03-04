@@ -15,8 +15,6 @@
 #define RACE_GNOME        7
 #define RACE_ORC          8
 #define RACE_TROLL        9
-
-#define MAX_PC_RACE 	  9
 /* Not player races from here down */
 #define RACE_GOBLIN      10
 #define RACE_REPTILE     11
@@ -41,7 +39,6 @@
 #define RACE_YRNALI      30
 #define RACE_IMMORTAL    31
 #define RACE_FELINE      32
-#define MAX_RACE         32
 
 /* Bitvectors for racial shit */
 #define BITV_HUMAN       1

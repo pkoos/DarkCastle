@@ -139,7 +139,7 @@
 #define CONWIS 9
 #define INTWIS 10
 
-#define MAX_PROFESSIONS 2
+
 
 // Constructor commented out for const.C initialization purposes
 struct str_app_type

@@ -5,6 +5,7 @@
 #ifndef SHOP_H_
 #define SHOP_H_
 
+#include "Maximums.h"
 #include "NumberTypes.h"
 
 struct player_shop_item {
@@ -12,8 +13,7 @@ struct player_shop_item {
    uint32 price;                   // asking price of item
    player_shop_item * next;     // next item in list
 };
-#define MAX_SHOP 70
-#define MAX_TRADE 5
+
 #define PC_SHOP_OWNER_SIZE      20
 #define PC_SHOP_SELL_MESS_SIZE  120
 #define PLAYER_SHOP_KEEPER      23000

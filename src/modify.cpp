@@ -420,7 +420,7 @@ char *one_word(char *argument, char *first_arg) {
 	return (argument + begin);
 }
 
-#define MAX_HELP  1100
+
 
 void free_help_from_memory() {
 	extern struct help_index_element *help_index;
