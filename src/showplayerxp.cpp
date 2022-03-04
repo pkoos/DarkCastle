@@ -5,6 +5,7 @@
 #include <cmath>
 #include <filesystem>
 
+#include "StatData.h"
 #include "nullfile.h"
 #include "CVoteData.h"
 #include "Maximums.h"
@@ -347,7 +348,7 @@ bool my_load_char_obj(struct descriptor_data *d, const char *name)
 bool test_rolls(uint8_t total)
 {
   int x, a, b;
-  stat_data stats;
+  StatData stats;
 
   init_random();
 
