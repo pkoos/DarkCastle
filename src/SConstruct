@@ -1,3 +1,4 @@
+import setuptools
 import glob
 import sys
 import os
@@ -67,7 +68,6 @@ libdcastle_src =  glob.glob('[abc]*.cpp') + \
     ['shop.cpp', 'sing.cpp', 'social.cpp', 'spec.cpp',  'spells.cpp',] + \
     ['stat.cpp', 'CommandStack.cpp', "StatData.cpp"] + \
     wizard_src + class_src + backend_src
-print(f'LIBDCASTLE_SRC: {libdcastle_src}')
 if not int(twitter):
     env.Append(CPPDEFINES=['LINUX'])
 else:
@@ -80,13 +80,14 @@ DC = env.Object('DC.cpp', CPPDEFINES=['LINUX', {'VERSION' :('\\"%s\\"' % version
 libdcastle=env.Clone()
 libdcastle.MergeFlags({'CPPPATH' : '/usr/include/pgsql/'})
 libdcastle.StaticLibrary('dcastle', [libdcastle_src + DC]);
-
+print(f'libdcastle: {libdcastle}')
 dcastle=env.Clone()
 dcastle.MergeFlags({'LIBS' : ['dcastle', 'crypt', 'mcheck', 'z', 'pq', 'fmt']})
 dcastle.Program('dcastle', ['dcastle.cpp'])
+print(f'dcastle: {dcastle}')
 
 showplayerexp=env.Clone()
 showplayerexp.MergeFlags({'LIBS' : ['dcastle', 'crypt', 'mcheck', 'z', 'pq', 'fmt']})
 showplayerexp.Program('showplayer', ['showplayerxp.cpp'])
-
+print(f'showplayerxp: {showplayerexp}')
 
