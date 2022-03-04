@@ -4047,7 +4047,7 @@ int spell_summon(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_data 
     return eFAILURE;
   }
 
-  if((GET_LEVEL(victim) > MIN(MORTAL, level+3)) && GET_LEVEL(ch) < IMP) {
+  if((GET_LEVEL(victim) > MIN(MAX_MORTAL, level+3)) && GET_LEVEL(ch) < IMP) {
     send_to_char("You failed.\n\r",ch);
     return eFAILURE;
   }

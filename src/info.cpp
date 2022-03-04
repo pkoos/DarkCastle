@@ -642,7 +642,7 @@ void show_char_to_char(struct char_data *i, struct char_data *ch, int mode)
 	 if ((IS_SET(tmp_obj->obj_flags.extra_flags, ITEM_QUEST) == FALSE ||
 	      GET_LEVEL(ch) > IMMORTAL ) &&
 	     CAN_SEE_OBJ(ch, tmp_obj) &&
-	     number(0,MORTAL) < GET_LEVEL(ch))
+	     number(0,MAX_MORTAL) < GET_LEVEL(ch))
 	   {
 	     show_obj_to_char(tmp_obj, ch, 1);
 	     found = TRUE;
@@ -793,7 +793,7 @@ void try_to_peek_into_container(struct char_data *vict, struct char_data *ch,
    }
 
    if(!(cont = get_obj_in_list_vis(ch, container, vict->carrying)) ||
-      number(0,MORTAL+30) > GET_LEVEL(ch))
+      number(0,MAX_MORTAL+30) > GET_LEVEL(ch))
    {
       send_to_char("You cannot see a container named that to peek into.\r\n", ch);
       return;
@@ -815,7 +815,7 @@ void try_to_peek_into_container(struct char_data *vict, struct char_data *ch,
    }
 
    for(obj = cont->contains; obj; obj = obj->next_content)
-      if (CAN_SEE_OBJ(ch, obj) && number(0,MORTAL+30) < GET_LEVEL(ch))
+      if (CAN_SEE_OBJ(ch, obj) && number(0,MAX_MORTAL+30) < GET_LEVEL(ch))
       {
          show_obj_to_char(obj, ch, 1);
          found = TRUE;
