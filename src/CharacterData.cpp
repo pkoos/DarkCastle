@@ -6,12 +6,12 @@ class CharacterData {
         struct pc_data * pcdata;
         struct obj_data * objdata;
 
-        struct descriptor_data *desc;       // NULL normally for mobs 
+        struct descriptor_data *desc;   // NULL normally for mobs 
 
-        char *name;         // Keyword 'kill X'
-        char *short_desc;   // Action 'X hits you.'
-        char *long_desc;    // For 'look room'
-        char *description;  // For 'look mob'
+        char *name;                     // Keyword 'kill X'
+        char *short_desc;               // Action 'X hits you.'
+        char *long_desc;                // For 'look room'
+        char *description;              // For 'look mob'
         char *title;
 
         sbyte sex;
