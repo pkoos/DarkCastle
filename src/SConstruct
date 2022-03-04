@@ -78,15 +78,15 @@ print(f'DC: {DC}\nLIBDCASTLE_SRC: {libdcastle_src}')
 libdcastle=env.Clone()
 libdcastle.MergeFlags({'CPPPATH' : '/usr/include/pgsql/'})
 libdcastle.StaticLibrary('dcastle', [libdcastle_src + DC])
-print(f'libdcastle: {libdcastle}')
+print(f'libdcastle: {libdcastle.items()}')
 
 dcastle=env.Clone()
 dcastle.MergeFlags({'LIBS' : ['dcastle', 'crypt', 'mcheck', 'z', 'pq', 'fmt']})
 dcastle.Program('dcastle', ['dcastle.cpp'])
-print(f'dcastle: {dcastle}')
+print(f'dcastle: {dcastle.items()}')
 
 showplayerexp=env.Clone()
 showplayerexp.MergeFlags({'LIBS' : ['dcastle', 'crypt', 'mcheck', 'z', 'pq', 'fmt']})
 showplayerexp.Program('showplayer', ['showplayerxp.cpp'])
-print(f'showplayerxp: {showplayerexp}')
+print(f'showplayerxp: {showplayerexp.items()}')
 
