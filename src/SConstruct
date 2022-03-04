@@ -65,7 +65,7 @@ libdcastle_src =  glob.glob('[abc]*.cpp') + \
     ['magic.cpp','memory.cpp','meta.cpp','MobActivity.cpp'] + \
     ['Leaderboard.cpp','Timer.cpp', 'Trace.cpp', 'db.cpp', 'save.cpp'] + \
     ['shop.cpp', 'sing.cpp', 'social.cpp', 'spec.cpp',  'spells.cpp',] + \
-    ['stat.cpp', 'CommandStack.cpp', "StatsData.cpp"] + \
+    ['stat.cpp', 'CommandStack.cpp', "StatData.cpp"] + \
     wizard_src + class_src + backend_src
 print(f'LIBDCASTLE_SRC: {libdcastle_src}')
 if not int(twitter):
