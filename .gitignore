@@ -12,7 +12,6 @@ lib/corpse.save
 save/*/*
 lib/onlinewho.txt
 lib/leaderboard.txt
-lib/onlinewho.txt
 googletest
 test/build
 test/log

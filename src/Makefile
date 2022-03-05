@@ -11,9 +11,9 @@ OBJS = $(SRCS:cpp=o)
 DEBUG_FLAGS = -ggdb3
 PROF_FLAGS = $(DEBUG_FLAGS) -pg
 
-LDFLAGS = -L/usr/local/lib -ltwitcurl -lcrypt -lmcheck -lz -lpq -lXmlRpc
+LDFLAGS = -L/usr/local/lib -lcrypt -lmcheck -lz -lpq
 CYGWIN_LDFLAGS = -L/emul/linux/x86/lib -L/usr/local/lib32 -lcrypt -lz -lpq /usr/local/lib/libXmlRpc.a
-IN_CXXFLAGS = -std=c++20 -Wall -Wno-write-strings -DTWITTER -DLINUX -m32 -Iinclude -I/usr/include/pgsql/ -I/usr/include/x86_64-linux-gnu/
+IN_CXXFLAGS = -std=c++20 -Wall -Wno-write-strings -DLINUX -m32 -Iinclude -I/usr/include/pgsql/ -I/usr/include/x86_64-linux-gnu/
 
 BASENAME = dcastle# Base product name -- NO SPACES
 
