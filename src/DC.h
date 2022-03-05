@@ -26,6 +26,10 @@
 
 using namespace std;
 
+extern int do_not_save_corpses;
+extern int try_to_hotboot_on_crash;
+extern int was_hotboot;
+
 typedef set<char_data *> character_list_t;
 typedef set<obj_data*> obj_list_t;
 typedef set<int> client_descriptor_list_t;

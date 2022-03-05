@@ -5,6 +5,7 @@
 /* 11/10/2003    Onager     Removed clan size limit                    */
 /***********************************************************************/
 #define __STDC_LIMIT_MACROS
+#define FMT_HEADER_ONLY
 #include <stdint.h>
 uint64_t i= UINT64_MAX;
 

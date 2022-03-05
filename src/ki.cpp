@@ -4,6 +4,7 @@
  *
  */
 /* $Id: ki.cpp,v 1.94 2014/07/04 22:00:04 jhhudso Exp $ */
+#define FMT_HEADER_ONLY
 
 extern "C"
 {
@@ -11,6 +12,7 @@ extern "C"
 #include <stdlib.h>
 #include <string.h>
 }
+
 #include <fmt/format.h>
 
 
@@ -31,6 +33,7 @@ extern "C"
 #include <vector>
 
 using namespace std;
+using namespace fmt;
 
 extern CWorld world;
  
