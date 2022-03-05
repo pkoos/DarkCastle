@@ -877,7 +877,7 @@ int cast_greater_stone_shield( ubyte level, CHAR_DATA *ch, char *arg, int type, 
   return eFAILURE;
 }
 
-#include <map>
+// #include <map>
 using namespace std;
 
 /* EARTHQUAKE */

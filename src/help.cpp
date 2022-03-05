@@ -25,7 +25,7 @@ extern "C"
 #include "help.h"
 #include "fileinfo.h"
 
-#include <map>
+// #include <map>
 #include <vector>
 #include <algorithm>
 

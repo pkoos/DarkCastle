@@ -35,7 +35,7 @@ extern "C"
 #include "fileinfo.h"
 #include <string>
 #include <vector>
-#include <map>
+// #include <map>
 #include <set>
 
 extern CWorld world;

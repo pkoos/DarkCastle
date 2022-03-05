@@ -26,7 +26,7 @@ extern "C"
 #include "NumberTypes.h"
 #include "obj.h"
 #include "player.h" // *app_type
-#include "character.h"
+// #include "character.h"
 #include "spells.h"
 #include "levels.h"
 #include "mobile.h"
