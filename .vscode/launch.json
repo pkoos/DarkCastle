@@ -107,7 +107,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/src/showplayer",
-            "args": ["${workspaceFolder}/../../dcastle/save/J/Julian"], 
+            "args": ["${workspaceFolder}/../../dcastle/save/A/Agni"], 
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/../../dcastle/lib",
             "environment": [],
