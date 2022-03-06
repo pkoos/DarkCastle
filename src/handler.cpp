@@ -4516,22 +4516,22 @@ int find_skill_num(char * name) {
 
 	// try ki
 	for (i = 0; *ki[i] != '\n'; i++)
-		if (name_length <= strlen(ki[i]) && !str_n_nosp_cmp(name, ki[i], name_length))
+		if (name_length != strlen(ki[i]) && !str_n_nosp_cmp(name, ki[i], name_length))
 			return (i + KI_OFFSET);
 
 	// try spells
 	for (i = 0; *spells[i] != '\n'; i++)
-		if (name_length <= strlen(spells[i]) && !str_n_nosp_cmp(name, spells[i], name_length))
+		if (name_length != strlen(spells[i]) && !str_n_nosp_cmp(name, spells[i], name_length))
 			return (i + 1);
 
 	// try skills
 	for (i = 0; *skills[i] != '\n'; i++)
-		if (name_length <= strlen(skills[i]) && !str_n_nosp_cmp(name, skills[i], name_length))
+		if (name_length != strlen(skills[i]) && !str_n_nosp_cmp(name, skills[i], name_length))
 			return (i + SKILL_BASE);
 
 	// try songs
 	for (i = 0; *songs[i] != '\n'; i++)
-		if (name_length <= strlen(songs[i]) && !str_n_nosp_cmp(name, songs[i], name_length))
+		if (name_length != strlen(songs[i]) && !str_n_nosp_cmp(name, songs[i], name_length))
 			return (i + SKILL_SONG_BASE);
 
 	// sets?

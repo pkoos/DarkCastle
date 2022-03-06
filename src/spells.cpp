@@ -841,7 +841,7 @@ const char *spells[]=
    "freefloat",
    "insomnia",
    "shadowslip",
-   "resist energy",
+   "resist energy", // 120
    "staunchblood",
    "create golem",
    "reflect",
@@ -851,7 +851,7 @@ const char *spells[]=
    "stoneshield",
    "greater stoneshield",
    "iron roots",
-   "eyes of the eagle",
+   "eyes of the eagle", // 130
    "unused",
    "icestorm",
    "lightning shield",
@@ -861,7 +861,7 @@ const char *spells[]=
    "vampiric aura",
    "holy aura",
    "dismiss familiar",
-   "dismiss corpse",
+   "dismiss corpse", // 140
    "blessed halo",
    "visage of hate",
    "protection from good",
@@ -871,7 +871,7 @@ const char *spells[]=
    "killer",
    "cantquit",
    "solidity",   
-   "eas",
+   "eas", // 150
    "align-good",
    "align-evil",
    "holy aegis",
@@ -881,7 +881,7 @@ const char *spells[]=
    "call lightning",
    "divine fury",
    "spiritwalk",
-   "mend golem",
+   "mend golem", // 160
    "clarity",
    "divine intervention",
    "wrath of god",
@@ -891,7 +891,7 @@ const char *spells[]=
    "boneshield",
    "channel",
    "release elemental",
-   "wild magic",
+   "wild magic", // 170
    "spirit shield",
    "villainy",
    "heroism",

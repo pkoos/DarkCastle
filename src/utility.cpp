@@ -217,13 +217,12 @@ int str_cmp( const char *arg1, const char *arg2 )
 
     for ( i = 0; arg1[i] || arg2[i]; i++ )
     {
-	check = LOWER(arg1[i]) - LOWER(arg2[i]);
-	if ( check < 0 )
-	    return -1;
-	if ( check > 0 )
-	    return 1;
+	    check = LOWER(arg1[i]) - LOWER(arg2[i]);
+	    if ( check < 0 )
+	      return -1;
+	    if ( check > 0 )
+	      return 1;
     }
-
     return 0;
 }
 
@@ -262,6 +261,9 @@ int str_n_nosp_cmp( const char *arg1, const char *arg2, int size)
   int retval = strncasecmp(tmp_arg1, tmp_arg2, size);
   dc_free(tmp_arg2);
   dc_free(tmp_arg1);
+  if(strlen(arg1) != strlen(arg2)) {
+    
+  }
   
   return retval;
 }

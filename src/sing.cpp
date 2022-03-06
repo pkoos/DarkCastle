@@ -195,11 +195,39 @@ NULL, NULL, SKILL_INCREASE_MEDIUM }, { /* 30 */
 TAR_IGNORE, 2, song_summon_song, execute_song_summon_song, NULL,
 NULL, SKILL_INCREASE_MEDIUM }, };
 
-const char *songs[] = {  "listsongs", "whistle sharp", "stop", /* If you move stop, update do_sing */
-"travelling march", "bountiful sonnet", "insane chant", "glitter dust", "synchronous chord", "healing melody", "sticky lullaby", "revealing staccato",
-		"flight of the bumblebee", "jig of alacrity", "note of knowledge", "terrible clef", "soothing rememberance", "forgetful rhythm", "searching song",
-		"vigilant siren", "astral chanty", "disarming limerick", "shattering resonance", "irresistable ditty", "fanatical fanfare", "dischordant dirge",
-		"crushing crescendo", "hypnotic harmony", "mountain king's charge", "submariner's anthem", "summoning song", "\n" };
+const char *songs[] = {  
+	"listsongs", 
+	"whistle sharp", 
+	"stop", /* If you move stop, update do_sing */
+	"travelling march", 
+	"bountiful sonnet", 
+	"insane chant", 
+	"glitter dust", 
+	"synchronous chord", 
+	"healing melody", 
+	"sticky lullaby", 
+	"revealing staccato",
+	"flight of the bumblebee", 
+	"jig of alacrity", 
+	"note of knowledge", 
+	"terrible clef", 
+	"soothing rememberance", 
+	"forgetful rhythm", 
+	"searching song",
+	"vigilant siren", 
+	"astral chanty", 
+	"disarming limerick", 
+	"shattering resonance", 
+	"irresistable ditty", 
+	"fanatical fanfare", 
+	"dischordant dirge",
+	"crushing crescendo", 
+	"hypnotic harmony", 
+	"mountain king's charge", 
+	"submariner's anthem", 
+	"summoning song", 
+	"\n" 
+	};
 
 int16 use_song(CHAR_DATA *ch, int kn);
 bool ARE_GROUPED(CHAR_DATA *sub, CHAR_DATA *obj);
