@@ -127,7 +127,7 @@ D2
 D3
 ~
 ~
-0 -1 4010
+0 -1 4009
 S
 #4011
 Outside the Velvet Pot~

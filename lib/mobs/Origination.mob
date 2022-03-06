@@ -18,6 +18,20 @@ say But please, allow me to explain.
 ~
 |
 S
+#4001
+guard townguard town~
+Town guard~
+    A town guard is keeping an eye out.
+~
+~
+33088 0 -1
+0 0 0 -1
+1000 0 10
+3 78 100d1+0 1d4+4
+2500 11000
+8 8 0 0 0 0
+C 4
+S
 #10009
 meta shopkeeper physician phil~
 Meta-Physician~

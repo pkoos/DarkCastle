@@ -506,8 +506,8 @@ agni axe~
 Agni's Runed Axe~
 A very large axe, the color of slate.~
 Fixed.~
-5 16 8193 8
-0 100 200 3 0
+5 262144 8193 8
+0 1500 2500 3 0
 5 0 0
 A
 26 15
@@ -848,22 +848,5 @@ Fixed.~
 29 16384 16385 1
 0 0 0 0 1
 0 10000 0
-S
-#100
-runed breastplate plate gl~
-A Runed Breastplate~
-A lightweight suit of shiny chainmail lays on the ground here.~
-~
-9 16 9 1
-30 0 0 0 0
-0 0 0
-A
-13 25
-A
-25 20
-A
-26 5
-A
-12 25
 S
 $~
