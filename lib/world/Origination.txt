@@ -2,7 +2,7 @@
 Entrance to the Dungeon~
 Entrance to the Dungeon
 ~
-1 0 0
+3 0 0
 D2
 ~
 ~
@@ -10,6 +10,7 @@ D2
 S
 #4001
 Starlight~
+3 0 0
 D2
 ~
 ~
@@ -19,7 +20,7 @@ S
 Walking Bear Outfitter~
 Walking Bear Outfitter
 ~
-1 0 0
+3 0 0
 D2
 ~
 ~
@@ -29,7 +30,7 @@ S
 Sew Nice~
 Sew Nice
 ~
-1 0 0
+3 0 0
 D2
 ~
 ~
@@ -39,7 +40,7 @@ S
 Dungeon Drive~
 Dungeon Drive
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -53,7 +54,7 @@ S
 The Guild~
 The Guild
 ~
-1 0 0
+3 0 0
 D2
 ~
 ~
@@ -63,7 +64,7 @@ S
 Outside the Red Commands~
 Outside the Red Commands
 ~
-1 0 0
+3 0 0
 D1
 ~
 ~
@@ -77,7 +78,7 @@ S
 The Red Commands~
 The Red Commands
 ~
-1 0 0
+3 0 0
 D3
 ~
 ~
@@ -87,7 +88,7 @@ S
 Heartsong Meadows~
 Heartsong Meadows
 ~
-1 0 0
+3 0 0
 D1
 ~
 ~
@@ -97,7 +98,7 @@ S
 Outside the Starlight~
 Outside the Starlight
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -115,7 +116,7 @@ S
 Outside the Careful Moon~
 Outside the Careful Moon
 ~
-1 0 0
+3 0 0
 D1
 ~
 ~
@@ -133,7 +134,7 @@ S
 Outside the Velvet Pot~
 Outside the Velvet Pot
 ~
-1 0 0
+3 0 0
 D1
 ~
 ~
@@ -151,7 +152,7 @@ S
 Outside the Walking Bear Outfitter~
 Outside the Walking Bear Outfitter
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -169,7 +170,7 @@ S
 Main Street~
 Main Street
 ~
-1 0 0
+3 0 0
 D1
 ~
 ~
@@ -187,7 +188,7 @@ S
 Outside Sew Nice~
 Outside Sew Nice
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -205,7 +206,7 @@ S
 Intersection of Main Street and Dungeon Drive~
 Intersection of Main Street and Dungeon Drive
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -227,7 +228,7 @@ S
 Intersection of Main Street and Prophecy Place~
 Intersection of Main Street and Prophecy Place
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -249,7 +250,7 @@ S
 Outside the Bronze Griffin~
 Outside the Bronze Griffin
 ~
-1 0 0
+3 0 0
 D1
 ~
 ~
@@ -267,7 +268,7 @@ S
 Intersection of Main Street and Merchant Boulevard~
 Intersection of Main Street and Merchant Boulevard
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -289,7 +290,7 @@ S
 Alleyway~
 Alleyway
 ~
-1 0 0
+3 0 0
 D1
 ~
 ~
@@ -303,7 +304,7 @@ S
 Outside of Crumb~
 Outside of Crumb
 ~
-1 0 0
+3 0 0
 D2
 ~
 ~
@@ -317,7 +318,7 @@ S
 Careful Moon~
 Careful Moon
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -327,7 +328,7 @@ S
 Velvet Pot~
 Velvet Pot
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -337,7 +338,7 @@ S
 The Common Tome~
 The Common Tome
 ~
-1 0 0
+3 0 0
 D1
 ~
 ~
@@ -347,7 +348,7 @@ S
 Alley from Main Street~
 Alley from Main Street
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -369,7 +370,7 @@ S
 Odds and Ends~
 Odds and Ends
 ~
-1 0 0
+3 0 0
 D3
 ~
 ~
@@ -379,7 +380,7 @@ S
 Dungeon Drive~
 Dungeon Drive
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -393,7 +394,7 @@ S
 Outside the Bronze Griffin~
 Outside the Bronze Griffin
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -411,7 +412,7 @@ S
 The Bronze Griffin~
 The Bronze Griffin
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -425,7 +426,7 @@ S
 Outside Drumphy's Toys~
 Outside Drumphy's Toys
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -439,7 +440,7 @@ S
 Drumphy's Toys~
 Drumphy's Toys
 ~
-1 0 0
+3 0 0
 D3
 ~
 ~
@@ -449,7 +450,7 @@ S
 Crumb~
 Crumb
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -459,7 +460,7 @@ S
 La Fable~
 La Fable
 ~
-1 0 0
+3 0 0
 D2
 ~
 ~
@@ -469,7 +470,7 @@ S
 Merchant Boulevard~
 Merchant Boulevard
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -483,7 +484,7 @@ S
 Town Center~
 Town Center
 ~
-1 0 0
+3 0 0
 D1
 ~
 ~
@@ -497,7 +498,7 @@ S
 Town Center~
 Town Center
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -519,7 +520,7 @@ S
 Town Center~
 Town Center
 ~
-1 0 0
+3 0 0
 D1
 ~
 ~
@@ -537,7 +538,7 @@ S
 Intersection of Center Street and Prophecy Place~
 Intersection of Center Street and Prophecy Place
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -555,7 +556,7 @@ S
 Outside the Heavenly Barrel~
 Outside the Heavenly Barrel
 ~
-1 0 0
+3 0 0
 D1
 ~
 ~
@@ -573,7 +574,7 @@ S
 Outside of La Fable~
 Outside of La Fable
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -591,7 +592,7 @@ S
 Intersection of Center Street and Merchant Boulevard~
 Intersection of Center Street and Merchant Boulevard
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -609,7 +610,7 @@ S
 Alley to Temple Way~
 Alley to Temple Way
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -627,7 +628,7 @@ S
 Temple Way~
 Temple Way
 ~
-1 0 0
+3 0 0
 D1
 ~
 ~
@@ -641,7 +642,7 @@ S
 Town Center~
 Town Center
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -663,7 +664,7 @@ S
 Central Portal~
 Central Portal
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -685,7 +686,7 @@ S
 Town Center~
 Town Center
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -703,7 +704,7 @@ S
 The Heavenly Barrel~
 The Heavenly Barrel
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -713,7 +714,7 @@ S
 Outside the Cobalt Forge~
 Outside the Cobalt Forge
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -731,7 +732,7 @@ S
 The Cobalt Forge~
 The Cobalt Forge
 ~
-1 0 0
+3 0 0
 D3
 ~
 ~
@@ -741,7 +742,7 @@ S
 Alley to Main Street~
 Alley to Main Street
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -755,7 +756,7 @@ S
 Town Center~
 Town Center
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -769,7 +770,7 @@ S
 Town Center~
 Town Center
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -791,7 +792,7 @@ S
 Town Center~
 Town Center
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -805,7 +806,7 @@ S
 Outside the Tanned Hide~
 Outside the Tanned Hide
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -823,7 +824,7 @@ S
 The Tanned Hide~
 The Tanned Hide
 ~
-1 0 0
+3 0 0
 D3
 ~
 ~
@@ -833,7 +834,7 @@ S
 Outside the Temple of Balance~
 Outside the Temple of Balance
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -847,7 +848,7 @@ S
 Dungeon Drive~
 Dungeon Drive
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -861,7 +862,7 @@ S
 Merchant Boulevard~
 Merchant Boulevard
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -875,7 +876,7 @@ S
 Temple of Balance~
 Temple of Balance
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -889,7 +890,7 @@ S
 Outside the Temple of Balance~
 Outside the Temple of Balance
 ~
-1 0 0
+3 0 0
 D1
 ~
 ~
@@ -903,7 +904,7 @@ S
 Outside the Origination Institute~
 Outside the Origination Institute
 ~
-1 0 0
+3 0 0
 D1
 ~
 ~
@@ -921,7 +922,7 @@ S
 Intersection of College Way and Dungeon Drive~
 Intersection of College Way and Dungeon Drive
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -939,7 +940,7 @@ S
 Intersection of College Way and Prophecy Place~
 Intersection of College Way and Prophecy Place
 ~
-1 0 0
+3 0 0
 D1
 ~
 ~
@@ -953,7 +954,7 @@ S
 College Way~
 College Way
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -967,7 +968,7 @@ S
 Origination Institute~
 Origination Institute
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -977,16 +978,11 @@ D2
 ~
 0 -1 4100
 S
-
-
-
-
 #4100
 Entrance of the Origination Institute~
 Entrance of the Origination Institute
-
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -996,14 +992,12 @@ D1
 ~
 0 -1 4101
 S
-
 #4101
 Trainer's Hall between the General and Cleric Trainer~
 General Trainer to the north.
 Cleric Trainer to the south.
-
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -1025,9 +1019,8 @@ S
 Trainer's Hall between the Bard and Mage Trainer~
 Bard Trainer to the north.
 Mage Trainer to the south.
-
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -1049,9 +1042,8 @@ S
 Trainer's Hall between the Druid and Paladin Trainer~
 Druid Trainer to the north.
 Paladin Trainer to the south.
-
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -1073,9 +1065,8 @@ S
 Trainer's Hall between the Thief and Ranger Trainer~
 Thief Trainer to the north.
 Ranger Trainer to the south.
-
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -1094,13 +1085,11 @@ D3
 0 -1 4103
 S
 #4105
-Trainer's Hall between the Barbarian, Anti-paladin, and Warrior Trainer~
+Trainer's Hall between the Barbarian and Warrior Trainer~
 Barbarian Trainer to the north.
-Anti-paladin Trainer to the east.
 Warrior Trainer to the south.
-
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
@@ -1121,65 +1110,63 @@ S
 #4106
 Anti-paladin Training Hall~
 Anti-paladin Training Hall
-
 ~
-1 0 0
-D3
+3 0 0
+D2
 ~
 ~
-0 -1 4105
+0 -1 4117
+C5
 S
 #4107
 Barbarian Training Hall~
 Barbarian Training Hall
-
 ~
-1 0 0
+3 0 0
 D2
 ~
 ~
 0 -1 4105
+C7
 S
 #4108
 Thief Training Hall~
 Thief Training Hall
-
 ~
-1 0 0
+3 0 0
 D2
 ~
 ~
 0 -1 4104
-
+C3
 S
 #4109
 Druid Training Hall~
 Druid Training Hall
-
 ~
-1 0 0
+3 0 0
 D2
 ~
 ~
 0 -1 4103
+C11
 S
 #4110
 Bard Training Hall~
 Bard Training Hall
-
 ~
-1 0 0
+3 0 0
 D2
 ~
 ~
 0 -1 4102
+C10
 S
 #4111
 General Training Hall~
 General Training Hall
-
 ~
-1 0 0
+3 0 0
 D2
 ~
 ~
@@ -1188,59 +1175,87 @@ S
 #4112
 Warrior Training Hall~
 Warrior Training Hall
-
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
 0 -1 4105
+C4
 S
 #4113
 Ranger Training Hall~
 Ranger Training Hall
-
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
 0 -1 4104
+C9
 S
 #4114
 Paladin Training Hall~
 Paladin Training Hall
-
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
 0 -1 4103
+C6
 S
 #4115
 Mage Training Hall~
 Mage Training Hall
-
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
 0 -1 4102
+C1
 S
 #4116
 Cleric Training Hall~
 Cleric Training Hall
-
 ~
-1 0 0
+3 0 0
 D0
 ~
 ~
 0 -1 4101
+C2
 S
-
-
-
+#4117
+Trainer's Hall between the Anti-paladin and Monk Trainer~
+Angi-paladin Trainer to the north.
+Monk Trainer to the south.
+~
+3 0 0
+D0
+~
+~
+0 -1 4106
+D2
+~
+~
+0 -1 4118
+D3
+~
+~
+0 -1 4105
+S
+#4118
+Trainer's Hall between the Bard and Mage Trainer~
+Bard Trainer to the north.
+Mage Trainer to the south.
+~
+3 0 0
+D0
+~
+~
+0 -1 4117
+C8
+S
 $~

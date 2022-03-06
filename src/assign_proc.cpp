@@ -143,7 +143,18 @@ void assign_non_combat_procs() {
     SPEC_FUN    cardinal;
     SPEC_FUN    eddie_shopkeeper;
     assign_one_mob_non(3071, cardinal);
-
+    assign_one_mob_non(4002, guild);
+    assign_one_mob_non(4004, guild);
+    assign_one_mob_non(4008, guild);
+    assign_one_mob_non(3021, guild);
+    assign_one_mob_non(4007, guild);
+    assign_one_mob_non(4005, guild);
+    assign_one_mob_non(3020, guild);
+    assign_one_mob_non(4003, guild);
+    assign_one_mob_non(4006, guild);
+    assign_one_mob_non(3022, guild);
+    assign_one_mob_non(3023, guild);
+    assign_one_mob_non(4009, guild);
     assign_one_mob_non(501, arena_only);
     assign_one_mob_non(502, arena_only);
     assign_one_mob_non(503, arena_only);
@@ -256,7 +267,7 @@ void assign_non_combat_procs() {
     assign_one_mob_non(1924,  guild);
     assign_one_mob_non(1926,  guild);
     assign_one_mob_non(10011,  skill_master);
-    assign_one_mob_non(10009, meta_dude);
+    assign_one_mob_non(3013, meta_dude);
     assign_one_mob_non(10030, sleazy_vault_guy);
     assign_one_mob_non(73,    quest_vendor);
     assign_one_mob_non(1927,  guild_guard);

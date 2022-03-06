@@ -1,8 +1,20 @@
 V2
-#0
+#3
 The City of Origination~
-4116 10 2 102 9
-M 0 4000 1 4044 Nyxi spawning at portal
+4118 10 2 102 9
+M 3 4000 1 4044 Nyxi spawning at portal
+M 3 4002 1 4106 Antipaladin trainer spawn
+M 3 4003 1 4114 Paladin trainer spawn
+M 3 4004 1 4107 Barbarian trainer spawn
+M 3 4005 1 4111 General trainer spawn
+M 3 4006 1 4113 Ranger trainer spawn
+M 3 3021 1 4116 Cleric trainer spawn
+M 3 3020 1 4115 Mage Trainer Spawn
+M 3 3022 1 4108 Thief Trainer Spawn
+M 3 3023 1 4112 Warrior Trainer Spawn
+M 3 4007 1 4109 Druid Trainer Spawn
+M 3 4008 1 4110 Bard Trainer Spawn
+M 3 4009 1 4118 Monk Trainer Spawn
 M 0 4001 1 4004 Guard spawn
 E 4 4000 -1 16 Equip guard sword
 M 0 4001 1 4004 Guard spawn

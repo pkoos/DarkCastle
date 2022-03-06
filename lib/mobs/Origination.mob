@@ -5,7 +5,7 @@ Nyxi~
 ~
 ~
 271451970 0 -1
-1879378048 8388608 40 -1
+1915029672 8388608 40 -1
 1000 0 95
 -50 -80 7500d1+0 8d10+20
 750000 6000000
@@ -24,18 +24,18 @@ Town guard~
     A town guard is keeping an eye out.
 ~
 ~
-33088 0 -1
-0 0 0 -1
+557888 0 -1
+2097152 0 0 -1
 1000 0 10
 3 78 100d1+0 1d4+4
 2500 11000
 8 8 0 0 0 0
 C 4
 S
-#10009
-meta shopkeeper physician phil~
-Meta-Physician~
-The Meta-Physician stands here.
+#4002
+guildmaster arthas~
+Arthas~
+Arthas stands here, growing increasingly impatient with you.
 ~
 ~
 296774 0 -1
@@ -44,5 +44,103 @@ The Meta-Physician stands here.
 20 10 0d1+0 1d1+0
 0 0
 8 8 0 0 0 0
+C 5
+S
+#4003
+guildmaster boondiggles~
+Boondiggles~
+Boondiggles kneeling here, praying.
+~
+~
+296774 0 -1
+0 0 0 -1
+0 0 109
+20 10 0d1+0 1d1+0
+0 0
+8 8 0 0 0 0
+C 6
+S
+#4004
+guildmaster biri~
+Biri~
+Biri stands here, angry at your existence.
+~
+~
+296774 0 -1
+0 0 0 -1
+0 0 109
+20 10 0d1+0 1d1+0
+0 0
+8 8 0 0 0 0
+C 7
+S
+#4005
+guildmaster fang~
+Fang~
+Fang seems to be looking for someone.
+~
+~
+296774 0 -1
+0 0 0 -1
+0 0 109
+20 10 0d1+0 1d1+0
+0 0
+8 8 0 0 0 0
+S
+#4006
+guildmaster aragorn~
+Aragorn~
+Aragorn is pacing the room, looking for places to hide.
+~
+~
+296774 0 -1
+0 0 0 -1
+0 0 109
+20 10 0d1+0 1d1+0
+0 0
+8 8 0 0 0 0
+C 9
+S
+#4007
+guildmaster druid arthur~
+Arthur~
+Arthur stands here, deeply in thought.
+~
+~
+296774 0 -1
+0 0 0 -1
+0 0 109
+20 10 0d1+0 1d1+0
+0 0
+8 8 0 0 0 0
+C 11
+S
+#4008
+guildmaster bard skiphoof~
+Skiphoof~
+Skiphoof grabs your hands, dragging you into a dance.
+~
+~
+296774 0 -1
+0 0 0 -1
+0 0 109
+20 10 0d1+0 1d1+0
+0 0
+8 8 0 0 0 0
+C 10
+S
+#4008
+guildmaster monk myra~
+Myra~
+Myra stumbles around. Is she day-drinking again?!
+~
+~
+296774 0 -1
+0 0 0 -1
+0 0 109
+20 10 0d1+0 1d1+0
+0 0
+8 8 0 0 0 0
+C 8
 S
 $~
