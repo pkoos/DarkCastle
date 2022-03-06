@@ -972,5 +972,275 @@ D0
 ~
 ~
 0 -1 4060
+D2
+~
+~
+0 -1 4100
 S
+
+
+
+
+#4100
+Entrance of the Origination Institute~
+Entrance of the Origination Institute
+
+~
+1 0 0
+D0
+~
+~
+0 -1 4064
+D1
+~
+~
+0 -1 4101
+S
+
+#4101
+Trainer's Hall between the General and Cleric Trainer~
+General Trainer to the north.
+Cleric Trainer to the south.
+
+~
+1 0 0
+D0
+~
+~
+0 -1 4111
+D1
+~
+~
+0 -1 4102
+D2
+~
+~
+0 -1 4116
+D3
+~
+~
+0 -1 4100
+S
+#4102
+Trainer's Hall between the Bard and Mage Trainer~
+Bard Trainer to the north.
+Mage Trainer to the south.
+
+~
+1 0 0
+D0
+~
+~
+0 -1 4110
+D1
+~
+~
+0 -1 4103
+D2
+~
+~
+0 -1 4115
+D3
+~
+~
+0 -1 4101
+S
+#4103
+Trainer's Hall between the Druid and Paladin Trainer~
+Druid Trainer to the north.
+Paladin Trainer to the south.
+
+~
+1 0 0
+D0
+~
+~
+0 -1 4109
+D1
+~
+~
+0 -1 4104
+D2
+~
+~
+0 -1 4114
+D3
+~
+~
+0 -1 4102
+S
+#4104
+Trainer's Hall between the Thief and Ranger Trainer~
+Thief Trainer to the north.
+Ranger Trainer to the south.
+
+~
+1 0 0
+D0
+~
+~
+0 -1 4108
+D1
+~
+~
+0 -1 4105
+D2
+~
+~
+0 -1 4113
+D3
+~
+~
+0 -1 4103
+S
+#4105
+Trainer's Hall between the Barbarian, Anti-paladin, and Warrior Trainer~
+Barbarian Trainer to the north.
+Anti-paladin Trainer to the east.
+Warrior Trainer to the south.
+
+~
+1 0 0
+D0
+~
+~
+0 -1 4107
+D1
+~
+~
+0 -1 4106
+D2
+~
+~
+0 -1 4112
+D3
+~
+~
+0 -1 4104
+S
+#4106
+Anti-paladin Training Hall~
+Anti-paladin Training Hall
+
+~
+1 0 0
+D3
+~
+~
+0 -1 4105
+S
+#4107
+Barbarian Training Hall~
+Barbarian Training Hall
+
+~
+1 0 0
+D2
+~
+~
+0 -1 4105
+S
+#4108
+Thief Training Hall~
+Thief Training Hall
+
+~
+1 0 0
+D2
+~
+~
+0 -1 4104
+
+S
+#4109
+Druid Training Hall~
+Druid Training Hall
+
+~
+1 0 0
+D2
+~
+~
+0 -1 4103
+S
+#4110
+Bard Training Hall~
+Bard Training Hall
+
+~
+1 0 0
+D2
+~
+~
+0 -1 4102
+S
+#4111
+General Training Hall~
+General Training Hall
+
+~
+1 0 0
+D2
+~
+~
+0 -1 4101
+S
+#4112
+Warrior Training Hall~
+Warrior Training Hall
+
+~
+1 0 0
+D0
+~
+~
+0 -1 4105
+S
+#4113
+Ranger Training Hall~
+Ranger Training Hall
+
+~
+1 0 0
+D0
+~
+~
+0 -1 4104
+S
+#4114
+Paladin Training Hall~
+Paladin Training Hall
+
+~
+1 0 0
+D0
+~
+~
+0 -1 4103
+S
+#4115
+Mage Training Hall~
+Mage Training Hall
+
+~
+1 0 0
+D0
+~
+~
+0 -1 4102
+S
+#4116
+Cleric Training Hall~
+Cleric Training Hall
+
+~
+1 0 0
+D0
+~
+~
+0 -1 4101
+S
+
+
+
 $~
