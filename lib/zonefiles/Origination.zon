@@ -2,288 +2,288 @@ V2
 #3
 The City of Origination~
 4118 10 2 102 9
-M 3 4000 1 4044 Nyxi spawning at portal
-M 3 4002 1 4106 Antipaladin trainer spawn
-M 3 4003 1 4114 Paladin trainer spawn
-M 3 4004 1 4107 Barbarian trainer spawn
-M 3 4005 1 4111 General trainer spawn
-M 3 4006 1 4113 Ranger trainer spawn
-M 3 3021 1 4116 Cleric trainer spawn
-M 3 3020 1 4115 Mage Trainer Spawn
-M 3 3022 1 4108 Thief Trainer Spawn
-M 3 3023 1 4112 Warrior Trainer Spawn
-M 3 4007 1 4109 Druid Trainer Spawn
-M 3 4008 1 4110 Bard Trainer Spawn
-M 3 4009 1 4118 Monk Trainer Spawn
-M 0 4001 1 4004 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4004 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4004 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4006 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4006 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4006 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4009 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4009 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4009 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4010 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4010 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4010 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4011 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4011 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4011 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4012 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4012 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4012 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4013 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4013 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4013 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4014 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4014 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4014 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4015 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4015 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4015 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4016 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4016 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4016 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4017 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4017 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4017 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4018 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4018 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4018 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4019 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4019 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4019 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4020 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4020 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4020 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4024 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4024 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4024 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4026 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4026 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4026 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4027 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4027 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4027 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4029 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4029 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4029 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4033 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4033 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4033 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4034 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4034 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4034 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4035 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4035 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4035 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4036 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4036 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4036 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4037 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4037 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4037 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4038 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4038 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4038 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4039 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4039 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4039 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4040 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4040 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4040 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4041 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4041 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4041 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4042 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4042 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4042 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4043 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4043 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4043 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4044 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4044 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4044 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4045 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4045 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4045 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4047 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4047 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4047 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4049 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4049 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4049 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4050 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4050 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4050 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4051 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4051 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4051 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4052 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4052 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4052 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4053 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4053 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4053 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4055 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4055 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4055 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4056 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4056 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4056 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4057 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4057 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4057 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4059 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4059 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4059 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4060 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4060 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4060 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4061 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4061 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4061 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4062 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4062 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4062 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4063 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4063 Guard spawn
-E 4 4000 -1 16 Equip guard sword
-M 0 4001 1 4063 Guard spawn
-E 4 4000 -1 16 Equip guard sword
+M  3  4000  1  4044  Nyxi spawning at portal
+M  3  4002  1  4106  Antipaladin trainer spawn
+M  3  4003  1  4114  Paladin trainer spawn
+M  3  4004  1  4107  Barbarian trainer spawn
+M  3  4005  1  4111  General trainer spawn
+M  3  4006  1  4113  Ranger trainer spawn
+M  3  3021  1  4116  Cleric trainer spawn
+M  3  3020  1  4115  Mage Trainer Spawn
+M  3  3022  1  4108  Thief Trainer Spawn
+M  3  3023  1  4112  Warrior Trainer Spawn
+M  3  4007  1  4109  Druid Trainer Spawn
+M  3  4008  1  4110  Bard Trainer Spawn
+M  3  4009  1  4118  Monk Trainer Spawn
+M  0  4001  1  4004  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4004  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4004  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4006  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4006  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4006  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4009  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4009  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4009  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4010  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4010  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4010  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4011  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4011  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4011  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4012  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4012  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4012  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4013  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4013  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4013  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4014  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4014  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4014  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4015  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4015  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4015  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4016  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4016  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4016  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4017  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4017  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4017  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4018  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4018  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4018  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4019  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4019  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4019  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4020  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4020  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4020  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4024  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4024  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4024  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4026  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4026  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4026  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4027  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4027  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4027  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4029  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4029  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4029  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4033  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4033  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4033  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4034  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4034  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4034  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4035  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4035  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4035  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4036  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4036  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4036  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4037  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4037  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4037  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4038  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4038  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4038  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4039  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4039  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4039  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4040  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4040  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4040  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4041  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4041  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4041  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4042  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4042  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4042  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4043  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4043  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4043  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4044  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4044  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4044  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4045  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4045  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4045  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4047  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4047  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4047  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4049  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4049  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4049  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4050  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4050  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4050  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4051  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4051  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4051  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4052  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4052  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4052  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4053  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4053  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4053  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4055  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4055  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4055  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4056  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4056  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4056  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4057  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4057  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4057  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4059  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4059  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4059  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4060  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4060  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4060  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4061  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4061  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4061  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4062  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4062  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4062  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4063  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4063  Guard spawn
+E  4  4000 -1    16  Equip guard sword
+M  0  4001  1  4063  Guard spawn
+E  4  4000 -1    16  Equip guard sword
 S
 $~
