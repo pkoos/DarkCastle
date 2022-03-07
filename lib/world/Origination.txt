@@ -1097,7 +1097,7 @@ D0
 D1
 ~
 ~
-0 -1 4106
+0 -1 4117
 D2
 ~
 ~
@@ -1247,9 +1247,8 @@ D3
 0 -1 4105
 S
 #4118
-Trainer's Hall between the Bard and Mage Trainer~
-Bard Trainer to the north.
-Mage Trainer to the south.
+Monk Training Hall~
+Monk Training Hall.
 ~
 3 0 0
 D0

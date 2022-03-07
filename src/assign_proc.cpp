@@ -155,6 +155,11 @@ void assign_non_combat_procs() {
     assign_one_mob_non(3022, guild);
     assign_one_mob_non(3023, guild);
     assign_one_mob_non(4009, guild);
+    assign_one_mob_non(3014, gl_repair_shop);
+    assign_one_mob_non(3015, godload_sales);
+
+
+
     assign_one_mob_non(501, arena_only);
     assign_one_mob_non(502, arena_only);
     assign_one_mob_non(503, arena_only);
@@ -522,7 +527,7 @@ void assign_objects(void)
 
   //Godload procs follow.
     assign_one_obj_com(565,   godload_banshee);
-  //  assign_one_obj_com(511,   godload_claws);
+    assign_one_obj_com(154,   godload_claws);
    // assign_one_obj_com(506,  glove_combat_procs);
    // assign_one_obj_com(528, godload_leprosy);
 

@@ -12,6 +12,10 @@ D0
 ~
 ~
 0 -1 257
+D4
+~
+~
+1 -1 201
 D5
 ~
 ~
@@ -42,10 +46,10 @@ is said that his talents, while notoriously pricey, have been sought by even
 the gods themselves.
 ~
 1 1711286284 0
-D1
+D5
 ~
-door platinum~
-1 -1 28105
+~
+1 -1 200
 E
 sign~
 Welcome to your first sign!  Most of the rooms will have them.  Be sure to

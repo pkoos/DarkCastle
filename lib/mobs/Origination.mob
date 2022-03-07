@@ -39,7 +39,7 @@ Arthas stands here, growing increasingly impatient with you.
 ~
 ~
 296774 0 -1
-0 0 0 -1
+2621480 0 0 -1
 0 0 109
 20 10 0d1+0 1d1+0
 0 0
@@ -52,8 +52,8 @@ Boondiggles~
 Boondiggles kneeling here, praying.
 ~
 ~
-296774 0 -1
-0 0 0 -1
+821062 0 -1
+2097192 0 0 -1
 0 0 109
 20 10 0d1+0 1d1+0
 0 0
@@ -66,8 +66,8 @@ Biri~
 Biri stands here, angry at your existence.
 ~
 ~
-296774 0 -1
-0 0 0 -1
+821062 0 -1
+2097152 0 0 -1
 0 0 109
 20 10 0d1+0 1d1+0
 0 0
@@ -93,8 +93,8 @@ Aragorn~
 Aragorn is pacing the room, looking for places to hide.
 ~
 ~
-296774 0 -1
-0 0 0 -1
+821062 0 -1
+35651584 0 0 -1
 0 0 109
 20 10 0d1+0 1d1+0
 0 0
@@ -108,7 +108,7 @@ Arthur stands here, deeply in thought.
 ~
 ~
 296774 0 -1
-0 0 0 -1
+35651616 32 0 -1
 0 0 109
 20 10 0d1+0 1d1+0
 0 0
@@ -122,23 +122,23 @@ Skiphoof grabs your hands, dragging you into a dance.
 ~
 ~
 296774 0 -1
-0 0 0 -1
+2097152 0 0 -1
 0 0 109
 20 10 0d1+0 1d1+0
 0 0
 8 8 0 0 0 0
 C 10
 S
-#4008
+#4009
 guildmaster monk myra~
 Myra~
 Myra stumbles around. Is she day-drinking again?!
 ~
 ~
 296774 0 -1
-0 0 0 -1
-0 0 109
-20 10 0d1+0 1d1+0
+1075839008 0 0 -1
+0 32 109
+20 10 0d1+0 10d20+0
 0 0
 8 8 0 0 0 0
 C 8

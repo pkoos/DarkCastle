@@ -788,50 +788,31 @@ The Meta-Physician stands here.
 0 0
 8 8 0 0 0 0
 S
-#3015
------~
-------------~
-an empty mob description~
+#3014
+brok repair godload~
+Brok~
+Brok looks over and gruffly greets you.
 ~
-0 0 -1
-2097152 0 0 -1
-0 0 0
-20 10 0d1+0 1d1+0
+~
+1946945346 0 -1
+1613039744 536870912 0 -1
+0 0 109
+-80 -250 55000d1+0 20d20+0
 0 0
-8 1 0 0 0 0
->catch_prog 1~
-MPECHO Alana straightens up and looks a bit more serious.
-say But nevermind that for now, you can find Intamin on your own for your studies.
-say Lets get back to practicing your mystic talents!
+8 8 1 8388607 0 0
+S
+#3015
+sindri shop shopkeeper godload~
+Sindri~
+Sindri nervously looks you up and down.
 ~
->speech_prog intamin~
-say Oh Intamin is a great explorer and full of knowledge.
-say I just wish he spent more time in the guildhouse with me...
-sigh
-MPTHROW 3020 1 3
 ~
->speech_prog friend~
-say Oh! Hi there. I hope I wasn't disturbing you with my thinking out loud.
-say Yes, my friend Intamin, he's always off searching the world for new magicks.
-~
->greet_prog 60~
-MPECHO Alana sighs mournfully and looks around with searching eyes.
-say I wish my friend didn't spend so much time away from the guildhouse.
-~
->give_prog earring ring glass~
-say Excellent, you have served me well and I will reward you by
-say teaching you the debility spell if you are able to learn.
-MPJUNK earring
-if ispc($n)
-  if class($n) == 1
-    emote goes through some arcane gestures and speaks to you softly.
-    MPTEACHSKILL $n 135
-    break
-  endif
-endif
-say You are unable to learn.
-~
-|
+1946945346 0 -1
+1613039744 536870912 0 -1
+0 0 109
+-80 -250 55000d1+0 20d20+0
+0 0
+8 8 1 8388607 0 0
 S
 #3016
 executioner~
@@ -1232,6 +1213,51 @@ if ispc($n)
   endif
 endif
 say Yar! Ye be no warrior, begone from this place o' the true fighter.
+~
+|
+S
+#3028
+-----~
+------------~
+an empty mob description~
+~
+0 0 -1
+2097152 0 0 -1
+0 0 0
+20 10 0d1+0 1d1+0
+0 0
+8 1 0 0 0 0
+>catch_prog 1~
+MPECHO Alana straightens up and looks a bit more serious.
+say But nevermind that for now, you can find Intamin on your own for your studies.
+say Lets get back to practicing your mystic talents!
+~
+>speech_prog intamin~
+say Oh Intamin is a great explorer and full of knowledge.
+say I just wish he spent more time in the guildhouse with me...
+sigh
+MPTHROW 3020 1 3
+~
+>speech_prog friend~
+say Oh! Hi there. I hope I wasn't disturbing you with my thinking out loud.
+say Yes, my friend Intamin, he's always off searching the world for new magicks.
+~
+>greet_prog 60~
+MPECHO Alana sighs mournfully and looks around with searching eyes.
+say I wish my friend didn't spend so much time away from the guildhouse.
+~
+>give_prog earring ring glass~
+say Excellent, you have served me well and I will reward you by
+say teaching you the debility spell if you are able to learn.
+MPJUNK earring
+if ispc($n)
+  if class($n) == 1
+    emote goes through some arcane gestures and speaks to you softly.
+    MPTEACHSKILL $n 135
+    break
+  endif
+endif
+say You are unable to learn.
 ~
 |
 S

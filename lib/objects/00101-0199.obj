@@ -195,9 +195,9 @@ sword spellsword gl specialgoditem~
 SpellBinder the SpellSword~
 A glowing blade of purest steel lays here in the dust.~
 ~
-5 0 0 0
+5 16 8193 1
 0 4 10 3 0
-0 0 0
+0 25000 0
 A
 49 5
 A
@@ -212,9 +212,9 @@ wavy kris gl specialgoditem~
 A wavy bladed kris~
 A wavy bladed steel kris lays in the dust here.~
 ~
-5 0 0 0
+5 16 8193 1
 0 9 4 11 0
-0 0 0
+0 25000 0
 A
 37 15
 A
@@ -227,9 +227,9 @@ hammer worn gl specialgoditem~
 A worn and rusted hammer~
 A rusted hammer of ancient origin gathers dust on the ground.~
 ~
-5 0 0 0
+5 16 8193 1
 0 4 20 6 0
-0 0 0
+0 25000 0
 A
 26 7
 A
@@ -240,9 +240,9 @@ sourne mask shadow gl~
 Sourne's Mask of Shadows~
 A pair of small eyes shimmer in the dust.~
 ~
-9 0 0 0
+9 16 131073 1
 3 0 0 0 0
-0 0 0
+0 25000 0
 A
 14 100
 A
@@ -257,9 +257,9 @@ krylar claws gl~
 Krylar's Rapacious Claws~
 Strong leather gloves on the ground catch your eye.~
 ~
-9 0 0 0
+9 16 129 1
 3 0 0 0 0
-0 0 0
+0 25000 0
 A
 13 100
 A
@@ -274,9 +274,9 @@ boots cloud gl~
 Cloudwalking Boots~
 A pair of light sturdy boots rests on the ground here.~
 ~
-9 0 0 0
+9 16 65 1
 3 0 0 0 0
-0 0 0
+0 25000 0
 A
 13 100
 A
@@ -291,9 +291,9 @@ leggings gazelle gl~
 The leggings of the Gazelle~
 Powerful mechanical legwear lays on the ground here.~
 ~
-9 0 0 0
+9 16 33 1
 3 0 0 0 0
-0 0 0
+0 25000 0
 A
 2 3
 A
@@ -306,9 +306,9 @@ balis crimson bracer gl~
 Balis's Crimson Bracers~
 Powerful mechanical armwear lays on the ground here.~
 ~
-9 0 0 0
+9 16 4097 1
 3 0 0 0 0
-0 0 0
+0 25000 0
 A
 17 60
 A
@@ -321,9 +321,9 @@ runed breastplate plate gl~
 A Runed Breastplate~
 A lightweight suit of shiny chainmail lays on the ground here.~
 ~
-9 0 0 0
+9 16 9 1
 30 0 0 0 0
-0 0 0
+0 25000 0
 A
 13 25
 A
@@ -338,9 +338,9 @@ sati sash gl~
 Sati's Indestructible Sash~
 An enormous belt lays on the ground here.~
 ~
-15 0 0 0
+15 16 2049 1
 500 0 0 0 0
-0 0 0
+0 25000 0
 A
 26 6
 S
@@ -349,8 +349,8 @@ ring fate gl specialgoditem~
 The Ring of Fate~
 You see a small ring which appears to be your destiny on the ground here.~
 ~
-9 3 0 0
-50 0 0 0 0
+9 16 3 1
+50 25000 0 0 0
 1 100 0
 A
 33 100
@@ -364,9 +364,9 @@ ring madman gl specialgoditem~
 A Madman's Ring~
 The ring on the ground makes your mind tilt and turn crazily.~
 ~
-9 0 0 0
+9 16 3 1
 3 0 0 0 0
-0 0 0
+0 25000 0
 A
 13 100
 A
@@ -379,9 +379,9 @@ silver amulet magic gl specialgoditem~
 A Silver Amulet of Magic~
 Laying on the ground is a silver magickal amulet.~
 ~
-9 0 0 0
+9 16 5 1
 3 0 0 0 0
-0 0 0
+0 25000 0
 A
 13 75
 A
