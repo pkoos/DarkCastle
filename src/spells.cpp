@@ -30,6 +30,7 @@ extern "C"
 #include <stdlib.h>
 }
 
+#include "SkillCost.h"
 #include "Maximums.h"
 #include "NumberTypes.h"
 #include "character.h"
@@ -79,6 +80,8 @@ int spl_lvl(int lev);
 void make_dust(CHAR_DATA * ch);
 int say_spell( CHAR_DATA *ch, int si, int room = 0);
 extern struct index_data *mob_index;
+
+
 
 #if(0)
     ubyte        beats;                  /* Waiting time after spell     */

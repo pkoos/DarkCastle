@@ -17,6 +17,8 @@
 #ifndef SPELLS_H_
 #define SPELLS_H_
 
+#include "AttackTypes.h"
+#include "SkillTimers.h"
 #include "SkillIds.h"
 #include "SpellIds.h"
 #include "NumberTypes.h"
@@ -24,16 +26,11 @@
 #include "obj.h"
 #include <map>
 
-
-
-std::map<int,int> fill_skill_cost();
-
-const std::map<int,int> skill_cost = fill_skill_cost();
-
 void extractFamiliar(CHAR_DATA *ch);
 
 bool skill_success(CHAR_DATA *ch, CHAR_DATA *victim, int skillnum, int mod=0);
 bool canPerform(char_data * const &ch, const int_fast32_t &learned, std::string failMessage = std::string());
+
 
 /* New skill quest thingy. */
 struct skill_quest
@@ -192,73 +189,10 @@ void check_maxes(CHAR_DATA *ch);
 #define SPELL_ACID_BREATH            903
 #define SPELL_LIGHTNING_BREATH       904
 
-
-/*
- * Types of attacks.
- * Must be non-overlapping with spell/skill types,
- * but may be arbitrary beyond that.
- * If you change this, update strs_damage_types[] in const.cpp
- */
-#define TYPE_HIT                     1000
-#define TYPE_BLUDGEON                (TYPE_HIT +  1)
-#define TYPE_PIERCE                  (TYPE_HIT +  2)
-#define TYPE_SLASH                   (TYPE_HIT +  3)
-#define TYPE_WHIP                    (TYPE_HIT +  4)
-#define TYPE_CLAW                    (TYPE_HIT +  5)
-#define TYPE_BITE                    (TYPE_HIT +  6)
-#define TYPE_STING                   (TYPE_HIT +  7)
-#define TYPE_CRUSH                   (TYPE_HIT +  8)
-#define TYPE_SUFFERING               (TYPE_HIT +  9)
-#define TYPE_MAGIC                   (TYPE_HIT + 10)
-#define TYPE_CHARM                   (TYPE_HIT + 11)
-#define TYPE_FIRE                    (TYPE_HIT + 12)
-#define TYPE_ENERGY                  (TYPE_HIT + 13)
-#define TYPE_ACID                    (TYPE_HIT + 14)
-#define TYPE_POISON                  (TYPE_HIT + 15)
-#define TYPE_SLEEP                   (TYPE_HIT + 16)
-#define TYPE_COLD                    (TYPE_HIT + 17)
-#define TYPE_PARA                    (TYPE_HIT + 18)
-#define TYPE_KI                      (TYPE_HIT + 19)
-#define TYPE_SONG                    (TYPE_HIT + 20)
-#define TYPE_PHYSICAL_MAGIC          (TYPE_HIT + 21)
-#define TYPE_WATER                   (TYPE_HIT + 22)
-// If you change this, update strs_damage_types[] in const.cpp
-////////////////////////////////////////////////////////////////
-
 #define BASE_TIMERS 1100
 
 // NOTE  "skill" numbers 1500-1599 are reserved for innate skill abilities
 // These are in innate.h
-
-//////////////////////////////////////////////////////////////////////
-// NOTE 'spell' wear off timers are here.  Reserved messages 4000-4099
-// If you change this, update reserved[] in const.cpp
-//////////////////////////////////////////////////////////////////////
-#define RESERVED_BASE                4000
-#define SPELL_HOLY_AURA_TIMER        4000
-#define SPELL_NAT_SELECT_TIMER       4001
-#define SPELL_DIV_INT_TIMER	     4002
-#define SPELL_NO_CAST_TIMER	     4003
-#define SKILL_CM_TIMER               4004
-#define OBJ_CHAMPFLAG_TIMER          4005
-#define SKILL_TRIAGE_TIMER           4006
-#define SKILL_SMITE_TIMER            4007
-#define SKILL_MAKE_CAMP_TIMER        4008
-#define SKILL_LEADERSHIP_BONUS       4009
-#define SKILL_PERSEVERANCE_BONUS     4010
-#define SKILL_DECEIT_TIMER           4011
-#define SKILL_FEROCITY_TIMER         4012
-#define SKILL_TACTICS_TIMER          4013
-#define CONC_LOSS_FIXER              4014
-#define SKILL_ONSLAUGHT_TIMER        4015
-#define SPELL_KI_TRANS_TIMER         4016
-#define SKILL_BREW_TIMER             4017
-#define SKILL_SCRIBE_TIMER           4018
-#define SKILL_PROFESSION             4019
-#define OBJ_LILITHRING		     4020
-#define OBJ_DAWNSWORD		     4021
-#define OBJ_DURENDAL		     4022
-#define RESERVED_MAX                 4022
 
 ///////////////////////////////////////////////////////////////////////
 
