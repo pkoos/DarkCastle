@@ -2,12 +2,10 @@ VERSION := "$(shell git describe --tags --always --abbrev=8)"
 BUILD_TIME := "$(shell date +'%Y-%m-%d %H:%M:%S')"
 
 CXX = g++-11
-SRC_DIR=.
-SRCS = $(shell find $(SRC_DIR) -maxdepth 2 -name showplayerxp.cpp -prune -o -name '*.cpp' -print)
+SRCS = $(shell find . -maxdepth 2 -name showplayerxp.cpp -prune -o -name '*.cpp' -print)
 
 OBJS = $(SRCS:cpp=o)
-
-#FAST_FLAGS  = -02
+SPX_OBJS = DC.o interp.o Leaderboard.o vault.o utility.o const.o 
 DEBUG_FLAGS = -ggdb3
 PROF_FLAGS = $(DEBUG_FLAGS) -pg
 
@@ -17,22 +15,17 @@ IN_CXXFLAGS = -std=c++20 -Wall -Wno-write-strings -DLINUX -m32 -Iinclude -I/usr/
 
 BASENAME = dcastle# Base product name -- NO SPACES
 
-.SUFFIXES: .C
-
 default:
 	@echo "Type make followed by one of:"
 	@echo ""
 	@echo "debug	Make with debug libraries/flags"
-	@echo "cygwin     Make with debug libraries/flags on cygwin"
 	@echo "simple	Make with no libraries/flags"
-	@echo "fast	Make with optimization flags"
-	@echo "profile  Make with debug & profile libraries/flags"
 	@echo ""
 
 DC.o: DC.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -DVERSION=\"$(VERSION)\" -DBUILD_TIME=\"$(BUILD_TIME)\" -c -o $@ $<
 
-.C.o:
+%.C: %.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
 install:
@@ -53,36 +46,20 @@ install:
 
 all:	debug
 
-profile:
-	@$(MAKE) darkcastle PROGNAME=$(BASENAME).prof CXXFLAGS="$(IN_CXXFLAGS) $(PROF_FLAGS)"
-
 debug:
 	@$(MAKE) darkcastle PROGNAME=$(BASENAME) CXXFLAGS="$(IN_CXXFLAGS) $(DEBUG_FLAGS)"
 
-cygwin:
-	@$(MAKE) cygwin_darkcastle PROGNAME=$(BASENAME)_debug.exe CXXFLAGS="$(IN_CXXFLAGS) $(DEBUG_FLAGS) -fpack-struct=4"
-
 simple:
-	@$(MAKE) darkcastle PROGNAME=$(BASENAME).simple CXXFLAGS=$(IN_CXXFLAGS)
-
-fast:
-	@$(MAKE) darkcastle PROGNAME=$(BASENAME).fast CXXFLAGS="$(IN_CXXFLAGS)"
-#	$(FAST_FLAGS)"
+	@$(MAKE) darkcastle PROGNAME=$(BASENAME).simple CXXFLAGS="$(IN_CXXFLAGS)"
 
 darkcastle: $(OBJS)
-	$(CXX) $(CXXFLAGS) $(LIBDIRS) -o $(PROGNAME) $(OBJS) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $(PROGNAME) $(OBJS) $(LDFLAGS)
+
+showplayerxp: $(OBJS)
+	$(CXX) $(IN_CXXFLAGS) -o showplayerxp $(OBJS)
 
 cygwin_darkcastle: $(OBJS)
-	$(CXX) $(CXXFLAGS) $(LIBDIRS) -o $(PROGNAME) $(OBJS) $(CYGWIN_LDFLAGS)
-
-# Now for the library makefile calls
-#WizLib:
-#	@echo "Making libWiz.a.."
-#	@cd wizard; $(MAKE) CXX=$(CXX) CXXFLAGS="$(CXXFLAGS) -I../include"
-
-#ClassLib:
-#	@echo "Making libClass.a"
-#	@cd class; $(MAKE) CXX=$(CXX) CXXFLAGS="$(CXXFLAGS) -I../include"
+	$(CXX) $(CXXFLAGS) -o $(PROGNAME) $(OBJS) $(CYGWIN_LDFLAGS)
 
 clean:
 	/bin/rm -f `find . -name '*.[oa]' -print`
