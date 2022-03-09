@@ -153,7 +153,7 @@ bool malediction_res(CHAR_DATA *ch, CHAR_DATA *victim, int spell)
 
 bool can_heal(CHAR_DATA *ch, CHAR_DATA *victim, int spellnum)
 {
-  bool can_cast = TRUE;
+  bool can_cast = true;
 
   // You cannot heal an elemental from "conjure elemental"
   if (IS_NPC(victim) &&
@@ -162,26 +162,26 @@ bool can_heal(CHAR_DATA *ch, CHAR_DATA *victim, int spellnum)
        mob_index[victim->mobdata->nr].virt == 90 ||
        mob_index[victim->mobdata->nr].virt == 91)) {
     send_to_char("The heavy magics surrounding this being prevent healing.\r\n",ch);
-    return FALSE;
+    return false;
   }
 
   if (victim->getHP() > GET_MAX_HIT(victim)-10)
   {
     if (spellnum != SPELL_CURE_LIGHT)
-       can_cast = FALSE;
+       can_cast = false;
   } else if (victim->getHP() > GET_MAX_HIT(victim) - 25)
   {
      if (spellnum != SPELL_CURE_LIGHT && spellnum != SPELL_CURE_SERIOUS)
-        can_cast = FALSE;
+        can_cast = false;
   } else if (victim->getHP() > GET_MAX_HIT(victim) -50)
   {
      if (spellnum != SPELL_CURE_LIGHT && spellnum != SPELL_CURE_SERIOUS &&
            spellnum != SPELL_CURE_CRITIC)
-         can_cast = FALSE;
+         can_cast = false;
   }
 
 //  if (victim->getHP() > GET_MAX_HIT(victim)-5)
-//    can_cast = FALSE;
+//    can_cast = false;
 
   if (!can_cast)
   {
@@ -196,16 +196,16 @@ bool can_heal(CHAR_DATA *ch, CHAR_DATA *victim, int spellnum)
 bool resist_spell(int perc)
 {
   if (number(1,100) > perc)
-    return TRUE;
-  return FALSE;
+    return true;
+  return false;
 }
 
 bool resist_spell(CHAR_DATA *ch, int skill)
 {
   int perc = has_skill(ch,skill);
   if (number(1,100) > perc)
-    return TRUE;
-  return FALSE;
+    return true;
+  return false;
 }
 
 
@@ -1619,7 +1619,7 @@ int spell_teleport(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_dat
               IS_SET(zone_table[world[to_room].zone].zone_flags, ZONE_NO_TELEPORT) ||
               ( (IS_NPC(victim) && ISSET(victim->mobdata->actflags, ACT_STAY_NO_TOWN)) ? 
                     (IS_SET(zone_table[world[to_room].zone].zone_flags, ZONE_IS_TOWN)) :
-                    FALSE
+                    false
                ) ||
               ( IS_AFFECTED(victim, AFF_CHAMPION) && ( IS_SET(world[to_room].room_flags, CLAN_ROOM) ||
                 ( to_room >= 1900 && to_room <= 1999 ) )
@@ -2878,13 +2878,13 @@ int spell_poison(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_data 
 {
   struct affected_type af;
   int retval = eSUCCESS;
-  bool endy = FALSE; 
+  bool endy = false; 
 
   if (victim) 
   {
      if(IS_AFFECTED(victim, AFF_POISON)) {
         act("$N's insides are already being eaten away by poison!", ch, NULL, victim, TO_CHAR, 0);
-        endy = TRUE;
+        endy = true;
      }
      else if (IS_SET(victim->immune, ISR_POISON) || 
               malediction_res(ch, victim, SPELL_POISON) ||
@@ -2894,7 +2894,7 @@ int spell_poison(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_data 
          act("$N resists your attempt to poison $M!", ch, NULL, victim, TO_CHAR,0);
          act("$N resists $n's attempt to poison $M!", ch, NULL, victim, TO_ROOM,NOTVICT);
          act("You resist $n's attempt to poison you!",ch,NULL,victim,TO_VICT,0);
-         endy = TRUE;
+         endy = true;
      }
      set_cantquit(ch, victim);
      if (!endy) {
@@ -2903,7 +2903,7 @@ int spell_poison(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_data 
         af.modifier = IS_NPC(ch)?-123:(int)ch;
         af.location = APPLY_NONE;
         af.bitvector = AFF_POISON;
-        affect_join(victim, &af, FALSE, FALSE);
+        affect_join(victim, &af, false, false);
         send_to_char("You feel very sick.\n\r", victim);
         act("$N looks very sick.", ch,0,victim, TO_CHAR, 0);
      }
@@ -3134,7 +3134,7 @@ bool find_spell_shield(CHAR_DATA *ch, CHAR_DATA *victim)
     else
       act("$N is already protected by a shield of fire.", ch, 0, victim, TO_CHAR, INVIS_NULL);
 
-    return TRUE;
+    return true;
   }
 
   if (IS_AFFECTED(victim, AFF_LIGHTNINGSHIELD))
@@ -3144,7 +3144,7 @@ bool find_spell_shield(CHAR_DATA *ch, CHAR_DATA *victim)
     else
       act("$N is already protected by a shield of lightning.", ch, 0, victim, TO_CHAR, INVIS_NULL);
 
-    return TRUE;
+    return true;
   }
 
   if (IS_AFFECTED(victim, AFF_FROSTSHIELD))
@@ -3154,7 +3154,7 @@ bool find_spell_shield(CHAR_DATA *ch, CHAR_DATA *victim)
     else
       act("$N is already protected by a $1frost shield$R.", ch, 0, victim, TO_CHAR, INVIS_NULL);
 
-    return TRUE;
+    return true;
   }
 
   if (IS_AFFECTED(victim, AFF_ACID_SHIELD))
@@ -3164,10 +3164,10 @@ bool find_spell_shield(CHAR_DATA *ch, CHAR_DATA *victim)
     else
       act("$N is already protected by a shield of acid.", ch, 0, victim, TO_CHAR, INVIS_NULL);
 
-    return TRUE;
+    return true;
   }	
 	
-  return FALSE;
+  return false;
 }
 
 /* FIRESHIELD */
@@ -3716,7 +3716,7 @@ int spell_sleep(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_data *
 	af.modifier  = 1;
 	af.location  = APPLY_NONE;
 	af.bitvector = AFF_SLEEP;
-	affect_join(victim, &af, FALSE, FALSE);
+	affect_join(victim, &af, false, false);
 
 	if (GET_POS(victim)>POSITION_SLEEPING)
 	{
@@ -4388,7 +4388,7 @@ int spell_identify(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_dat
 
 	 }
 
-	 found = FALSE;
+	 found = false;
 
 	 for (i=0;i<obj->num_affects;i++) {
 		if ((obj->affected[i].location != APPLY_NONE) &&
@@ -4396,7 +4396,7 @@ int spell_identify(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_dat
 	{
 	 	if (!found) {
 			send_to_char("Can affect you as:\n\r", ch);
-			found = TRUE;
+			found = true;
 	 	}
 
 		if (obj->affected[i].location < 1000)
@@ -4570,7 +4570,7 @@ int spell_fire_breath(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_
 
 
     if ( (ch->in_room == tmp_victim->in_room) && (ch != tmp_victim) &&
-         (IS_NPC(ch) ? !IS_NPC(tmp_victim) : TRUE) ) // if i'm a mob, don't hurt other mobs
+         (IS_NPC(ch) ? !IS_NPC(tmp_victim) : true) ) // if i'm a mob, don't hurt other mobs
     {
       if(GET_DEX(tmp_victim) > number(1, 100)) // roll vs dex dodged
       {
@@ -5014,7 +5014,7 @@ int spell_know_alignment(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct o
 int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_data *obj, int skill)
 {
    int rots = 0;
-   int done = FALSE;
+   int done = false;
    int retval;
 
    if(obj && (unsigned int)obj > 100) /* Trying to dispel_minor an obj */
@@ -5122,14 +5122,14 @@ int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
                affect_from_char(victim, SPELL_INVISIBLE);
                send_to_char("You feel your invisibility dissipate.\n\r", victim);
                act("$n fades into existence.", victim, 0, 0, TO_ROOM, 0);
-               done = TRUE;
+               done = true;
             }
             if (IS_AFFECTED(victim, AFF_INVISIBLE))
             {
                REMBIT(victim->affected_by, AFF_INVISIBLE);
                send_to_char("You feel your invisibility dissipate.\n\r", victim);
                act("$n fades into existence.", victim, 0, 0, TO_ROOM, 0);
-               done = TRUE;
+               done = true;
             }
             break;
 
@@ -5139,7 +5139,7 @@ int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
                affect_from_char(victim, SPELL_DETECT_INVISIBLE);
                send_to_char("Your ability to detect invisible has been dispelled!\n\r", victim);
                act("$N's ability to detect invisible is removed.", ch,0,victim, TO_CHAR, 0);
-               done = TRUE;
+               done = true;
             }
             break;
 
@@ -5149,7 +5149,7 @@ int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
                affect_from_char(victim, SPELL_CAMOUFLAGE);
                send_to_char("Your camouflage has been dispelled!.\n\r", victim);
                act("$N's form is less obscured as you dispel $S camouflage.", ch,0,victim, TO_CHAR, 0);
-               done = TRUE;
+               done = true;
             }
             break;
 
@@ -5159,7 +5159,7 @@ int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
                affect_from_char(victim, SPELL_RESIST_ACID);
                send_to_char("The $2green$R in your skin is dispelled!\n\r", victim);
                act("$N's skin loses its $2green$R hue.", ch,0,victim, TO_CHAR, 0);
-               done = TRUE;
+               done = true;
             }
             break;
 
@@ -5169,7 +5169,7 @@ int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
                affect_from_char(victim, SPELL_RESIST_COLD);
                send_to_char("The $3blue$R in your skin is dispelled!\n\r", victim);
                act("$N's skin loses its $3blue$R hue.", ch,0,victim, TO_CHAR, 0);
-               done = TRUE;
+               done = true;
             }
             break;
 
@@ -5179,7 +5179,7 @@ int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
                affect_from_char(victim, SPELL_RESIST_FIRE);
                send_to_char("The $4red$R in your skin is dispelled!\n\r", victim);
                act("$N's skin loses its $4red$R hue.", ch,0,victim, TO_CHAR, 0);
-               done = TRUE;
+               done = true;
             }
             break;
 
@@ -5189,7 +5189,7 @@ int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
                affect_from_char(victim, SPELL_RESIST_ENERGY);
                send_to_char("The $5yellow$R in your skin is dispelled!\n\r", victim);
                act("$N's skin loses its $5yellow$R hue.", ch,0,victim, TO_CHAR, 0);
-               done = TRUE;
+               done = true;
             }
             break;
 
@@ -5199,7 +5199,7 @@ int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
                affect_from_char(victim, SPELL_BARKSKIN);
                send_to_char("Your woody has been dispelled!\n\r", victim);
                act("$N loses $S woody.", ch,0,victim, TO_CHAR, 0);
-               done = TRUE;
+               done = true;
             }
             break;
 
@@ -5209,7 +5209,7 @@ int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
                affect_from_char(victim, SPELL_STONE_SKIN);
                send_to_char("Your skin loses stone-like consistency.\n\r", victim);
                act("$N's looks like less of a stoner as $S skin returns to normal.", ch,0,victim, TO_CHAR, 0);
-               done = TRUE;
+               done = true;
             }
             break;
 
@@ -5219,14 +5219,14 @@ int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
                affect_from_char(victim, SPELL_FLY);
                send_to_char("You do not feel lighter than air anymore.\n\r", victim);
                act("$N is no longer lighter than air.", ch,0,victim, TO_CHAR, 0);
-               done = TRUE;
+               done = true;
             }
  	    if (IS_AFFECTED(victim, AFF_FLYING))
             {
                REMBIT(victim->affected_by, AFF_FLYING);
                send_to_char("You do not feel lighter than air anymore.\n\r", victim);
                act("$n drops to the ground, no longer lighter than air.", victim, 0, 0, TO_ROOM, 0);
-               done = TRUE;
+               done = true;
             }
             break;
  
@@ -5236,7 +5236,7 @@ int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
                affect_from_char(victim, SPELL_TRUE_SIGHT);
                send_to_char("You no longer see what is hidden.\n\r", victim);
                act("$N no longer sees what is hidden.", ch,0,victim, TO_CHAR, 0);
-               done = TRUE;
+               done = true;
             }
             break;
       
@@ -5246,14 +5246,14 @@ int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
                affect_from_char(victim, SPELL_WATER_BREATHING);
                send_to_char("You can no longer breathe underwater!\n\r", victim);
                act("$N can no longer breathe underwater!", ch,0,victim, TO_CHAR, 0);
-               done = TRUE;
+               done = true;
             }
             break;
          case 13:
 	   if (affected_by_spell(victim, SPELL_ARMOR))
 	   {
 	      affect_from_char(victim, SPELL_ARMOR);
-		done = TRUE;
+		done = true;
 		send_to_char("Your magical armour is dispelled!\r\n",victim);
 		act("$N's magical armour is dispelled!",ch,0,victim, TO_CHAR, 0);
 	   }
@@ -5262,7 +5262,7 @@ int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
 	   if (affected_by_spell(victim, SPELL_SHIELD))
 	   {
 		affect_from_char(victim, SPELL_SHIELD);
-		done = TRUE;
+		done = true;
 		send_to_char("Your force shield shimmers and fades away.\r\n",victim);
 		act("$N's force shield shimmers and fades away.",ch,0,victim, TO_CHAR, 0);
 	   }
@@ -5274,12 +5274,12 @@ int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
                affect_from_char(victim, SPELL_RESIST_MAGIC);
                send_to_char("The $B$7white$R in your skin is dispelled!\n\r", victim);
                act("$N's skin loses its $B$7white$R hue.", ch,0,victim, TO_CHAR, 0);
-               done = TRUE;
+               done = true;
             }
             break;
 
          default: send_to_char("Illegal Value send to switch in dispel_minor, tell a god.\r\n", ch);
-            done = TRUE;
+            done = true;
             break;
       } // of switch
    } // of while
@@ -5300,7 +5300,7 @@ int spell_dispel_minor(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
 int spell_dispel_magic(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_data *obj, int skill)
 {
    int rots = 0;
-   int done = FALSE;
+   int done = false;
    int retval;
    int spell = (int) obj;
 
@@ -5384,14 +5384,14 @@ int spell_dispel_magic(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
               affect_from_char(victim, SPELL_SANCTUARY);
 	      act("You don't feel so invulnerable anymore.", ch, 0, victim, TO_VICT, 0);
               act("The $B$7white glow$R around $n's body fades.", victim, 0, 0, TO_ROOM, 0);
-              done = TRUE;
+              done = true;
            }
            if (IS_AFFECTED(victim, AFF_SANCTUARY))
            {
               REMBIT(victim->affected_by, AFF_SANCTUARY);
               act("You don't feel so invulnerable anymore.", ch, 0,victim, TO_VICT, 0);
               act("The $B$7white glow$R around $n's body fades.", victim, 0, 0, TO_ROOM, 0);
-              done = TRUE;
+              done = true;
            }
            break;
 
@@ -5401,7 +5401,7 @@ int spell_dispel_magic(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
               affect_from_char(victim, SPELL_PROTECT_FROM_EVIL);
               act("Your protection from evil has been dispelled!", ch, 0,victim, TO_VICT, 0);
               act("The dark, $6pulsing$R aura surrounding $n has been dispelled!", victim, 0, 0, TO_ROOM, 0);
-              done = TRUE;
+              done = true;
            }
            break;
 
@@ -5411,7 +5411,7 @@ int spell_dispel_magic(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
               affect_from_char(victim, SPELL_HASTE);
               act("Your magically enhanced speed has been dispelled!", ch, 0,victim, TO_VICT, 0);
               act("$n's actions slow to their normal speed.", victim, 0, 0, TO_ROOM, 0);
-              done = TRUE;
+              done = true;
            }
            break;
 
@@ -5421,7 +5421,7 @@ int spell_dispel_magic(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
               affect_from_char(victim, SPELL_STONE_SHIELD);
               act("Your shield of swirling stones falls harmlessly to the ground!", ch, 0,victim, TO_VICT, 0);
               act("The shield of stones swirling about $n's body fall to the ground!", victim, 0, 0, TO_ROOM, 0);
-              done = TRUE;
+              done = true;
            }
            break;
 
@@ -5431,7 +5431,7 @@ int spell_dispel_magic(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
               affect_from_char(victim, SPELL_GREATER_STONE_SHIELD);
               act("Your shield of swirling stones falls harmlessly to the ground!", ch, 0,victim, TO_VICT, 0);
               act("The shield of stones swirling about $n's body falls to the ground!", victim, 0, 0, TO_ROOM, 0);
-              done = TRUE;
+              done = true;
            }
            break;
 
@@ -5441,7 +5441,7 @@ int spell_dispel_magic(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
 	      REMBIT(victim->affected_by, AFF_FROSTSHIELD);
               act("Your shield of $B$3frost$R melts into nothing!.", ch, 0,victim, TO_VICT, 0);
               act("The $B$3frost$R encompassing $n's body melts away.", victim, 0, 0, TO_ROOM, 0);
-              done = TRUE;
+              done = true;
            }
            break;
 
@@ -5451,14 +5451,14 @@ int spell_dispel_magic(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
               affect_from_char(victim, SPELL_LIGHTNING_SHIELD);
               act("Your crackling shield of $B$5electricity$R vanishes!", ch, 0,victim, TO_VICT, 0);
               act("The $B$5electricity$R crackling around $n's body fades away.", victim, 0, 0, TO_ROOM, 0);
-              done = TRUE;
+              done = true;
            }
            else if (IS_AFFECTED(victim, AFF_LIGHTNINGSHIELD))
            {
 	      REMBIT(victim->affected_by, AFF_LIGHTNINGSHIELD);
               act("Your crackling shield of $B$5electricity$R vanishes!", ch, 0,victim, TO_VICT, 0);
               act("The $B$5electricity$R crackling around $n's body fades away.", victim, 0, 0, TO_ROOM, 0);
-              done = TRUE;
+              done = true;
            }
            break;
 	 case 8: 
@@ -5467,14 +5467,14 @@ int spell_dispel_magic(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
               affect_from_char(victim, SPELL_FIRESHIELD);
               act("Your $B$4flames$R have been extinguished!", ch, 0,victim, TO_VICT, 0);
               act("The $B$4flames$R encompassing $n's body are extinguished!", victim, 0, 0, TO_ROOM, 0);
-              done = TRUE;
+              done = true;
            }
            if (IS_AFFECTED(victim, AFF_FIRESHIELD))
            {
               REMBIT(victim->affected_by, AFF_FIRESHIELD);
               act("Your $B$4flames$R have been extinguished!", ch, 0,victim, TO_VICT, 0);
               act("The $B$4flames$R encompassing $n's body are extinguished!", victim, 0, 0, TO_ROOM, 0);
-              done = TRUE;
+              done = true;
 	   }
            break;
 	 case 9: 
@@ -5483,14 +5483,14 @@ int spell_dispel_magic(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
               affect_from_char(victim, SPELL_ACID_SHIELD);
               act("Your shield of $B$2acid$R dissolves to nothing!", ch, 0,victim, TO_VICT, 0);
               act("The $B$2acid$R swirling about $n's body dissolves to nothing!", victim, 0, 0, TO_ROOM, 0);
-              done = TRUE;
+              done = true;
            }
            if (IS_AFFECTED(victim, AFF_ACID_SHIELD))
            {
               REMBIT(victim->affected_by, AFF_ACID_SHIELD);
               act("Your shield of $B$2acid$R dissolves to nothing!", ch, 0,victim, TO_VICT, 0);
               act("The $B$2acid$R swirling about $n's body dissolves to nothing!", victim, 0, 0, TO_ROOM, 0);
-              done = TRUE;
+              done = true;
            }
            break;
       
@@ -5500,12 +5500,12 @@ int spell_dispel_magic(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj
               affect_from_char(victim, SPELL_PROTECT_FROM_GOOD);
               act("Your protection from good has been dispelled!", ch, 0,victim, TO_VICT, 0);
               act("The light, $B$6pulsing$R aura surrounding $n has been dispelled!", victim, 0, 0, TO_ROOM, 0);
-              done = TRUE;
+              done = true;
            }
            break;
 
            default: send_to_char("Illegal Value sent to dispel_magic switch statement.  Tell a god.", ch);
-              done = TRUE;
+              done = true;
               break;
       } // end of switch
    } // end of while
@@ -9427,7 +9427,7 @@ int elemental_damage_bonus(int spell, char_data *ch)
   char_data *mst = ch->master?ch->master:ch;
   struct follow_type *f, *t;
   bool fire, ice, earth, energy;
-  fire = ice = earth = energy = FALSE;
+  fire = ice = earth = energy = false;
   for (f=mst->followers; f; f=f->next)
   {
     if (IS_NPC(f->follower) && f->follower->height == 77)
@@ -9435,13 +9435,13 @@ int elemental_damage_bonus(int spell, char_data *ch)
 	switch (mob_index[f->follower->mobdata->nr].virt)
 	{
 		case 88:
-		  fire = TRUE; break;
+		  fire = true; break;
 		case 89:
-		  ice = TRUE; break;
+		  ice = true; break;
 		case 90:
-		  energy = TRUE; break;
+		  energy = true; break;
 		case 91:
-		  earth = TRUE; break;
+		  earth = true; break;
 		default: break;
 	}
     } else {
@@ -9451,13 +9451,13 @@ int elemental_damage_bonus(int spell, char_data *ch)
 		switch (mob_index[t->follower->mobdata->nr].virt)
 		{
 			case 88:
-			  fire = TRUE; break;
+			  fire = true; break;
 			case 89:
-			  ice = TRUE; break;
+			  ice = true; break;
 			case 90:
-			  energy = TRUE; break;
+			  energy = true; break;
 			case 91:
-			  earth = TRUE; break;
+			  earth = true; break;
 			default: break;
 		}
 	    }
@@ -9501,7 +9501,7 @@ bool elemental_score(char_data *ch, int level)
   char_data *mst = ch->master?ch->master:ch;
   struct follow_type *f, *t;
   bool fire, ice, earth, energy;
-  fire = ice = earth = energy = FALSE;
+  fire = ice = earth = energy = false;
   // reuse of elemental damage function
   for (f=mst->followers; f; f=f->next)
   {
@@ -9511,13 +9511,13 @@ bool elemental_score(char_data *ch, int level)
 	switch (mob_index[f->follower->mobdata->nr].virt)
 	{
 		case 88:
-		  fire = TRUE; break;
+		  fire = true; break;
 		case 89:
-		  ice = TRUE; break;
+		  ice = true; break;
 		case 90:
-		  energy = TRUE; break;
+		  energy = true; break;
 		case 91:
-		  earth = TRUE; break;
+		  earth = true; break;
 		default: break;
 	}
     } else {
@@ -9528,13 +9528,13 @@ bool elemental_score(char_data *ch, int level)
 		switch (mob_index[t->follower->mobdata->nr].virt)
 		{
 			case 88:
-			  fire = TRUE; break;
+			  fire = true; break;
 			case 89:
-			  ice = TRUE; break;
+			  ice = true; break;
 			case 90:
-			  energy = TRUE; break;
+			  energy = true; break;
 			case 91:
-			  earth = TRUE; break;
+			  earth = true; break;
 			default: break;
 		}
 	    }
@@ -10296,7 +10296,7 @@ int spell_bee_sting(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_da
             af.modifier = -2;
             af.location = APPLY_STR;
             af.bitvector = AFF_POISON;
-            affect_join(victim, &af, FALSE, FALSE);
+            affect_join(victim, &af, false, false);
             send_to_char("You seem to have an allergic reaction to these bees!\n\r", victim);
             act("$N seems to be allergic to your bees!", ch, 0, victim,
 	        TO_CHAR, 0);
@@ -10463,7 +10463,7 @@ int cast_creeping_death(ubyte level, CHAR_DATA *ch, char *arg, int type, CHAR_DA
         af.modifier = IS_NPC(ch)?-123:(int)ch;
         af.location = APPLY_NONE;
         af.bitvector = AFF_POISON;
-        affect_join(victim, &af, FALSE, FALSE);
+        affect_join(victim, &af, false, false);
         send_to_char("The insect $2poison$R has gotten into your blood!\n\r", victim);
         act("$N has been $2poisoned$R by your insect swarm!", ch, 0, victim, TO_CHAR, 0);
      }
@@ -10526,7 +10526,7 @@ int spell_barkskin(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_dat
   af.location  = APPLY_AC;
   af.bitvector = -1;
 
-  affect_join(victim, &af, FALSE, FALSE);
+  affect_join(victim, &af, false, false);
 
   SET_BIT(victim->resist, ISR_SLASH);
 
@@ -10853,7 +10853,7 @@ int spell_eyes_of_the_owl(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct 
 	af.modifier  = 1+(skill/20);
 	af.location  = APPLY_WIS;
 	af.bitvector = AFF_INFRARED;
-	affect_join(victim, &af, FALSE, FALSE);
+	affect_join(victim, &af, false, false);
         redo_mana(victim);
   send_to_char("You feel your vision become much more acute.\n\r", victim);
   return eSUCCESS;
@@ -11072,7 +11072,7 @@ int cast_companion(ubyte level, CHAR_DATA *ch, char *arg, int type, CHAR_DATA *v
    af.location = 0;
    af.bitvector = AFF_CHARM;
    add_follower(mob, ch, 0);
-   affect_join(mob,&af, FALSE, FALSE);
+   affect_join(mob,&af, false, false);
 
    // The mob should have zero xp
    GET_EXP(mob) = 0;
@@ -11130,17 +11130,17 @@ int cast_companion(ubyte level, CHAR_DATA *ch, char *arg, int type, CHAR_DATA *v
    af.modifier = 0;
    af.location = 0;
    af.bitvector = -1;
-   affect_join(ch, &af, FALSE, FALSE);
+   affect_join(ch, &af, false, false);
    return eSUCCESS;
 }
 
 
 // Procedure for checking for/destroying spell components                       
 // Expects SPELL_xxx, the caster, and boolean as to destroy the components      
-// Returns TRUE for success and FALSE for failure                               
+// Returns TRUE for success and false for failure                               
                                                                                 
 int check_components(CHAR_DATA *ch, int destroy, int item_one = 0, 
-                     int item_two = 0, int item_three = 0, int item_four = 0, bool silent = FALSE)
+                     int item_two = 0, int item_three = 0, int item_four = 0, bool silent = false)
 {
   // We're going to assume you never have more than 4 items                       
   // for a spell, though you can easily change to take more                       
@@ -11152,11 +11152,11 @@ int check_components(CHAR_DATA *ch, int destroy, int item_one = 0,
   if(!ch)                                                                       
   {                                                                             
     log("No ch sent to check spell components", ANGEL, LOG_BUG);                
-    return FALSE;                                                               
+    return false;                                                               
   }                                                                             
 
   if(!ch->carrying)                                                             
-    return FALSE;                                                               
+    return false;                                                               
                                                                                 
   ptr_one = get_obj_in_list_num(real_object(item_one), ch->carrying);
   if(item_two)                                                                  
@@ -11170,15 +11170,15 @@ int check_components(CHAR_DATA *ch, int destroy, int item_one = 0,
 
   if(destroy)                                                                   
   {                                                                             
-    int gone = FALSE;
+    int gone = false;
     if(ptr_one)                                                                 
-      { obj_from_char(ptr_one); extract_obj(ptr_one); gone = TRUE;}                         
+      { obj_from_char(ptr_one); extract_obj(ptr_one); gone = true;}                         
     if(ptr_two)                                                                 
-      { obj_from_char(ptr_two); extract_obj(ptr_two); gone = TRUE;}                         
+      { obj_from_char(ptr_two); extract_obj(ptr_two); gone = true;}                         
     if(ptr_three)                                                               
-      { obj_from_char(ptr_three); extract_obj(ptr_three); gone = TRUE;}                     
+      { obj_from_char(ptr_three); extract_obj(ptr_three); gone = true;}                     
     if(ptr_four)                                                                
-      { obj_from_char(ptr_four); extract_obj(ptr_four); gone = TRUE;}
+      { obj_from_char(ptr_four); extract_obj(ptr_four); gone = true;}
     if(gone && !silent)
       send_to_char("The spell components poof into smoke.\r\n", ch);              
   }                                                                             
@@ -11199,7 +11199,7 @@ int check_components(CHAR_DATA *ch, int destroy, int item_one = 0,
 
   if(GET_LEVEL(ch) > ARCHANGEL && !all_ok && !silent) {
      send_to_char("You didn't have the right components, but yer a god:)\r\n", ch);
-     return TRUE;
+     return true;
   }
 
 return all_ok;                                                                  
@@ -11235,7 +11235,7 @@ int spell_create_golem(int level, CHAR_DATA *ch, CHAR_DATA *victim, struct obj_d
   }
 
   // check_special_room !
-  if(!check_components(ch, TRUE, 14905, 2256, 3181)) {
+  if(!check_components(ch, true, 14905, 2256, 3181)) {
      send_to_char("Without the proper spell components, your spell fizzles out and dies.\r\n", ch);
      act("$n's hands pop and sizzle with misused spell components.", ch, 0, 0, TO_ROOM, 0);
      return eFAILURE;
@@ -11593,7 +11593,7 @@ int choose_druid_familiar(char_data * ch, char * arg)
 
    if(!strcmp(buf, "chipmunk"))
    {
-     if(!check_components(ch, TRUE, 27800)) {
+     if(!check_components(ch, true, 27800)) {
        send_to_char("You remember at the last second that you don't have an acorn ready!\r\n", ch);
        act("$n's hands pop with unused mystical energy and $e seems confused.", ch, 0, 0, TO_ROOM, 0);
        return -1;
@@ -11602,7 +11602,7 @@ int choose_druid_familiar(char_data * ch, char * arg)
    }
   if (!strcmp(buf, "owl"))
   {
-     if(!check_components(ch, TRUE, 44)) {
+     if(!check_components(ch, true, 44)) {
        send_to_char("You remember at the last second that you don't have a dead mouse ready!\r\n", ch);
        act("$n's hands pop with unused mystical energy and $e seems confused.", ch, 0, 0, TO_ROOM, 0);
        return -1;
@@ -11622,7 +11622,7 @@ int choose_mage_familiar(char_data * ch, char * arg)
 
    if(!strcmp(buf, "imp")) 
    {
-     if(!check_components(ch, TRUE, 4)) {
+     if(!check_components(ch, true, 4)) {
        send_to_char("You remember at the last second that you don't have a batwing ready!\r\n", ch);
        act("$n's hands pop with unused mystical energy and $e seems confused.", ch, 0, 0, TO_ROOM, 0);
        return -1;
@@ -11631,7 +11631,7 @@ int choose_mage_familiar(char_data * ch, char * arg)
    }
    if(!strcmp(buf, "gremlin")) 
    {
-     if(!check_components(ch, TRUE, 43)) {
+     if(!check_components(ch, true, 43)) {
        send_to_char("You remember at the last second that you don't have a silver piece ready!\r\n", ch);
        act("$n's hands pop with unused mystical energy and $e seems confused.", ch, 0, 0, TO_ROOM, 0);
        return -1;
@@ -12926,7 +12926,7 @@ int spell_dismiss_familiar(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct
    }
 
    act("$n disappears in a flash of flame and shadow.", victim, 0, 0, TO_ROOM, INVIS_NULL);
-   extract_char(victim, TRUE);
+   extract_char(victim, true);
 	 
    GET_MANA(ch) += 51;
    if(GET_MANA(ch) > GET_MAX_MANA(ch))
@@ -12985,7 +12985,7 @@ int spell_dismiss_corpse(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struct o
    }
 
    act("$n begins to melt and dissolves into the ground... dust to dust.", victim, 0, 0, TO_ROOM, INVIS_NULL);
-   extract_char(victim, TRUE);
+   extract_char(victim, true);
 	 
    return eSUCCESS;
 }
@@ -13063,7 +13063,7 @@ int spell_release_elemental(ubyte level, CHAR_DATA *ch, CHAR_DATA *victim, struc
          break;
    }
 
-   extract_char(victim, TRUE);
+   extract_char(victim, true);
 	 
    return eSUCCESS;
 }

@@ -94,7 +94,7 @@ void addTimer(CHAR_DATA *ch, int spell, int ticks) {
 	af.location = 0;
 	af.bitvector = -1;
 	af.modifier = 0;
-	affect_join(ch, &af, TRUE, FALSE);
+	affect_join(ch, &af, true, false);
 	return;
 }
 //END TIMERS
@@ -103,8 +103,8 @@ bool is_wearing(CHAR_DATA *ch, OBJ_DATA *item) {
 	int i;
 	for (i = 0; i < MAX_WEAR; i++)
 		if (ch->equipment[i] == item)
-			return TRUE;
-	return FALSE;
+			return true;
+	return false;
 }
 
 // This grabs the first "word" (defined as group of alphaBETIC chars)
@@ -561,17 +561,17 @@ void add_set_stats(char_data *ch, obj_data *obj, int flag, int pos)
             continue;
           if (set_list[z].vnum[y] == 17325 && GET_CLASS(ch) != CLASS_MONK)
             continue;
-          bool found = FALSE, doublea = FALSE;
+          bool found = false, doublea = false;
           for (i = 0; i < MAX_WEAR; i++)
           {
             if (ch->equipment[i] && obj_index[ch->equipment[i]->item_number].virt == set_list[z].vnum[y])
             {
               if (y > 0 && !doublea && set_list[z].vnum[y] == set_list[z].vnum[y - 1])
               {
-                doublea = TRUE;
+                doublea = true;
                 continue;
               }
-              found = TRUE;
+              found = true;
               break;
             }
           }
@@ -826,14 +826,14 @@ void remove_set_stats(char_data *ch, obj_data *obj, int flag) {
 						continue;
 					if (set_list[z].vnum[y] == 17325 && GET_CLASS(ch) != CLASS_MONK)
 						continue;
-					bool found = FALSE, doublea = FALSE;
+					bool found = false, doublea = false;
 					for (i = 0; i < MAX_WEAR; i++) {
 						if (ch->equipment[i] && obj_index[ch->equipment[i]->item_number].virt == set_list[z].vnum[y]) {
 							if (y > 0 && !doublea && set_list[z].vnum[y] == set_list[z].vnum[y - 1]) {
-								doublea = TRUE;
+								doublea = true;
 								continue;
 							}
-							found = TRUE;
+							found = true;
 							break;
 						}
 					}
@@ -1505,24 +1505,24 @@ void affect_total(CHAR_DATA *ch) {
 	for (i = 0; i < MAX_WEAR; i++) {
 		if (ch->equipment[i])
 			for (j = 0; j < ch->equipment[i]->num_affects; j++)
-				affect_modify(ch, ch->equipment[i]->affected[j].location, ch->equipment[i]->affected[j].modifier, -1, FALSE);
+				affect_modify(ch, ch->equipment[i]->affected[j].location, ch->equipment[i]->affected[j].modifier, -1, false);
 	}
 	remove_totem_stats(ch);
 	for (af = ch->affected; af; af = tmp_af) {
-//        bool secFix = FALSE;
+//        bool secFix = false;
 		tmp_af = af->next;
-		affect_modify(ch, af->location, af->modifier, af->bitvector, FALSE);
+		affect_modify(ch, af->location, af->modifier, af->bitvector, false);
 	}
 
 	// add everything back
 	for (i = 0; i < MAX_WEAR; i++) {
 		if (ch->equipment[i])
 			for (j = 0; j < ch->equipment[i]->num_affects; j++)
-				affect_modify(ch, ch->equipment[i]->affected[j].location, ch->equipment[i]->affected[j].modifier, -1, TRUE);
+				affect_modify(ch, ch->equipment[i]->affected[j].location, ch->equipment[i]->affected[j].modifier, -1, true);
 	}
 	for (af = ch->affected; af; af = af->next) {
-//      bool secFix = FALSE;
-		affect_modify(ch, af->location, af->modifier, af->bitvector, TRUE);
+//      bool secFix = false;
+		affect_modify(ch, af->location, af->modifier, af->bitvector, true);
 	}
 	add_totem_stats(ch);
 	if (!already)
@@ -1553,7 +1553,7 @@ void affect_to_char(CHAR_DATA *ch, struct affected_type *af, int32 duration_type
 	affected_alloc->next = ch->affected;
 	ch->affected = affected_alloc;
 
-	affect_modify(ch, af->location, af->modifier, af->bitvector, TRUE);
+	affect_modify(ch, af->location, af->modifier, af->bitvector, true);
 }
 
 /* Remove an affected_type structure from a char (called when duration
@@ -1563,7 +1563,7 @@ void affect_remove(CHAR_DATA *ch, struct affected_type *af, int flags) {
 	struct affected_type *hjp;
 	char buf[200];
 	short dir;
-	bool char_died = FALSE;
+	bool char_died = false;
 	struct follow_type *f, *next_f;
 
 	if (!ch->affected)
@@ -1572,7 +1572,7 @@ void affect_remove(CHAR_DATA *ch, struct affected_type *af, int flags) {
 	assert(ch);
 	assert(ch->affected);
 
-	affect_modify(ch, af->location, af->modifier, af->bitvector, FALSE);
+	affect_modify(ch, af->location, af->modifier, af->bitvector, false);
 
 	/* remove structure *af from linked list */
 
@@ -1616,7 +1616,7 @@ void affect_remove(CHAR_DATA *ch, struct affected_type *af, int flags) {
 						|| (IS_SET(world[ch->in_room].room_flags, FALL_EAST) && (dir = 1)) || (IS_SET(world[ch->in_room].room_flags, FALL_WEST) && (dir = 3))
 						|| (IS_SET(world[ch->in_room].room_flags, FALL_SOUTH) && (dir = 2)) || (IS_SET(world[ch->in_room].room_flags, FALL_NORTH) && (dir = 0)))) {
 			if (do_fall(ch, dir) & eCH_DIED)
-				char_died = TRUE;
+				char_died = true;
 		}
 		break;
 	case SKILL_INSANE_CHANT:
@@ -1795,7 +1795,7 @@ void affect_remove(CHAR_DATA *ch, struct affected_type *af, int flags) {
 			send_to_char("The water rushes into your lungs and the light fades with your oxygen.\n\r"
 					"You have been KILLED!!!\n\r", ch);
 			fight_kill(NULL, ch, TYPE_RAW_KILL, 0);
-			char_died = TRUE;
+			char_died = true;
 #else
 			act("$n begins to choke on the water, a look of panic filling $s eyes as it fills $s lungs.\n\r", ch, 0, 0, TO_ROOM, 0);
 			send_to_char("The water rushes into your lungs and the light fades with your oxygen.\n\r", ch);
@@ -2008,10 +2008,10 @@ void affect_from_char(CHAR_DATA *ch, int skill, int flags) {
 		afc = hjp->next;
 		if (hjp->type == (unsigned) skill)
 			affect_remove(ch, hjp, flags);
-		bool a = TRUE;
+		bool a = true;
 		for (recheck = ch->affected; recheck; recheck = recheck->next)
 			if (recheck == afc)
-				a = FALSE;
+				a = false;
 		if (a)
 			break;
 	}
@@ -2058,7 +2058,7 @@ affected_type * affected_by_random(CHAR_DATA *ch) {
 
 void affect_join(CHAR_DATA *ch, struct affected_type *af, bool avg_dur, bool avg_mod) {
 	struct affected_type *hjp;
-	bool found = FALSE;
+	bool found = false;
 
 	for (hjp = ch->affected; !found && hjp; hjp = hjp->next) {
 		if (hjp->type == af->type) {
@@ -2073,7 +2073,7 @@ void affect_join(CHAR_DATA *ch, struct affected_type *af, bool avg_dur, bool avg
 
 			affect_remove(ch, hjp, SUPPRESS_ALL);
 			affect_to_char(ch, af);
-			found = TRUE;
+			found = true;
 		}
 	}
 	if (!found)
@@ -2088,7 +2088,7 @@ int char_from_room(CHAR_DATA *ch) {
 /* Returns 0 on failure, non-zero otherwise */
 int char_from_room(CHAR_DATA *ch, bool stop_all_fighting) {
 	CHAR_DATA *i, *fighter, *next_char;
-	bool Other = FALSE, More = FALSE, kimore = FALSE;
+	bool Other = false, More = false, kimore = false;
 
 	if (ch->in_room == NOWHERE) {
 		return (0);
@@ -2122,11 +2122,11 @@ int char_from_room(CHAR_DATA *ch, bool stop_all_fighting) {
 //	debugpoint();
 	for (i = world[ch->in_room].people; i; i = i->next_in_room) {
 		if (IS_NPC(i) && ISSET(i->mobdata->actflags, ACT_NOMAGIC))
-			Other = TRUE;
+			Other = true;
 		if (IS_NPC(i) && ISSET(i->mobdata->actflags, ACT_NOTRACK))
-			More = TRUE;
+			More = true;
 		if (IS_NPC(i) && ISSET(i->mobdata->actflags, ACT_NOKI))
-			kimore = TRUE;
+			kimore = true;
 	}
 	if (!IS_NPC(ch)) // player
 		zone_table[world[ch->in_room].zone].players--;
@@ -2159,14 +2159,14 @@ bool is_hiding(CHAR_DATA *ch, CHAR_DATA *vict) {
 		return (number(1, 101) > 70);
 
 	if (!has_skill(ch, SKILL_HIDE))
-		return FALSE;
+		return false;
 	if (ch->in_room != vict->in_room)
 		return skill_success(ch, vict, SKILL_HIDE);
 
 	int i;
 	for (i = 0; i < MAX_HIDE; i++)
 		if (ch->pcdata->hiding_from[i] == vict && ch->pcdata->hide[i])
-			return TRUE;
+			return true;
 	return skill_success(ch, vict, SKILL_HIDE);
 }
 
@@ -2203,10 +2203,10 @@ int char_to_room(CHAR_DATA *ch, int room, bool stop_all_fighting)
 			if (number(1, 101) > a) // Failed.
 					{
 				ch->pcdata->hiding_from[i] = temp;
-				ch->pcdata->hide[i++] = FALSE;
+				ch->pcdata->hide[i++] = false;
 			} else {
 				ch->pcdata->hiding_from[i] = temp;
-				ch->pcdata->hide[i++] = TRUE;
+				ch->pcdata->hide[i++] = true;
 			}
 		}
 	}
@@ -2216,10 +2216,10 @@ int char_to_room(CHAR_DATA *ch, int room, bool stop_all_fighting)
 				if (temp->pcdata->hiding_from[i] == NULL || temp->pcdata->hiding_from[i] == ch) {
 					if (number(1, 101) > has_skill(temp, SKILL_HIDE)) {
 						temp->pcdata->hiding_from[i] = ch;
-						temp->pcdata->hide[i] = FALSE;
+						temp->pcdata->hide[i] = false;
 					} else {
 						temp->pcdata->hiding_from[i] = ch;
-						temp->pcdata->hide[i] = TRUE;
+						temp->pcdata->hide[i] = true;
 					}
 				}
 			}
@@ -2385,7 +2385,7 @@ int equip_char(CHAR_DATA *ch, struct obj_data *obj, int pos, int flag) {
 		GET_AC(ch) -= apply_ac(ch, pos);
 
 	for (j = 0; ch->equipment[pos] && j < ch->equipment[pos]->num_affects; j++)
-		affect_modify(ch, obj->affected[j].location, obj->affected[j].modifier, -1, TRUE, flag);
+		affect_modify(ch, obj->affected[j].location, obj->affected[j].modifier, -1, true, flag);
 
 	add_set_stats(ch, obj, flag, pos);
 
@@ -2477,7 +2477,7 @@ struct obj_data *unequip_char(CHAR_DATA *ch, int pos, int flag) {
 	}
 
 	for (j = 0; j < obj->num_affects; j++)
-		affect_modify(ch, obj->affected[j].location, obj->affected[j].modifier, -1, FALSE);
+		affect_modify(ch, obj->affected[j].location, obj->affected[j].modifier, -1, false);
 	redo_hitpoints(ch);
 	redo_mana(ch);
 	redo_ki(ch);
@@ -3322,7 +3322,7 @@ void extract_char(CHAR_DATA *ch, bool pull, Trace t) {
 	struct descriptor_data *t_desc;
 	int l, was_in;
 	/*CHAR_DATA *i;*/
-	bool isGolem = FALSE;
+	bool isGolem = false;
 
 	struct obj_data *i;
 	CHAR_DATA *omast = NULL;
@@ -3349,11 +3349,11 @@ void extract_char(CHAR_DATA *ch, bool pull, Trace t) {
 		if (ch->pcdata->golem) {
 			if (ch->pcdata->golem->in_room)
 				release_message(ch->pcdata->golem);
-			extract_char(ch->pcdata->golem, FALSE);
+			extract_char(ch->pcdata->golem, false);
 		}
 	}
 	if (IS_NPC(ch) && mob_index[ch->mobdata->nr].virt == 8) {
-		isGolem = TRUE;
+		isGolem = true;
 		if (pull) {
 			if (ch->level > 1)
 				ch->level--;
@@ -4152,7 +4152,7 @@ int generic_find(const char *arg, int bitvector, CHAR_DATA *ch, CHAR_DATA **tar_
 	char name[256] = { '\0' };
 	bool found;
 
-	found = FALSE;
+	found = false;
 
 	/* Eliminate spaces and "ignore" words */
 	while (*arg && !found) {
@@ -4164,8 +4164,8 @@ int generic_find(const char *arg, int bitvector, CHAR_DATA *ch, CHAR_DATA **tar_
 			;
 		name[i] = 0;
 		arg += i;
-		if (search_block(name, ignore, TRUE) > -1 || !IS_SET(bitvector, FIND_CHAR_ROOM))
-			found = TRUE;
+		if (search_block(name, ignore, true) > -1 || !IS_SET(bitvector, FIND_CHAR_ROOM))
+			found = true;
 
 	}
 
@@ -4245,7 +4245,7 @@ int generic_find(const char *arg, int bitvector, CHAR_DATA *ch, CHAR_DATA **tar_
 	}
 
 	if (IS_SET(bitvector, FIND_OBJ_EQUIP)) {
-		for (found = FALSE, i = 0; i < MAX_WEAR && !found; i++)
+		for (found = false, i = 0; i < MAX_WEAR && !found; i++)
 		{
 			if (ch->equipment[i] && isname(name, ch->equipment[i]->name) && CAN_SEE_OBJ(ch, ch->equipment[i])) {
 				*tar_obj = ch->equipment[i];
@@ -4505,10 +4505,10 @@ bool charge_moves(char_data *ch, int skill, double modifier) {
 
 	if (GET_MOVE(ch) < amt) {
 		send_to_char("You do not have enough movement to do this!\r\n", ch);
-		return FALSE;
+		return false;
 	}
 	GET_MOVE(ch) -= amt;
-	return TRUE;
+	return true;
 }
 
 int find_skill_num(char * name) {

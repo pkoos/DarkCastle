@@ -38,7 +38,7 @@ extern Leaderboard leaderboard;
 
 
 CVoteData *DCVote;
-bool verbose_mode = FALSE;
+bool verbose_mode = false;
 
 struct obj_data *my_obj_store_to_char(CHAR_DATA *ch, FILE *fpsave, struct obj_data *last_cont)
 {
@@ -281,7 +281,7 @@ bool my_load_char_obj(struct descriptor_data *d, const char *name)
   struct char_data *ch;
 
   if (!name || !strcmp(name, ""))
-    return FALSE;
+    return false;
 
 #ifdef LEAK_CHECK
   ch = (CHAR_DATA *)calloc(1, sizeof(CHAR_DATA));
@@ -301,12 +301,12 @@ bool my_load_char_obj(struct descriptor_data *d, const char *name)
   sprintf(strsave, "%s", name);
 
   if ((fpsave = dc_fopen(strsave, "rb")) == NULL)
-    return FALSE;
+    return false;
 
   if (fread(&uchar, sizeof(uchar), 1, fpsave) == 0)
   {
     load_char_obj_error(fpsave, strsave);
-    return FALSE;
+    return false;
   }
 
   reset_char(ch);
@@ -342,7 +342,7 @@ bool my_load_char_obj(struct descriptor_data *d, const char *name)
     dc_fclose(fpsave);
 
   DC::instance().character_list.insert(ch);
-  return TRUE;
+  return true;
 }
 
 bool test_rolls(uint8_t total)

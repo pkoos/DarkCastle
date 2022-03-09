@@ -8,7 +8,7 @@
 */
 #include "obj.h" // WIELD, SECOND_WIELD
 #include "character.h"
-#include "utility.h" // FALSE
+#include "utility.h" // false
 #ifdef NeXT
 #ifndef bool
 #define bool int
@@ -103,7 +103,7 @@ int second_attack(CHAR_DATA *ch);
 int third_attack(CHAR_DATA *ch);
 int fourth_attack(CHAR_DATA *ch);
 int second_wield(CHAR_DATA *ch);
-void set_cantquit(CHAR_DATA *, CHAR_DATA *, bool = FALSE);
+void set_cantquit(CHAR_DATA *, CHAR_DATA *, bool = false);
 int is_pkill(CHAR_DATA *ch, CHAR_DATA *vict);
 void raw_kill(CHAR_DATA *ch, CHAR_DATA *victim);
 void do_pkill(CHAR_DATA *ch, CHAR_DATA *victim, int type, bool vict_is_attacker = false);

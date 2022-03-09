@@ -87,7 +87,7 @@ int do_force(struct char_data *ch, char *argument, int cmd)
         act(buf,  ch, 0, vict, TO_VICT, 0);
       }
       else {
-        if(ch->pcdata->stealth == FALSE) {
+        if(ch->pcdata->stealth == false) {
           sprintf(buf, "$n has forced you to '%s'.", to_force);
           act(buf,  ch, 0, vict, TO_VICT, 0);
           send_to_char("Ok.\n\r", ch);
@@ -112,7 +112,7 @@ int do_force(struct char_data *ch, char *argument, int cmd)
          if(GET_LEVEL(ch) <= GET_LEVEL(vict))
            continue;
          else {
-           if(ch->pcdata->stealth == FALSE || GET_LEVEL(ch) < 109) {
+           if(ch->pcdata->stealth == false || GET_LEVEL(ch) < 109) {
              sprintf(buf, "$n has forced you to '%s'.", to_force);
              act(buf,  ch, 0, vict, TO_VICT, 0);
            }

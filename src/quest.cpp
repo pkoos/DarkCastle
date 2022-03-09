@@ -89,7 +89,7 @@ int load_quests(void)
       quest->reward = fread_int(fl, 0, INT_MAX);
       quest->cost   = fread_int(fl, 0, INT_MAX);
       quest->brownie= fread_int(fl, 0, INT_MAX);
-      quest->active = FALSE;
+      quest->active = false;
 
       quest_list.push_back(quest);
    }
@@ -190,7 +190,7 @@ int do_add_quest(CHAR_DATA *ch, char *name)
    quest->mobnum = QUEST_MASTER;
    quest->timer = 0;
    quest->reward = 0;
-   quest->active = FALSE;
+   quest->active = false;
    quest->cost = 0;
 
    if (quest_list.empty() == true)
@@ -270,36 +270,36 @@ void show_quest_info(CHAR_DATA *ch, int num)
 
 bool check_available_quest(CHAR_DATA *ch, struct quest_info *quest)
 {
-   if(!quest) return FALSE;
+   if(!quest) return false;
 
    if(GET_LEVEL(ch) >= quest->level && !check_quest_current(ch, quest->number)
          && !check_quest_complete(ch, quest->number) && !(quest->active) )
-      return TRUE;
+      return true;
 
-   return FALSE;
+   return false;
 }
 
 bool check_quest_current(CHAR_DATA *ch, int number)
 {
    for(int i = 0;i<QUEST_MAX;i++)
       if(ch->pcdata->quest_current[i] == number)
-         return TRUE;
-   return FALSE;
+         return true;
+   return false;
 }
 
 bool check_quest_cancel(CHAR_DATA *ch, int number)
 {
    for(int i = 0;i<QUEST_CANCEL;i++)
       if(ch->pcdata->quest_cancel[i] == number)
-         return TRUE;
-   return FALSE;
+         return true;
+   return false;
 }
 
 bool check_quest_complete(CHAR_DATA *ch, int number)
 {
    if(ISSET(ch->pcdata->quest_complete, number))
-         return TRUE;
-   return FALSE;
+         return true;
+   return false;
 }
 
 int get_quest_price(struct quest_info *quest)
@@ -577,7 +577,7 @@ int start_quest(CHAR_DATA *ch, struct quest_info *quest)
    ch->pcdata->quest_current[count] = quest->number;     
    ch->pcdata->quest_current_ticksleft[count] = quest->timer;
    if(quest->number)
-    quest->active = TRUE;
+    quest->active = true;
    count = 0;
    while(count < QUEST_CANCEL) {
       if(ch->pcdata->quest_cancel[count] == quest->number) {
@@ -649,7 +649,7 @@ int complete_quest(CHAR_DATA *ch, struct quest_info *quest)
    ch->pcdata->quest_current_ticksleft[count] = 0;
    if(quest->number) //quest 0 is recurring auto quest
     SETBIT(ch->pcdata->quest_complete, quest->number);
-   quest->active = FALSE;
+   quest->active = false;
    
    logf(IMMORTAL, LOG_QUEST, "%s completed quest %d (%s) and won %d qpoints.", GET_NAME(ch), quest->number, quest->name, quest->reward);
 
@@ -674,7 +674,7 @@ int stop_current_quest(CHAR_DATA *ch, struct quest_info *quest)
    }
    ch->pcdata->quest_current[count] = -1;
    ch->pcdata->quest_current_ticksleft[count] = 0;
-   quest->active = FALSE;
+   quest->active = false;
    sprintf(buf, "q%d", quest->number);
    obj = get_obj(buf);
    if(obj) extract_obj(obj);
@@ -1312,7 +1312,7 @@ int quest_vendor(struct char_data *ch, struct obj_data *obj, int cmd, char *arg,
       for (int qvnum=27975; qvnum < 28000; qvnum++) {
 	  rnum = real_object(qvnum);
 	  if (rnum) {
-	      char *buffer = gl_item((OBJ_DATA*)obj_index[rnum].item, n++, ch, FALSE);
+	      char *buffer = gl_item((OBJ_DATA*)obj_index[rnum].item, n++, ch, false);
 	      send_to_char(buffer, ch);
 	      dc_free(buffer);
 	  }
@@ -1320,7 +1320,7 @@ int quest_vendor(struct char_data *ch, struct obj_data *obj, int cmd, char *arg,
       for (int qvnum=3124; qvnum <= 3127; qvnum++) {
 	  rnum = real_object(qvnum);
 	  if (rnum) {
-	      char *buffer = gl_item((OBJ_DATA*)obj_index[rnum].item, n++, ch, FALSE);
+	      char *buffer = gl_item((OBJ_DATA*)obj_index[rnum].item, n++, ch, false);
 	      send_to_char(buffer, ch);
 	      dc_free(buffer);
 	  }

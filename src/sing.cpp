@@ -431,7 +431,7 @@ int do_sing(CHAR_DATA *ch, char *arg, int cmd) {
 			; /* skip spaces */
 
 		/* Locate targets */
-		target_ok = FALSE;
+		target_ok = false;
 
 		one_argument(argument, name);
 
@@ -439,38 +439,38 @@ int do_sing(CHAR_DATA *ch, char *arg, int cmd) {
 			if (*name) {
 				if (IS_SET(song_info[spl].targets, TAR_CHAR_ROOM))
 					if ((tar_char = get_char_room_vis(ch, name)) != NULL)
-						target_ok = TRUE;
+						target_ok = true;
 
 				if (!target_ok && IS_SET(song_info[spl].targets, TAR_CHAR_WORLD))
 					if ((tar_char = get_char_vis(ch, name)) != NULL)
-						target_ok = TRUE;
+						target_ok = true;
 
 				if (!target_ok && IS_SET(song_info[spl].targets, TAR_OBJ_INV))
 					if ((tar_obj = get_obj_in_list_vis(ch, name, ch->carrying)) != NULL)
-						target_ok = TRUE;
+						target_ok = true;
 
 				if (!target_ok && IS_SET(song_info[spl].targets, TAR_OBJ_ROOM)) {
 					tar_obj = get_obj_in_list_vis(ch, name, world[ch->in_room].contents);
 					if (tar_obj != NULL)
-						target_ok = TRUE;
+						target_ok = true;
 				}
 
 				if (!target_ok && IS_SET(song_info[spl].targets, TAR_OBJ_EQUIP)) {
 					for (int i = 0; i < MAX_WEAR && !target_ok; i++)
 						if (ch->equipment[i] && str_cmp(name, ch->equipment[i]->name) == 0) {
 							tar_obj = ch->equipment[i];
-							target_ok = TRUE;
+							target_ok = true;
 						}
 				}
 
 				if (!target_ok && IS_SET(song_info[spl].targets, TAR_OBJ_WORLD))
 					if ((tar_obj = get_obj_vis(ch, name)) != NULL)
-						target_ok = TRUE;
+						target_ok = true;
 
 				if (!target_ok && IS_SET(song_info[spl].targets, TAR_SELF_ONLY))
 					if (str_cmp(GET_NAME(ch), name) == 0) {
 						tar_char = ch;
-						target_ok = TRUE;
+						target_ok = true;
 					} // of !target_ok
 			} // of *name
 
@@ -480,22 +480,22 @@ int do_sing(CHAR_DATA *ch, char *arg, int cmd) {
 					if (ch->fighting)
 						if ((ch->fighting)->in_room == ch->in_room) {
 							tar_char = ch->fighting;
-							target_ok = TRUE;
+							target_ok = true;
 						}
 				if (!target_ok && IS_SET(song_info[spl].targets, TAR_SELF_ONLY)) {
 					tar_char = ch;
-					target_ok = TRUE;
+					target_ok = true;
 				}
 			} // of !*name
 
 			else
-				target_ok = FALSE;
+				target_ok = false;
 		}
 
 		if (IS_SET(song_info[spl].targets, TAR_IGNORE))
-			target_ok = TRUE;
+			target_ok = true;
 
-		if (target_ok != TRUE) {
+		if (target_ok != true) {
 			if (*name) {
 				if (IS_SET(song_info[spl].targets, TAR_CHAR_ROOM))
 					send_to_char("Nobody here by that name.\n\r", ch);
@@ -600,14 +600,14 @@ int do_sing(CHAR_DATA *ch, char *arg, int cmd) {
 						send_to_char("You stop orchestrating all of your music.\r\n", ch);
 					else if (ch->songs.size() > 1 && *name) {
 						int hold = old_search_block(name, 0, strlen(name), songs, 0);
-						bool found = FALSE;
+						bool found = false;
 						if (--hold < 0) {
 							send_to_char("You do not know of that song.\r\n", ch);
 							return eFAILURE;
 						}
 						for (i = ch->songs.begin(); i != ch->songs.end(); ++i)
 							if ((*i).song_number == hold) {
-								found = TRUE;
+								found = true;
 								break;
 							}
 						if (!found) {
@@ -2552,18 +2552,18 @@ int execute_song_dischordant_dirge(ubyte level, CHAR_DATA *ch, char *arg, CHAR_D
 		act("$n shatters $N's bond with this realm, and the creature vanishes.", ch, 0, target, TO_ROOM, NOTVICT);
 		act("At your dirge's completion, $N vanishes.", ch, 0, target, TO_CHAR, 0);
 		make_dust(target);
-		extract_char(target, TRUE);
+		extract_char(target, true);
 		return eSUCCESS;
 	}
 	if (type == 4) {
 		act("$n shatters!", target, 0, 0, TO_ROOM, 0);
 		make_dust(target);
-		extract_char(target, FALSE);
+		extract_char(target, false);
 		return eSUCCESS;
 	} else if (type == 2) {
 		act("$n's mind is set free, and the body falls onto the ground", target, 0, 0, TO_ROOM, 0);
 		make_dust(target);
-		extract_char(target, TRUE);
+		extract_char(target, true);
 		return eSUCCESS;
 	}
 	affect_from_char(target, SPELL_CHARM_PERSON);

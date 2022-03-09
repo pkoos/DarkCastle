@@ -178,7 +178,7 @@ void object_activity(uint64_t pulse_type)
     } else if (obj->obj_flags.type_flag == ITEM_MEGAPHONE && obj->ex_description && obj->obj_flags.value[0]-- == 0)
     {
       obj->obj_flags.value[0] = ((obj_data*) obj_index[item_number].item)->obj_flags.value[1];
-      send_to_room(obj->ex_description->description, obj->in_room, TRUE);
+      send_to_room(obj->ex_description->description, obj->in_room, true);
     } else
     {
       int retval = 0;
@@ -261,13 +261,13 @@ int do_quaff(struct char_data *ch, char *argument, int cmd)
   int is_mob = IS_MOB(ch);
   int lvl;
 
-  equipped = FALSE;
+  equipped = false;
   int pos = -1;
   one_argument(argument,buf);
 
   if (!(temp = get_obj_in_list_vis(ch,buf,ch->carrying))) {
     temp = ch->equipment[HOLD];
-    equipped = TRUE;
+    equipped = true;
 	pos = HOLD;
     if ((temp==0) || !isname(buf, temp->name))
     {
@@ -275,9 +275,9 @@ int do_quaff(struct char_data *ch, char *argument, int cmd)
 	pos = HOLD2;
       if ((temp==0) || !isname(buf, temp->name))
       {
-        equipped = FALSE;
+        equipped = false;
         pos = -2;
-        if(!(temp = get_obj_in_list_vis(ch,buf,ch->carrying,TRUE))) {
+        if(!(temp = get_obj_in_list_vis(ch,buf,ch->carrying,true))) {
           act("You do not have that item.",ch,0,0,TO_CHAR, 0);
           return eFAILURE;
         }
@@ -358,7 +358,7 @@ int do_recite(struct char_data *ch, char *argument, int cmd)
        send_to_char("Your magic is muffled by greater beings.\n\r", ch);
        return eFAILURE; 
     }
-    equipped = FALSE;
+    equipped = false;
     obj = 0;
     victim = 0;
     int pos = -1;
@@ -366,7 +366,7 @@ int do_recite(struct char_data *ch, char *argument, int cmd)
 
   if (!(scroll = get_obj_in_list_vis(ch,buf,ch->carrying))) {
     scroll = ch->equipment[HOLD];
-    equipped = TRUE;
+    equipped = true;
 	pos = HOLD;
     if ((scroll==0) || !isname(buf, scroll->name))
     {
@@ -505,7 +505,7 @@ void set_exit_trap(struct char_data *ch, struct obj_data *obj, char * arg)
 
 #define MORTAR_ROUND_OBJECT_ID      113
 
-// Return FALSE if there was a command problem
+// Return false if there was a command problem
 // Return TRUE if it went off
 bool set_utility_mortar(struct char_data *ch, struct obj_data *obj, char *arg)
 {
@@ -519,7 +519,7 @@ bool set_utility_mortar(struct char_data *ch, struct obj_data *obj, char *arg)
   one_argument(arg, direct);
   if(!arg) {
     send_to_char("Set it off in which direction?\r\n", ch);
-    return FALSE;
+    return false;
   }
 
   if(direct[0] == 'n') dir = 0;
@@ -530,16 +530,16 @@ bool set_utility_mortar(struct char_data *ch, struct obj_data *obj, char *arg)
   else if(direct[0] == 'd') dir = 5;
   else {
     send_to_char("Set it off in which direction?\n\r", ch);
-    return FALSE;
+    return false;
   }
 
   if( IS_SET(world[ch->in_room].room_flags, SAFE) ) {
     send_to_char("In the rear with the gear huh?  Maybe use this somewhere in the field.\r\n", ch);
-    return FALSE;
+    return false;
   }
   if( CAN_GO(ch, dir) && IS_SET( world[ world[ch->in_room].dir_option[dir]->to_room ].room_flags, SAFE) ) {
     send_to_char("Firing it into a safe room seems wasteful.\r\n", ch);
-    return FALSE;
+    return false;
   }
 
   // make a new item
@@ -566,7 +566,7 @@ bool set_utility_mortar(struct char_data *ch, struct obj_data *obj, char *arg)
     obj_to_room(trap_obj, world[ch->in_room].dir_option[dir]->to_room);
   }
 
-  return TRUE;
+  return true;
 }
 
 
@@ -964,7 +964,7 @@ int do_drink(struct char_data *ch, char *argument, int cmd)
              af.modifier = 0;
              af.location = APPLY_NONE;
              af.bitvector = AFF_POISON;
-             affect_join(ch,&af, FALSE, FALSE);
+             affect_join(ch,&af, false, false);
           }
         }
         
@@ -1045,7 +1045,7 @@ int do_eat(struct char_data *ch, char *argument, int cmd)
            af.modifier = 0;
            af.location = APPLY_NONE;
            af.bitvector = AFF_POISON;
-           affect_join(ch,&af, FALSE, FALSE);
+           affect_join(ch,&af, false, false);
         }
     }
 
@@ -1361,9 +1361,9 @@ void perform_wear(struct char_data *ch, struct obj_data *obj_object,
 
 int class_restricted(struct char_data *ch, struct obj_data *obj)
 {
-if (IS_NPC(ch)) return FALSE;
+if (IS_NPC(ch)) return false;
 if (IS_OBJ_STAT(obj, ITEM_ANY_CLASS))
-    return FALSE;
+    return false;
 
 if ((IS_OBJ_STAT(obj, ITEM_WARRIOR) && (GET_CLASS(ch) == CLASS_WARRIOR)) ||
     (IS_OBJ_STAT(obj, ITEM_MAGE) && (GET_CLASS(ch) == CLASS_MAGIC_USER)) ||
@@ -1376,24 +1376,24 @@ if ((IS_OBJ_STAT(obj, ITEM_WARRIOR) && (GET_CLASS(ch) == CLASS_WARRIOR)) ||
     (IS_OBJ_STAT(obj, ITEM_BARD) && (GET_CLASS(ch) == CLASS_BARD)) ||
     (IS_OBJ_STAT(obj, ITEM_DRUID) && (GET_CLASS(ch) == CLASS_DRUID)) ||
     (IS_OBJ_STAT(obj, ITEM_MONK) && (GET_CLASS(ch) == CLASS_MONK))) 
-    return FALSE;
-return TRUE;
+    return false;
+return true;
 }
 
 int charmie_restricted(struct char_data *ch, struct obj_data *obj, int wear_loc)
 {
-  return FALSE; // sigh, work for nohin'
+  return false; // sigh, work for nohin'
   if (IS_NPC(ch) && ISSET(ch->affected_by, AFF_CHARM) && ch->master && ch->mobdata)
   {
 	int vnum = mob_index[ch->mobdata->nr].virt;
 	if (vnum == 8 || (vnum > 22388 && vnum < 22399))
-           return FALSE; // golems and corpses wear all
+           return false; // golems and corpses wear all
         switch (ch->race)
 	{
 		case RACE_GHOST:
 		case RACE_ELEMENT:
 		case RACE_SLIME:
-		   return TRUE; // screw 'em!
+		   return true; // screw 'em!
 		case RACE_REPTILE:
 		case RACE_DRAGON:
 		case RACE_SNAKE:
@@ -1417,57 +1417,57 @@ int charmie_restricted(struct char_data *ch, struct obj_data *obj, int wear_loc)
 			case WEAR_WRIST_R:
 			case WEAR_NECK_1:
 			case WEAR_FACE:
-				return FALSE;
+				return false;
 			default:
-				return TRUE;
+				return true;
 		  }			
 		break;
              default:
-		return FALSE;
+		return false;
 	}
   }
-  return FALSE;
+  return false;
 }
 
 int size_restricted(struct char_data *ch, struct obj_data *obj)
 {
   if(IS_SET(obj->obj_flags.size, SIZE_ANY))
-    return FALSE;
+    return false;
 
   if(GET_RACE(ch) == RACE_HUMAN)  // human can wear all sizes
-    return FALSE;
+    return false;
 
   if(IS_MOB(ch))  // mobs (ie charmies) can wear all sizes
-    return FALSE;
+    return false;
 
   if(GET_HEIGHT(ch) < 42) {
     if(IS_SET(obj->obj_flags.size, SIZE_SMALL))
-      return FALSE;
-    else return TRUE;
+      return false;
+    else return true;
   }
 
   if(GET_HEIGHT(ch) < 66) {
     if(IS_SET(obj->obj_flags.size, SIZE_SMALL) || IS_SET(obj->obj_flags.size, SIZE_MEDIUM))
-      return FALSE;
-    else return TRUE;
+      return false;
+    else return true;
   }
 
   if(GET_HEIGHT(ch) < 79) {
     if(IS_SET(obj->obj_flags.size, SIZE_MEDIUM))
-      return FALSE;
-    else return TRUE;
+      return false;
+    else return true;
   }
 
   if(GET_HEIGHT(ch) < 103) {
     if(IS_SET(obj->obj_flags.size, SIZE_LARGE) || IS_SET(obj->obj_flags.size, SIZE_MEDIUM))
-      return FALSE;
-    else return TRUE;
+      return false;
+    else return true;
   }
 
   if(IS_SET(obj->obj_flags.size, SIZE_LARGE))
-      return FALSE;
+      return false;
 
-  return TRUE;
+  return true;
 }
 
 // find out if wearing/removing an item will screw up the items a player
@@ -1485,7 +1485,7 @@ int will_screwup_worn_sizes(char_data * ch, obj_data * obj, int add)
       mod += obj->affected[j].modifier;
 
   if(!mod)
-    return FALSE;
+    return false;
 
   // temporarily affect the person's height
   if(add) {
@@ -1502,7 +1502,7 @@ int will_screwup_worn_sizes(char_data * ch, obj_data * obj, int add)
 //	  logf(ANGEL, LOG_BUG, "will_screwup_worn_sizes: %s height %d by -%d = %d", GET_NAME(ch), GET_HEIGHT(ch), mod, GET_HEIGHT(ch)-mod);
 	  GET_HEIGHT(ch) -= mod;
     send_to_char("After modifying your height that item would not fit!\r\n", ch);
-    return TRUE;
+    return true;
   }
 
   int problem = 0;
@@ -1532,10 +1532,10 @@ int will_screwup_worn_sizes(char_data * ch, obj_data * obj, int add)
       csendf(ch, "Wearing that would cause your %s to no longer fit!\r\n", ch->equipment[j]->short_description);
     else csendf(ch, "Removing that would cause your %s to no longer fit!\r\n", ch->equipment[j]->short_description);
 
-    return TRUE;
+    return true;
   }
   
-  return FALSE;
+  return false;
 }
 
 void wear(struct char_data *ch, struct obj_data *obj_object, int keyword)
@@ -2060,7 +2060,7 @@ int do_wear(struct char_data *ch, char *argument, int cmd)
     char buffer[MAX_STRING_LENGTH];
     struct obj_data *obj_object, *tmp_object, *next_obj;
     int keyword;
-    bool blindlag = FALSE;
+    bool blindlag = false;
     static char const *keywords[] = {
         "finger",
         "neck",
@@ -2114,12 +2114,12 @@ int do_wear(struct char_data *ch, char *argument, int cmd)
 
     obj_object = get_obj_in_list_vis(ch, arg1, ch->carrying);
     if(!obj_object && IS_AFFECTED(ch, AFF_BLIND) && has_skill(ch, SKILL_BLINDFIGHTING)) {
-       obj_object = get_obj_in_list_vis(ch, arg1, ch->carrying, TRUE);
-       blindlag = TRUE;
+       obj_object = get_obj_in_list_vis(ch, arg1, ch->carrying, true);
+       blindlag = true;
     }
     if (obj_object) {
         if (*arg2) {
-            keyword = search_block(arg2, keywords, FALSE);
+            keyword = search_block(arg2, keywords, false);
             if (keyword == -1) {
                 sprintf(buf,
                 "%s is an unknown body location.\n\r", arg2);
@@ -2149,7 +2149,7 @@ int do_wield(struct char_data *ch, char *argument, int cmd)
   char arg2[MAX_STRING_LENGTH];
   char buffer[MAX_STRING_LENGTH];
   struct obj_data *obj_object;
-  bool blindlag = FALSE;
+  bool blindlag = false;
   int keyword = 12;
 
     if (IS_SET(world[ch->in_room].room_flags, QUIET))
@@ -2164,8 +2164,8 @@ int do_wield(struct char_data *ch, char *argument, int cmd)
         obj_object = get_obj_in_list_vis(ch, arg1, ch->carrying);
         if(!obj_object && IS_AFFECTED(ch, AFF_BLIND) && has_skill(ch, SKILL_BLINDFIGHTING)) 
         {
-           obj_object = get_obj_in_list_vis(ch, arg1, ch->carrying, TRUE);
-           blindlag = TRUE;
+           obj_object = get_obj_in_list_vis(ch, arg1, ch->carrying, true);
+           blindlag = true;
         }
         if (obj_object) 
 	{
@@ -2195,7 +2195,7 @@ int do_grab(struct char_data *ch, char *argument, int cmd)
     char arg2[MAX_STRING_LENGTH];
     char buffer[MAX_STRING_LENGTH];
     struct obj_data *obj_object;
-    bool blindlag = FALSE;
+    bool blindlag = false;
 
     if (IS_SET(world[ch->in_room].room_flags, QUIET))
       {
@@ -2208,8 +2208,8 @@ int do_grab(struct char_data *ch, char *argument, int cmd)
     if (*arg1) {
         obj_object = get_obj_in_list_vis(ch, arg1, ch->carrying);
         if(!obj_object && IS_AFFECTED(ch, AFF_BLIND) && has_skill(ch, SKILL_BLINDFIGHTING)) {
-           obj_object = get_obj_in_list_vis(ch, arg1, ch->carrying, TRUE);
-           blindlag = TRUE;
+           obj_object = get_obj_in_list_vis(ch, arg1, ch->carrying, true);
+           blindlag = true;
         }
         if (obj_object) {
             if (obj_object->obj_flags.type_flag == ITEM_LIGHT)
@@ -2271,7 +2271,7 @@ int do_remove(struct char_data *ch, char *argument, int cmd)
 {
   char arg1[MAX_STRING_LENGTH];
   struct obj_data *obj_object;
-  bool blindlag = FALSE;
+  bool blindlag = false;
   int j;
 
   if (IS_SET(world[ch->in_room].room_flags, QUIET))
@@ -2323,10 +2323,10 @@ int do_remove(struct char_data *ch, char *argument, int cmd)
       }
     } else 
     {
-      obj_object = get_object_in_equip_vis(ch, arg1, ch->equipment, &j, FALSE);
+      obj_object = get_object_in_equip_vis(ch, arg1, ch->equipment, &j, false);
       if(!obj_object && IS_AFFECTED(ch, AFF_BLIND) && has_skill(ch, SKILL_BLINDFIGHTING)) {
-         obj_object = get_object_in_equip_vis(ch, arg1, ch->equipment, &j, TRUE);
-         blindlag = TRUE;
+         obj_object = get_object_in_equip_vis(ch, arg1, ch->equipment, &j, true);
+         blindlag = true;
       }
       if (obj_object) 
       {

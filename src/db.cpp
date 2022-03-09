@@ -517,7 +517,7 @@ void boot_db(void)
 
 	void add_commands_to_radix(void);
 
-	mud_is_booting = TRUE;
+	mud_is_booting = true;
 
 	reset_time();
 
@@ -685,7 +685,7 @@ void boot_db(void)
 	fix_shopkeepers_inventory();
 
 	log("Turning on MOB Progs", 0, LOG_MISC);
-	MOBtrigger = TRUE;
+	MOBtrigger = true;
 
 	log("Loading quest one liners.", 0, LOG_MISC);
 	load_quests();
@@ -699,7 +699,7 @@ void boot_db(void)
 	log("Loading auction tickets.", 0, LOG_MISC);
 	load_auction_tickets();
 
-	mud_is_booting = FALSE;
+	mud_is_booting = false;
 }
 
 /*
@@ -1270,7 +1270,7 @@ void remove_all_mobs_from_world()
 	for_each(character_list.begin(), character_list.end(),
 			[](char_data * const &curr) {
 				if (IS_NPC(curr))
-					extract_char(curr, TRUE);
+					extract_char(curr, true);
 				else
 					do_quit(curr, "", 666);
 			});
@@ -1351,7 +1351,7 @@ struct index_data *generate_obj_indices(int *top,
 					index[i].non_combat_func = 0;
 					index[i].combat_func = 0;
 					index[i].progtypes = 0;
-					if (!(index[i].item = (struct obj_data *)read_object(i, fl, FALSE)))
+					if (!(index[i].item = (struct obj_data *)read_object(i, fl, false)))
 					{
 						sprintf(log_buf, "Unable to load object %d!\n\r",
 								index[i].virt);
@@ -1443,7 +1443,7 @@ void write_one_room(FILE * f, int a)
 
 	// Write out allowed classes if any
 	for (int i = 0; i < CLASS_MAX; i++) {
-		if (world[a].allow_class[i] == TRUE) {
+		if (world[a].allow_class[i] == true) {
 			fprintf(f, "C%d\n", i);
 		}
 	}
@@ -1519,7 +1519,7 @@ int read_one_room(FILE *fl, int & room_nr)
 				log("Room below minimum for it's zone table.  ERROR", IMMORTAL, LOG_BUG);
 				log("Room below minimum for it's zone table.  ERROR", IMMORTAL, LOG_MISC);
 //        abort();
-				return FALSE;
+				return false;
 			}
 
 			// Go through the zone table until world[room_nr].number is
@@ -1532,7 +1532,7 @@ int read_one_room(FILE *fl, int & room_nr)
 					fprintf(stderr, "Room %d is outside of any zone.\n", room_nr);
 					log("Room outside of ANY zone.  ERROR", IMMORTAL, LOG_BUG);
 					log("Room outside of ANY zone.  ERROR", IMMORTAL, LOG_MISC);
-					return FALSE;
+					return false;
 				}
 			}
 
@@ -1612,15 +1612,15 @@ int read_one_room(FILE *fl, int & room_nr)
 				break;
 			else if (ch == 'C') {
 				int c_class = fread_int(fl, 0, CLASS_MAX);
-				world[room_nr].allow_class[c_class] = TRUE;
+				world[room_nr].allow_class[c_class] = true;
 			}
 		} // of for (;;) (get directions and extra descs)
 
-		return TRUE;
+		return true;
 	} // if == $
 //  dc_free(temp); /* cleanup the area containing the terminal $  */
 // we no longer free temp, cause it's no longer used as a terminating char
-	return FALSE;
+	return false;
 }
 
 char * read_next_worldfile_name(FILE * flWorldIndex)
@@ -1650,43 +1650,43 @@ char * read_next_worldfile_name(FILE * flWorldIndex)
 bool can_modify_this_room(char_data * ch, long vnum)
 {
 	if (has_skill(ch, COMMAND_RANGE))
-		return TRUE;
+		return true;
 
 	if (ch->pcdata->buildLowVnum <= 0 || ch->pcdata->buildHighVnum <= 0)
-		return FALSE;
+		return false;
 	if (ch->pcdata->buildLowVnum > vnum)
-		return FALSE;
+		return false;
 	if (ch->pcdata->buildHighVnum < vnum)
-		return FALSE;
-	return TRUE;
+		return false;
+	return true;
 }
 
 bool can_modify_room(char_data * ch, long vnum)
 {
 	if (has_skill(ch, COMMAND_RANGE))
-		return TRUE;
+		return true;
 
 	if (ch->pcdata->buildLowVnum <= 0 || ch->pcdata->buildHighVnum <= 0)
-		return FALSE;
+		return false;
 	if (ch->pcdata->buildLowVnum > vnum)
-		return FALSE;
+		return false;
 	if (ch->pcdata->buildHighVnum < vnum)
-		return FALSE;
-	return TRUE;
+		return false;
+	return true;
 }
 
 bool can_modify_this_mobile(char_data * ch, long vnum)
 {
 	if (has_skill(ch, COMMAND_RANGE))
-		return TRUE;
+		return true;
 
 	if (ch->pcdata->buildMLowVnum <= 0 || ch->pcdata->buildMHighVnum <= 0)
-		return FALSE;
+		return false;
 	if (ch->pcdata->buildMLowVnum > vnum)
-		return FALSE;
+		return false;
 	if (ch->pcdata->buildMHighVnum < vnum)
-		return FALSE;
-	return TRUE;
+		return false;
+	return true;
 }
 
 bool can_modify_mobile(char_data * ch, long mob)
@@ -1697,15 +1697,15 @@ bool can_modify_mobile(char_data * ch, long mob)
 bool can_modify_this_object(char_data * ch, long vnum)
 {
 	if (has_skill(ch, COMMAND_RANGE))
-		return TRUE;
+		return true;
 
 	if (ch->pcdata->buildOLowVnum <= 0 || ch->pcdata->buildOHighVnum <= 0)
-		return FALSE;
+		return false;
 	if (ch->pcdata->buildOLowVnum > vnum)
-		return FALSE;
+		return false;
 	if (ch->pcdata->buildOHighVnum < vnum)
-		return FALSE;
-	return TRUE;
+		return false;
+	return true;
 
 }
 
@@ -2757,7 +2757,7 @@ CHAR_DATA *read_mobile(int nr, FILE *fl)
 			break;
 		case '>':
 			ungetc(letter, fl);
-			mprog_read_programs(fl, nr, FALSE);
+			mprog_read_programs(fl, nr, false);
 			break;
 		case 'Y': // type
 			mob->mobdata->mob_flags.type = (mob_type_t)fread_int(fl, mob_type_t::MOB_TYPE_FIRST, mob_type_t::MOB_TYPE_LAST);
@@ -2936,7 +2936,7 @@ void write_mobile(char_data * mob, FILE *fl)
 	}
 
 	if (mob_index[mob->mobdata->nr].mobprogs) {
-		write_mprog_recur(fl, mob_index[mob->mobdata->nr].mobprogs, TRUE);
+		write_mprog_recur(fl, mob_index[mob->mobdata->nr].mobprogs, true);
 		fprintf(fl, "|\n");
 	}
 
@@ -4058,7 +4058,7 @@ void write_object(obj_data * obj, FILE *fl)
 				obj->affected[i].modifier);
 
 	if (obj_index[obj->item_number].mobprogs) {
-		write_mprog_recur(fl, obj_index[obj->item_number].mobprogs, FALSE);
+		write_mprog_recur(fl, obj_index[obj->item_number].mobprogs, false);
 		fprintf(fl, "|\n");
 	}
 
@@ -4103,7 +4103,7 @@ ofstream& operator<<(ofstream &out, obj_data *obj)
 	}
 
 	if (obj_index[obj->item_number].mobprogs) {
-		write_mprog_recur(out, obj_index[obj->item_number].mobprogs, FALSE);
+		write_mprog_recur(out, obj_index[obj->item_number].mobprogs, false);
 		out << "|\n";
 	}
 
@@ -4840,7 +4840,7 @@ void reset_zone(int zone)
 
 #undef ZCMD
 
-/* for use in reset_zone; return TRUE if zone 'nr' is free of PC's  */
+/* for use in reset_zone; return true if zone 'nr' is free of PC's  */
 int zone_is_empty(int zone_nr)
 {
 	struct descriptor_data *i;
@@ -6316,7 +6316,7 @@ bool verify_item(struct obj_data **obj)
 	extern int top_of_objt;
 
 	if (!str_cmp((*obj)->short_description, ((struct obj_data*)obj_index[(*obj)->item_number].item)->short_description))
-		return FALSE;
+		return false;
 
 	int newitem = -1;
 	for (int i = 1;; i++)
@@ -6340,9 +6340,9 @@ bool verify_item(struct obj_data **obj)
 			}
 	}
 	if (newitem == -1)
-		return FALSE;
+		return false;
 
 	*obj = clone_object(newitem); // Fixed!
-	return TRUE;
+	return true;
 }
 

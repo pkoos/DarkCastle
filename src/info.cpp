@@ -347,7 +347,7 @@ void list_obj_to_char(struct obj_data *list, struct char_data *ch, int mode,
                       bool show)
 {
    struct obj_data *i;
-   bool found = FALSE;
+   bool found = false;
    int number = 1;
    int can_see;
    char buf[50];
@@ -365,7 +365,7 @@ void list_obj_to_char(struct obj_data *list, struct char_data *ch, int mode,
             send_to_char(buf, ch);
          }
          show_obj_to_char(i, ch, mode);
-         found = TRUE;
+         found = true;
          number = 1;
       }
    }
@@ -611,11 +611,11 @@ void show_char_to_char(struct char_data *i, struct char_data *ch, int mode)
        return;
      }
 
-     found = FALSE;
+     found = false;
      for (j=0; j< MAX_WEAR; j++) {
        if (i->equipment[j]) {
 	 if (CAN_SEE_OBJ(ch,i->equipment[j])) {
-	   found = TRUE;
+	   found = true;
 	 }
        }
      }
@@ -635,17 +635,17 @@ void show_char_to_char(struct char_data *i, struct char_data *ch, int mode)
      }
 
      if ((GET_CLASS(ch) == CLASS_THIEF && ch != i) || GET_LEVEL(ch) > IMMORTAL) {
-       found = FALSE;
+       found = false;
        send_to_char("\n\rYou attempt to peek at the inventory:\n\r", ch);
        for(tmp_obj = i->carrying; tmp_obj;
 	   tmp_obj = tmp_obj->next_content) {
-	 if ((IS_SET(tmp_obj->obj_flags.extra_flags, ITEM_QUEST) == FALSE ||
+	 if ((IS_SET(tmp_obj->obj_flags.extra_flags, ITEM_QUEST) == false ||
 	      GET_LEVEL(ch) > IMMORTAL ) &&
 	     CAN_SEE_OBJ(ch, tmp_obj) &&
 	     number(0,MAX_MORTAL) < GET_LEVEL(ch))
 	   {
 	     show_obj_to_char(tmp_obj, ch, 1);
-	     found = TRUE;
+	     found = true;
 	   }
        }
        if (!found)
@@ -655,7 +655,7 @@ void show_char_to_char(struct char_data *i, struct char_data *ch, int mode)
    } else if (mode == 2) {
      /* Lists inventory */
      act("$n is carrying:", i, 0, ch, TO_VICT, 0);
-     list_obj_to_char(i->carrying,ch,1,TRUE);
+     list_obj_to_char(i->carrying,ch,1,true);
    }
 }
 
@@ -785,7 +785,7 @@ void try_to_peek_into_container(struct char_data *vict, struct char_data *ch,
 {
    struct obj_data * obj = NULL;
    struct obj_data * cont = NULL;
-   int found = FALSE;
+   int found = false;
 
    if(GET_CLASS(ch) != CLASS_THIEF && GET_LEVEL(ch) < DEITY) {
       send_to_char("They might object to you trying to look in their pockets...", ch);
@@ -818,7 +818,7 @@ void try_to_peek_into_container(struct char_data *vict, struct char_data *ch,
       if (CAN_SEE_OBJ(ch, obj) && number(0,MAX_MORTAL+30) < GET_LEVEL(ch))
       {
          show_obj_to_char(obj, ch, 1);
-         found = TRUE;
+         found = true;
       }
 
    if(!found)
@@ -1096,7 +1096,7 @@ bool identify(char_data *ch, obj_data *obj)
       break;
    }
 
-   found = FALSE;
+   found = false;
 
    for (i = 0; i < obj->num_affects; i++)
    {
@@ -1110,7 +1110,7 @@ bool identify(char_data *ch, obj_data *obj)
          if (!found)
          {
             send_to_char("$3Can affect you as:$R\n\r", ch);
-            found = TRUE;
+            found = true;
          }
 
          if (obj->affected[i].location < 1000)
@@ -1210,14 +1210,14 @@ int do_look(struct char_data *ch, char *argument, int cmd) {
 		// TODO - if have blindfighting, list some of the room exits sometimes
 	} else {
 		argument_split_3(argument, arg1, arg2, arg3);
-		keyword_no = search_block(arg1, keywords, FALSE); /* Partial Match */
+		keyword_no = search_block(arg1, keywords, false); /* Partial Match */
 
 		if ((keyword_no == -1) && *arg1) {
 			keyword_no = 7;
 			strcpy(arg2, arg1); /* Let arg2 become the target object (arg1) */
 		}
 
-		found = FALSE;
+		found = false;
 		tmp_object = 0;
 		tmp_char = 0;
 		tmp_desc = 0;
@@ -1350,7 +1350,7 @@ int do_look(struct char_data *ch, char *argument, int cmd) {
                         csendf(ch, ": \r\n");
                      }
 							
-							list_obj_to_char(tmp_object->contains, ch, 2, TRUE);
+							list_obj_to_char(tmp_object->contains, ch, 2, true);
 						} else
 							send_to_char("It is closed.\n\r", ch);
 					} else {
@@ -1424,7 +1424,7 @@ int do_look(struct char_data *ch, char *argument, int cmd) {
 					if (tmp_desc) {
 						page_string(ch->desc, tmp_desc, 0);
 						return eSUCCESS; /* RETURN SINCE IT WAS ROOM DESCRIPTION */
-						/* Old system was: found = TRUE; */
+						/* Old system was: found = true; */
 					}
 				}
 
@@ -1441,7 +1441,7 @@ int do_look(struct char_data *ch, char *argument, int cmd) {
 								if (tmp_desc) {
 									page_string(ch->desc, tmp_desc, 1);
 									return eSUCCESS;
-//                              found = TRUE;
+//                              found = true;
 								}
 							}
 						}
@@ -1459,7 +1459,7 @@ int do_look(struct char_data *ch, char *argument, int cmd) {
 							if (tmp_desc) {
 								page_string(ch->desc, tmp_desc, 1);
 								return eSUCCESS;
-//                           found = TRUE;
+//                           found = true;
 							}
 						}
 					}
@@ -1477,7 +1477,7 @@ int do_look(struct char_data *ch, char *argument, int cmd) {
 							if (tmp_desc) {
 								page_string(ch->desc, tmp_desc, 1);
 								return eSUCCESS;
-//                           found = TRUE;
+//                           found = true;
 							}
 						}
 					}
@@ -1514,18 +1514,18 @@ int do_look(struct char_data *ch, char *argument, int cmd) {
 								&& (tmp_object->in_room > -1)
 								&& (tmp_object->obj_flags.value[1] == 1))) {
 					ch->in_room = tmp_object->in_room;
-					found = TRUE;
+					found = true;
 					break;
 				}
 			}
-			if (found != TRUE) {
+			if (found != true) {
 				send_to_char("Nothing much to see there.\n\r", ch);
 				return eFAILURE;
 			}
 		}
 	      /* no break */
 		case 9:  // look through
-			if (found != TRUE) {
+			if (found != true) {
 				if (*arg2) {
 					if ((tmp_object = get_obj_in_list_vis(ch, arg2,
 							world[ch->in_room].contents))) {
@@ -1543,7 +1543,7 @@ int do_look(struct char_data *ch, char *argument, int cmd) {
 											tmp_object->obj_flags.value[0])))
 								ch->in_room = original_loc;
 							else
-								found = TRUE;
+								found = true;
 						}
 					} else {
 						send_to_char("Look through what?\n\r", ch);
@@ -1552,7 +1552,7 @@ int do_look(struct char_data *ch, char *argument, int cmd) {
 				}
 			}
 
-			if (found != TRUE) {
+			if (found != true) {
 				send_to_char("You can't seem to look through that.\n\r", ch);
 				return eFAILURE;
 			}
@@ -1592,7 +1592,7 @@ int do_look(struct char_data *ch, char *argument, int cmd) {
 
 			ansi_color( BLUE, ch);
 			ansi_color( BOLD, ch);
-			list_obj_to_char(world[ch->in_room].contents, ch, 0, FALSE);
+			list_obj_to_char(world[ch->in_room].contents, ch, 0, false);
 
 			list_char_to_char(world[ch->in_room].people, ch, 0);
 
@@ -1831,7 +1831,7 @@ int do_score(struct char_data *ch, char *argument, int cmd)
    }
    else send_to_char(
       "($5:$7)===================================($5:$7)==================================($5:$7)\n\r", ch);
-   int found = FALSE;
+   int found = false;
 
    if((immune=ch->immune))
    {
@@ -1842,7 +1842,7 @@ int do_score(struct char_data *ch, char *argument, int cmd)
            sprintf(buf, "|%c| Affected by %-25s          Modifier %-13s   |%c|\n\r",
                    scratch,"Immunity",isrString.c_str(), scratch);
            send_to_char(buf, ch);
-           found = TRUE;
+           found = true;
            isrString=string();
            if(++level == 4)
               level = 0;
@@ -1858,7 +1858,7 @@ int do_score(struct char_data *ch, char *argument, int cmd)
            sprintf(buf, "|%c| Affected by %-25s          Modifier %-13s   |%c|\n\r",
                    scratch,"Susceptibility",isrString.c_str(), scratch);
            send_to_char(buf, ch);
-           found = TRUE;
+           found = true;
            isrString=string();
            if(++level == 4)
               level = 0;
@@ -1874,7 +1874,7 @@ int do_score(struct char_data *ch, char *argument, int cmd)
            sprintf(buf, "|%c| Affected by %-25s          Modifier %-13s   |%c|\n\r",
                    scratch,"Resistibility",isrString.c_str(), scratch);
            send_to_char(buf, ch);
-           found = TRUE;
+           found = true;
            isrString=string();
            if(++level == 4)
               level = 0;
@@ -1891,7 +1891,7 @@ int do_score(struct char_data *ch, char *argument, int cmd)
       if (aff->type == SKILL_SNEAK)
         continue;
       scratch = frills[level];
-      modifyOutput = FALSE;
+      modifyOutput = false;
 
       // figure out the name of the affect (if any)
       const char *aff_name = get_skill_name(aff->type);
@@ -1954,11 +1954,11 @@ int do_score(struct char_data *ch, char *argument, int cmd)
         break;
       case SPELL_IMMUNITY:
         aff_name = "immunity";
-        modifyOutput = TRUE;
+        modifyOutput = true;
         break;
       case SKILL_NAT_SELECT:
         aff_name = "natural selection";
-        modifyOutput = TRUE;
+        modifyOutput = true;
         break;
       case SKILL_BREW_TIMER:
         aff_name = "brew timer";
@@ -1988,7 +1988,7 @@ int do_score(struct char_data *ch, char *argument, int cmd)
       apply_types[(int) aff->location], scratch);
       
       send_to_char(buf, ch);
-      found = TRUE;
+      found = true;
       if (++level == 4)
         level = 0;
     }
@@ -1998,7 +1998,7 @@ int do_score(struct char_data *ch, char *argument, int cmd)
      sprintf(buf, "|%c| Affected by fly                                Modifier NONE            |%c|\n\r",
              scratch, scratch);
      send_to_char(buf, ch);
-     found = TRUE;
+     found = true;
      if(++level == 4)
        level = 0;
    }*/
@@ -2010,7 +2010,7 @@ int do_score(struct char_data *ch, char *argument, int cmd)
    if(found)
      send_to_char("($5:$7)=========================================================================($5:$7)\n\r", ch);
 
-   found = FALSE;
+   found = false;
 
 	for (int aff_idx = 1; aff_idx < (AFF_MAX + 1); aff_idx++)
    {
@@ -2022,7 +2022,7 @@ int do_score(struct char_data *ch, char *argument, int cmd)
          continue;
 
 
-       found = TRUE;
+       found = true;
        if(++level == 4)
          level = 0;
        scratch = frills[level];
@@ -2292,7 +2292,7 @@ int do_count(struct char_data *ch, char *arg, int cmd)
 int do_inventory(struct char_data *ch, char *argument, int cmd)
 {
    send_to_char("You are carrying:\n\r", ch);
-   list_obj_to_char(ch->carrying, ch, 1, TRUE);
+   list_obj_to_char(ch->carrying, ch, 1, true);
    return eSUCCESS;
 }
 
@@ -2303,20 +2303,20 @@ int do_equipment(struct char_data *ch, char *argument, int cmd)
    bool found;
 
    send_to_char("You are using:\n\r", ch);
-   found = FALSE;
+   found = false;
    for (j=0; j< MAX_WEAR; j++) {
       if (ch->equipment[j]) {
          if (CAN_SEE_OBJ(ch,ch->equipment[j])) {
             if(!found) {
                act("<    worn     > Item Description     (Flags) [Item Condition]\r\n", ch, 0, 0, TO_CHAR, 0);
-               found = TRUE;
+               found = true;
             }
             send_to_char(where[j],ch);
             show_obj_to_char(ch->equipment[j],ch,1);
          } else {
             send_to_char(where[j],ch);
             send_to_char("something\n\r",ch);
-            found = TRUE;
+            found = true;
          }
       }
    }

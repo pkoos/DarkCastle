@@ -3471,7 +3471,7 @@ int do_medit(struct char_data *ch, char *argument, int cmd) {
 		auto &character_list = DC::instance().character_list;
 		for (auto& v : character_list) {
 			if (IS_NPC(v) && v->mobdata->nr == mob_num)
-				extract_char(v, TRUE);
+				extract_char(v, true);
 		}
 		delete_mob_from_index(mob_num);
 		send_to_char("Mobile deleted.\r\n", ch);
@@ -4049,7 +4049,7 @@ int do_redit(struct char_data *ch, char *argument, int cmd)
   // rflag
   case 5:
   {
-    a = FALSE;
+    a = false;
     if (remainder_args.empty())
     {
       send_to_char("$3Syntax$R: redit rflag <flags>\n\r", ch);
@@ -4121,7 +4121,7 @@ int do_redit(struct char_data *ch, char *argument, int cmd)
       send_to_char("Syntax: redit denymob <vnum>\r\nDoing this on an already denied mob will allow it once more.\r\n", ch);
       return eFAILURE;
     }
-    bool done = FALSE;
+    bool done = false;
     int mob=0;
     try {
       mob = stoi(remainder_args);
@@ -4140,7 +4140,7 @@ int do_redit(struct char_data *ch, char *argument, int cmd)
           world[ch->in_room].denied = nd->next;
         dc_free(nd);
         csendf(ch, "Mobile %d ALLOWED entrance.\r\n", mob);
-        done = TRUE;
+        done = true;
         break;
       }
       pd = nd;
@@ -4531,7 +4531,7 @@ int do_instazone(struct char_data *ch, char *arg, int cmd) {
 	struct char_data *mob,/**tmp_mob,*next_mob,*/*mob_list;
 	struct obj_data *obj, *tmp_obj,/**next_obj,*/*obj_list;
 
-	bool found_room = FALSE;
+	bool found_room = false;
 
 	send_to_char(
 			"Whoever thought of this had a good idea, but never really finished it.  Beg someone to finish it some time.\r\n",
@@ -4554,7 +4554,7 @@ int do_instazone(struct char_data *ch, char *arg, int cmd) {
 		room = real_room(x);
 		if (room == (-1))
 			continue;
-		found_room = TRUE;
+		found_room = true;
 		break;
 	}
 
@@ -5019,7 +5019,7 @@ int do_return(struct char_data *ch, char *argument, int cmd)
 	cmd != 12)
 	{
 	  act("$n evaporates.",ch, 0, 0, TO_ROOM, 0);
-	  extract_char(ch, TRUE);
+	  extract_char(ch, true);
 	  return eSUCCESS|eCH_DIED;
 	}
     }
@@ -5068,13 +5068,13 @@ int do_sockets(struct char_data *ch, char *argument, int cmd)
       if (*name &&
           !str_str(d->host, name) && (!d->character || !isname(name, GET_NAME(d->character))))
             continue; 
-      bool duplicate = FALSE;
+      bool duplicate = false;
       for (ad = descriptor_list; ad; ad = ad->next)
 	if (ad != d && !str_cmp(d->host, ad->host))
 	if (!ad->character ||
 	    GET_LEVEL(ad->character) <= GET_LEVEL(ch))	   
 	{
-	   duplicate = TRUE;
+	   duplicate = true;
  	   break;
 	}
       num_can_see++;

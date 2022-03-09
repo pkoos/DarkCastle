@@ -363,14 +363,14 @@ int do_group(struct char_data *ch, char *argument, int cmd)
       return eFAILURE;
     }
 
-    found = FALSE;
+    found = false;
 
     if(victim == ch)
-      found = TRUE;
+      found = true;
     else {
       for(f = ch->followers; f; f = f->next) {
         if(f->follower == victim) {
-          found = TRUE;
+          found = true;
           break;
         }
       }

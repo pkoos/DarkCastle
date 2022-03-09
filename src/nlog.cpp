@@ -58,9 +58,9 @@ bool ishashed(char *arg)
   struct hash_info *current = &tree;
   for(; current; current = current->right) {
    if (current->name == arg)
-     return TRUE;
+     return true;
   }
-  return FALSE;
+  return false;
 }
 
 char *str_hsh(const char *arg)

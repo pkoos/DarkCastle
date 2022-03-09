@@ -42,7 +42,7 @@ extern CWorld world;
 extern struct index_data *obj_index;
 extern CVoteData *DCVote;
    
-void log_sacrifice(CHAR_DATA *ch, OBJ_DATA *obj, bool decay = FALSE)
+void log_sacrifice(CHAR_DATA *ch, OBJ_DATA *obj, bool decay = false)
 { //decay variable means it's from a decaying corpse, not a player
   time_t timep;
   char *tmstr;

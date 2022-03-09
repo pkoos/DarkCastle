@@ -194,7 +194,7 @@ int do_mpasound( CHAR_DATA *ch, char *argument, int cmd )
 	ch->in_room = world[was_in_room].dir_option[door]->to_room;
         if(ch->in_room == was_in_room)
           continue;
-	MOBtrigger  = FALSE;
+	MOBtrigger  = false;
         // argument +1 so we skip the leading ' '
 	act( argument+1, ch, NULL, NULL, TO_ROOM, 0 );
         ch->in_room = was_in_room;
@@ -346,7 +346,7 @@ int do_mpjunk( CHAR_DATA *ch, char *argument, int cmd )
     char      arg[ MAX_INPUT_LENGTH ];
     OBJ_DATA *obj;
     int location;
-    bool dot = FALSE;
+    bool dot = false;
     char dotbuf[MAX_INPUT_LENGTH];
     if ( !IS_NPC( ch ) )
     {
@@ -365,7 +365,7 @@ int do_mpjunk( CHAR_DATA *ch, char *argument, int cmd )
 
     if ( str_cmp( arg, "all" ) && !sscanf(arg, "all.%s", dotbuf))
     {
-      if ((obj = get_object_in_equip_vis(ch, arg, ch->equipment, &location, FALSE )))
+      if ((obj = get_object_in_equip_vis(ch, arg, ch->equipment, &location, false )))
       {
 	extract_obj( unequip_char( ch, location ) );
 	return eSUCCESS;
@@ -379,7 +379,7 @@ int do_mpjunk( CHAR_DATA *ch, char *argument, int cmd )
     else
     {
 	if (dotbuf[0] != '\0')
-           dot = TRUE;
+           dot = true;
 
         for(int l = 0; l < MAX_WEAR; l++ )
           if ( ch->equipment[l] )
@@ -421,7 +421,7 @@ int do_mpechoaround( CHAR_DATA *ch, char *argument, int cmd )
        return eFAILURE|eINTERNAL_ERROR;
     }
 
-    if ( !( victim=get_char_room( arg,ch->in_room, TRUE ) ) )
+    if ( !( victim=get_char_room( arg,ch->in_room, true) ) )
     {
         prog_error(ch, "Mpechoaround - victim does not exist.");
 	return eFAILURE|eINTERNAL_ERROR;
@@ -488,7 +488,7 @@ int do_mpechoat( CHAR_DATA *ch, char *argument, int cmd )
        return eFAILURE|eINTERNAL_ERROR;
     }
 
-    if ( !( victim = get_char_room( arg, ch->in_room, TRUE ) ) )
+    if ( !( victim = get_char_room( arg, ch->in_room, true) ) )
     {
         prog_error(ch, "Mpechoat - victim does not exist.");
 	return eFAILURE|eINTERNAL_ERROR;
@@ -635,7 +635,7 @@ int do_mppurge( CHAR_DATA *ch, char *argument, int cmd )
 	{
 	  vnext = victim->next_in_room;
 			if ( IS_NPC( victim ) && victim != ch) {
-	    extract_char( victim, TRUE );
+	    extract_char( victim, true);
 			}
 	}
 
@@ -680,7 +680,7 @@ int do_mppurge( CHAR_DATA *ch, char *argument, int cmd )
       logf(0, LOG_BUG, "selfpurge on %s to %s", GET_NAME(ch), GET_NAME(victim));
       selfpurge = true;
     }
-    extract_char( victim, TRUE );
+    extract_char( victim, true);
 
 //    if(issame)
 
@@ -1086,7 +1086,7 @@ int do_mpthrow( CHAR_DATA *ch, char *argument, int cmd )
   strcpy(throwitem->target_mob_name, first);
   throwitem->data_num = catch_num;
   throwitem->delay = delay;
-  throwitem->mob = TRUE; // This is, suprisingly, a mob
+  throwitem->mob = true; // This is, suprisingly, a mob
   throwitem->actor = activeActor;
   throwitem->obj = activeObj;
   throwitem->vo = activeVo;
@@ -1395,22 +1395,22 @@ int do_mpdamage( CHAR_DATA *ch, char *argument, int cmd )
 	break;
       int numdice, sizedice;
       numdice = sizedice = 0;
-      bool perc = TRUE;
+      bool perc = true;
       char t,l,o;
       int plus = 0;
-      bool plusPerc = TRUE;
+      bool plusPerc = true;
 
       if (sscanf(damroll, "%dd%d%c%c%d%c", &numdice, &sizedice, &t, &l, &plus, &o) != 6 || l != '+' || t != '%' || o != '%')
       {
-       plusPerc = FALSE;
+       plusPerc = false;
        if (sscanf(damroll, "%dd%d%c%c%d", &numdice, &sizedice, &t, &l, &plus) != 5 || l != '+' || t != '%')
         if (sscanf(damroll, "%dd%d%c", &numdice, &sizedice,&t) != 3 || t != '%')
         {
- 	  perc = FALSE;
-	  plusPerc = TRUE;
+ 	  perc = false;
+	  plusPerc = true;
 	  if (sscanf(damroll, "%dd%d%c%d%c", &numdice, &sizedice, &l, &plus,&o) != 5 || l != '+' || o != '%')
 	  {
-	    plusPerc = FALSE;
+	    plusPerc = false;
   	    if (sscanf(damroll, "%dd%d%c%d", &numdice, &sizedice, &l, &plus) != 4 || l != '+')
 	  	sscanf(damroll,"%dd%d",&numdice, &sizedice);
 	  }
@@ -1605,7 +1605,7 @@ mprog_throw_type));
   strcpy(throwitem->target_mob_name, first);
   throwitem->data_num = catch_num;
   throwitem->delay = delay;
-  throwitem->mob = FALSE;
+  throwitem->mob = false;
   if (fourth[0] != '\0')
     throwitem->var = str_dup(fourth);
   else throwitem->var = NULL;
@@ -1648,7 +1648,7 @@ int do_mpbestow(CHAR_DATA *ch, char *argument, int cmd)
 
   if (arg[0] == '\0' || arg1[0] == '\0' || arg2[0] == '\0')
     return eFAILURE;
-  if ((victim = get_char_room(arg, ch->in_room, TRUE)) == NULL && str_cmp(arg, "all") && str_cmp(arg, "allpc"))
+  if ((victim = get_char_room(arg, ch->in_room, true)) == NULL && str_cmp(arg, "all") && str_cmp(arg, "allpc"))
   {
     prog_error(ch, "Mpbestow - No such person.");
     return eFAILURE | eINTERNAL_ERROR;
@@ -1682,7 +1682,7 @@ int do_mpbestow(CHAR_DATA *ch, char *argument, int cmd)
         af.bitvector = a + 1;
         af.location = 0;
         af.modifier = 987; // Notifies that it's timered.
-        affect_join(victim, &af, TRUE, FALSE);
+        affect_join(victim, &af, true, false);
         if (z && o) // Timer on it
         {
           af.type = BASE_TIMERS + z;
@@ -1690,7 +1690,7 @@ int do_mpbestow(CHAR_DATA *ch, char *argument, int cmd)
           af.bitvector = -1;
           af.location = 0;
           af.modifier = 0;
-          affect_join(victim, &af, TRUE, FALSE);
+          affect_join(victim, &af, true, false);
         }
       }
     }
@@ -1715,7 +1715,7 @@ int do_mpbestow(CHAR_DATA *ch, char *argument, int cmd)
     af.bitvector = -1;
     af.location = 0;
     af.modifier = 0;
-    affect_join(owner, &af, TRUE, FALSE);
+    affect_join(owner, &af, true, false);
   }
   return eSUCCESS;
 }
@@ -1761,7 +1761,7 @@ int do_mppause( CHAR_DATA *ch, char *argument, int cmd )
   throwitem->target_mob_name[0] = '\0';
   throwitem->tMob = ch;
   throwitem->delay = delay;
-  throwitem->mob = TRUE; // This is, suprisingly, a mob
+  throwitem->mob = true; // This is, suprisingly, a mob
 
   extern CHAR_DATA *activeActor;
   extern CHAR_DATA *activeRndm;
@@ -1851,7 +1851,7 @@ int do_mpteleport(struct char_data *ch, char *argument, int cmd)
 	   (world[to_room].sector_type == SECT_UNDERWATER && GET_RACE(victim) != RACE_FISH) ||
 	   IS_SET(zone_table[world[to_room].zone].zone_flags, ZONE_NO_TELEPORT) ||
 	   ( (IS_NPC(victim) && ISSET(victim->mobdata->actflags, ACT_STAY_NO_TOWN)) ? 
-	     (IS_SET(zone_table[world[to_room].zone].zone_flags, ZONE_IS_TOWN)) : FALSE ) ||
+	     (IS_SET(zone_table[world[to_room].zone].zone_flags, ZONE_IS_TOWN)) : false ) ||
 	   ( IS_AFFECTED(victim, AFF_CHAMPION) && (IS_SET(world[to_room].room_flags, CLAN_ROOM) ||
 						   (to_room >= 1900 && to_room <= 1999)) ) );
 
@@ -1924,7 +1924,7 @@ int process_math(char_data *ch, char *string)
 {
   int result = 0,curr = 0; 
   char lastsign = '\0';
-  bool numproc = FALSE;
+  bool numproc = false;
   if (!string) return -9839;
 
   while (1)
@@ -1932,7 +1932,7 @@ int process_math(char_data *ch, char *string)
     if (*string == ' ') { string++; continue; }
     if (isdigit(*string))
     {
-      numproc = TRUE;
+      numproc = true;
       curr *= 10;
       curr += (*string - '0');
       string++;
@@ -2096,7 +2096,7 @@ int do_mpsetmath(char_data *ch, char *arg, int cmd)
 	    prog_error(ch, "Mpsetmath - Invalid primary data.");
 	     return eFAILURE;
   }
-  bool allowed = FALSE;
+  bool allowed = false;
 
   int16 *lvali = 0;
   uint32 *lvalui = 0;
@@ -2111,11 +2111,11 @@ int do_mpsetmath(char_data *ch, char *arg, int cmd)
 //	    prog_error(ch, "Mpsetmath - No target.");
 //	    return eFAILURE;
   }
-  if (vict && IS_NPC(vict)) allowed = TRUE;
+  if (vict && IS_NPC(vict)) allowed = true;
   else if (vict)
     for (int i = 0; allowedData[i]; i++)
       if (!str_cmp(allowedData[i],r))
-	allowed = TRUE;
+	allowed = true;
 
   if (!allowed && vict)
   {

@@ -1132,7 +1132,7 @@ void argument_interpreter(const char *argument, char *first_arg, char *second_ar
 
 
 // If the string is ALL numbers, return TRUE
-// If there is a non-numeric in string, return FALSE
+// If there is a non-numeric in string, return false
 int is_number(const char *str)
 {
   int look_at;
@@ -1151,19 +1151,19 @@ int is_number(const char *str)
 // Multiline arguments, used for mobprogs
 char *one_argument_long(char *argument, char *first_arg) {
 	int begin, look_at;
-	bool end = FALSE;
+	bool end = false;
 	begin = 0;
 
 	/* Find first non blank */
 	for (; isspace(*(argument + begin)); begin++)
 		;
 	if (*(argument + begin) == '{') {
-		end = TRUE;
+		end = true;
 		begin++;
 	}
 
 	if (*(argument + begin) == '{') {
-		end = TRUE;
+		end = true;
 		begin++;
 	}
 	/* Find length of first word */
@@ -1189,19 +1189,19 @@ char *one_argument_long(char *argument, char *first_arg) {
 
 const char *one_argument_long(const char *argument, char *first_arg) {
 	int begin, look_at;
-	bool end = FALSE;
+	bool end = false;
 	begin = 0;
 
 	/* Find first non blank */
 	for (; isspace(*(argument + begin)); begin++)
 		;
 	if (*(argument + begin) == '{') {
-		end = TRUE;
+		end = true;
 		begin++;
 	}
 
 	if (*(argument + begin) == '{') {
-		end = TRUE;
+		end = true;
 		begin++;
 	}
 	/* Find length of first word */
@@ -1256,7 +1256,7 @@ const char *one_argument(const char *argument, char *first_arg )
 
 int fill_wordnolow(char *argument)
 {
-  return (search_blocknolow(argument,fillwords,TRUE) >= 0);
+  return (search_blocknolow(argument,fillwords,true) >= 0);
 }
 
 
@@ -1282,7 +1282,7 @@ char *one_argumentnolow(char *argument, char *first_arg) {
 
 int fill_word(char *argument)
 {
-  return (search_block(argument,fillwords,TRUE) >= 0);
+  return (search_block(argument,fillwords,true) >= 0);
 }
 
 
@@ -1513,9 +1513,9 @@ bool can_use_command(CHAR_DATA *ch, int cmdnum)
   {
     
     if (cmdl->ch == ch && cmdl->cmd_number == cmdnum)
-	return FALSE;
+	return false;
   }
- return TRUE;
+ return true;
 }
 
 void pulse_command_lag()

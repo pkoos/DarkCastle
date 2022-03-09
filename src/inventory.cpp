@@ -204,7 +204,7 @@ void get(struct char_data *ch, struct obj_data *obj_object, struct obj_data *sub
 	  send_to_char("\r\n",ch);
 	}
 	extern zone_data *zone_table;
-	bool tax = FALSE;
+	bool tax = false;
 
         if (zone_table[world[ch->in_room].zone].clanowner > 0 && ch->clan != 
 		zone_table[world[ch->in_room].zone].clanowner)
@@ -214,7 +214,7 @@ void get(struct char_data *ch, struct obj_data *obj_object, struct obj_data *sub
 		zone_table[world[ch->in_room].zone].gold += cgold;
 	if(!IS_MOB(ch) && IS_SET(ch->pcdata->toggles, PLR_BRIEF))
 	{
-		tax = TRUE;
+		tax = true;
 		buffer = fmt::format("{} Bounty: {}", buffer, cgold);
 		zone_table[world[ch->in_room].zone].gold += cgold;
 	}
@@ -234,7 +234,7 @@ void get(struct char_data *ch, struct obj_data *obj_object, struct obj_data *sub
           get_clan(ch)->cdeposit(cgold);
 	if(!IS_MOB(ch) && IS_SET(ch->pcdata->toggles, PLR_BRIEF))
         {
-		tax = TRUE;
+		tax = true;
 		buffer = fmt::format("{} ClanTax: {}", buffer, cgold);
         }
 	else {
@@ -280,12 +280,12 @@ int do_get(struct char_data *ch, char *argument, int cmd)
   struct obj_data *sub_object;
   struct obj_data *obj_object;
   struct obj_data *next_obj;
-  bool found = FALSE;
-  bool fail = FALSE;
-  bool has_consent = FALSE;
+  bool found = false;
+  bool fail = false;
+  bool has_consent = false;
   int type = 3;
-  bool alldot = FALSE;
-  bool inventorycontainer = FALSE, blindlag = FALSE;
+  bool alldot = false;
+  bool inventorycontainer = false, blindlag = false;
   char allbuf[MAX_STRING_LENGTH];
 
   argument_interpreter(argument, arg1, arg2);
@@ -297,13 +297,13 @@ int do_get(struct char_data *ch, char *argument, int cmd)
   }
   if (*arg1 && !*arg2)
   {
-    alldot = FALSE;
+    alldot = false;
     allbuf[0] = '\0';
     if ((str_cmp(arg1, "all") != 0) &&
         (sscanf(arg1, "all.%s", allbuf) != 0))
     {
       strcpy(arg1, "all");
-      alldot = TRUE;
+      alldot = true;
     }
     if (!str_cmp(arg1, "all"))
     {
@@ -316,13 +316,13 @@ int do_get(struct char_data *ch, char *argument, int cmd)
   }
   if (*arg1 && *arg2)
   {
-    alldot = FALSE;
+    alldot = false;
     allbuf[0] = '\0';
     if ((str_cmp(arg1, "all") != 0) &&
         (sscanf(arg1, "all.%s", allbuf) != 0))
     {
       strcpy(arg1, "all");
-      alldot = TRUE;
+      alldot = true;
     }
     if (!str_cmp(arg1, "all"))
     {
@@ -396,8 +396,8 @@ int do_get(struct char_data *ch, char *argument, int cmd)
       return eFAILURE;
     }
     sub_object = 0;
-    found = FALSE;
-    fail = FALSE;
+    found = false;
+    fail = false;
     for (obj_object = world[ch->in_room].contents;
          obj_object;
          obj_object = next_obj)
@@ -446,7 +446,7 @@ int do_get(struct char_data *ch, char *argument, int cmd)
         if ((isname("thiefcorpse", obj_object->name) &&
              !isname(GET_NAME(ch), obj_object->name)) ||
             isname(GET_NAME(ch), obj_object->name) || GET_LEVEL(ch) >= OVERSEER)
-          has_consent = TRUE;
+          has_consent = true;
         if (!has_consent && !isname(GET_NAME(ch), obj_object->name))
         {
           if (GET_LEVEL(ch) < OVERSEER)
@@ -460,14 +460,14 @@ int do_get(struct char_data *ch, char *argument, int cmd)
           if (GET_LEVEL(ch) < OVERSEER)
           {
             send_to_char("This item contains no_trade items that cannot be picked up.\r\n", ch);
-            has_consent = FALSE; // bugfix, could loot without consent
+            has_consent = false; // bugfix, could loot without consent
             continue;
           }
         }
         if (GET_LEVEL(ch) < OVERSEER)
-          has_consent = FALSE; // reset it for the next item:P
+          has_consent = false; // reset it for the next item:P
         else
-          has_consent = TRUE; // reset it for the next item:P
+          has_consent = true; // reset it for the next item:P
       }
 
       if (CAN_SEE_OBJ(ch, obj_object) && GET_LEVEL(ch) < IMMORTAL)
@@ -478,29 +478,29 @@ int do_get(struct char_data *ch, char *argument, int cmd)
         {
           sprintf(buffer, "%s : You can't carry that many items.\r\n", fname(obj_object->name));
           send_to_char(buffer, ch);
-          fail = TRUE;
+          fail = true;
         }
         else if ((IS_CARRYING_W(ch) + obj_object->obj_flags.weight) > CAN_CARRY_W(ch) && GET_LEVEL(ch) < IMMORTAL && GET_ITEM_TYPE(obj_object) != ITEM_MONEY)
         {
           sprintf(buffer, "%s : You can't carry that much weight.\r\n", fname(obj_object->name));
           send_to_char(buffer, ch);
-          fail = TRUE;
+          fail = true;
         }
         else if (CAN_WEAR(obj_object, ITEM_TAKE))
         {
           get(ch, obj_object, sub_object, 0, cmd);
-          found = TRUE;
+          found = true;
         }
         else
         {
           send_to_char("You can't take that.\r\n", ch);
-          fail = TRUE;
+          fail = true;
         }
       }
       else if (CAN_SEE_OBJ(ch, obj_object) && GET_LEVEL(ch) >= IMMORTAL && CAN_WEAR(obj_object, ITEM_TAKE))
       {
         get(ch, obj_object, sub_object, 0, cmd);
-        found = TRUE;
+        found = true;
       }
     } // of for loop
     if (found)
@@ -519,8 +519,8 @@ int do_get(struct char_data *ch, char *argument, int cmd)
   case 2:
   {
     sub_object = 0;
-    found = FALSE;
-    fail = FALSE;
+    found = false;
+    fail = false;
     obj_object = get_obj_in_list_vis(ch, arg1,
                                      world[ch->in_room].contents);
     if (obj_object)
@@ -531,7 +531,7 @@ int do_get(struct char_data *ch, char *argument, int cmd)
       {
         sprintf(buffer, "%s_consent", GET_NAME(ch));
         if (isname(GET_NAME(ch), obj_object->name))
-          has_consent = TRUE;
+          has_consent = true;
         if (!has_consent && !isname(GET_NAME(ch), obj_object->name))
         {
           send_to_char("You don't have consent to take the "
@@ -539,7 +539,7 @@ int do_get(struct char_data *ch, char *argument, int cmd)
                        ch);
           return eFAILURE;
         }
-        has_consent = FALSE; // reset it
+        has_consent = false; // reset it
       }
 
       if (IS_SET(obj_object->obj_flags.extra_flags, ITEM_SPECIAL) &&
@@ -552,21 +552,21 @@ int do_get(struct char_data *ch, char *argument, int cmd)
       {
         sprintf(buffer, "%s : You can't carry that many items.\r\n", fname(obj_object->name));
         send_to_char(buffer, ch);
-        fail = TRUE;
+        fail = true;
       }
       else if ((IS_CARRYING_W(ch) + obj_object->obj_flags.weight) > CAN_CARRY_W(ch) &&
                GET_LEVEL(ch) < IMMORTAL && GET_ITEM_TYPE(obj_object) != ITEM_MONEY)
       {
         sprintf(buffer, "%s : You can't carry that much weight.\r\n", fname(obj_object->name));
         send_to_char(buffer, ch);
-        fail = TRUE;
+        fail = true;
       }
       else if (GET_ITEM_TYPE(obj_object) == ITEM_MONEY &&
                obj_object->obj_flags.value[0] > 10000 &&
                GET_LEVEL(ch) < 5)
       {
         send_to_char("You cannot pick up that much money!\r\n", ch);
-        fail = TRUE;
+        fail = true;
       }
 
       else if (obj_object->obj_flags.eq_level > 19 && GET_LEVEL(ch) < 5)
@@ -574,14 +574,14 @@ int do_get(struct char_data *ch, char *argument, int cmd)
         if (ch->in_room != real_room(3099))
         {
           csendf(ch, "%s is too powerful for you to possess.\r\n", obj_object->short_description);
-          fail = TRUE;
+          fail = true;
         }
         else
         {
           csendf(ch, "The aura of the donation room allows you to pick up %s.\r\n", obj_object->short_description);
           get(ch, obj_object, sub_object, 0, cmd);
           do_save(ch, "", 666);
-          found = TRUE;
+          found = true;
         }
       }
       else if (CAN_WEAR(obj_object, ITEM_TAKE))
@@ -592,19 +592,19 @@ int do_get(struct char_data *ch, char *argument, int cmd)
           get(ch, obj_object, sub_object, 0, cmd);
 
         do_save(ch, "", 666);
-        found = TRUE;
+        found = true;
       }
       else
       {
         send_to_char("You can't take that.\r\n", ch);
-        fail = TRUE;
+        fail = true;
       }
     }
     else
     {
       sprintf(buffer, "You do not see a %s here.\r\n", arg1);
       send_to_char(buffer, ch);
-      fail = TRUE;
+      fail = true;
     }
   }
   break;
@@ -617,14 +617,14 @@ int do_get(struct char_data *ch, char *argument, int cmd)
   /* get all ??? */
   case 4:
   {
-    found = FALSE;
-    fail = FALSE;
+    found = false;
+    fail = false;
     sub_object = get_obj_in_list_vis(ch, arg2,
                                      world[ch->in_room].contents);
     if (!sub_object)
     {
       sub_object = get_obj_in_list_vis(ch, arg2, ch->carrying);
-      inventorycontainer = TRUE;
+      inventorycontainer = true;
     }
 
     if (sub_object)
@@ -636,7 +636,7 @@ int do_get(struct char_data *ch, char *argument, int cmd)
       {
         sprintf(buffer, "%s_consent", GET_NAME(ch));
         if ((isname("thiefcorpse", sub_object->name) && !isname(GET_NAME(ch), sub_object->name)) || isname(buffer, sub_object->name) || GET_LEVEL(ch) > 105)
-          has_consent = TRUE;
+          has_consent = true;
         if (!has_consent && !isname(GET_NAME(ch), sub_object->name))
         {
           send_to_char("You don't have consent to touch the corpse.\r\n", ch);
@@ -700,7 +700,7 @@ int do_get(struct char_data *ch, char *argument, int cmd)
             {
               sprintf(buffer, "%s : You can't carry that many items.\r\n", fname(obj_object->name));
               send_to_char(buffer, ch);
-              fail = TRUE;
+              fail = true;
             }
             else
             {
@@ -742,12 +742,12 @@ int do_get(struct char_data *ch, char *argument, int cmd)
                 if (CAN_WEAR(obj_object, ITEM_TAKE))
                 {
                   get(ch, obj_object, sub_object, 0, cmd);
-                  found = TRUE;
+                  found = true;
                 }
                 else
                 {
                   send_to_char("You can't take that.\r\n", ch);
-                  fail = TRUE;
+                  fail = true;
                 }
               }
               else
@@ -756,7 +756,7 @@ int do_get(struct char_data *ch, char *argument, int cmd)
                         "%s : You can't carry that much weight.\r\n",
                         fname(obj_object->name));
                 send_to_char(buffer, ch);
-                fail = TRUE;
+                fail = true;
               }
             }
           }
@@ -766,7 +766,7 @@ int do_get(struct char_data *ch, char *argument, int cmd)
           sprintf(buffer, "You do not see anything in the %s.\r\n",
                   fname(sub_object->name));
           send_to_char(buffer, ch);
-          fail = TRUE;
+          fail = true;
         }
       }
       else
@@ -774,14 +774,14 @@ int do_get(struct char_data *ch, char *argument, int cmd)
         sprintf(buffer, "The %s is not a container.\r\n",
                 fname(sub_object->name));
         send_to_char(buffer, ch);
-        fail = TRUE;
+        fail = true;
       }
     }
     else
     {
       sprintf(buffer, "You do not see or have the %s.\r\n", arg2);
       send_to_char(buffer, ch);
-      fail = TRUE;
+      fail = true;
     }
   }
   break;
@@ -793,8 +793,8 @@ int do_get(struct char_data *ch, char *argument, int cmd)
   break;
   case 6:
   { // get ??? ???
-    found = FALSE;
-    fail = FALSE;
+    found = false;
+    fail = false;
     sub_object = get_obj_in_list_vis(ch, arg2,
                                      world[ch->in_room].contents);
     if (!sub_object)
@@ -805,8 +805,8 @@ int do_get(struct char_data *ch, char *argument, int cmd)
         return eFAILURE;
       }
 
-      sub_object = get_obj_in_list_vis(ch, arg2, ch->carrying, TRUE);
-      inventorycontainer = TRUE;
+      sub_object = get_obj_in_list_vis(ch, arg2, ch->carrying, true);
+      inventorycontainer = true;
     }
     if (sub_object)
     {
@@ -818,9 +818,9 @@ int do_get(struct char_data *ch, char *argument, int cmd)
         sprintf(buffer, "%s_consent", GET_NAME(ch));
 
         if ((cmd != CMD_LOOT && (isname("thiefcorpse", sub_object->name) && !isname(GET_NAME(ch), sub_object->name))) || isname(buffer, sub_object->name))
-          has_consent = TRUE;
+          has_consent = true;
         if (!isname(GET_NAME(ch), sub_object->name) && (cmd == CMD_LOOT && isname("lootable", sub_object->name)) && !IS_SET(sub_object->obj_flags.more_flags, ITEM_PC_CORPSE_LOOTED) && !IS_SET(world[ch->in_room].room_flags, SAFE) && GET_LEVEL(ch) >= 50)
-          has_consent = TRUE;
+          has_consent = true;
         if (!has_consent && !isname(GET_NAME(ch), sub_object->name))
         {
           send_to_char("You don't have consent to touch the "
@@ -840,8 +840,8 @@ int do_get(struct char_data *ch, char *argument, int cmd)
         obj_object = get_obj_in_list_vis(ch, arg1, sub_object->contains);
         if (!obj_object && IS_AFFECTED(ch, AFF_BLIND) && has_skill(ch, SKILL_BLINDFIGHTING))
         {
-          obj_object = get_obj_in_list_vis(ch, arg1, sub_object->contains, TRUE);
-          blindlag = TRUE;
+          obj_object = get_obj_in_list_vis(ch, arg1, sub_object->contains, true);
+          blindlag = true;
         }
         if (obj_object)
         {
@@ -850,13 +850,13 @@ int do_get(struct char_data *ch, char *argument, int cmd)
               GET_LEVEL(ch) < 5)
           {
             send_to_char("You cannot pick up that much money!\r\n", ch);
-            fail = TRUE;
+            fail = true;
           }
 
           else if (sub_object->carried_by != ch && obj_object->obj_flags.eq_level > 9 && GET_LEVEL(ch) < 5)
           {
             csendf(ch, "%s is too powerful for you to possess.\r\n", obj_object->short_description);
-            fail = TRUE;
+            fail = true;
           }
 
           else if ((IS_CARRYING_N(ch) + 1 > CAN_CARRY_N(ch)) &&
@@ -864,7 +864,7 @@ int do_get(struct char_data *ch, char *argument, int cmd)
           {
             sprintf(buffer, "%s : You can't carry that many items.\r\n", fname(obj_object->name));
             send_to_char(buffer, ch);
-            fail = TRUE;
+            fail = true;
           }
           else if (inventorycontainer ||
                    (IS_CARRYING_W(ch) + obj_object->obj_flags.weight) < CAN_CARRY_W(ch) || GET_ITEM_TYPE(obj_object) == ITEM_MONEY)
@@ -891,7 +891,7 @@ int do_get(struct char_data *ch, char *argument, int cmd)
                   log(log_buf, ANGEL, LOG_MORTAL);
 
                   extract_obj(obj_object);
-                  fail = TRUE;
+                  fail = true;
                   sprintf(buffer, "%s_consent", GET_NAME(ch));
 
                   if ((cmd == CMD_LOOT && isname("lootable", sub_object->name)) && !isname(buffer, sub_object->name))
@@ -919,7 +919,7 @@ int do_get(struct char_data *ch, char *argument, int cmd)
                 else
                 {
                   csendf(ch, "%s : It seems magically attached to the corpse.\r\n", fname(obj_object->name));
-                  fail = TRUE;
+                  fail = true;
                 }
               }
             }
@@ -929,21 +929,21 @@ int do_get(struct char_data *ch, char *argument, int cmd)
                 palm(ch, obj_object, sub_object, has_consent);
               else
                 get(ch, obj_object, sub_object, has_consent, cmd);
-              found = TRUE;
+              found = true;
               if (blindlag)
                 WAIT_STATE(ch, PULSE_VIOLENCE);
             }
             else
             {
               send_to_char("You can't take that.\r\n", ch);
-              fail = TRUE;
+              fail = true;
             }
           }
           else
           {
             sprintf(buffer, "%s : You can't carry that much weight.\r\n", fname(obj_object->name));
             send_to_char(buffer, ch);
-            fail = TRUE;
+            fail = true;
           }
         }
         else
@@ -951,7 +951,7 @@ int do_get(struct char_data *ch, char *argument, int cmd)
           sprintf(buffer, "The %s does not contain the %s.\r\n",
                   fname(sub_object->name), arg1);
           send_to_char(buffer, ch);
-          fail = TRUE;
+          fail = true;
         }
       }
       else
@@ -959,14 +959,14 @@ int do_get(struct char_data *ch, char *argument, int cmd)
         sprintf(buffer,
                 "The %s is not a container.\r\n", fname(sub_object->name));
         send_to_char(buffer, ch);
-        fail = TRUE;
+        fail = true;
       }
     }
     else
     {
       sprintf(buffer, "You do not see or have the %s.\r\n", arg2);
       send_to_char(buffer, ch);
-      fail = TRUE;
+      fail = true;
     }
   }
   break;
@@ -1057,10 +1057,10 @@ int contents_cause_unique_problem(obj_data * obj, char_data * vict)
 
     if( IS_SET(inside->obj_flags.more_flags, ITEM_UNIQUE) &&
         search_char_for_item(vict, inside->item_number, false))
-       return TRUE;
+       return true;
     lastnum = inside->item_number;
   }
-  return FALSE;
+  return false;
 }
 
 int contains_no_trade_item(obj_data * obj)
@@ -1070,11 +1070,11 @@ int contains_no_trade_item(obj_data * obj)
   while(inside)
   {
     if(IS_SET(inside->obj_flags.more_flags, ITEM_NO_TRADE))
-      return TRUE;
+      return true;
     inside = inside->next_content;
   }
 
-  return FALSE;
+  return false;
 }
 
 int do_drop(struct char_data *ch, char *argument, int cmd)
@@ -1084,7 +1084,7 @@ int do_drop(struct char_data *ch, char *argument, int cmd)
   char buffer[MAX_STRING_LENGTH];
   struct obj_data *tmp_object;
   struct obj_data *next_obj;
-  bool test = FALSE, blindlag = FALSE;
+  bool test = false, blindlag = false;
   char alldot[MAX_STRING_LENGTH];
 
   alldot[0] = '\0';
@@ -1165,10 +1165,10 @@ int do_drop(struct char_data *ch, char *argument, int cmd)
                sprintf(buffer, "You drop the %s.\r\n", fname(tmp_object->name));
                send_to_char(buffer, ch);
             }
-            else if(CAN_SEE_OBJ(ch, tmp_object, TRUE)) {
+            else if(CAN_SEE_OBJ(ch, tmp_object, true)) {
                sprintf(buffer, "You drop the %s.\r\n", fname(tmp_object->name));
                send_to_char(buffer, ch);
-               blindlag = TRUE;
+               blindlag = true;
             }
             else
                send_to_char("You drop something.\r\n", ch);
@@ -1186,14 +1186,14 @@ int do_drop(struct char_data *ch, char *argument, int cmd)
 	    
             act("$n drops $p.", ch, tmp_object, 0, TO_ROOM, INVIS_NULL);
             move_obj(tmp_object, ch->in_room);
-            test = TRUE;
+            test = true;
             if(blindlag) WAIT_STATE(ch, PULSE_VIOLENCE);
          }
          else {
-            if(CAN_SEE_OBJ(ch, tmp_object, TRUE)) {
+            if(CAN_SEE_OBJ(ch, tmp_object, true)) {
                sprintf(buffer, "You can't drop the %s, it must be CURSED!\r\n", fname(tmp_object->name));
                send_to_char(buffer, ch);
-               test = TRUE;
+               test = true;
             }
          }
       } /* for */
@@ -1265,7 +1265,7 @@ void do_putalldot(struct char_data *ch, char *name, char *target, int cmd)
   struct obj_data *tmp_object;
   struct obj_data *next_object;
   char buf[200];
-  bool found = FALSE;
+  bool found = false;
 
  /* If "put all.object bag", get all carried items
   * named "object", and put each into the bag.
@@ -1276,13 +1276,13 @@ void do_putalldot(struct char_data *ch, char *name, char *target, int cmd)
      if(!name && CAN_SEE_OBJ(ch, tmp_object)) {
        sprintf(buf, "%s %s", fname(tmp_object->name), target);
        buf[99] = 0;
-       found = TRUE;
+       found = true;
        do_put(ch, buf, cmd);
      }
      else if(isname(name, tmp_object->name) && CAN_SEE_OBJ(ch, tmp_object)) {
        sprintf(buf, "%s %s", name, target);
        buf[99] = 0;
-       found = TRUE;
+       found = true;
        do_put(ch, buf, cmd);
      }
   }
@@ -1525,20 +1525,20 @@ void do_givealldot(CHAR_DATA *ch, char *name, char *target, int cmd)
   struct obj_data *tmp_object;
   struct obj_data *next_object;
   char buf[200];
-  bool found = FALSE;
+  bool found = false;
 
   for(tmp_object = ch->carrying; tmp_object; tmp_object = next_object) {
      next_object = tmp_object->next_content;
      if(!name && CAN_SEE_OBJ(ch, tmp_object)) {
        sprintf(buf, "%s %s", fname(tmp_object->name), target);
        buf[99] = 0;
-       found = TRUE;
+       found = true;
        do_give(ch, buf, cmd);
      }
      else if(isname(name, tmp_object->name) && CAN_SEE_OBJ(ch, tmp_object)) {
        sprintf(buf, "%s %s", name, target);
        buf[99] = 0;
-       found = TRUE;
+       found = true;
        do_give(ch, buf, cmd);
      }
   }
@@ -2033,7 +2033,7 @@ int find_door(CHAR_DATA *ch, char *type, char *dir)
   
     if (*dir) /* a direction was specified */
     {
-        if ((door = search_block(dir, dirs, FALSE)) == -1) /* Partial Match */
+        if ((door = search_block(dir, dirs, false)) == -1) /* Partial Match */
         {
             send_to_char("That's not a direction.\r\n", ch);
             return(-1);
@@ -2190,11 +2190,11 @@ int do_open(CHAR_DATA *ch, char *argument, int cmd)
                   {
                      sprintf(buf, "The %s is opened from the other side.\r\n",
                                 fname(back->keyword));
-                     send_to_room(buf, EXIT(ch, door)->to_room, TRUE);
+                     send_to_room(buf, EXIT(ch, door)->to_room, true);
                   }
                   else
                      send_to_room("The door is opened from the other side.\r\n",
-                                EXIT(ch, door)->to_room, TRUE);
+                                EXIT(ch, door)->to_room, true);
                }
 
          if((IS_SET(world[ch->in_room].room_flags, FALL_DOWN) && (door = 5)) ||
@@ -2213,7 +2213,7 @@ int do_open(CHAR_DATA *ch, char *argument, int cmd)
                if(IS_NPC(victim) || IS_AFFECTED(victim, AFF_FLYING))  
                   continue;
                if(!success) {
-                  send_to_room("With the door no longer closed for support, this area's strange gravity takes over!\r\n", victim->in_room, TRUE);
+                  send_to_room("With the door no longer closed for support, this area's strange gravity takes over!\r\n", victim->in_room, true);
                   success = 1;
                }
                if(victim == ch)
@@ -2295,11 +2295,11 @@ int do_close(CHAR_DATA *ch, char *argument, int cmd)
                   {
                      sprintf(buf, "The %s closes quietly.\r\n",
                                    fname(back->keyword));
-                     send_to_room(buf, EXIT(ch, door)->to_room, TRUE);
+                     send_to_room(buf, EXIT(ch, door)->to_room, true);
                   }
                   else
                      send_to_room("The door closes quietly.\r\n",
-                                       EXIT(ch, door)->to_room, TRUE);
+                                       EXIT(ch, door)->to_room, true);
                }
       }
    }

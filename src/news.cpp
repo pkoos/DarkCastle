@@ -150,7 +150,7 @@ const char *newsify(char *string)
 int do_news(struct char_data *ch, char *argument, int cmd)
 {
    bool up;
-   if (IS_NPC(ch)) up = TRUE;
+   if (IS_NPC(ch)) up = true;
    else up = !IS_SET(ch->pcdata->toggles, PLR_NEWS);
    struct news_data *tnews;
    char buf[MAX_STRING_LENGTH*2],old[MAX_STRING_LENGTH*2];

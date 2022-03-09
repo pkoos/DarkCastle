@@ -1243,7 +1243,7 @@ int do_primalfury(CHAR_DATA *ch, char *argument, int cmd)
   if (number(1,101) > (5 + has_skill(ch, SKILL_PRIMAL_FURY)/5))
   { // Str loss.
      GET_RAW_STR(ch) -= 1;
-     affect_modify(ch, APPLY_STR, 0, -1, TRUE); 
+     affect_modify(ch, APPLY_STR, 0, -1, true); 
      send_to_char("You lose one point of strength.",ch);
      logf(OVERSEER, LOG_MORTAL, "Statloss: %s lost one point of strength through primal fury.", GET_NAME(ch));
   }

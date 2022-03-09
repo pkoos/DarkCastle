@@ -201,9 +201,9 @@ int hit_gain(CHAR_DATA *ch, int position) {
 	struct affected_type * af;
 	int divisor = 1;
 	int learned = has_skill(ch, SKILL_ENHANCED_REGEN);
-	bool improve = TRUE;
+	bool improve = true;
 	if (position == 777) {
-		improve = FALSE;
+		improve = false;
 		position = GET_POS(ch);
 	}
 	/* Neat and fast */
@@ -291,9 +291,9 @@ int move_gain(CHAR_DATA *ch, int extra)
 	int divisor = 100000;
 	int learned = has_skill(ch, SKILL_ENHANCED_REGEN);
 	struct affected_type * af;
-	bool improve = TRUE;
+	bool improve = true;
 	if (extra == 777)
-		improve = FALSE;
+		improve = false;
 
 	if (IS_NPC(ch)) {
 		return (GET_LEVEL(ch));
@@ -369,7 +369,7 @@ void redo_hitpoints(CHAR_DATA *ch) {
 		if (ch->equipment[i])
 			for (j = 0; j < ch->equipment[i]->num_affects; j++) {
 				if (ch->equipment[i]->affected[j].location == APPLY_HIT)
-					affect_modify(ch, ch->equipment[i]->affected[j].location, ch->equipment[i]->affected[j].modifier, -1, TRUE);
+					affect_modify(ch, ch->equipment[i]->affected[j].location, ch->equipment[i]->affected[j].modifier, -1, true);
 			}
 	}
 	add_totem_stats(ch, APPLY_HIT);
@@ -408,7 +408,7 @@ void redo_mana(CHAR_DATA *ch)
 		if (ch->equipment[i])
 			for (j = 0; j < ch->equipment[i]->num_affects; j++) {
 				if (ch->equipment[i]->affected[j].location == APPLY_MANA)
-					affect_modify(ch, ch->equipment[i]->affected[j].location, ch->equipment[i]->affected[j].modifier, -1, TRUE);
+					affect_modify(ch, ch->equipment[i]->affected[j].location, ch->equipment[i]->affected[j].modifier, -1, true);
 			}
 	}
 	add_totem_stats(ch, APPLY_MANA);
@@ -434,7 +434,7 @@ void redo_ki(CHAR_DATA *ch) {
 		if (ch->equipment[i])
 			for (j = 0; j < ch->equipment[i]->num_affects; j++) {
 				if (ch->equipment[i]->affected[j].location == APPLY_KI)
-					affect_modify(ch, ch->equipment[i]->affected[j].location, ch->equipment[i]->affected[j].modifier, -1, TRUE);
+					affect_modify(ch, ch->equipment[i]->affected[j].location, ch->equipment[i]->affected[j].modifier, -1, true);
 			}
 	}
 	add_totem_stats(ch, APPLY_KI);
@@ -792,10 +792,10 @@ void point_update(void) {
 				if (number(1, 101) > a) // Failed.
 						{
 					i->pcdata->hiding_from[o] = temp;
-					i->pcdata->hide[o++] = FALSE;
+					i->pcdata->hide[o++] = false;
 				} else {
 					i->pcdata->hiding_from[o] = temp;
-					i->pcdata->hide[o++] = TRUE;
+					i->pcdata->hide[o++] = true;
 				}
 			}
 		}
@@ -885,7 +885,7 @@ void update_corpses_and_portals(void)
 
 							if (IS_SET(oo->obj_flags.more_flags, ITEM_NO_TRADE))
 							{
-								log_sacrifice((CHAR_DATA *)j, oo, TRUE);
+								log_sacrifice((CHAR_DATA *)j, oo, true);
 								extract_obj(oo);
 							}
 						}
@@ -898,7 +898,7 @@ void update_corpses_and_portals(void)
 								next_thing = jj->next;
 							while (next_thing && next_thing->in_obj == jj)
 								next_thing = next_thing->next;
-							log_sacrifice((CHAR_DATA *)j, jj, TRUE);
+							log_sacrifice((CHAR_DATA *)j, jj, true);
 							extract_obj(jj);
 						}
 						else
@@ -912,7 +912,7 @@ void update_corpses_and_portals(void)
 								next_thing = jj->next;
 							while (next_thing->in_obj == jj)
 								next_thing = next_thing->next;
-							log_sacrifice((CHAR_DATA *)j, jj, TRUE);
+							log_sacrifice((CHAR_DATA *)j, jj, true);
 							extract_obj(jj);
 						}
 						else
@@ -926,7 +926,7 @@ void update_corpses_and_portals(void)
 								next_thing = jj->next;
 							while (next_thing && next_thing->in_obj == jj)
 								next_thing = next_thing->next;
-							log_sacrifice((CHAR_DATA *)j, jj, TRUE);
+							log_sacrifice((CHAR_DATA *)j, jj, true);
 							extract_obj(jj);
 						}
 						else

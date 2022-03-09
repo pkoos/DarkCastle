@@ -190,7 +190,7 @@ send_tokens_return send_tokens(TokenList * tokens, CHAR_DATA *ch, OBJ_DATA * obj
   if (MOBtrigger && buf)
     retval |= oprog_act_trigger( buf, ch);
     
-  MOBtrigger = TRUE;
+  MOBtrigger = true;
   if (buf == nullptr)
   {
     send_tokens_return str;

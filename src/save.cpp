@@ -351,7 +351,7 @@ void save_pc_data(struct pc_data * i, FILE * fpsave, struct time_data tmpage)
 void fread_to_tilde(FILE *fpsave)
 {
   char a;
-  while (TRUE)
+  while (true)
   {
     fread(&a, 1, 1, fpsave);
     if (a == '~') break; 
@@ -687,7 +687,7 @@ int store_to_char_variable_data(CHAR_DATA * ch, FILE * fpsave)
        fread(&(af->location),  sizeof(af->location),  1, fpsave);
        fread(&(af->bitvector), sizeof(af->bitvector), 1, fpsave);
 
-       affect_modify(ch, af->location, af->modifier, af->bitvector, TRUE); // re-affect the char
+       affect_modify(ch, af->location, af->modifier, af->bitvector, true); // re-affect the char
     }
     fread(&typeflag, sizeof(char), 3, fpsave);
   }
@@ -899,7 +899,7 @@ bool load_char_obj( struct descriptor_data *d, char *name )
   struct  char_data *ch;
 
   if(!name || !strcmp(name, ""))
-    return FALSE;
+    return false;
 
 #ifdef LEAK_CHECK
   ch = (CHAR_DATA *)calloc(1, sizeof(CHAR_DATA));
@@ -932,10 +932,10 @@ bool load_char_obj( struct descriptor_data *d, char *name )
 //  Should be much faster and save our HD from turning itself to mush -pir
 
   if ((fpsave = dc_fopen(strsave, "rb" )) == NULL)
-    return FALSE;
+    return false;
 
   if(fread(&uchar, sizeof(uchar), 1, fpsave) == 0)
-    { load_char_obj_error(fpsave, strsave);  return FALSE;  }
+    { load_char_obj_error(fpsave, strsave);  return false;  }
 
   reset_char(ch);
 
@@ -961,7 +961,7 @@ bool load_char_obj( struct descriptor_data *d, char *name )
 
   if(fpsave != NULL)
     dc_fclose(fpsave);
-  return TRUE;
+  return true;
 }
 
 // read data from file for an item.
@@ -1203,21 +1203,21 @@ bool obj_to_store (struct obj_data *obj, CHAR_DATA *ch, FILE *fpsave, int wear_p
  // struct obj_data *tmp;
 
   if (obj == NULL)
-    return TRUE;
+    return true;
 
   // recurse down next item in list
   if (!obj_to_store (obj->next_content, ch, fpsave, -1))
-    return FALSE;
+    return false;
 
   // store myself
   if (!put_obj_in_store (obj, ch, fpsave, wear_pos ))
-    return FALSE;
+    return false;
 
   // store anything IN myself.  That way they get put back in on read
   if (!obj_to_store (obj->contains, ch, fpsave, -1))
-    return FALSE;
+    return false;
 
-  return TRUE;
+  return true;
 }
 
 // return true on success
@@ -1232,10 +1232,10 @@ bool put_obj_in_store (struct obj_data *obj, CHAR_DATA *ch, FILE *fpsave, int we
   memset(&object, 0, sizeof(object));
 
   if (GET_ITEM_TYPE(obj) == ITEM_NOTE)
-    return TRUE;
+    return true;
 
   if(IS_SET(obj->obj_flags.extra_flags, ITEM_NOSAVE))
-    return TRUE;
+    return true;
 
   if (IS_SET(obj->obj_flags.more_flags, ITEM_24H_SAVE)) {
 	  // First time we try to save this object we set the
@@ -1245,12 +1245,12 @@ bool put_obj_in_store (struct obj_data *obj, CHAR_DATA *ch, FILE *fpsave, int we
 	  } else if (time(NULL) > obj->save_expiration){
 		  // If the object's window for saving has expired then
 		  // we don't save it as-if it had ITEM_NOSAVE
-		  return TRUE;
+		  return true;
 	  }
     }
 
   if (obj->item_number < 0)
-    return TRUE;
+    return true;
 
   // Set up items saved for all items
   object.version      = CURRENT_OBJ_VERSION;
@@ -1263,7 +1263,7 @@ bool put_obj_in_store (struct obj_data *obj, CHAR_DATA *ch, FILE *fpsave, int we
 
   // write basic item format to file
   if(!(fwrite(&object, sizeof(object), 1, fpsave )))
-    return FALSE;
+    return false;
 
   // get a pointer to the standard version of this item
   standard_obj = ((struct obj_data *)obj_index[obj->item_number].item);
@@ -1452,7 +1452,7 @@ bool put_obj_in_store (struct obj_data *obj, CHAR_DATA *ch, FILE *fpsave, int we
   // Stop flag.  This means we are done with this object on the read
   fwrite("STP", sizeof(char), 3, fpsave);
 
-  return TRUE;
+  return true;
 }
 
 
@@ -1577,7 +1577,7 @@ void char_to_store(CHAR_DATA *ch, struct char_file_u *st, struct time_data & tmp
   // Unaffect everything a character can be affected by spell-wise
   for(af = ch->affected; af; af = af->next) 
   {
-    affect_modify( ch, af->location, af->modifier, af->bitvector, FALSE);
+    affect_modify( ch, af->location, af->modifier, af->bitvector, false);
   }
 
   st->sex      = GET_SEX(ch);
@@ -1667,7 +1667,7 @@ void char_to_store(CHAR_DATA *ch, struct char_file_u *st, struct time_data & tmp
 
   // re-affect the character with spells
   for(af = ch->affected; af; af = af->next) {
-      affect_modify( ch, af->location, af->modifier, af->bitvector, TRUE);
+      affect_modify( ch, af->location, af->modifier, af->bitvector, true);
   }
 
   // re-equip the character with his eq

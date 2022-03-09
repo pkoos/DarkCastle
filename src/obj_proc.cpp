@@ -1301,7 +1301,7 @@ int pfe_word(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg,
    }
   else // cmd=69 (remove)
    {
-      obj_object = get_object_in_equip_vis(ch, arg1, ch->equipment, &j, FALSE);
+      obj_object = get_object_in_equip_vis(ch, arg1, ch->equipment, &j, false);
       if(!obj_object)
          return eFAILURE;
 
@@ -1317,7 +1317,7 @@ int pfe_word(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg,
          send_to_char("The power drains away.\r\n", ch);
       }
       // This should remove the pfe unless he has it cast or on EQ
-      // We will allow it to return FALSE do the do_remove goes through.
+      // We will allow it to return false do the do_remove goes through.
    }
    return eFAILURE;
 }
@@ -1352,7 +1352,7 @@ int devilsword(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg,
       if(ch->equipment[WIELD]->obj_flags.value[3] == 8)
       {
          send_to_char("Nothing happens.\r\n", ch);
-         return TRUE;
+         return true;
       }
 
       act("Venom-flecked fangs grow and bristle from the bedeviled Cestus!", ch, 0, 0, TO_ROOM, 0);
@@ -1766,7 +1766,7 @@ int stupid_message(struct char_data*ch, struct obj_data *obj, int cmd, char*arg,
    if(number(1, 10) == 1)
       send_to_room("The shadows swirl to reveal a face before you.\r\n"
                    "It speaks suddenly, 'Only with the key can you unlock the masters name' "
-                   "and then fades away.\r\n", obj->in_room, TRUE);
+                   "and then fades away.\r\n", obj->in_room, true);
 
    return eSUCCESS;
 }
@@ -2189,7 +2189,7 @@ int protection_word(CHAR_DATA *ch, struct obj_data *obj, int cmd, char *arg,
 
    if(ch->equipment[HOLD]->obj_flags.value[3] && GET_LEVEL(ch) < IMMORTAL) {
       send_to_char("The item seems to be recharging.\r\n", ch);
-      return TRUE;
+      return true;
    }
    act("$n mutters something into $s hands.", ch, 0, 0, TO_ROOM, 0);
    send_to_char("You quietly whisper 'protezione' into your hands.\r\n", ch);
@@ -2225,17 +2225,17 @@ int pull_proc(struct char_data*ch, struct obj_data *obj, int cmd, char*arg, CHAR
         // unlock the gate
         REMOVE_BIT(world[9531].dir_option[1]->exit_info, EX_LOCKED);
         REMOVE_BIT(world[9532].dir_option[3]->exit_info, EX_LOCKED);
-        send_to_room("You hear a large clicking noise.\n\r", 9531, TRUE);
-        send_to_room("You hear a large clicking noise.\n\r", 9532, TRUE);
-        send_to_room("You hear a large clicking noise.\n\r", ch->in_room, TRUE);
+        send_to_room("You hear a large clicking noise.\n\r", 9531, true);
+        send_to_room("You hear a large clicking noise.\n\r", 9532, true);
+        send_to_room("You hear a large clicking noise.\n\r", ch->in_room, true);
         break;
       case 29203:
 	if (obj_index[real_object(29202)].number > 0)
 	{
-		send_to_room("A compartment in the ceiling opens, but is it empty.\r\n",29258, TRUE);
+		send_to_room("A compartment in the ceiling opens, but is it empty.\r\n",29258, true);
 		break;
 	}
-	send_to_room("A compartment in the ceiling opens, and a key drops to the ground.\r\n", 29258, TRUE);
+	send_to_room("A compartment in the ceiling opens, and a key drops to the ground.\r\n", 29258, true);
 	obj_to_room(clone_object(real_object(29202)), 29258);
 	break;
       default:
@@ -2269,12 +2269,12 @@ int szrildor_pass(struct char_data *ch, struct obj_data *obj, int cmd, char *arg
 
   if (obj->obj_flags.timer == 0)
   {       // Just created - check if this is the first pass in existence and if so, repop zone 161
-    bool first = TRUE;
+    bool first = true;
     for (p = object_list; p; p = p->next)
     {
       if (obj_index[p->item_number].virt == 30097 && p != obj && p->obj_flags.timer != 0)  // if any exist that are not at 1800 timer
       {
-        first = FALSE;
+        first = false;
         break;
       }
     }
@@ -2308,7 +2308,7 @@ int szrildor_pass(struct char_data *ch, struct obj_data *obj, int cmd, char *arg
               extract_obj(tmp_victim->carrying);
             }
 
-            extract_char(tmp_victim, TRUE);
+            extract_char(tmp_victim, true);
           }
         }
       }
@@ -2361,7 +2361,7 @@ int szrildor_pass(struct char_data *ch, struct obj_data *obj, int cmd, char *arg
               strcpy(throwitem->target_mob_name, "");
               throwitem->data_num = 99;
               throwitem->delay = 0;
-              throwitem->mob = TRUE; // This is, surprisingly, a mob
+              throwitem->mob = true; // This is, surprisingly, a mob
               throwitem->actor = v;
               throwitem->obj = NULL;
               throwitem->vo = NULL;
@@ -2466,20 +2466,20 @@ char*arg, CHAR_DATA *invoker)
    {
       obj->obj_flags.timer = time;
       while ((room = number(low, high))) {
-          bool portal = FALSE;
+          bool portal = false;
           if (real_room(room) < 0) continue;
 	  if (sector)
 	    if (world[real_room(room)].sector_type != sector)
 		continue;
           struct obj_data *o;
 	  for (o = world[real_room(room)].contents; o; o = o->next_content)
-		if (o->obj_flags.type_flag == ITEM_PORTAL) portal = TRUE;
+		if (o->obj_flags.type_flag == ITEM_PORTAL) portal = true;
         if (!portal) break;
       } // Find a room
-      send_to_room(msg1,obj->in_room, TRUE);
+      send_to_room(msg1,obj->in_room, true);
       obj_from_room(obj);
       obj_to_room(obj, room);
-      send_to_room(msg2,obj->in_room, TRUE);
+      send_to_room(msg2,obj->in_room, true);
       return eSUCCESS;
    }
    return eFAILURE;
@@ -2524,11 +2524,11 @@ void send_to_boat(int boat, char * message)
 {
   switch(boat) {
     case 9531: // dk boat
-       send_to_room(message, 9522, TRUE);
-       send_to_room(message, 9523, TRUE);
-       send_to_room(message, 9524, TRUE);
-       send_to_room(message, 9525, TRUE);
-       send_to_room(message, 9587, TRUE);
+       send_to_room(message, 9522, true);
+       send_to_room(message, 9523, true);
+       send_to_room(message, 9524, true);
+       send_to_room(message, 9525, true);
+       send_to_room(message, 9587, true);
        break;
     default:
       break;
@@ -2605,11 +2605,11 @@ int boat_proc(struct char_data*ch, struct obj_data *obj, int cmd, char*arg, CHAR
          send_to_boat(obj_index[obj->item_number].virt, "The ship docks at its destination.\n\r");
        }
      }
-     send_to_room("The ship sails away.\n\r", obj->in_room, TRUE);
+     send_to_room("The ship sails away.\n\r", obj->in_room, true);
      send_to_boat(obj_index[obj->item_number].virt, "The ship sails onwards.\n\r");
      obj_from_room(obj);
      obj_to_room(obj, move_to);
-     send_to_room("A ship sails in.\n\r", obj->in_room, TRUE);
+     send_to_room("A ship sails in.\n\r", obj->in_room, true);
    }
    return eSUCCESS;
 }
@@ -2710,13 +2710,13 @@ int mob_summoner(struct char_data*ch, struct obj_data *obj, int cmd, char*arg, C
 
        switch(obj->obj_flags.value[0]) {
          case 0:
-           send_to_room("The shadows in the room begin to shift and slide in tricks of the light.\n\r", BONEWRACK_ROOM, TRUE);
+           send_to_room("The shadows in the room begin to shift and slide in tricks of the light.\n\r", BONEWRACK_ROOM, true);
            break;
          case 1:
            send_to_zone("A loud roar echos audibly through the entire kingdom.\n\r", world[obj->in_room].zone);
            break;
          case 2:
-           send_to_room("The dragon $B$2Bonewrack$R flies in from above!\n\r", BONEWRACK_ROOM, TRUE);
+           send_to_room("The dragon $B$2Bonewrack$R flies in from above!\n\r", BONEWRACK_ROOM, true);
            move_char(vict, BONEWRACK_ROOM);
            obj->obj_flags.value[0] = 0;
            break;
@@ -2733,13 +2733,13 @@ int mob_summoner(struct char_data*ch, struct obj_data *obj, int cmd, char*arg, C
 
        switch(obj->obj_flags.value[0]) {
          case 0:
-           send_to_room("In the distance a winged creature can be seen flying towards you.\n\r", GAIOT_AVATAR, TRUE);
+           send_to_room("In the distance a winged creature can be seen flying towards you.\n\r", GAIOT_AVATAR, true);
            break;
          case 1:
-           send_to_room("The winged creature flies closer and closer.\n\r", GAIOT_AVATAR, TRUE);
+           send_to_room("The winged creature flies closer and closer.\n\r", GAIOT_AVATAR, true);
            break;
          case 2:
-           send_to_room("The creature shatters in illusion!\n\r", GAIOT_AVATAR, TRUE);
+           send_to_room("The creature shatters in illusion!\n\r", GAIOT_AVATAR, true);
            move_char(vict, GAIOT_AVATAR);
            obj->obj_flags.value[0] = 0;
            break;
@@ -2771,7 +2771,7 @@ int globe_of_darkness_proc(struct char_data*ch, struct obj_data *obj, int cmd, c
    if(obj->obj_flags.value[0] < 1) {
       // time to kill myself
       world[obj->in_room].light += obj->obj_flags.value[1]; // light back up
-      send_to_room("The globe of darkness fades brightening the room some.\n\r", obj->in_room, TRUE);
+      send_to_room("The globe of darkness fades brightening the room some.\n\r", obj->in_room, true);
       extract_obj(obj);
    }
    else obj->obj_flags.value[0]--;

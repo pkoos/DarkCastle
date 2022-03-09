@@ -461,10 +461,10 @@ void char_to_store(CHAR_DATA *ch, struct char_file_u *st, struct time_data & tmp
 bool obj_to_store( struct obj_data *obj, CHAR_DATA *ch, FILE *fpsave, int wear_pos );
 void check_idling(CHAR_DATA *ch);
 void stop_follower(CHAR_DATA *ch, int cmd);
-bool CAN_SEE( CHAR_DATA *sub, CHAR_DATA *obj, bool noprog = FALSE );
+bool CAN_SEE( CHAR_DATA *sub, CHAR_DATA *obj, bool noprog = false );
 int  SWAP_CH_VICT(int value);
 bool SOMEONE_DIED(int value);
-bool CAN_SEE_OBJ( CHAR_DATA *sub, struct obj_data *obj, bool bf = FALSE);
+bool CAN_SEE_OBJ( CHAR_DATA *sub, struct obj_data *obj, bool bf = false);
 bool check_blind( CHAR_DATA *ch );
 void raw_kill(CHAR_DATA *ch, CHAR_DATA *victim);
 void check_killer( CHAR_DATA *ch, CHAR_DATA *victim );
@@ -476,7 +476,7 @@ void ansi_color(char *txt, CHAR_DATA *ch);
 void send_to_char(string messg, struct char_data *ch);
 void send_to_char(const char *messg, CHAR_DATA *ch);
 void send_to_char_nosp(const char *messg, CHAR_DATA *ch);
-void send_to_room(const char *messg, int room, bool awakeonly = FALSE, CHAR_DATA *nta = NULL);
+void send_to_room(const char *messg, int room, bool awakeonly = false, CHAR_DATA *nta = NULL);
 void record_track_data(CHAR_DATA *ch, int cmd); 
 int write_to_descriptor(int desc, char *txt);
 int write_to_descriptor_fd(int desc, char *txt);
@@ -509,7 +509,7 @@ void mob_suprised_sayings(char_data * ch, char_data * aggressor);
 // MOBProgs prototypes
 int     mprog_wordlist_check    ( const char * arg, CHAR_DATA *mob,
                 			CHAR_DATA* actor, OBJ_DATA* object,
-					void* vo, int type, bool reverse = FALSE );
+					void* vo, int type, bool reverse = false );
 void    mprog_percent_check     ( CHAR_DATA *mob, CHAR_DATA* actor,
 					OBJ_DATA* object, void* vo,
 					int type );

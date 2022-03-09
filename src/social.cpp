@@ -47,7 +47,7 @@ int check_social( struct char_data *ch, char *pcomm, int length, char *arg )
 	else
 	  i++;
     if(!(action = find_social(pcomm)))
-      return SOCIAL_FALSE;
+      return SOCIAL_false;
 
     if(!IS_NPC(ch) && IS_SET(ch->pcdata->punish, PUNISH_NOEMOTE)) {
 	send_to_char( "You are anti-social!\n\r", ch );
@@ -140,7 +140,7 @@ char *fread_social_string(FILE *fl)
 
 // read one social
 // return TRUE on success
-// return FALSE on 'EOF'
+// return false on 'EOF'
 int read_social_from_file(long int num_social, FILE * fl)
 {
   char tmp[MAX_INPUT_LENGTH];
@@ -148,7 +148,7 @@ int read_social_from_file(long int num_social, FILE * fl)
 
   fscanf(fl, " %s ", tmp);
   if(feof(fl))
-    return FALSE;
+    return false;
   fscanf(fl, " %d %d \n", &hide, &min_pos);
 
   // read strings that will always be there
@@ -160,13 +160,13 @@ int read_social_from_file(long int num_social, FILE * fl)
   soc_mess_list[num_social].char_found          = fread_social_string(fl);
   // if no char_found, then the social is done, and the ones below won't be there
   if(!soc_mess_list[num_social].char_found)
-    return TRUE;
+    return true;
   soc_mess_list[num_social].others_found        = fread_social_string(fl);
   soc_mess_list[num_social].vict_found          = fread_social_string(fl);
   soc_mess_list[num_social].not_found           = fread_social_string(fl);
   soc_mess_list[num_social].char_auto           = fread_social_string(fl);
   soc_mess_list[num_social].others_auto         = fread_social_string(fl);
-  return TRUE;
+  return true;
 }
 
 // this function used by qsort to sort the social array

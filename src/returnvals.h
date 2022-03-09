@@ -22,7 +22,7 @@ enum {
 };
 
 
-#define SOCIAL_FALSE            0
+#define SOCIAL_false            0
 #define SOCIAL_TRUE             1
 #define SOCIAL_TRUE_WITH_NOISE  2
 

@@ -460,7 +460,7 @@ int mortician(struct char_data *ch, struct obj_data *obj, int cmd, char *arg, st
 	return eSUCCESS;
 }
 
-char *gl_item(OBJ_DATA *obj, int number, CHAR_DATA *ch, bool platinum = TRUE) {
+char *gl_item(OBJ_DATA *obj, int number, CHAR_DATA *ch, bool platinum = true) {
 	char buf[MAX_STRING_LENGTH], buf2[MAX_STRING_LENGTH], buf3[MAX_STRING_LENGTH];
 	int length, i = 0;
 	if (platinum)

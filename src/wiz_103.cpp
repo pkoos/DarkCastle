@@ -213,7 +213,7 @@ int do_fsave(struct char_data *ch, char *argument, int cmd)
       act(buf,  ch, 0, vict, TO_VICT, 0);
     }
     else */{
-      if (ch->pcdata->stealth == FALSE) {
+      if (ch->pcdata->stealth == false) {
         sprintf(buf, "$n has forced you to 'save'.");
         act(buf,  ch, 0, vict, TO_VICT, 0);
         strcpy(buf,"");
@@ -396,10 +396,10 @@ int do_guild(struct char_data *ch, char *argument, int cmd)
       }
 
       csendf(ch, "Allow list for room #%d: ", room);
-      bool found = FALSE;
+      bool found = false;
       for(c_class=1; c_class < CLASS_MAX; c_class++) {
-	if (world_array[room]->allow_class[c_class] == TRUE) {
-	  found = TRUE;
+	if (world_array[room]->allow_class[c_class] == true) {
+	  found = true;
 	  csendf(ch, "%s ", pc_clss_types[c_class]);
 	}
       }
@@ -423,7 +423,7 @@ int do_guild(struct char_data *ch, char *argument, int cmd)
 
       int cols = 0;
       for (int r = 0; r < top_of_world; r++) {
-	if (world_array[r] && world_array[r]->allow_class[c_class] == TRUE) {
+	if (world_array[r] && world_array[r]->allow_class[c_class] == true) {
 	  csendf(ch, "%5d ", r);
 	  
 	  count++;
@@ -461,12 +461,12 @@ int do_guild(struct char_data *ch, char *argument, int cmd)
     return eFAILURE;
   }
 
-  if (world_array[room]->allow_class[c_class] == TRUE) {
+  if (world_array[room]->allow_class[c_class] == true) {
     csendf(ch, "Removed %s class from room #%d's allow list.\n\r", pc_clss_types[c_class], room);
-    world_array[room]->allow_class[c_class] = FALSE;
+    world_array[room]->allow_class[c_class] = false;
   } else {
     csendf(ch, "Added %s class to room #%d's allow list.\n\r", pc_clss_types[c_class], room);
-    world_array[room]->allow_class[c_class] = TRUE;
+    world_array[room]->allow_class[c_class] = true;
   }
   
   set_zone_modified_world(room);

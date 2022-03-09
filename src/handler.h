@@ -78,7 +78,7 @@ void extract_obj(struct obj_data *obj);
 
 /* ******* characters ********* */
 
-CHAR_DATA *get_char_room(char *name, int room, bool careful = FALSE);
+CHAR_DATA *get_char_room(char *name, int room, bool careful = false);
 CHAR_DATA *get_char_num(int nr);
 CHAR_DATA *get_char(const char *name);
 CHAR_DATA *get_mob(char *name);
@@ -105,10 +105,10 @@ CHAR_DATA *get_mob_room_vis(CHAR_DATA *ch, char *name);
 CHAR_DATA *get_mob_vnum(int vnum);
 OBJ_DATA *get_obj_vnum(int vnum);
 struct obj_data *get_obj_in_list_vis(CHAR_DATA *ch, const char *name, 
-		struct obj_data *list, bool bf = FALSE);
+		struct obj_data *list, bool bf = false);
 struct obj_data *get_obj_in_list_vis(CHAR_DATA *ch, int item_num, 
-		struct obj_data *list, bool bf = FALSE);
-struct obj_data *get_obj_vis(CHAR_DATA *ch, char *name, bool loc = FALSE);
+		struct obj_data *list, bool bf = false);
+struct obj_data *get_obj_vis(CHAR_DATA *ch, char *name, bool loc = false);
 
 void extract_char(CHAR_DATA *ch, bool pull, Trace t = Trace("unknown"));
 /* wiz_102.cpp */

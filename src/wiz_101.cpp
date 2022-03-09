@@ -475,11 +475,11 @@ int do_holylite(struct char_data *ch, char *argument, int cmd)
      } /* if */
 
         if (ch->pcdata->holyLite) {
-           ch->pcdata->holyLite = FALSE;
+           ch->pcdata->holyLite = false;
            send_to_char("Holy light mode off.\n\r",ch);
      }
         else {
-           ch->pcdata->holyLite = TRUE;
+           ch->pcdata->holyLite = true;
            send_to_char("Holy light mode on.\n\r",ch);
      } /* if */
   return eSUCCESS;
@@ -629,7 +629,7 @@ int do_findfix(char_data *ch, char *argument, int cmd)
   {
     for (j = 0; zone_table[i].cmd[j].command != 'S'; j++)
     {
-      bool first = TRUE, found = FALSE;
+      bool first = true, found = false;
       if (zone_table[i].cmd[j].command != 'M') continue;
       int vnum = zone_table[i].cmd[j].arg1, max = zone_table[i].cmd[j].arg2;
       if (zone_table[i].cmd[j].arg2 == 1 ||
@@ -639,8 +639,8 @@ int do_findfix(char_data *ch, char *argument, int cmd)
        {
          if (zone_table[i].cmd[z].command != 'M') continue;
 	 if (zone_table[i].cmd[z].arg1 != vnum) continue;
-	 if (z == j && found) { first = FALSE; break; }
-	 found = TRUE;
+	 if (z == j && found) { first = false; break; }
+	 found = true;
          if (zone_table[i].cmd[z].arg2 > max) max = zone_table[i].cmd[z].arg2;
          amt++;
        }

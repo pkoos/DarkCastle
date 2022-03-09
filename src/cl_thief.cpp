@@ -482,12 +482,12 @@ int do_circle(CHAR_DATA *ch, char *argument, int cmd)
 
    if (!charge_moves(ch, SKILL_CIRCLE)) return eSUCCESS;
 
-   bool stabbingCircle = FALSE;
+   bool stabbingCircle = false;
 
    switch (get_weapon_damage_type(ch->equipment[WIELD])) {
    case TYPE_PIERCE:
    case TYPE_STING:
-     stabbingCircle = TRUE;
+     stabbingCircle = true;
      break;
    default:
 //     send_to_char("Only certain weapons can be used for backstabbing, this is not one of them.\n\r", ch);
@@ -804,10 +804,10 @@ int do_hide(CHAR_DATA *ch, char *argument, int cmd)
           if (number(1,101) > a) // Failed.
           {
             ch->pcdata->hiding_from[i] = temp;
-            ch->pcdata->hide[i++] = FALSE;
+            ch->pcdata->hide[i++] = false;
           } else {
             ch->pcdata->hiding_from[i] = temp;
-            ch->pcdata->hide[i++] = TRUE;
+            ch->pcdata->hide[i++] = true;
           }
         }
    }
@@ -839,7 +839,7 @@ int do_steal(CHAR_DATA *ch, char *argument, int cmd)
   int _exp;
   int retval;
   obj_data * has_item = NULL;
-  bool ohoh = FALSE;
+  bool ohoh = false;
   int chance = GET_HITROLL(ch) + has_skill(ch, SKILL_STEAL) / 4;
   extern struct index_data *obj_index;
 
@@ -953,7 +953,7 @@ int do_steal(CHAR_DATA *ch, char *argument, int cmd)
     {
       set_cantquit( ch, victim );
       send_to_char("Oops, that was clumsy...\n\r", ch);
-      ohoh = TRUE;
+      ohoh = true;
       if(!number(0, 4)) {
         act("$n tried to steal something from you!", ch, 0, victim, TO_VICT, 0);
         act("$n tries to steal something from $N.", ch, 0, victim, TO_ROOM, INVIS_NULL|NOTVICT);
@@ -1152,7 +1152,7 @@ int do_steal(CHAR_DATA *ch, char *argument, int cmd)
     else if (!skill_success(ch,victim,SKILL_STEAL, 0-mod)) 
     {
       set_cantquit( ch, victim );
-      ohoh = TRUE;
+      ohoh = true;
       send_to_char("Oops, that was clumsy...\r\n", ch);
       if((paf = affected_by_spell(victim, SPELL_SLEEP))&& paf->modifier == 1)
       {
@@ -1289,7 +1289,7 @@ int do_pocket(CHAR_DATA *ch, char *argument, int cmd)
   int gold;
   int _exp;
   int retval;
-  bool ohoh = FALSE;
+  bool ohoh = false;
 
   one_argument(argument, victim_name);
 
@@ -1372,7 +1372,7 @@ int do_pocket(CHAR_DATA *ch, char *argument, int cmd)
   {
     set_cantquit( ch, victim );
     send_to_char("Oops, that was clumsy...\r\n", ch);
-    ohoh = TRUE;
+    ohoh = true;
 	    if(number(0, 6)) {
       act("You discover that $n has $s hands in your wallet.", ch,0,victim,TO_VICT, 0);
       act("$n tries to steal gold from $N.", ch, 0, victim, TO_ROOM, NOTVICT|INVIS_NULL);
@@ -1452,7 +1452,7 @@ int do_pick(CHAR_DATA *ch, char *argument, int cmd)
    struct room_direction_data *back;
    struct obj_data *obj;
    CHAR_DATA *victim;
-   bool has_lockpicks = FALSE;
+   bool has_lockpicks = false;
 
    argument_interpreter(argument, type, dir);
 
@@ -1463,12 +1463,12 @@ int do_pick(CHAR_DATA *ch, char *argument, int cmd)
 
   // for (obj = ch->carrying; obj; obj = obj->next_content)
   //    if (obj->obj_flags.type_flag == ITEM_LOCKPICK)
-  //      has_lockpicks = TRUE;
+  //      has_lockpicks = true;
 
    for (j=0; j<MAX_WEAR; j++)
      if (ch->equipment[j] && (ch->equipment[j]->obj_flags.type_flag == ITEM_LOCKPICK
 	|| obj_index[ch->equipment[j]->item_number].virt == 504))
-       has_lockpicks = TRUE;
+       has_lockpicks = true;
 
    if (!has_lockpicks) {
       send_to_char("But...you don't have a lockpick!\r\n", ch);
@@ -2116,7 +2116,7 @@ int do_appraise(CHAR_DATA *ch, char *argument, int cmd)
    char name[MAX_STRING_LENGTH], buf[MAX_STRING_LENGTH];
    char item[MAX_STRING_LENGTH];
    int appraised = 0, bits, learned;
-   bool found = FALSE, weight = FALSE;
+   bool found = false, weight = false;
 
    argument = one_argument(argument,name);
    one_argument(argument, item);
@@ -2144,7 +2144,7 @@ int do_appraise(CHAR_DATA *ch, char *argument, int cmd)
 
    if(obj) {
       appraised = obj->obj_flags.cost;
-      found = TRUE;
+      found = true;
    }
 
    if(victim) {
@@ -2158,8 +2158,8 @@ int do_appraise(CHAR_DATA *ch, char *argument, int cmd)
             obj = get_obj_in_list_vis(ch, item, ch->carrying);
             if(obj) {
                appraised = GET_OBJ_WEIGHT(obj);
-               found = TRUE;
-               weight = TRUE;
+               found = true;
+               weight = true;
             } else send_to_char("You don't seem to be carrying anything like that.\n\r", ch);
          } else {
             obj = get_obj_in_list_vis(ch, item, victim->carrying);
@@ -2168,8 +2168,8 @@ int do_appraise(CHAR_DATA *ch, char *argument, int cmd)
                return eSUCCESS;
             } else {
                appraised = GET_OBJ_WEIGHT(obj);
-               found = TRUE;
-               weight = TRUE;
+               found = true;
+               weight = true;
             }
          }
          if(number(0,1))

@@ -239,7 +239,7 @@ int innate_repair(CHAR_DATA *ch, char *arg, int cmd)
   struct obj_data *obj;
   char buf[MAX_STRING_LENGTH];
   int i, chance = 60-GET_LEVEL(ch);
-  bool found = FALSE;
+  bool found = false;
   arg = one_argument(arg,buf);
   if ( ( obj = get_obj_in_list_vis( ch, buf, ch->carrying ) ) == NULL )
   {
@@ -266,7 +266,7 @@ int innate_repair(CHAR_DATA *ch, char *arg, int cmd)
 	  act("$n fails to repair $p.",ch,obj,obj,TO_ROOM,0);
 	  return eSUCCESS;
        }
-       found = TRUE;
+       found = true;
        obj->num_affects--;
     } else if (found) {
        obj->affected[i-1] = obj->affected[i];

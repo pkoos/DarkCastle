@@ -615,10 +615,10 @@ int do_emote(struct char_data *ch, char *argument, int cmd)
   else {
     sprintf(buf,"$n %s", argument + i);
     // don't want players triggering mobs with emotes
-    MOBtrigger = FALSE;
+    MOBtrigger = false;
     act(buf,ch,0,0,TO_ROOM, 0);
     csendf(ch, "%s %s\n\r", GET_SHORT(ch), argument + i);
-    MOBtrigger = TRUE;
+    MOBtrigger = true;
   }
   return eSUCCESS;
 }

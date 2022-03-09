@@ -177,11 +177,11 @@ int do_stealth(struct char_data *ch, char *argument, int cmd)
      } /* if */
 
         if (ch->pcdata->stealth) {
-           ch->pcdata->stealth = FALSE;
+           ch->pcdata->stealth = false;
            send_to_char("Stealth mode off.\n\r",ch);
      }
         else {
-           ch->pcdata->stealth = TRUE;
+           ch->pcdata->stealth = true;
            send_to_char("Stealth mode on.\n\r",ch);
      } /* if */
   return eSUCCESS;

@@ -845,11 +845,11 @@ int do_bladeshield(struct char_data *ch, char *argument, int cmd)
 /* BEGIN UTILITY FUNCTIONS FOR "Guard" */
 
 // return TRUE on guard doing anything
-// otherwise FALSE
+// otherwise false
 int handle_any_guard(char_data * ch)
 {
    if(!ch->guarded_by)
-      return FALSE;
+      return false;
 
    char_data * guard = NULL;
 
@@ -868,15 +868,15 @@ int handle_any_guard(char_data * ch)
    }
 
    if(!guard) // my guard isn't here
-      return FALSE;
+      return false;
 
    if(ch->fighting && can_be_attacked(guard, ch->fighting) && skill_success(guard,ch,SKILL_GUARD)) {
       do_rescue(guard, GET_NAME(ch), 9);
       if (ch->fighting)
-      return TRUE;
-      else return FALSE;
+      return true;
+      else return false;
    }
-   return FALSE;
+   return false;
 }
 
 char_data * is_guarding_me(char_data * ch, char_data * guard)
@@ -1367,7 +1367,7 @@ int do_leadership(struct char_data *ch, char *argument, int cmd)
 
     affect_to_char(ch, &af);
 
-    ch->changeLeadBonus = TRUE;
+    ch->changeLeadBonus = true;
     ch->curLeadBonus = get_leadership_bonus(ch);
   }
 

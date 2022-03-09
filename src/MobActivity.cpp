@@ -58,9 +58,9 @@ bool Path::isRoomConnected(int room)
   for (i = 0; i < MAX_DIRS; i++)
     if (world[room].dir_option[i] && world[room].dir_option[i]->to_room >= 0)
       for (p = world[world[room].dir_option[i]->to_room].paths; p; p = p->next)
-        if (p->p == this) return TRUE;
+        if (p->p == this) return true;
 
-  return FALSE;
+  return false;
 }
 
 bool Path::isRoomPathed(int room)
@@ -68,9 +68,9 @@ bool Path::isRoomPathed(int room)
   struct path_data *p;
 
   for (p = world[room].paths; p; p = p->next)
-    if (p->p == this) return TRUE;
+    if (p->p == this) return true;
 
-  return FALSE;
+  return false;
 }
 
 
@@ -107,8 +107,8 @@ void Path::resetPath()
 
 bool Path::findRoom(int from, int to, int steps, int leastSteps, char *buf)
 {
-  if (steps > leastSteps) return FALSE; // Longer than the shortest path known. fuck it.
-  if ((*this)[from] <= steps) return FALSE; // already checked this room, circly paths
+  if (steps > leastSteps) return false; // Longer than the shortest path known. fuck it.
+  if ((*this)[from] <= steps) return false; // already checked this room, circly paths
 
   (*this)[from] = steps;
 
@@ -118,15 +118,15 @@ bool Path::findRoom(int from, int to, int steps, int leastSteps, char *buf)
     if (world[from].dir_option[i]->to_room < 0) continue;
     if (!isRoomPathed(world[from].dir_option[i]->to_room)) continue;
 
-    if (world[from].dir_option[i]->to_room == to) { *buf = dirs[i][0]; *(buf+1) = '\0'; return TRUE; }
+    if (world[from].dir_option[i]->to_room == to) { *buf = dirs[i][0]; *(buf+1) = '\0'; return true; }
     
     if (findRoom(world[from].dir_option[i]->to_room, to, steps+1, leastSteps, buf+1)) 
     {
        *buf = dirs[i][0];
-       return TRUE;
+       return true;
     }
   }
-  return FALSE;
+  return false;
 }
 
 int Path::leastSteps(int from, int to, int val, int *bestval)
@@ -154,9 +154,9 @@ bool Path::isPathConnected(class Path *pa)
 {
   struct path_data *t;
   for (t = p; t; t = t->next)
-     if (t->p == pa) return TRUE;
+     if (t->p == pa) return true;
 
-  return FALSE;
+  return false;
 }
 
 void Path::addRoom(char_data *ch, int room, bool IgnoreConnectingIssues)
@@ -241,7 +241,7 @@ int do_newPath(char_data *ch, char *argument, int cmd)
   }
   p = new Path;
   p->name = str_dup(arg1);
-  p->addRoom(ch, ch->in_room, TRUE);
+  p->addRoom(ch, ch->in_room, true);
   p->next = mPathList;
   mPathList = p;
   return eSUCCESS;
@@ -252,7 +252,7 @@ int do_listPathsByZone(char_data *ch, char *argument, int cmd)
   int i = world[ch->in_room].zone, low = zone_table[i].bottom_rnum, high = zone_table[i].top_rnum;
 
   class Path *p;
-  bool found = FALSE;
+  bool found = false;
   for (p = mPathList; p; p = p->next)
     for( map<int, int>::iterator iter = p->begin(); iter != p->end(); iter++ )
 	if ((*iter).first >= low && (*iter).first <= high)
@@ -262,7 +262,7 @@ int do_listPathsByZone(char_data *ch, char *argument, int cmd)
 	    for (pa = p->p; pa; pa = pa->next)
 		csendf(ch, " --- Path '%s' connects to that path in %d places.\r\n",
 			pa->p->name, pa->num);
-	  found = TRUE;
+	  found = true;
 	  break;
 	}
   if (!found)
@@ -274,7 +274,7 @@ int do_listPathsByZone(char_data *ch, char *argument, int cmd)
 int do_listAllPaths(char_data *ch, char *argument, int cmd)
 {
   class Path *p;
-  bool found = FALSE;
+  bool found = false;
   for (p = mPathList; p; p = p->next)
   {
     csendf(ch, "Path '%s'.\r\n",p->name);
@@ -282,7 +282,7 @@ int do_listAllPaths(char_data *ch, char *argument, int cmd)
     for (pa = p->p; pa; pa = pa->next)
 	csendf(ch, " --- Path '%s' connects to that path in %d places.\r\n",
 		pa->p->name, pa->num);
-    found = TRUE;
+    found = true;
 
   }
   if (!found)
@@ -309,7 +309,7 @@ int do_addRoom(char_data *ch, char *argument, int cmd)
 	send_to_char("No such path exists.\r\n",ch);
 	return eFAILURE;
   }
-  p->addRoom(ch, ch->in_room, FALSE);
+  p->addRoom(ch, ch->in_room, false);
   return eSUCCESS;
 }
 
@@ -369,8 +369,8 @@ int leastPathSteps(class Path *goal, class Path *at, int steps, int *beststeps)
 
 bool determinePath(class Path *goal, class Path *at, int beststeps, int steps, class Path **end)
 {
- if (at->s < steps) return FALSE;
- if (steps > beststeps) return FALSE;
+ if (at->s < steps) return false;
+ if (steps > beststeps) return false;
  // Determine path
  at->s = steps;
  struct path_data *pt;
@@ -380,12 +380,12 @@ bool determinePath(class Path *goal, class Path *at, int beststeps, int steps, c
     {
      *end = at;
      *(&end[1]) = goal;
-      return TRUE;
+      return true;
     }
     if (determinePath(goal, pt->p, beststeps, steps+1, &end[1]))
-    {  *end = at; return TRUE; }
+    {  *end = at; return true; }
  }
- return FALSE;
+ return false;
 }
 
 

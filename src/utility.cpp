@@ -693,15 +693,15 @@ bool ARE_CLANNED( struct char_data *sub, struct char_data *obj)
 	obj->master &&
 	ARE_CLANNED(sub, obj->master) &&
 	(IS_AFFECTED(obj, AFF_CHARM) || IS_AFFECTED(obj, AFF_FAMILIAR)))
-	return TRUE;
+	return true;
 
    // make sure we're clanned, and the person we're looking at is in same clan
    // (have to check if we're clanned, cause otherwise two non-clanned people
    // would count as being in "same clan")
    if (!sub->clan || sub->clan != obj->clan)
-      return FALSE;
+      return false;
    
-   return TRUE;
+   return true;
 }
 
 int DARK_AMOUNT(int room)
@@ -734,9 +734,9 @@ bool IS_DARK( int room )
    int glow = DARK_AMOUNT(room);
 
    if(glow < 0)
-     return TRUE;
+     return true;
 
-   return FALSE;
+   return false;
 }
 
 bool ARE_GROUPED( struct char_data *sub, struct char_data *obj)
@@ -745,32 +745,32 @@ bool ARE_GROUPED( struct char_data *sub, struct char_data *obj)
    struct char_data *k;
 
    if (obj == sub)
-      return TRUE;
+      return true;
 
    if (obj == NULL || sub == NULL)
-     return FALSE;
+     return false;
 
    if (IS_PC(sub) &&
        IS_NPC(obj) &&
        obj->master &&
        ARE_GROUPED(sub, obj->master) &&
        (IS_AFFECTED(obj, AFF_CHARM) || IS_AFFECTED(obj, AFF_FAMILIAR)))
-     return TRUE;
+     return true;
 
    if (!(k=sub->master))
       k = sub;
 
    if( (IS_AFFECTED(k, AFF_GROUP)) && (IS_AFFECTED(sub, AFF_GROUP)) ) {
       if ((k == obj) && (IS_AFFECTED(obj, AFF_GROUP)) )
-         return TRUE;
+         return true;
 
       for (f = k->followers; f; f = f->next) 
       {
          if ((f->follower == obj) && (IS_AFFECTED(obj, AFF_GROUP)) )
-            return TRUE;
+            return true;
       }
    }
-   return FALSE;
+   return false;
 }
 
 int SWAP_CH_VICT(int value)
@@ -791,51 +791,51 @@ int SWAP_CH_VICT(int value)
 bool SOMEONE_DIED(int value)
 {
    if(IS_SET(value, eCH_DIED) || IS_SET(value, eVICT_DIED))
-     return TRUE;
-   return FALSE;
+     return true;
+   return false;
 }
 
 bool CAN_SEE( struct char_data *sub, struct char_data *obj, bool noprog )
 {
    if (obj == sub)
-      return TRUE;
+      return true;
     
    if (!sub || !obj) {
       log("Invalid pointer passed to CAN_SEE!", ANGEL, LOG_BUG);
-      return FALSE;
+      return false;
       }	
 
    if (!IS_MOB(obj)) 
    {
       if(!obj->pcdata) // noncreated char
-         return TRUE;
+         return true;
 
       if(GET_LEVEL(sub) < obj->pcdata->wizinvis) {
-         if (obj->pcdata->incognito == TRUE) {
+         if (obj->pcdata->incognito == true) {
             if (sub->in_room != obj->in_room)
-               return FALSE;
-            return TRUE;
+               return false;
+            return true;
          }
          else
-            return FALSE;
+            return false;
       }
    }
 
 
    if (sub && IS_PC(sub) && sub->pcdata && sub->pcdata->holyLite )
-      return TRUE;
+      return true;
 
    if (!noprog && IS_NPC(obj))
    {
       int prog = mprog_can_see_trigger(sub,obj);
-      if (IS_SET(prog, eEXTRA_VALUE)) return TRUE;
-      else if (IS_SET(prog, eEXTRA_VAL2)) return FALSE;
+      if (IS_SET(prog, eEXTRA_VALUE)) return true;
+      else if (IS_SET(prog, eEXTRA_VAL2)) return false;
    }
    if ( IS_AFFECTED(obj, AFF_GLITTER_DUST) && GET_LEVEL(obj) < IMMORTAL )
-      return TRUE;
+      return true;
 
    if (obj->in_room == NOWHERE) {
-	  return FALSE;
+	  return false;
    }
 
    try
@@ -851,37 +851,37 @@ bool CAN_SEE( struct char_data *sub, struct char_data *obj, bool noprog )
    }
 
    if ( IS_AFFECTED(sub, AFF_BLIND) )
-      return FALSE;
+      return false;
 
    if ( !IS_LIGHT(sub->in_room) && !IS_AFFECTED(sub, AFF_INFRARED) )
-      return FALSE;
+      return false;
 
    if (IS_AFFECTED(obj, AFF_HIDE))
    {
 	   if (IS_AFFECTED(sub, AFF_TRUE_SIGHT))
-      		return TRUE;
+      		return true;
 
            if (ARE_GROUPED(sub, obj))
            {
              if ( !IS_AFFECTED( obj, AFF_INVISIBLE ) )
-               return TRUE; //if they're not invis.. they can always see
+               return true; //if they're not invis.. they can always see
 
              if ( IS_AFFECTED( sub, AFF_DETECT_INVISIBLE ) )
-               return TRUE; //if they have det invis.. they can see
+               return true; //if they have det invis.. they can see
 
-              return FALSE; //else they can't
+              return false; //else they can't
            }
 
-      if (is_hiding(obj, sub)) return FALSE;
+      if (is_hiding(obj, sub)) return false;
    }
 
    if ( !IS_AFFECTED( obj, AFF_INVISIBLE ) )
-      return TRUE;
+      return true;
 
    if ( IS_AFFECTED( sub, AFF_DETECT_INVISIBLE ) )
-      return TRUE;
+      return true;
 
-   return FALSE;
+   return false;
 }
 
 bool CAN_SEE_OBJ( struct char_data *sub, struct obj_data *obj, bool blindfighting )
@@ -890,32 +890,32 @@ bool CAN_SEE_OBJ( struct char_data *sub, struct obj_data *obj, bool blindfightin
    struct affected_type * cur_af;
 
    if ( !IS_MOB(sub) && sub->pcdata->holyLite )
-	return TRUE;
+	return true;
 
    int prog = oprog_can_see_trigger(sub,obj);
-   if (IS_SET(prog, eEXTRA_VALUE)) return TRUE;
-    else if (IS_SET(prog, eEXTRA_VAL2)) return FALSE;
+   if (IS_SET(prog, eEXTRA_VALUE)) return true;
+    else if (IS_SET(prog, eEXTRA_VAL2)) return false;
    
    skill = 0;
    if ((cur_af = affected_by_spell(sub, SPELL_DETECT_GOOD)))
      skill = (int)cur_af->modifier;
    if ((skill >= 80 || GET_LEVEL(sub) >= IMMORTAL) && isname("consecrateitem", GET_OBJ_NAME(obj)) && obj->obj_flags.value[0] == SPELL_CONSECRATE)
-     return TRUE;
+     return true;
 
    skill = 0;
    if ((cur_af = affected_by_spell(sub, SPELL_DETECT_EVIL)))
      skill = (int)cur_af->modifier;
    if ((skill >= 80 || GET_LEVEL(sub) >= IMMORTAL) && isname("consecrateitem", GET_OBJ_NAME(obj)) && obj->obj_flags.value[0] == SPELL_DESECRATE)
-     return TRUE;
+     return true;
 
    if (IS_OBJ_STAT(obj, ITEM_NOSEE))
-      return FALSE;
+      return false;
 
    if ( IS_AFFECTED( sub, AFF_BLIND ) ) {
      if(blindfighting && skill_success(sub, NULL, SKILL_BLINDFIGHTING))
-       return TRUE;
+       return true;
      else
-       return FALSE;
+       return false;
    }
 
    // only see beacons if you have detect magic up
@@ -924,41 +924,41 @@ bool CAN_SEE_OBJ( struct char_data *sub, struct obj_data *obj, bool blindfightin
 
    if (GET_ITEM_TYPE(obj) == ITEM_BEACON && IS_SET(obj->obj_flags.extra_flags, ITEM_INVISIBLE)) {
      if (!IS_AFFECTED(sub, AFF_DETECT_MAGIC)) {
-       return FALSE;
+       return false;
      } else {
        if (skill < 50)
-        return FALSE;
+        return false;
      }
    }
 
 //   if (IS_AFFECTED(sub, AFF_TRUE_SIGHT) )
-  //      return TRUE;
+  //      return true;
 
    if(IS_OBJ_STAT(obj, ITEM_INVISIBLE) && !IS_AFFECTED(sub, AFF_DETECT_INVISIBLE))
-      return FALSE;
+      return false;
 
    if( IS_DARK(sub->in_room) && !IS_AFFECTED(sub, AFF_INFRARED) && !IS_OBJ_STAT(obj, ITEM_GLOW) )
-      return FALSE;
+      return false;
 
-    return TRUE;
+    return true;
 }
 
 bool check_blind( struct char_data *ch )
 {
 
 //   if (IS_AFFECTED(ch, AFF_TRUE_SIGHT))
-  //    return FALSE;
+  //    return false;
 
     if ( !IS_NPC(ch) && ch->pcdata->holyLite )
-       return FALSE;
+       return false;
 
     if ( IS_AFFECTED(ch, AFF_BLIND) && number(0,4)) // 20% chance of seeing
     {
 	send_to_char( "You can't see a damn thing!\n\r", ch );
-	return TRUE;
+	return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -966,7 +966,7 @@ int do_order(struct char_data *ch, char *argument, int cmd)
 {
     char name[MAX_INPUT_LENGTH], message[MAX_INPUT_LENGTH];
     char buf[256];
-    bool found = FALSE;
+    bool found = false;
     int org_room;
     int retval;
     struct char_data *victim;
@@ -1017,7 +1017,7 @@ int do_order(struct char_data *ch, char *argument, int cmd)
 						k = k->next) {
 					if (org_room == k->follower->in_room)
 						if (IS_AFFECTED(k->follower, AFF_CHARM)) {
-							found = TRUE;
+							found = true;
 							retval = command_interpreter(k->follower, message);
 							if (IS_SET(retval, eCH_DIED))
 								break; // k is no longer valid if it was a mob(always), get out now
@@ -1426,7 +1426,7 @@ int do_quit(struct char_data *ch, char *argument, int cmd)
 mob_index[fol->follower->mobdata->nr].virt == 8)
     {
       release_message(fol->follower);
-      extract_char(fol->follower, FALSE);
+      extract_char(fol->follower, false);
     }
   }
   affect_from_char(ch, SPELL_IRON_ROOTS);
@@ -1498,7 +1498,7 @@ mob_index[fol->follower->mobdata->nr].virt == 8)
   while(ch->carrying)
     extract_obj(ch->carrying);
 
-  extract_char( ch, TRUE );
+  extract_char( ch, true);
   return eSUCCESS|eCH_DIED;
 }
 
@@ -1670,15 +1670,15 @@ bool check_range_valid_and_convert(int & value, char * buf, int begin, int end)
 {
    value = atoi(buf);
    if(value == 0 && strcmp(buf, "0"))
-     return FALSE; 
+     return false; 
 
    if(value < begin)
-     return FALSE;
+     return false;
 
    if(value > end)
-     return FALSE;
+     return false;
 
-   return TRUE;
+   return true;
 }
 
 // convert char string to int
@@ -1687,15 +1687,15 @@ bool check_valid_and_convert(int & value, char * buf)
 {
    value = atoi(buf);
    if(value == 0 && strcmp(buf, "0"))
-     return FALSE; 
+     return false; 
 
-   return TRUE;
+   return true;
 }
 
 // modified for new SETBIT et al. commands
 void parse_bitstrings_into_int(const char * bits[], const char * strings, char_data *ch, uint value[])
 {
-  bool found = FALSE;
+  bool found = false;
   string remainder_args(strings);
 
   if(!ch)
@@ -1722,7 +1722,7 @@ void parse_bitstrings_into_int(const char * bits[], const char * strings, char_d
           SETBIT(value, x+1);
           csendf(ch, "%s flag ADDED.\n\r", bits[x]);
         }
-        found = TRUE;
+        found = true;
         break;
       }
     } 
@@ -1734,7 +1734,7 @@ void parse_bitstrings_into_int(const char * bits[], const char * strings, char_d
 // calls below uint32 version
 void parse_bitstrings_into_int(const char * bits[], const char * strings, char_data * ch, uint16 & value)
 {
-  int  found = FALSE;
+  int  found = false;
   string remainder_args(strings);
 
   if(!ch)
@@ -1761,7 +1761,7 @@ void parse_bitstrings_into_int(const char * bits[], const char * strings, char_d
           SET_BIT(value, (1<<x));
           csendf(ch, "%s flag ADDED.\n\r", bits[x]);
         }
-        found = TRUE;
+        found = true;
         break;
       }
     } 
@@ -1777,7 +1777,7 @@ void parse_bitstrings_into_int(const char * bits[], const char * strings, char_d
 //
 void parse_bitstrings_into_int(const char * bits[], const char * strings, char_data * ch, uint32 & value)
 {
-  int  found = FALSE;
+  int  found = false;
   string remainder_args(strings);
 
   if(!ch)
@@ -1804,7 +1804,7 @@ void parse_bitstrings_into_int(const char * bits[], const char * strings, char_d
           SET_BIT(value, (1<<x));
           csendf(ch, "%s flag ADDED.\n\r", bits[x]);
         }
-        found = TRUE;
+        found = true;
         break;
       }
     } 
@@ -2117,17 +2117,17 @@ void remove_familiars(char *name, BACKUP_TYPE backup)
 bool check_make_camp(int room)
 {
   CHAR_DATA *i, *next_i;
-  bool campok = FALSE;
+  bool campok = false;
 
   for(i = world[room].people; i; i = next_i) {
     next_i = i->next_in_room;
 
     if(i->fighting)
-    	return FALSE;
+    	return false;
     if(IS_MOB(i) && !IS_AFFECTED(i, AFF_CHARM) && !IS_AFFECTED(i, AFF_FAMILIAR))
-    	return FALSE;
+    	return false;
     if(affected_by_spell(i, SKILL_MAKE_CAMP) && affected_by_spell(i, SKILL_MAKE_CAMP)->modifier == room)
-      campok = TRUE;
+      campok = true;
   }
 
   return campok;
@@ -2213,8 +2213,8 @@ void update_make_camp_and_leadership(void)
     }
     bonus = get_leadership_bonus(i);
     
-    if(i->changeLeadBonus == TRUE) {
-      i->changeLeadBonus = FALSE;
+    if(i->changeLeadBonus == true) {
+      i->changeLeadBonus = false;
 
       if(i->curLeadBonus != bonus) {
         i->curLeadBonus = bonus;
@@ -2239,7 +2239,7 @@ void update_make_camp_and_leadership(void)
     }
 
     if(i->curLeadBonus != bonus)
-      i->changeLeadBonus = TRUE;
+      i->changeLeadBonus = true;
   });
 }
 
@@ -2359,7 +2359,7 @@ bool champion_can_go(int room)
   try {
     // Champions can't enter class restricted rooms
     for (int c_class=1; c_class < CLASS_MAX; c_class++) {
-      if (world[room].allow_class[c_class] == TRUE) {
+      if (world[room].allow_class[c_class] == true) {
 	return false;
       }
     }
