@@ -18,7 +18,6 @@
 
 #include <vector>
 #include "Timer.h"
-#include "NumberTypes.h"
 #include "Size.h"
 #include "EquipmentLocation.h"
 #include "ContainerStatus.h"
