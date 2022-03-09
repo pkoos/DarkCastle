@@ -1,0 +1,30 @@
+#ifndef COMBAT_AFFECTS_H_
+#define COMBAT_AFFECTS_H_
+
+#define COMBAT_SHOCKED      1
+#define COMBAT_BASH1        1<<1
+#define COMBAT_BASH2        1<<2
+#define COMBAT_STUNNED      1<<3
+#define COMBAT_STUNNED2     1<<4
+#define COMBAT_CIRCLE       1<<5
+#define COMBAT_BERSERK      1<<6
+#define COMBAT_HITALL       1<<7
+#define COMBAT_RAGE1        1<<8
+#define COMBAT_RAGE2        1<<9
+#define COMBAT_BLADESHIELD1 1<<10
+#define COMBAT_BLADESHIELD2 1<<11
+#define COMBAT_REPELANCE    1<<12
+#define COMBAT_VITAL_STRIKE 1<<13
+#define COMBAT_MONK_STANCE  1<<14
+#define COMBAT_MISS_AN_ATTACK 1<<15
+#define COMBAT_ORC_BLOODLUST1 1<<16
+#define COMBAT_ORC_BLOODLUST2 1<<17
+#define COMBAT_THI_EYEGOUGE  1<<18
+#define COMBAT_THI_EYEGOUGE2 1<<19
+#define COMBAT_FLEEING       1<<20
+#define COMBAT_SHOCKED2      1<<21
+#define COMBAT_CRUSH_BLOW    1<<22
+#define COMBAT_ATTACKER	     1<<23
+#define COMBAT_CRUSH_BLOW2   1<<24
+
+#endif

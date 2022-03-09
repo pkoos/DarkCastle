@@ -11,7 +11,7 @@
 struct char_data;
 typedef struct char_data CHAR_DATA;
 
-// #include "obj.h"
+#include "CombatAffects.h"
 #include "Actions.h"
 #include "Maximums.h"
 #include "Progs.h"

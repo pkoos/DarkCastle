@@ -46,8 +46,6 @@ void load_auction_tickets()
 #include <errno.h>
 #include "const.h"
 #include "inventory.h"
-#include "const.h"
-#include "inventory.h"
 
 using namespace std;
 

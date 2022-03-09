@@ -3,10 +3,6 @@
 | Description:  This file contains the classes and methods used to make
 |  the act() function work.
 */
-extern "C"
-{
-#include <ctype.h>
-};
 
 extern "C" {
 #include <string.h>

@@ -11,7 +11,7 @@ extern "C" {
 }
 #include <vector>
 
-
+#include "CombatAffects.h"
 #include "sing.h"
 #include "room.h"
 #include "character.h"

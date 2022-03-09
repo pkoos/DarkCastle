@@ -1,26 +1,35 @@
 #ifndef CL_WARRIOR_H_
 #define CL_WARRIOR_H_
 
-#include "Maximums.h"
-#include "character.h"
-#include "player.h"
-#include "fight.h"
-#include "utility.h"
-#include "handler.h"
+#include "RoomFlags.h"
 #include "levels.h"
-#include "connect.h"
-#include "mobile.h"
+#include "MessageDestination.h"
+#include "CombatAffects.h"
+#include "SkillIds.h"
+#include "player.h"
+#include "db.h"
+// #include "Maximums.h"
+
+#include "fight.h"
+// #include "utility.h"
+// #include "handler.h"
+// #include "levels.h"
+// #include "connect.h"
+// #include "mobile.h"
 #include "room.h"
 #include "act.h"
-#include "db.h"
-#include "DC.h"
-#include "returnvals.h"
-#include "race.h"
-#include "interp.h"
-#include "const.h"
 
-#include "class.h"
+
+// #include "DC.h"
+#include "returnvals.h"
+// #include "race.h"
+#include "interp.h"
+// #include "const.h"
 #include "spells.h"
+
+extern const char *dirs[];
+extern CHAR_DATA *combat_list;
+
 // warrior 3023 guildmaster - done and checked, Apoc
 struct class_skill_defines w_skills[] = { // warrior skills
 

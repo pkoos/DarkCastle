@@ -2,6 +2,7 @@
 #define CL_BARBARIAN_H_
 
 #include "cl_barbarian_skills.h"
+#include "CombatAffects.h"
 #include "Maximums.h"
 #include "player.h"
 #include "levels.h"
@@ -19,7 +20,6 @@
 #include "room.h"
 #include "db.h"
 #include "clan.h"
-#include "utility.h"
 #include "const.h"
 
 extern struct index_data *obj_index;

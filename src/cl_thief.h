@@ -1,7 +1,7 @@
 #ifndef CL_THIEF_H_
 #define CL_THIEF_H_
 
-
+#include "CombatAffects.h"
 #include "Maximums.h"
 #include "NumberTypes.h"
 #include "character.h"
@@ -24,8 +24,6 @@
 #include "arena.h"
 #include "const.h"
 #include "inventory.h"
-
-#include "class.h"
 
 // thief 3022 guildmaster - done and checked, Apoc
 struct class_skill_defines t_skills[] = { // thief skills

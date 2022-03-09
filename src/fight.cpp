@@ -29,6 +29,7 @@
 #include <assert.h>
 #include <sstream>
 
+#include "CombatAffects.h"
 #include "nullfile.h"
 #include "Maximums.h"
 #include "NumberTypes.h"

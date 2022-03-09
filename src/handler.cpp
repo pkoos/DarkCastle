@@ -26,6 +26,7 @@
 #include <iostream>
 #include <sstream>
 
+#include "CombatAffects.h"
 #include "Maximums.h"
 #include "NumberTypes.h"
 #include "magic.h"
