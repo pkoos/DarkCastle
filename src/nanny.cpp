@@ -61,6 +61,8 @@ using namespace std;
 
 #define STATE(d) ((d)->connected)
 
+extern void prepare_character_for_sixty(CHAR_DATA *ch);
+
 void AuctionHandleDelete(string name);
 bool is_bracing(CHAR_DATA *bracee, struct room_direction_data *exit);
 void check_for_sold_items(CHAR_DATA *ch);
