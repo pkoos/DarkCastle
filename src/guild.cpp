@@ -22,6 +22,8 @@
 #include "const.h"
 
 extern vector<profession> professions;
+extern void prepare_character_for_sixty(CHAR_DATA *ch);
+extern const std::map<int,int> skill_cost;
 
 int get_max(CHAR_DATA *ch, int skill);
 int guild(struct char_data *ch, struct obj_data *obj, int cmd, char *arg, struct char_data *owner);
@@ -939,7 +941,7 @@ int skill_master(struct char_data *ch, struct obj_data *obj, int cmd, char *arg,
     do_say(invoker, "Okay, you've got a deal!",9);
     learn_skill(ch, skl, 1, 1);
 
-    extern void prepare_character_for_sixty(CHAR_DATA *ch);
+    
     prepare_character_for_sixty(ch);
     sprintf(buf, "$BYou have learned the basics of %s.$R\n\r", get_skill_name(skl));
     send_to_char(buf,ch);

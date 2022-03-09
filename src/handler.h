@@ -17,6 +17,8 @@
 #ifndef HANDLER_H_
 #define HANDLER_H_
 
+
+#include "SkillCost.h"
 #include "NumberTypes.h"
 #include "comm.h"
 #include "Trace.h"
@@ -31,7 +33,7 @@ affected_type * affected_by_spell( CHAR_DATA *ch, int skill );
 void affect_join( CHAR_DATA *ch, struct affected_type *af,
 		  bool avg_dur, bool avg_mod );
 affected_type * affected_by_random(CHAR_DATA *ch);
-
+extern const std::map<int,int> skill_cost;
 
 /* flag bit values for affect_remove() */
 #define SUPPRESS_CONSEQUENCES	1

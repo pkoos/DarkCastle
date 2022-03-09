@@ -52,6 +52,9 @@ extern "C" {
 void save_corpses(void);
 struct time_info_data age(CHAR_DATA *ch);
 
+/* forward declaration */
+void prepare_character_for_sixty(CHAR_DATA *ch);
+
 /* When age < 15 return the value p0 */
 /* When age in 15..29 calculate the line between p1 & p2 */
 /* When age in 30..44 calculate the line between p2 & p3 */

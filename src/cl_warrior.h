@@ -1,34 +1,35 @@
 #ifndef CL_WARRIOR_H_
 #define CL_WARRIOR_H_
 
+#include "SkillCost.h"
+#include "SectorTypes.h"
+#include "RoomStructs.h"
+#include "CharacterStructs.h"
+#include "ExitInfo.h"
+#include "AttackTypes.h"
+#include "SpellIds.h"
+#include "SkillTimers.h"
+#include "StatCombos.h"
+#include "Pulses.h"
 #include "RoomFlags.h"
 #include "levels.h"
 #include "MessageDestination.h"
 #include "CombatAffects.h"
 #include "SkillIds.h"
 #include "player.h"
-#include "db.h"
-// #include "Maximums.h"
-
-#include "fight.h"
-// #include "utility.h"
-// #include "handler.h"
-// #include "levels.h"
-// #include "connect.h"
-// #include "mobile.h"
-#include "room.h"
-#include "act.h"
-
-
-// #include "DC.h"
 #include "returnvals.h"
-// #include "race.h"
+#include "db.h"
+#include "fight.h"
+#include "obj.h"
+#include "act.h"
 #include "interp.h"
-// #include "const.h"
-#include "spells.h"
 
+
+extern const unsigned int NOWHERE;
 extern const char *dirs[];
 extern CHAR_DATA *combat_list;
+bool skill_success(CHAR_DATA *ch, CHAR_DATA *victim, int skillnum, int mod=0);
+bool canPerform(char_data * const &ch, const int_fast32_t &learned, std::string failMessage = std::string());
 
 // warrior 3023 guildmaster - done and checked, Apoc
 struct class_skill_defines w_skills[] = { // warrior skills

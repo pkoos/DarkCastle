@@ -39,5 +39,8 @@ struct send_tokens_return
 send_tokens_return send_tokens(TokenList * tokens, CHAR_DATA *ch, OBJ_DATA * obj, void * vch, int flags, CHAR_DATA *to);
 
 void send_message(const char *str, CHAR_DATA *to);
+void clear_hunt(void *arg1, void *arg2, void *arg3);
+void clear_hunt(char *arg1, CHAR_DATA *arg2, void *arg3);
+bool isPaused(char_data *mob);
 
 #endif /* ACT_H_ */

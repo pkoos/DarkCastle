@@ -9,6 +9,7 @@
 #define GUILD_H_
 
 #include "const.h"
+#include "SkillCost.h"
 
 int get_max(CHAR_DATA *ch, int skill);
 int guild(struct char_data *ch, struct obj_data *obj, int cmd, char *arg, struct char_data *owner);

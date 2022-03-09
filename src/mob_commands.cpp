@@ -68,6 +68,7 @@ extern CWorld world;
 extern struct descriptor_data *descriptor_list;
 extern bool MOBtrigger;
 extern struct mprog_throw_type *g_mprog_throw_list;
+extern void prepare_character_for_sixty(CHAR_DATA *ch);
 
 extern CHAR_DATA *activeActor;
 extern CHAR_DATA *activeRndm;

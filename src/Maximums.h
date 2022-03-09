@@ -74,4 +74,12 @@
 #define MAX_KI_LIST   10
 
 #define MAX_THROW_NAME     60
+
+#define PASSWORD_LEN    20
+#define DESC_LENGTH     80
+
+#define QUEST_MAX    1     //max quests at a time
+#define QUEST_SHOW   10    //max quests shown at a time
+#define QUEST_CANCEL 15    //max quests canceled at a time
+#define QUEST_TOTAL  500   //max total quests in file
 #endif
